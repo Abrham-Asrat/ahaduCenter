@@ -1,0 +1,169 @@
+<app-navbar></app-navbar>
+<div class="computers-page">
+  <div class="container">
+    <h1 class="page-title">Computer Products</h1>
+    <p class="page-description">
+      Explore our range of computers and accessories
+    </p>
+
+    <div class="filters sticky-filters">
+      <div class="filter-group">
+        <label for="type">Product Type:</label>
+        <select id="type" [(ngModel)]="selectedType">
+          <option *ngFor="let type of productTypes" [value]="type.value">
+            {{ type.label }}
+          </option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="brand">Brand:</label>
+        <select id="brand" [(ngModel)]="selectedBrand">
+          <option *ngFor="let brand of brands" [value]="brand.value">
+            {{ brand.label }}
+          </option>
+        </select>
+      </div>
+
+      <div class="search-box">
+        <input
+          type="text"
+          placeholder="Search products..."
+          [(ngModel)]="searchTerm"
+        />
+        <i class="bi bi-search"></i>
+      </div>
+    </div>
+
+    <div class="product-grid">
+      <div class="product-card" *ngFor="let product of filteredProducts">
+        <div class="product-image">
+          <img [src]="product.image" [alt]="product.name" />
+          <div class="product-overlay">
+            <button class="add-to-cart-btn" (click)="addToCart(product)">
+              <i class="bi bi-cart-plus"></i> Add to Cart
+            </button>
+          </div>
+        </div>
+        <div class="product-info">
+          <h3>{{ product.name }}</h3>
+          <p class="product-brand">{{ product.brand }}</p>
+          <p class="product-type">{{ product.type }}</p>
+          <div class="product-specs">
+            <span *ngIf="product.processor">{{ product.processor }}</span>
+            <span *ngIf="product.ram">{{ product.ram }} RAM</span>
+            <span *ngIf="product.storage">{{ product.storage }}</span>
+          </div>
+          <div class="product-price">${{ product.price }}</div>
+          <div class="product-details me-auto">
+            <a
+              href="#"
+              class="view-details-link"
+              (click)="viewProductDetails(product); $event.preventDefault()"
+              >View Details</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pagination">
+      <button
+        class="page-btn"
+        (click)="previousPage()"
+        [disabled]="currentPage === 1"
+      >
+        <i class="bi bi-chevron-left"></i> Previous
+      </button>
+      <span class="page-info">Page {{ currentPage }} of {{ totalPages }}</span>
+      <button
+        class="page-btn"
+        (click)="nextPage()"
+        [disabled]="currentPage === totalPages"
+      >
+        Next <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Product Details Modal -->
+<div
+  class="modal fade"
+  id="productDetailsModal"
+  tabindex="-1"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ selectedProduct?.name }}</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body" *ngIf="selectedProduct">
+        <div class="row">
+          <div class="col-md-6">
+            <img
+              [src]="selectedProduct.image"
+              [alt]="selectedProduct.name"
+              class="img-fluid rounded"
+            />
+          </div>
+          <div class="col-md-6">
+            <table class="table table-borderless">
+              <tr>
+                <th>Brand:</th>
+                <td>{{ selectedProduct.brand }}</td>
+              </tr>
+              <tr>
+                <th>Type:</th>
+                <td>{{ selectedProduct.type }}</td>
+              </tr>
+              <tr *ngIf="selectedProduct.processor">
+                <th>Processor:</th>
+                <td>{{ selectedProduct.processor }}</td>
+              </tr>
+              <tr *ngIf="selectedProduct.ram">
+                <th>RAM:</th>
+                <td>{{ selectedProduct.ram }}</td>
+              </tr>
+              <tr *ngIf="selectedProduct.storage">
+                <th>Storage:</th>
+                <td>{{ selectedProduct.storage }}</td>
+              </tr>
+              <tr *ngIf="selectedProduct.size">
+                <th>Size:</th>
+                <td>{{ selectedProduct.size }}</td>
+              </tr>
+              <tr>
+                <th>Price:</th>
+                <td class="price">${{ selectedProduct.price }}</td>
+              </tr>
+            </table>
+            <button
+              class="btn btn-primary w-100 mt-3"
+              (click)="addToCart(selectedProduct)"
+            >
+              <i class="bi bi-cart-plus"></i> Add to Cart
+            </button>
+          </div>
+        </div>
+        <div class="mt-4">
+          <h6>Description</h6>
+          <p>
+            The {{ selectedProduct.name }} by {{ selectedProduct.brand }} offers
+            excellent performance and reliability. Perfect for
+            {{ getProductUseCase(selectedProduct.type) }}.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>

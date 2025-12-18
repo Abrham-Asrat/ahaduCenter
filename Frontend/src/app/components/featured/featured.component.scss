@@ -1,0 +1,267 @@
+/* Featured Products Section */
+@use "../../../styles.scss" as styles;
+
+.featured {
+  padding: 3rem 0;
+  animation: fadeIn 1s styles.$transition-normal;
+
+  h2 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: #333;
+    animation: fadeInDown 1s styles.$transition-normal;
+
+    span {
+      display: inline-block;
+
+      &:nth-child(1) {
+        animation: bounceIn 0.8s 0.2s both;
+      }
+
+      &:nth-child(2) {
+        animation: bounceIn 0.8s 0.3s both;
+      }
+    }
+  }
+}
+
+.featured-section {
+  background: white;
+  padding: 1rem;
+  border-radius: 1rem;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 1s styles.$transition-normal 0.4s both;
+}
+
+.product-scroll {
+  display: flex;
+  overflow-x: auto;
+  gap: 1.5rem;
+  padding: 1rem 0;
+  scrollbar-width: thin;
+  animation: fadeIn 1s styles.$transition-normal 0.6s both;
+
+  &::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+  }
+}
+
+.product-card {
+  flex: 0 0 auto;
+  width: 200px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: scaleIn 0.8s styles.$bounce calc(0.7s + var(--delay, 0) * 0.1s)
+    both;
+  @extend .hover-lift;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  img {
+    width: 100%;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    height: 150px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+    animation: fadeIn 1s styles.$transition-normal
+      calc(0.9s + var(--delay, 0) * 0.1s) both;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+
+  h4 {
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+    animation: fadeInUp 1s styles.$transition-normal
+      calc(1s + var(--delay, 0) * 0.1s) both;
+  }
+
+  .price {
+    color: #008080;
+    font-weight: bold;
+    font-size: 1.2rem;
+    animation: fadeIn 1s styles.$transition-normal
+      calc(1.1s + var(--delay, 0) * 0.1s) both;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 1199.98px) {
+  .product-card {
+    width: 180px;
+  }
+
+  .product-card img {
+    height: 140px;
+  }
+
+  .product-card h4 {
+    font-size: 1rem;
+  }
+
+  .price {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .featured-section {
+    padding: 0.8rem;
+    border-radius: 0.8rem;
+  }
+
+  .featured h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .product-scroll {
+    gap: 1.2rem;
+    padding: 0.8rem 0;
+  }
+
+  .product-card {
+    width: 160px;
+    padding: 0.8rem;
+  }
+
+  .product-card img {
+    height: 130px;
+    margin-bottom: 0.8rem;
+  }
+
+  .product-card h4 {
+    font-size: 0.95rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .price {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .featured-section {
+    padding: 0.7rem;
+    border-radius: 0.7rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .featured h2 {
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+  }
+
+  .product-scroll {
+    gap: 1rem;
+    padding: 0.7rem 0;
+  }
+
+  .product-card {
+    width: 150px;
+    padding: 0.7rem;
+  }
+
+  .product-card img {
+    height: 120px;
+    margin-bottom: 0.7rem;
+  }
+
+  .product-card h4 {
+    font-size: 0.9rem;
+  }
+
+  .price {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .featured-section {
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .featured h2 {
+    font-size: 1.4rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .product-scroll {
+    gap: 0.8rem;
+    padding: 0.5rem 0;
+  }
+
+  .product-card {
+    width: 140px;
+    padding: 0.5rem;
+  }
+
+  .product-card img {
+    height: 110px;
+    margin-bottom: 0.5rem;
+  }
+
+  .product-card h4 {
+    font-size: 0.85rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .price {
+    font-size: 0.9rem;
+  }
+}
+
+// Keyframe animations (local to this component)
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

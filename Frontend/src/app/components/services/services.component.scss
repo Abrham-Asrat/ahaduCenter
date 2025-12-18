@@ -1,0 +1,318 @@
+/* Services component styles */
+@use "../../../styles.scss" as styles;
+
+.services {
+  padding: 5rem 0;
+  animation: fadeIn 1s styles.$transition-normal;
+
+  h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+    color: #333;
+    animation: fadeInDown 1s styles.$transition-normal;
+
+    span {
+      display: inline-block;
+
+      &:nth-child(1) {
+        animation: bounceIn 0.8s 0.2s both;
+      }
+
+      &:nth-child(2) {
+        animation: bounceIn 0.8s 0.3s both;
+      }
+
+      &:nth-child(3) {
+        animation: bounceIn 0.8s 0.4s both;
+      }
+    }
+  }
+}
+
+.service-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  animation: fadeIn 1s styles.$transition-normal 0.4s both;
+}
+
+.movies {
+  position: relative;
+}
+
+.movies-img {
+  width: 240px;
+  height: 240px;
+  position: absolute;
+  top: -25%;
+  left: 15%;
+  animation: fadeIn 1s styles.$transition-normal 0.6s both;
+  transition: transform styles.$transition-normal;
+  @extend .hover-float;
+
+  &:hover {
+    transform: scale(1.05) rotate(2deg);
+  }
+}
+
+.computers {
+  position: relative;
+}
+
+.computers-img {
+  width: 230px;
+  height: 230px;
+  position: absolute;
+  top: -20%;
+  left: 15%;
+  animation: fadeIn 1s styles.$transition-normal 0.8s both;
+  transition: transform styles.$transition-normal;
+  @extend .hover-float;
+
+  &:hover {
+    transform: scale(1.05) rotate(-2deg);
+  }
+}
+
+.books {
+  position: relative;
+}
+
+.books-img {
+  width: 200px;
+  height: 200px;
+  position: absolute;
+  top: -15%;
+  left: 15%;
+  animation: fadeIn 1s styles.$transition-normal 1s both;
+  transition: transform styles.$transition-normal;
+  @extend .hover-float;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+.service-title {
+  margin-top: 6.3rem;
+  animation: fadeInUp 1s styles.$transition-normal 0.7s both;
+}
+
+.service-card {
+  background: #d9d9d9;
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s;
+  border-top: 4rem solid transparent;
+  animation: flipInY 1s styles.$ease-out-back
+    calc(0.5s + var(--delay, 0) * 0.2s) both;
+  @extend .hover-lift;
+
+  &:hover {
+    transform: translateY(-10px);
+  }
+
+  &.movies {
+    border-color: #ff8c00; /* Orange for Movies */
+  }
+
+  &.computers {
+    border-color: #008080; /* Teal for Computers */
+  }
+
+  &.books {
+    border-color: #8b4513; /* Brown for Books */
+  }
+
+  h3 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    animation: fadeInUp 1s styles.$transition-normal 0.9s both;
+  }
+
+  p {
+    margin-bottom: 1.5rem;
+    color: #666;
+    animation: fadeIn 1s styles.$transition-normal 1.1s both;
+  }
+
+  .btn-primary {
+    animation: bounceIn 1s styles.$bounce 1.3s both;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 1199.98px) {
+  .service-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .movies-img,
+  .computers-img,
+  .books-img {
+    width: 220px;
+    height: 220px;
+  }
+
+  .service-card {
+    padding: 1.5rem;
+  }
+
+  .service-card h3 {
+    font-size: 1.6rem;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .services {
+    padding: 4rem 0;
+  }
+
+  .services h2 {
+    font-size: 2.2rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .service-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .movies-img,
+  .computers-img,
+  .books-img {
+    width: 200px;
+    height: 200px;
+  }
+
+  .service-title {
+    margin-top: 5.5rem;
+  }
+
+  .service-card {
+    padding: 1.25rem;
+  }
+
+  .service-card h3 {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .services {
+    padding: 3rem 0;
+  }
+
+  .services h2 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .service-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .movies-img,
+  .computers-img,
+  .books-img {
+    width: 180px;
+    height: 180px;
+  }
+
+  .service-title {
+    margin-top: 5rem;
+  }
+
+  .service-card {
+    padding: 1.5rem;
+  }
+
+  .service-card h3 {
+    font-size: 1.4rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .services {
+    padding: 2rem 0;
+  }
+
+  .services h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .service-grid {
+    gap: 1rem;
+  }
+
+  .movies-img,
+  .computers-img,
+  .books-img {
+    width: 160px;
+    height: 160px;
+    top: -20%;
+  }
+
+  .service-title {
+    margin-top: 4.5rem;
+    font-size: 1.2rem;
+  }
+
+  .service-card {
+    padding: 1rem;
+  }
+
+  .service-card h3 {
+    font-size: 1.3rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .service-card p {
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+  }
+}
+
+// Keyframe animations (local to this component)
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes flipInY {
+  0% {
+    opacity: 0;
+    transform: perspective(400px) rotateY(90deg);
+  }
+  40% {
+    transform: perspective(400px) rotateY(-10deg);
+  }
+  70% {
+    transform: perspective(400px) rotateY(10deg);
+  }
+  100% {
+    opacity: 1;
+    transform: perspective(400px) rotateY(0deg);
+  }
+}

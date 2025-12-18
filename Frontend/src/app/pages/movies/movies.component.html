@@ -1,0 +1,76 @@
+<app-navbar></app-navbar>
+<div class="movies-page">
+  <div class="container">
+    <h1 class="page-title">Movie Collection</h1>
+    <p class="page-description">
+      Browse our extensive collection of movies across all genres
+    </p>
+
+    <div class="filters sticky-filters">
+      <div class="filter-group">
+        <label for="genre">Genre:</label>
+        <select id="genre" [(ngModel)]="selectedGenre">
+          <option *ngFor="let genre of genres" [value]="genre.value">
+            {{ genre.label }}
+          </option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="year">Release Year:</label>
+        <select id="year" [(ngModel)]="selectedYear">
+          <option *ngFor="let year of years" [value]="year.value">
+            {{ year.label }}
+          </option>
+        </select>
+      </div>
+
+      <div class="search-box">
+        <input
+          type="text"
+          placeholder="Search movies..."
+          [(ngModel)]="searchTerm"
+        />
+        <i class="bi bi-search"></i>
+      </div>
+    </div>
+
+    <div class="movie-grid">
+      <div class="movie-card" *ngFor="let movie of filteredMovies">
+        <div class="movie-image">
+          <img [src]="movie.image" [alt]="movie.title" />
+          <div class="movie-overlay">
+            <button class="add-to-cart-btn" (click)="addToCart(movie)">
+              <i class="bi bi-cart-plus"></i> Add to Cart
+            </button>
+          </div>
+        </div>
+        <div class="movie-info">
+          <h3>{{ movie.title }}</h3>
+          <p class="movie-year">{{ movie.year }}</p>
+          <p class="movie-genre">{{ movie.genre }}</p>
+          <div class="movie-price">${{ movie.price }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pagination">
+      <button
+        class="page-btn"
+        (click)="previousPage()"
+        [disabled]="currentPage === 1"
+      >
+        <i class="bi bi-chevron-left"></i> Previous
+      </button>
+      <span class="page-info">Page {{ currentPage }} of {{ totalPages }}</span>
+      <button
+        class="page-btn"
+        (click)="nextPage()"
+        [disabled]="currentPage === totalPages"
+      >
+        Next <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </div>
+</div>
+<app-footer></app-footer>

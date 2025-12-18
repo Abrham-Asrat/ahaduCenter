@@ -1,0 +1,57 @@
+.logo {
+  width: 100px;
+  height: 60px;
+}
+
+.line {
+  height: 4rem;
+  width: 0.28rem;
+  background-color: #d4d4d4;
+}
+.second-navbar {
+  margin-top: 90px; // Height of the first navbar
+}
+// Spacer to prevent content from being hidden behind fixed navbar
+.navbar-spacer {
+  height: 70px;
+}
+
+// Adjust navbar height if needed
+.navbar {
+  min-height: 70px;
+}
+
+// Hover dropdown functionality
+.hover-dropdown {
+  &:hover {
+    .dropdown-menu {
+      display: block;
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+  }
+
+  .dropdown-menu {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+    display: block;
+
+    &:hover {
+      display: block;
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+  }
+}
+
+// Ensure dropdown stays visible when hovering over menu items
+.dropdown-menu:hover {
+  display: block;
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}

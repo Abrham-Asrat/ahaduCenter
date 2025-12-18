@@ -1,0 +1,39 @@
+.home-page {
+  // Add any specific home page styles here if needed
+  animation: fadeIn 0.5s ease;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1199.98px) {
+  .home-page {
+    // Add large tablet styles if needed
+  }
+}
+
+@media (max-width: 991.98px) {
+  .home-page {
+    // Add medium tablet styles if needed
+  }
+}
+
+@media (max-width: 767.98px) {
+  .home-page {
+    // Add small tablet styles if needed
+  }
+}
+
+@media (max-width: 575.98px) {
+  .home-page {
+    // Add mobile styles if needed
+  }
+}
+
+/* Keyframe animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

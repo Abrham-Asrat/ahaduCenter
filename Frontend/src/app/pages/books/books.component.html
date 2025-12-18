@@ -1,0 +1,76 @@
+<app-navbar></app-navbar>
+<div class="books-page">
+  <div class="container">
+    <h1 class="page-title">Book Collection</h1>
+    <p class="page-description">
+      Discover our wide selection of books across various genres
+    </p>
+
+    <div class="filters sticky-filters">
+      <div class="filter-group">
+        <label for="category">Category:</label>
+        <select id="category" [(ngModel)]="selectedCategory">
+          <option *ngFor="let category of categories" [value]="category.value">
+            {{ category.label }}
+          </option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="author">Author:</label>
+        <select id="author" [(ngModel)]="selectedAuthor">
+          <option *ngFor="let author of authors" [value]="author.value">
+            {{ author.label }}
+          </option>
+        </select>
+      </div>
+
+      <div class="search-box">
+        <input
+          type="text"
+          placeholder="Search books..."
+          [(ngModel)]="searchTerm"
+        />
+        <i class="bi bi-search"></i>
+      </div>
+    </div>
+
+    <div class="book-grid">
+      <div class="book-card" *ngFor="let book of filteredBooks">
+        <div class="book-image">
+          <img [src]="book.image" [alt]="book.title" />
+          <div class="book-overlay">
+            <button class="add-to-cart-btn" (click)="addToCart(book)">
+              <i class="bi bi-cart-plus"></i> Add to Cart
+            </button>
+          </div>
+        </div>
+        <div class="book-info">
+          <h3>{{ book.title }}</h3>
+          <p class="book-author">by {{ book.author }}</p>
+          <p class="book-category">{{ book.category }}</p>
+          <div class="book-price">${{ book.price }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pagination">
+      <button
+        class="page-btn"
+        (click)="previousPage()"
+        [disabled]="currentPage === 1"
+      >
+        <i class="bi bi-chevron-left"></i> Previous
+      </button>
+      <span class="page-info">Page {{ currentPage }} of {{ totalPages }}</span>
+      <button
+        class="page-btn"
+        (click)="nextPage()"
+        [disabled]="currentPage === totalPages"
+      >
+        Next <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </div>
+</div>
+<app-footer></app-footer>

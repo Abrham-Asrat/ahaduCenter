@@ -1,0 +1,86 @@
+<app-navbar></app-navbar>
+<div class="about-page">
+  <section class="hero p-4 pt-5">
+    <div class="hero-content p-5">
+      <h1>{{ pageTitle }}</h1>
+
+      <div class="container-lg">
+        <div class="service-grid">
+          <div class="service-card">
+            <img
+              src="/images/books.png"
+              alt="Books Collection"
+              class="books-images"
+            />
+            <img
+              src="/images/movies.png"
+              alt="Movies Collection"
+              class="movies-images ps-3"
+            />
+            <img
+              src="/images/pcs.png"
+              alt="Computers Collection"
+              class="pcs-images ps-3"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mission-section p-5 pt-0">
+    <div class="hero-content p-5">
+      <h2>{{ missionTitle }}</h2>
+      <p>
+        {{ missionDescription }}
+      </p>
+      <p>
+        {{ missionDetails }}
+      </p>
+    </div>
+  </section>
+
+  <!-- Values Section -->
+  <section class="values-section p-5 pt-0">
+    <div class="hero-content p-5">
+      <h2>{{ valuesTitle }}</h2>
+      <div class="container-lg mt-4">
+        <div class="row">
+          <div
+            class="col-md-6 mb-4"
+            *ngFor="let value of values; let i = index"
+          >
+            <div class="value-item">
+              <h4><i class="bi {{ value.icon }} me-2"></i>{{ value.title }}</h4>
+              <p>
+                {{ value.description }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- History Section -->
+  <section class="history-section p-5">
+    <div class="hero-content p-5">
+      <h2>{{ historyTitle }}</h2>
+      <p>
+        {{ historyDescription }}
+      </p>
+
+      <ul class="mt-3">
+        <li *ngFor="let item of historyList">{{ item }}</li>
+      </ul>
+
+      <blockquote class="mt-4 p-3 bg-light border-start border-4">
+        <p class="fst-italic">"{{ quote }}"</p>
+        <footer class="blockquote-footer">{{ author }}</footer>
+      </blockquote>
+    </div>
+  </section>
+
+
+  <app-footer></app-footer>
+</div>
