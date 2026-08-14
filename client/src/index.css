@@ -1,9 +1,89 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Poppins:wght@600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap'); */
 
-@layer base {
-  body {
-    @apply bg-slate-900 text-slate-100 min-h-screen font-sans antialiased;
-  }
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+body {
+  background-color: #0B0F19;
+  color: #d6e4f7;
+  font-family: 'Inter', sans-serif;
+}
+
+.glass-panel {
+  background-color: rgba(21, 27, 40, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-border-gradient {
+  border: 1px solid transparent;
+  background: linear-gradient(rgba(21, 27, 40, 0.8), rgba(21, 27, 40, 0.8)) padding-box,
+    linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%) border-box;
+}
+
+.glow-hover:hover {
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.15);
+}
+
+.btn-primary {
+  background-color: #10B981;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  border: 1px solid #D4AF37;
+  color: #D4AF37;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+}
+
+/* Hide scrollbar for horizontal lists */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.emerald-glow:hover {
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+}
+
+.gold-glow:hover {
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+  border-color: #D4AF37;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.bg-gradient-premium {
+  background: radial-gradient(circle at top right, rgba(16, 185, 129, 0.15) 0%, transparent 40%),
+    radial-gradient(circle at bottom left, rgba(212, 175, 55, 0.1) 0%, transparent 40%),
+    #061422;
+}
+
+.hover-glow-emerald:hover {
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.5);
 }
