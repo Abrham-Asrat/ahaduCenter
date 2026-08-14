@@ -1,0 +1,2 @@
+// movieRequestController
+module.exports = {};

@@ -1,0 +1,2 @@
+// adminController
+module.exports = {};

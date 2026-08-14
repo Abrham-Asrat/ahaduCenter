@@ -1,0 +1,2 @@
+// searchController
+module.exports = {};
