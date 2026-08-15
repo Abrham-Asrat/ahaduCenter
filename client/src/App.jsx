@@ -32,7 +32,6 @@ import PurchaseHistoryPage from './pages/PurchaseHistoryPage';
 import BorrowingHistoryPage from './pages/BorrowingHistoryPage';
 import BookConfirmPage from './pages/BookConfirmPage';
 import AdminManageMovieRequestsPage from './pages/admin/AdminManageMovieRequestsPage';
-
 import AdminManageOrdersPage from './pages/admin/AdminManageOrdersPage';
 import NotFoundPage from './pages/NotFoundPage';
 
@@ -71,10 +70,8 @@ function App() {
       <Route path="/borrowing-history" element={<BorrowingHistoryPage />} />
       <Route path="/book-confirm" element={<BookConfirmPage />} />
       <Route path="/admin/movie-requests" element={<AdminManageMovieRequestsPage />} />
-
       <Route path="/admin/orders" element={<AdminManageOrdersPage />} />
       <Route path="*" element={<NotFoundPage />} />
-
     </Routes>
   );
 }
