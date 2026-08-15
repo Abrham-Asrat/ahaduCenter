@@ -111,11 +111,14 @@ const ProductCard = ({ product, onAddToCart, onCompare, onToggleWishlist, isWish
             {/* Quick Action Buttons */}
             <div className="grid grid-cols-2 gap-2">
               <button
-                onClick={handleCartClick}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }}
                 className="bg-primary/20 border border-primary/40 hover:bg-primary text-primary hover:text-black py-2 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition-all shadow"
               >
-                <span className="material-symbols-outlined text-sm">shopping_cart</span>
-                Add to Cart
+                <span className="material-symbols-outlined text-sm">visibility</span>
+                View Product
               </button>
               <button
                 onClick={handleCompareClick}

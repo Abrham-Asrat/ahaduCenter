@@ -141,13 +141,13 @@ const ProductDetailPage = () => {
           </button>
           <button
             onClick={() => {
-              showToast(`Added "${product.name}" to cart! Redirecting...`);
-              setTimeout(() => navigate('/checkout'), 1000);
+              showToast(`Inquiry sent for "${product.name}". Visit our Addis Ababa store for physical pick-up!`);
+              setTimeout(() => navigate('/contact'), 1000);
             }}
             className="flex-1 bg-primary text-black font-extrabold rounded-xl flex items-center justify-center gap-2 active:scale-95 transition-transform uppercase tracking-wider text-xs"
           >
-            <span className="material-symbols-outlined">shopping_bag</span>
-            Buy Now
+            <span className="material-symbols-outlined">storefront</span>
+            Visit Store to Pick Up
           </button>
         </div>
       </div>

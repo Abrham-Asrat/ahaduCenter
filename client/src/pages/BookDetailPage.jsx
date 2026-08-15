@@ -6,6 +6,7 @@ import BookCoverCard from '../components/book/BookCoverCard';
 import BookInfoSection from '../components/book/BookInfoSection';
 import BookDetailTabs from '../components/book/BookDetailTabs';
 import RelatedBooks from '../components/book/RelatedBooks';
+import ReviewsCommentsSection from '../components/common/ReviewsCommentsSection';
 import Footer from '../components/common/Footer';
 
 /**
@@ -117,6 +118,9 @@ const BookDetailPage = () => {
             <BookDetailTabs book={book} />
           </div>
         </div>
+
+        {/* Reader Reviews & Comments */}
+        <ReviewsCommentsSection title="Reader Reviews & Discussion" />
 
         {/* Related books */}
         <RelatedBooks books={relatedBooks} />

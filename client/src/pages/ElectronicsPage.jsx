@@ -135,7 +135,7 @@ const ElectronicsPage = () => {
   };
 
   const handleAddToCart = (product) => {
-    showToast(`"${product.name}" added to shopping cart!`);
+    showToast(`"${product.name}" reserved for in-store inquiry! Visit our physical location.`);
   };
 
   const handleCompare = (product) => {

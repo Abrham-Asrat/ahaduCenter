@@ -18,9 +18,7 @@ import ContactPage from './pages/ContactPage';
 import AdminManageMoviesPage from './pages/admin/AdminManageMoviesPage';
 import AdminManageElectronicsPage from './pages/admin/AdminManageElectronicsPage';
 import AdminManageBooksPage from './pages/admin/AdminManageBooksPage';
-import CartPage from './pages/CartPage';
-import CheckoutPage from './pages/CheckoutPage';
-import OrderConfirmationPage from './pages/OrderConfirmationPage';
+
 import DesignSystemPage from './pages/DesignSystemPage';
 import ProductComparisonPage from './pages/ProductComparisonPage';
 import MovieRequestPage from './pages/MovieRequestPage';
@@ -53,9 +51,7 @@ function App() {
       <Route path="/admin/movies" element={<AdminManageMoviesPage />} />
       <Route path="/admin/electronics" element={<AdminManageElectronicsPage />} />
       <Route path="/admin/books" element={<AdminManageBooksPage />} />
-      <Route path="/cart" element={<CartPage />} />
-      <Route path="/checkout" element={<CheckoutPage />} />
-      <Route path="/order-confirmation" element={<OrderConfirmationPage />} />
+
       <Route path="/design-system" element={<DesignSystemPage />} />
       <Route path="/compare" element={<ProductComparisonPage />} />
       <Route path="/movie-request" element={<MovieRequestPage />} />

@@ -8,7 +8,7 @@ import ScreenshotsSection from '../components/movie/ScreenshotsSection';
 import TrailerSection from '../components/movie/TrailerSection';
 import MovieInfoSidebar from '../components/movie/MovieInfoSidebar';
 import RelatedMoviesCarousel from '../components/movie/RelatedMoviesCarousel';
-import Footer from '../components/common/Footer';
+import ReviewsCommentsSection from '../components/common/ReviewsCommentsSection';
 
 const MovieDetailPage = () => {
     const { id } = useParams();
@@ -165,6 +165,9 @@ const MovieDetailPage = () => {
                         <MovieInfoSidebar movie={movie} />
                     </div>
                 </section>
+
+                {/* Movie Reviews & Comments */}
+                <ReviewsCommentsSection title="Viewer Reviews & Discussions" />
 
                 {/* You Might Also Like */}
                 <RelatedMoviesCarousel movies={relatedMovies} />

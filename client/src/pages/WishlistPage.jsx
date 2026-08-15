@@ -74,7 +74,7 @@ const WishlistPage = () => {
 
   const handleAction = (item) => {
     if (item.type === 'Electronics') {
-      navigate('/cart');
+      navigate(item.link || '/electronics');
     } else if (item.type === 'Movie') {
       navigate('/movie-request');
     } else {
@@ -103,7 +103,7 @@ const WishlistPage = () => {
   const getActionIcon = (type) => {
     switch (type) {
       case 'Movie': return 'add';
-      case 'Electronics': return 'shopping_cart';
+      case 'Electronics': return 'devices';
       case 'Book': return 'book';
       default: return 'add';
     }

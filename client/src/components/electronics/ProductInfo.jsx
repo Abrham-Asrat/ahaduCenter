@@ -18,9 +18,8 @@ const ProductInfo = ({ product, onShowToast }) => {
     const [isContactModalOpen, setIsContactModalOpen] = useState(false);
     const [contactMessage, setContactMessage] = useState('');
 
-    const handleBuyNow = () => {
-        if (onShowToast) onShowToast(`Added "${product.name}" to cart! Redirecting to checkout...`);
-        setTimeout(() => navigate('/checkout'), 1000);
+    const handleReserveForPickUp = () => {
+        if (onShowToast) onShowToast(`Reserved "${product.name}" for physical pick-up at our store!`);
     };
 
     const handleToggleWishlist = () => {
@@ -99,7 +98,7 @@ const ProductInfo = ({ product, onShowToast }) => {
             {/* Action buttons */}
             <div className="flex flex-wrap items-center gap-3 mb-6">
                 <button
-                    onClick={handleBuyNow}
+                    onClick={handleReserveForPickUp}
                     className="flex-1 bg-primary text-black font-extrabold py-3.5 px-6 rounded-xl shadow-lg hover:shadow-emerald-500/40 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer uppercase text-xs tracking-wider"
                 >
                     <span className="material-symbols-outlined">storefront</span>

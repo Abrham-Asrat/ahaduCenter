@@ -219,17 +219,15 @@ const SearchResultsPage = () => {
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
-              className={`px-6 py-3 font-semibold whitespace-nowrap transition-colors cursor-pointer ${
-                activeTab === tab.key
-                  ? 'text-primary border-b-2 border-primary'
-                  : 'text-on-surface-variant hover:text-white'
-              }`}
+              className={`px-6 py-3 font-semibold whitespace-nowrap transition-colors cursor-pointer ${activeTab === tab.key
+                ? 'text-primary border-b-2 border-primary'
+                : 'text-on-surface-variant hover:text-white'
+                }`}
             >
               {tab.label}{' '}
               <span
-                className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
-                  activeTab === tab.key ? 'bg-primary/10 text-primary' : 'bg-white/5 text-on-surface-variant'
-                }`}
+                className={`ml-2 px-2 py-0.5 rounded-full text-xs ${activeTab === tab.key ? 'bg-primary/10 text-primary' : 'bg-white/5 text-on-surface-variant'
+                  }`}
               >
                 {tab.count}
               </span>
@@ -333,13 +331,12 @@ const SearchResultsPage = () => {
                       {/* Type badge */}
                       <div className="absolute top-3 left-3">
                         <span
-                          className={`px-2 py-1 rounded text-xs uppercase font-bold flex items-center gap-1 ${
-                            result.type === 'Movie'
-                              ? 'bg-surface/90 text-primary border border-primary/30'
-                              : result.type === 'Electronics'
+                          className={`px-2 py-1 rounded text-xs uppercase font-bold flex items-center gap-1 ${result.type === 'Movie'
+                            ? 'bg-surface/90 text-primary border border-primary/30'
+                            : result.type === 'Electronics'
                               ? 'bg-surface/90 text-secondary border border-secondary/30'
                               : 'bg-surface/90 text-tertiary border border-tertiary/30'
-                          }`}
+                            }`}
                         >
                           <span className="material-symbols-outlined text-sm">
                             {result.type === 'Movie' ? 'movie' : result.type === 'Electronics' ? 'devices' : 'menu_book'}
@@ -432,8 +429,8 @@ const SearchResultsPage = () => {
           </div>
         </div>
       )}
-
       <Footer />
+
     </div>
   );
 };

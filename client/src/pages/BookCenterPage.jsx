@@ -145,8 +145,8 @@ const BookCenterPage = () => {
     } else if (book.availability === 'Reserve') {
       showToast(`Reserved place on waitlist for "${book.title}"!`);
     } else if (book.availability === 'Buy') {
-      showToast(`"${book.title}" added to shopping cart!`);
-      setTimeout(() => navigate('/checkout'), 1000);
+      showToast(`Inquiry sent for "${book.title}". Visit our store for physical purchase!`);
+      setTimeout(() => navigate('/contact'), 1000);
     }
   };
 
