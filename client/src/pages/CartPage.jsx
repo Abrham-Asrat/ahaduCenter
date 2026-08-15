@@ -7,19 +7,9 @@ import Footer from '../components/common/Footer';
 /**
  * CartPage Component
  * 
- * Displays shopping cart with items, quantity controls, promo code, and order summary.
- * 
- * Features:
- * - Cart items with image, name, brand, condition badge, price
- * - Quantity increase/decrease controls
- * - Remove item button
- * - Promo code input with apply button
- * - Order summary (subtotal, discount, shipping, tax, total)
- * - Proceed to Checkout button
- * 
- * State:
- * - cartItems: Array of { id, name, brand, imageUrl, condition, price, quantity }
- * - promoCode: String
+ * Displays items selected for In-Store Pick-Up Reservation.
+ * Note: Ahadu Center is an in-person physical store & library hub.
+ * No online payment method is required.
  */
 const CartPage = () => {
   const navigate = useNavigate();
@@ -28,19 +18,19 @@ const CartPage = () => {
   const [cartItems, setCartItems] = useState([
     {
       id: 1,
-      name: 'Alpha Pro DSLR X-1',
+      name: 'Alpha Pro DSLR X-1 Camera',
       brand: 'Lumiere Tech',
       condition: 'Brand New',
-      imageUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAnOBonH2beYWsnRCNi4bWcopLUJpx-YvtowT3DX75SioUCv1mrLVfAyRkizerku4uwYsRsS_2rRIHzUK4TC92XeqtsmUYOT62S_pHaFvxrOWZdJ1CLW7hyaNxkzl63MrWaTeLF97xcLL8smROV3q6sVHUFedhvM9QbvHXCQS8YtEhbWmTp2K8YCko-JtZTfU4tvN_mHscVGEWcNOg1ghe9pLuWp6mfpldtNj6kPVy_-k-DZVZtCqKb4Q',
+      imageUrl: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=600&q=80',
       price: 2499,
       quantity: 1,
     },
     {
       id: 2,
-      name: 'SonicWave Studio Pro',
+      name: 'SonicWave Studio Pro Headphones',
       brand: 'Acoustica',
       condition: 'Refurbished',
-      imageUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC67sQH4AyE-z2eU1PiMnmv8CkWSTYltmpyt40HEHnRqunEisbZLKiQzYd0oxwLq6YGUO7DWJPzNbgn8MrokEbFeLOIHLtqsVClNoebfU9GAl92shhHunQlzG4Nd9hVJQJCkXTfbcxBxYt9ozWDqdawPYj4OyCQi1WKrUD4qqUInTSZmek_whhZwdxYuHYcxyP8A8K9Qb9y0IpgXUgyczuyei_dhF2JK0AZvqSnGxF6F49ccyclh8Ka4g',
+      imageUrl: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80',
       price: 349,
       quantity: 2,
     },
@@ -51,12 +41,8 @@ const CartPage = () => {
 
   // Calculate subtotal
   const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  // Discount (if promo applied)
   const discount = appliedPromo === 'PROMO100' ? 100 : 0;
-  // Tax (8% of subtotal after discount)
-  const tax = (subtotal - discount) * 0.08;
-  // Total
-  const total = subtotal - discount + tax;
+  const total = subtotal - discount;
 
   // Update quantity
   const updateQuantity = (id, delta) => {
@@ -87,25 +73,30 @@ const CartPage = () => {
       <Navbar />
 
       <main className="flex-grow pt-24 pb-12 max-w-7xl mx-auto px-4 md:px-8 w-full">
-        <h1 className="text-4xl md:text-5xl font-bold text-white mb-8">Your Cart</h1>
+        <div className="mb-8">
+          <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-2">In-Store Pick-Up Cart</h1>
+          <p className="text-on-surface-variant text-base">
+            Items reserved here will be held at our physical address for in-person inspection and payment.
+          </p>
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Left: Cart items */}
           <div className="lg:col-span-8 flex flex-col gap-4">
             {cartItems.length === 0 ? (
-              <div className="text-center py-16">
+              <div className="glass-panel rounded-2xl text-center py-16 px-6 border border-white/10">
                 <span className="material-symbols-outlined text-6xl text-on-surface-variant/30">shopping_cart</span>
-                <h2 className="text-2xl font-bold text-white mt-4">Your cart is empty</h2>
-                <p className="text-on-surface-variant mt-2">Add some products to get started.</p>
-                <Link to="/electronics" className="inline-block mt-6 bg-primary text-black px-6 py-2 rounded hover:shadow-lg transition-all">
-                  Shop Electronics
+                <h2 className="text-2xl font-bold text-white mt-4">Your pick-up cart is empty</h2>
+                <p className="text-on-surface-variant mt-2 text-sm">Add some products or books to reserve for pick-up.</p>
+                <Link to="/electronics" className="inline-block mt-6 bg-primary text-black font-bold px-8 py-3 rounded-xl hover:shadow-lg transition-all">
+                  Browse Tech Marketplace
                 </Link>
               </div>
             ) : (
               cartItems.map((item) => (
-                <div key={item.id} className="glass-panel rounded-xl p-6 flex flex-col sm:flex-row gap-6 items-center">
+                <div key={item.id} className="glass-panel rounded-2xl p-6 flex flex-col sm:flex-row gap-6 items-center border border-white/10 shadow-lg">
                   {/* Product image */}
-                  <div className="w-32 h-32 flex-shrink-0 bg-surface-container rounded-lg overflow-hidden border border-white/5">
+                  <div className="w-32 h-32 flex-shrink-0 bg-surface-container rounded-xl overflow-hidden border border-white/10">
                     <img src={item.imageUrl} alt={item.name} className="w-full h-full object-cover" />
                   </div>
 
@@ -113,36 +104,36 @@ const CartPage = () => {
                   <div className="flex-grow flex flex-col gap-2 w-full">
                     <div className="flex justify-between items-start">
                       <div>
-                        <span className={`text-xs uppercase px-2 py-1 rounded ${item.condition === 'Brand New'
-                            ? 'bg-primary/15 text-primary'
-                            : 'bg-secondary/15 text-secondary'
+                        <span className={`text-[10px] uppercase font-bold px-2.5 py-1 rounded-full ${item.condition === 'Brand New'
+                            ? 'bg-primary/15 text-primary border border-primary/30'
+                            : 'bg-secondary/15 text-secondary border border-secondary/30'
                           }`}>
                           {item.condition}
                         </span>
-                        <h3 className="text-xl font-semibold text-white mt-2">{item.name}</h3>
-                        <p className="text-sm text-on-surface-variant">{item.brand}</p>
+                        <h3 className="text-xl font-bold text-white mt-2">{item.name}</h3>
+                        <p className="text-xs text-on-surface-variant font-medium">{item.brand}</p>
                       </div>
                       <button
                         onClick={() => removeItem(item.id)}
-                        className="text-on-surface-variant hover:text-error transition-colors p-2"
+                        className="text-on-surface-variant hover:text-error transition-colors p-2 cursor-pointer"
                       >
-                        <span className="material-symbols-outlined">delete</span>
+                        <span className="material-symbols-outlined text-xl">delete</span>
                       </button>
                     </div>
 
                     <div className="flex justify-between items-end mt-4">
-                      <div className="text-xl font-bold text-primary">${item.price.toLocaleString()}</div>
-                      <div className="flex items-center gap-2 bg-surface-container-high rounded-lg p-1 border border-white/5">
+                      <div className="text-2xl font-extrabold text-primary">${item.price.toLocaleString()}</div>
+                      <div className="flex items-center gap-2 bg-surface-container-high rounded-xl p-1 border border-white/10">
                         <button
                           onClick={() => updateQuantity(item.id, -1)}
-                          className="w-8 h-8 flex items-center justify-center text-white hover:text-primary transition-colors"
+                          className="w-8 h-8 flex items-center justify-center text-white hover:text-primary transition-colors cursor-pointer"
                         >
                           <span className="material-symbols-outlined text-sm">remove</span>
                         </button>
-                        <span className="text-white w-8 text-center">{item.quantity}</span>
+                        <span className="text-white w-8 text-center font-bold">{item.quantity}</span>
                         <button
                           onClick={() => updateQuantity(item.id, 1)}
-                          className="w-8 h-8 flex items-center justify-center text-white hover:text-primary transition-colors"
+                          className="w-8 h-8 flex items-center justify-center text-white hover:text-primary transition-colors cursor-pointer"
                         >
                           <span className="material-symbols-outlined text-sm">add</span>
                         </button>
@@ -160,12 +151,12 @@ const CartPage = () => {
                   type="text"
                   value={promoCode}
                   onChange={(e) => setPromoCode(e.target.value)}
-                  className="flex-grow bg-background border border-white/10 rounded-lg px-4 py-2 text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none"
-                  placeholder="Promo Code"
+                  className="flex-grow bg-background border border-white/10 rounded-xl px-4 py-3 text-white focus:border-primary outline-none text-sm"
+                  placeholder="In-Store Voucher Code"
                 />
                 <button
                   onClick={applyPromo}
-                  className="border border-secondary text-secondary px-6 py-2 rounded-lg hover:bg-secondary/10 transition-colors uppercase text-sm tracking-wider"
+                  className="border border-secondary text-secondary px-6 py-3 rounded-xl hover:bg-secondary/10 transition-colors uppercase text-xs font-bold tracking-wider cursor-pointer"
                 >
                   Apply
                 </button>
@@ -176,42 +167,38 @@ const CartPage = () => {
           {/* Right: Order summary */}
           {cartItems.length > 0 && (
             <div className="lg:col-span-4">
-              <div className="glass-panel rounded-xl p-6 sticky top-24 flex flex-col gap-4">
-                <h2 className="text-2xl font-bold text-white pb-3 border-b border-white/10">Order Summary</h2>
-                <div className="flex flex-col gap-3 text-lg">
+              <div className="glass-panel rounded-2xl p-6 sticky top-24 flex flex-col gap-4 border border-white/10 shadow-xl">
+                <h2 className="text-2xl font-bold text-white pb-3 border-b border-white/10">Reservation Summary</h2>
+                <div className="flex flex-col gap-3 text-sm">
                   <div className="flex justify-between text-on-surface-variant">
-                    <span>Subtotal</span>
-                    <span>${subtotal.toLocaleString()}</span>
+                    <span>Estimated Subtotal</span>
+                    <span className="text-white font-bold">${subtotal.toLocaleString()}</span>
                   </div>
                   {discount > 0 && (
                     <div className="flex justify-between text-secondary">
-                      <span>Discount (PROMO100)</span>
+                      <span>Voucher Discount</span>
                       <span>-${discount.toLocaleString()}</span>
                     </div>
                   )}
-                  <div className="flex justify-between text-on-surface-variant">
-                    <span>Shipping</span>
-                    <span className="text-primary">Free</span>
-                  </div>
-                  <div className="flex justify-between text-on-surface-variant">
-                    <span>Tax</span>
-                    <span>${tax.toFixed(2)}</span>
+                  <div className="flex justify-between text-on-surface-variant pb-2 border-b border-white/10">
+                    <span>In-Store Pick-Up Fee</span>
+                    <span className="text-primary font-bold">FREE</span>
                   </div>
                 </div>
-                <div className="border-t border-white/10 pt-4 flex justify-between items-end">
-                  <span className="text-xl font-semibold text-white">Total</span>
-                  <span className="text-3xl font-bold text-primary">${total.toFixed(2)}</span>
+                <div className="pt-2 flex justify-between items-end">
+                  <span className="text-lg font-bold text-white">Total Payable at Store</span>
+                  <span className="text-3xl font-extrabold text-secondary">${total.toFixed(2)}</span>
                 </div>
                 <button
                   onClick={() => navigate('/checkout')}
-                  className="w-full py-4 bg-primary text-black font-bold rounded-xl hover:shadow-[0_0_20px_rgba(16,185,129,0.5)] transition-all flex items-center justify-center gap-2"
+                  className="w-full py-4 bg-primary text-black font-extrabold rounded-xl hover:shadow-[0_0_20px_rgba(16,185,129,0.5)] transition-all flex items-center justify-center gap-2 cursor-pointer uppercase text-xs tracking-wider"
                 >
-                  Proceed to Checkout
+                  Proceed to Pick-Up Reservation
                   <span className="material-symbols-outlined">arrow_forward</span>
                 </button>
-                <div className="flex items-center gap-2 text-sm text-on-surface-variant justify-center">
-                  <span className="material-symbols-outlined text-sm">lock</span>
-                  Secure Checkout Guarantee
+                <div className="flex items-center gap-2 text-xs text-on-surface-variant justify-center pt-2 border-t border-white/10">
+                  <span className="material-symbols-outlined text-primary text-sm">verified</span>
+                  In-Person Inspection &amp; Warranty Guarantee
                 </div>
               </div>
             </div>

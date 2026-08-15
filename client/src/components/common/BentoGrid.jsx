@@ -27,7 +27,7 @@ const BentoGrid = () => {
                         className="absolute inset-0 bg-cover bg-center opacity-40 group-hover:opacity-60 transition-opacity duration-500"
                         style={{
                             backgroundImage:
-                                "url('https://lh3.googleusercontent.com/aida-public/AB6AXuAIHvSxlN360wcVtxV1tPdTP0oWJ7AfLyAbtzokP4ZGDeapUDZ4_4wpX_NNLzP7xDNrlcIgvzpdvLguZKakTE76brKm9BpsC5vEYvM0t6HcsD3uXjqyMmL1vBnDg90XsVI1RhlozTI8HMSzTXzXW_a4BQzCUsjo0XWlakhg1aHJkKWeMSquj-ZV0fXu4fPhar4P7HNjgmj1KFd1WTvbKEYlRXQih8abcmT6U843Hfp-pjWTZEYlBJAs5w')",
+                                "url('https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80')",
                         }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#151B28] via-[#151B28]/50 to-transparent" />
@@ -48,7 +48,7 @@ const BentoGrid = () => {
                         className="absolute inset-0 bg-cover bg-center opacity-40 group-hover:opacity-60 transition-opacity duration-500"
                         style={{
                             backgroundImage:
-                                "url('https://lh3.googleusercontent.com/aida-public/AB6AXuDnCvJUYMrDO3hvxg-9IP1QRulJjis-98ADMVxWWl9QdPeCeyxzt5pS42hLPEDHNDCpeLDB40DMwFjqc8hcxJwWg20H9ZtRiXyZdJtvg3htYiuaLTpQwqlN08E_AxfyAQWxwu39SF78EkDWa6hzobMUYaqW2Le8Sp7DZyf5hkyJxtm5InDgTmKwj1d8vHbPd1VB7erErUSeWw96v_nCSO3igWTY0IgUUctesWR1DXFvNfPU71gi-5_XAw')",
+                                "url('https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=800&q=80')",
                         }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#151B28] via-[#151B28]/50 to-transparent" />
@@ -64,7 +64,7 @@ const BentoGrid = () => {
                         className="absolute inset-0 bg-cover bg-center opacity-40 group-hover:opacity-60 transition-opacity duration-500"
                         style={{
                             backgroundImage:
-                                "url('https://lh3.googleusercontent.com/aida-public/AB6AXuBzRKp_0-_vCPBpIj-Hlsxd8xhUaGGQgaUr6eCDoHkgM-u1bo7gJGhF5AQUBV5_282H9UX-8WpgEpXPEcL7UCTFjk9_PyHfDhnLg0zeXsSIj2grKqEBIhQgxy0RAfq4qWSIpYs5Yubt9q-sGKme4v3PVAvFuornji37Ur-Qxk151UdNX9olUW7gtRnevJyghRMyqlGiUrZdgprZpQ2JmFpqfqkW_G9u6qbRyCJlEjwf-nS6PNWpM_q6_g')",
+                                "url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=800&q=80')",
                         }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#151B28] via-[#151B28]/50 to-transparent" />

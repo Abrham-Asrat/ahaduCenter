@@ -22,30 +22,49 @@ import Footer from '../components/common/Footer';
  * - Mobile: Sidebar becomes horizontal scrollable tabs, cards stack
  */
 const UserDashboardPage = () => {
-  // Dummy user data
-  const user = {
-    name: 'John Doe',
-    email: 'john.doe@example.com',
+  // User profile state
+  const [user, setUser] = useState({
+    name: 'Alex Mercer',
+    email: 'alex.mercer@ahaducenter.com',
+    phone: '+251 911 123 456',
     memberSince: 'Jan 2024',
-    initials: 'JD',
-    avatarUrl: null, // Use initials if no image
+    initials: 'AM',
+    avatarUrl: null,
     stats: {
       favorites: 12,
       purchases: 5,
       borrowed: 2,
       requests: 3,
     },
+  });
+
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editForm, setEditForm] = useState({ name: user.name, email: user.email, phone: user.phone });
+  const [toastMessage, setToastMessage] = useState(null);
+
+  const handleSaveProfile = (e) => {
+    e.preventDefault();
+    setUser({
+      ...user,
+      name: editForm.name,
+      email: editForm.email,
+      phone: editForm.phone,
+      initials: editForm.name.split(' ').map((n) => n[0]).join(''),
+    });
+    localStorage.setItem('ahadu_user_email', editForm.email);
+    window.dispatchEvent(new Event('auth-change'));
+    setIsEditModalOpen(false);
+    setToastMessage('Profile updated successfully!');
+    setTimeout(() => setToastMessage(null), 3000);
   };
 
   // Sidebar navigation items
   const navItems = [
-    { label: 'Overview', icon: 'dashboard', active: true },
-    { label: 'Favorites', icon: 'favorite' },
-    { label: 'Purchase History', icon: 'receipt_long' },
-    { label: 'Borrowing History', icon: 'library_books' },
-    { label: 'Movie Requests', icon: 'movie' },
-    { label: 'Settings', icon: 'settings' },
-    { label: 'Logout', icon: 'logout', danger: true },
+    { label: 'Overview', icon: 'dashboard', active: true, path: '/account' },
+    { label: 'Favorites', icon: 'favorite', path: '/wishlist' },
+    { label: 'Purchase History', icon: 'receipt_long', path: '/purchase-history' },
+    { label: 'Borrowing History', icon: 'library_books', path: '/borrowing-history' },
+    { label: 'Movie Requests', icon: 'movie', path: '/movie-request' },
   ];
 
   // Stats data
@@ -113,9 +132,12 @@ const UserDashboardPage = () => {
                 {user.email} <span className="mx-2 opacity-50">|</span> Member since {user.memberSince}
               </p>
               <div className="mt-4">
-                <button className="btn-secondary px-6 py-2 rounded text-xs uppercase tracking-wider flex items-center gap-2 mx-auto md:mx-0">
+                <button
+                  onClick={() => setIsEditModalOpen(true)}
+                  className="btn-secondary px-6 py-2.5 rounded-xl text-xs uppercase tracking-wider font-bold flex items-center gap-2 mx-auto md:mx-0 cursor-pointer"
+                >
                   <span className="material-symbols-outlined text-sm">edit</span>
-                  Edit Profile
+                  Edit Profile Information
                 </button>
               </div>
             </div>
@@ -227,6 +249,80 @@ const UserDashboardPage = () => {
           </div>
         </div>
       </main>
+
+      {/* Edit Profile Modal */}
+      {isEditModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+          <div className="glass-panel w-full max-w-md rounded-2xl shadow-2xl border border-white/20 overflow-hidden">
+            <div className="p-6 border-b border-white/10 flex items-center justify-between bg-white/5">
+              <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                <span className="material-symbols-outlined text-primary">edit</span>
+                Edit Profile Information
+              </h3>
+              <button onClick={() => setIsEditModalOpen(false)} className="text-on-surface-variant hover:text-error cursor-pointer">
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveProfile} className="p-6 space-y-4">
+              <div>
+                <label className="block text-xs uppercase text-on-surface-variant font-bold mb-2">Full Name</label>
+                <input
+                  type="text"
+                  value={editForm.name}
+                  onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
+                  className="w-full bg-background border border-white/10 rounded-xl px-4 py-2.5 text-white focus:border-primary outline-none text-sm"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-xs uppercase text-on-surface-variant font-bold mb-2">Email Address</label>
+                <input
+                  type="email"
+                  value={editForm.email}
+                  onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
+                  className="w-full bg-background border border-white/10 rounded-xl px-4 py-2.5 text-white focus:border-primary outline-none text-sm"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-xs uppercase text-on-surface-variant font-bold mb-2">Phone Number</label>
+                <input
+                  type="tel"
+                  value={editForm.phone}
+                  onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })}
+                  className="w-full bg-background border border-white/10 rounded-xl px-4 py-2.5 text-white focus:border-primary outline-none text-sm"
+                  required
+                />
+              </div>
+
+              <div className="pt-4 border-t border-white/10 flex justify-end gap-3">
+                <button
+                  type="button"
+                  onClick={() => setIsEditModalOpen(false)}
+                  className="px-5 py-2.5 rounded-xl border border-secondary text-secondary font-bold text-xs uppercase cursor-pointer hover:bg-secondary/10"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-6 py-2.5 rounded-xl bg-primary text-black font-extrabold text-xs uppercase cursor-pointer hover:shadow-[0_0_20px_rgba(16,185,129,0.5)]"
+                >
+                  Save Changes
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Toast notification */}
+      {toastMessage && (
+        <div className="fixed bottom-6 right-6 bg-primary text-black font-extrabold px-6 py-3 rounded-2xl shadow-2xl z-50 flex items-center gap-2 animate-bounce">
+          <span className="material-symbols-outlined">check_circle</span>
+          {toastMessage}
+        </div>
+      )}
 
       <Footer />
     </div>

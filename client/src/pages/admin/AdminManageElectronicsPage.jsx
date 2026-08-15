@@ -28,7 +28,7 @@ const AdminManageElectronicsPage = () => {
             id: 1,
             name: 'AuraBook Pro 16"',
             sku: 'AB-16-M3-1TB',
-            imageUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCaniux9GWXXuHOrx3HAWl9vQURfKwpZtHmgEGV3ffb_1iGFIJdCasbJDU1ZNy942E9vb2lPgmGtlrY8X5uKKl6ysnSb3XwKqMijbeTOc0BRPK_KFoOUiCMQRRnMPihRV4ZXTlBlZNoncedH7qygkJw8CZ7vDPukfuQ5-JIOuCS-h5o6U1mpU3EMO9cadIb4NjRqmTOl0d8lA3jTJ4KKh52VOXAgxurRiNwKvkU0sAgkwVfCclXv80g_A',
+            imageUrl: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=600&q=80',
             category: 'Laptops',
             condition: 'New',
             brand: 'AuraTech',
@@ -41,7 +41,7 @@ const AdminManageElectronicsPage = () => {
             id: 2,
             name: 'NovaPhone Z5 Fold',
             sku: 'NP-Z5-512G',
-            imageUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDfPVeoOj9geNM8nroF94pyWA-396GRS4CfxOn0AEECoXwQjxea1bwt7qmMQAf9ExYENGZlVqM5wQel24XQKBa6SU1n6BXr-5dbVTtZqBkD-3Mg9Z6JPC-BfCditCClCEKmm7uW39jXvIm-ZwZUhEOrFpEaSyU6MZOnRsXLuBGs0n2WDOYybBZ2yDnpyfXeAKIwig3CteYCUgmwYoYPp87nQ6RxmxSNv7R4CjrVdC6qYJ-EjvBYVnRSEg',
+            imageUrl: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80',
             category: 'Smartphones',
             condition: 'Refurbished',
             brand: 'NovaSystems',
@@ -52,9 +52,9 @@ const AdminManageElectronicsPage = () => {
         },
         {
             id: 3,
-            name: 'SonicWave Elite',
+            name: 'SonicWave Elite Headphones',
             sku: 'SW-E-ANC-BLK',
-            imageUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC3ZP7Iun0e-A-FhQzc-oQ95xlpW7XrzJ9VMzFWF363A7oS49aEhmhKgZhWpUYp2_c2BHMwx3AfmXgGESmFdKL_HsX25uRxdQ7I3-BhEDkj2G-2AgPqdR_uaRWnVuEcBd_nALtVOlooL7pQk2ebnKM3n3cuqtT8R8DDd4DuWnoFNNMrYs9yHu7r0CiQREeQBavgG0XA691pdpMylamH0ESvp4nkJcxuAJcvV_a3rXAKtFL1alfKWZGmDQ',
+            imageUrl: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80',
             category: 'Audio',
             condition: 'New',
             brand: 'SonicWave',
@@ -67,15 +67,43 @@ const AdminManageElectronicsPage = () => {
 
     // UI state
     const [searchQuery, setSearchQuery] = useState('');
+    const [categoryFilter, setCategoryFilter] = useState('All Categories');
+    const [conditionFilter, setConditionFilter] = useState('All Conditions');
+    const [brandFilter, setBrandFilter] = useState('All Brands');
     const [showModal, setShowModal] = useState(false);
     const [editingProduct, setEditingProduct] = useState(null);
 
-    // Filter products by search query
-    const filteredProducts = products.filter((product) =>
-        product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        product.sku.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        product.brand.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    // Filter products by search query, category, condition, brand
+    const filteredProducts = products.filter((product) => {
+        const matchesSearch =
+            product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            product.sku.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            product.brand.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchesCategory = categoryFilter === 'All Categories' || product.category === categoryFilter;
+        const matchesCondition = conditionFilter === 'All Conditions' || product.condition === conditionFilter;
+        const matchesBrand = brandFilter === 'All Brands' || product.brand === brandFilter;
+
+        return matchesSearch && matchesCategory && matchesCondition && matchesBrand;
+    });
+
+    const handleResetFilters = () => {
+        setSearchQuery('');
+        setCategoryFilter('All Categories');
+        setConditionFilter('All Conditions');
+        setBrandFilter('All Brands');
+    };
+
+    const handleExportCSV = () => {
+        const csvContent = "data:text/csv;charset=utf-8," 
+            + ["ID,SKU,Name,Brand,Category,Condition,Price,Stock,Status", ...products.map(p => `${p.id},${p.sku},"${p.name}",${p.brand},${p.category},${p.condition},${p.price},${p.stock},${p.status}`)].join("\n");
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "electronics_inventory.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
 
     // Handle add new product
     const handleAdd = () => {
@@ -104,7 +132,7 @@ const AdminManageElectronicsPage = () => {
             const newProduct = {
                 id: products.length + 1,
                 ...formData,
-                imageUrl: 'https://via.placeholder.com/300x300?text=New+Product',
+                imageUrl: 'https://images.unsplash.com/photo-1544652478-6653e09f18a2?auto=format&fit=crop&w=600&q=80',
             };
             setProducts([...products, newProduct]);
         }
@@ -145,13 +173,22 @@ const AdminManageElectronicsPage = () => {
                     <h2 className="text-4xl md:text-5xl font-bold text-white mb-2">Manage Electronics Inventory</h2>
                     <p className="text-lg text-on-surface-variant">Add, edit, delete, and organize electronics products.</p>
                 </div>
-                <button
-                    onClick={handleAdd}
-                    className="bg-primary text-white px-6 py-3 rounded-lg flex items-center justify-center gap-2 hover:shadow-[0_0_20px_rgba(16,185,129,0.5)] transition-all"
-                >
-                    <span className="material-symbols-outlined text-lg">add</span>
-                    Add New Product
-                </button>
+                <div className="flex flex-wrap gap-3">
+                    <button
+                        onClick={handleExportCSV}
+                        className="border border-secondary text-secondary px-5 py-3 rounded-lg flex items-center justify-center gap-2 hover:bg-secondary/10 transition-all font-bold text-xs uppercase tracking-wider cursor-pointer"
+                    >
+                        <span className="material-symbols-outlined text-lg">download</span>
+                        Export CSV
+                    </button>
+                    <button
+                        onClick={handleAdd}
+                        className="bg-primary text-black px-6 py-3 rounded-lg flex items-center justify-center gap-2 hover:shadow-[0_0_20px_rgba(16,185,129,0.5)] transition-all font-bold text-xs uppercase tracking-wider cursor-pointer"
+                    >
+                        <span className="material-symbols-outlined text-lg">add</span>
+                        Add New Product
+                    </button>
+                </div>
             </div>
 
             {/* Toolbar */}
@@ -167,24 +204,39 @@ const AdminManageElectronicsPage = () => {
                     />
                 </div>
                 <div className="flex flex-wrap gap-3">
-                    <select className="bg-background border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-primary outline-none">
+                    <select
+                        value={categoryFilter}
+                        onChange={(e) => setCategoryFilter(e.target.value)}
+                        className="bg-background border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-primary outline-none cursor-pointer"
+                    >
                         <option>All Categories</option>
                         <option>Laptops</option>
                         <option>Smartphones</option>
                         <option>Audio</option>
                     </select>
-                    <select className="bg-background border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-primary outline-none">
+                    <select
+                        value={conditionFilter}
+                        onChange={(e) => setConditionFilter(e.target.value)}
+                        className="bg-background border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-primary outline-none cursor-pointer"
+                    >
                         <option>All Conditions</option>
                         <option>New</option>
                         <option>Refurbished</option>
                     </select>
-                    <select className="bg-background border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-primary outline-none">
+                    <select
+                        value={brandFilter}
+                        onChange={(e) => setBrandFilter(e.target.value)}
+                        className="bg-background border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-primary outline-none cursor-pointer"
+                    >
                         <option>All Brands</option>
                         <option>AuraTech</option>
                         <option>NovaSystems</option>
                         <option>SonicWave</option>
                     </select>
-                    <button className="text-secondary hover:text-secondary-fixed text-sm flex items-center">
+                    <button
+                        onClick={handleResetFilters}
+                        className="text-secondary hover:text-secondary-fixed text-sm flex items-center cursor-pointer font-semibold"
+                    >
                         <span className="material-symbols-outlined text-sm mr-1">filter_alt_off</span>
                         Reset
                     </button>

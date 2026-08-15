@@ -1,6 +1,6 @@
 // src/pages/ProductDetailPage.jsx
-import React from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import Navbar from '../components/common/Navbar';
 import ProductGallery from '../components/electronics/ProductGallery';
 import ProductInfo from '../components/electronics/ProductInfo';
@@ -12,29 +12,29 @@ import Footer from '../components/common/Footer';
  * ProductDetailPage Component
  * 
  * Main page for displaying a single electronics product.
- * Uses useParams to get product ID from URL.
- * 
- * Layout:
- * - Breadcrumbs (desktop only)
- * - Two columns: Gallery (left, 7 cols) + Info (right, 5 cols)
- * - Full-width specs tabs below
- * - Similar products carousel
- * - Mobile fixed bottom action buttons
  */
 const ProductDetailPage = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+
+  const [toastMessage, setToastMessage] = useState(null);
+
+  const showToast = (msg) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(null), 3000);
+  };
 
   // Dummy product data
   const product = {
-    id: parseInt(id),
+    id: parseInt(id) || 1,
     name: 'Quantum UltraBook X Pro',
     brand: 'AHADUTECH',
     condition: 'Brand New',
     images: [
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuAsHOXXH9FMFbXFNIiikyaycPEtak2eXWt9UKMl1DbSLEe_t1hHHoDudr892DOEZyQHYg2FUnwVybakCjMH8fS-mcm9Uy5IEqR6adg-QDrGAkQkNUX8ANkKZWqUtjz_ZVjwMO9JoKyb5NfBrGjABH-Yb0H5RRi7lOZKkX0VlbwrIKqo6gmxWuocAjOTAxAEHdWmicUMDrBW7hE9JXOd4rY8b8p-xM4-wpQH9RJuU12dtAfLjAhW7Aubag',
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuBa3i6iJAoLznUqCNHDyZ0uqkrITZ_FnI90b2MS9t8ej4K4nH8Y0voizSsYad-wobdFiiUZPuLv7obQaQ_fWRxPeNAjMq47cfJE6wO4r2oQlVptszaYRJnS3G3fJWTDlnntC8k9rzMqU7mGVd1baXyxPeWJK-YnXaKcvDlTr3LkjvRrP7dkYZe8pFhSxmLMmEkK4eXHDMJmz4S2T0-OSbU6rSGjpxZvBjOo2JPTl-wOuxxSrmQb6osk7w',
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuDB00adDfUS0xpcqmaZUunqRRj2DhxrFilaT7QhRLPZir5MaWBX5kuJubDuw98SsF-e9EzW_6YCJSRurj7IuGl9dRylq2b68rm64GF-QDplgkXWPlJT8Kk_zHC5HNYHwEYN_rS6IGTlXgqohGswK6WelxdnDmo29TmO4LYhiFmX2KTCdKLMxtI-LUGjWxPytJzMNqMLV-IbN_fKCiMXWfbfwfhpm34QokqgHSf37YYAeU9gXZOj0qL3zw',
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuAZ2vLJi9f8xp79TBXxMX5itomGsGXOo-ohGiCAcE-62t6kRNcv8xV-DrE1vlFA5a55uhSFpeVt_gniKY0NV3Y1WeEWtRtRLDjrky4fEDoJyK-WiAUpcQOGCGqP_-TrvyFofx30NC4QnW2-MOzR-FnrxnkYHGCR7Wf7uD0HGmaxipDB2BbP2FW6EyovUAEGk2GFzpO0lRfi8n4q4kOg3EZo5a6IfPB3rsyq2Ft96TfHlPrlI9YhOHiozQ',
+      'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=1200&q=80',
+      'https://images.unsplash.com/photo-1541807084-5c52b6b3adef?auto=format&fit=crop&w=1200&q=80',
+      'https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?auto=format&fit=crop&w=1200&q=80',
+      'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=1200&q=80',
     ],
     rating: 4.8,
     reviews: 124,
@@ -66,39 +66,45 @@ const ProductDetailPage = () => {
       id: 101,
       name: 'AuraSync 34" Curved OLED Monitor',
       brand: 'AURA VISUALS',
-      imageUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCQTeMXJQZEnw0KS7qQqsDI2juFsa7lsx5p8MvqB-CcRoA9qEMuag5mWdBmlUBnbeHkCa43zo922BLjHiH1OErbdmzBcWe1l5o0hVThuBk5J7UPwEBPKn20LNeun8ElWz07GWRBNb9DX716r-SlzRwUDivoOPtEgYzo6Jd8XOJaZducngXxHMM9mqRjDdOD80V7wc9htNKxo3atd2AaaQLyEWAOhmYE_3xh0DAqhalGK3WkhMF4GgdWqw',
+      imageUrl: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=600&q=80',
       price: 899,
     },
     {
       id: 102,
       name: 'Tactile Pro Low-Profile Mechanical Keyboard',
       brand: 'AHADUTECH',
-      imageUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBsJqNC1ZKnXAwsapsIRVJvhwIPWDdLulifm0Zu3YA0N62mCDlseHiud1MWPAUhEzDruRpXpGZhC8DpGBfXs2ns1aA7K_x-EFH8R0H-1asNIPoeZcJ65PseyDzWwoxnwpnU1iCVNuMVoLZB8d96NJbBJHO96HVACbfXnfsymc7RTpWbtoMVSJu-TycnAyoGY2yOnWq6X-MhHlZ4TwAx2-iIk8h--TMKMFVtevAgMeKLAXE115sB0LVp8g',
+      imageUrl: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=600&q=80',
       price: 149,
     },
     {
       id: 103,
-      name: 'Vision 34" Curved Monitor',
-      brand: 'AURA VISUALS',
-      imageUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuB1mvIFfas5eRL83GDEzeZNadyZbvMBdo19e4Z5GkE5-PuVaY7dcTezBQpEWjF9--yIT6OS6ellA0EaJttwA15jnwGx5SIjI4VH550QjaFJXUzCBFogFS_W7i0FE0lP9D3TnYbMKYTK1MMqxlT-oPEm-7fwCzx93x9ilcDclmmqweREZZf0xCfLvIXabKEXkU77wxf6jo4IKcgD3eM47sVemFeJk6vF5Z_rYBMwDbTDxapkNU7kbFLmAA',
-      price: 899,
+      name: 'Silence 400 Wireless Headphones',
+      brand: 'SONICAURA',
+      imageUrl: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80',
+      price: 249,
     },
   ];
 
   return (
-    <div className="min-h-screen bg-background text-on-background flex flex-col">
+    <div className="min-h-screen bg-background text-on-background flex flex-col relative">
       <Navbar />
+
+      {/* Toast Notification */}
+      {toastMessage && (
+        <div className="fixed bottom-24 right-8 z-50 bg-surface-container border border-primary/50 text-white px-5 py-3.5 rounded-xl shadow-2xl flex items-center gap-3 animate-bounce">
+          <span className="material-symbols-outlined text-primary">check_circle</span>
+          <span className="text-sm font-semibold">{toastMessage}</span>
+        </div>
+      )}
 
       <main className="flex-grow pt-24 pb-12">
         {/* Breadcrumbs (desktop) */}
-        <div className="max-w-7xl mx-auto px-6 mb-6 hidden md:flex gap-2 text-sm text-on-surface-variant">
-          <a href="#" className="hover:text-primary">Home</a>
+        <div className="max-w-7xl mx-auto px-6 mb-6 hidden md:flex items-center gap-2 text-sm text-on-surface-variant">
+          <a href="/" className="hover:text-primary transition-colors">Home</a>
           <span className="material-symbols-outlined text-sm">chevron_right</span>
-          <a href="/electronics" className="hover:text-primary">Electronics</a>
+          <a href="/electronics" className="hover:text-primary transition-colors">Electronics</a>
           <span className="material-symbols-outlined text-sm">chevron_right</span>
-          <a href="#" className="hover:text-primary">Laptops</a>
-          <span className="material-symbols-outlined text-sm">chevron_right</span>
-          <span className="text-white">{product.name}</span>
+          <span className="text-white font-semibold">{product.name}</span>
         </div>
 
         {/* Product hero section */}
@@ -109,7 +115,7 @@ const ProductDetailPage = () => {
           </div>
           {/* Info */}
           <div className="lg:col-span-5">
-            <ProductInfo product={product} />
+            <ProductInfo product={product} onShowToast={showToast} />
           </div>
         </div>
 
@@ -125,12 +131,21 @@ const ProductDetailPage = () => {
       </main>
 
       {/* Mobile fixed bottom action bar */}
-      <div className="md:hidden fixed bottom-0 w-full glass-panel border-t border-white/10 p-4 z-40 pb-6 rounded-t-xl">
+      <div className="md:hidden fixed bottom-0 w-full glass-panel border-t border-white/10 p-4 z-40 pb-6 rounded-t-2xl shadow-2xl">
         <div className="flex gap-3">
-          <button className="w-12 h-12 flex-shrink-0 rounded-lg border border-secondary/50 text-secondary flex items-center justify-center bg-surface-container/50">
+          <button
+            onClick={() => showToast('Opening seller chat inquiry...')}
+            className="w-12 h-12 flex-shrink-0 rounded-xl border border-secondary/50 text-secondary flex items-center justify-center bg-surface-container/50 active:scale-95 transition-transform"
+          >
             <span className="material-symbols-outlined">chat_bubble</span>
           </button>
-          <button className="flex-1 bg-primary-container text-white font-semibold rounded-lg flex items-center justify-center gap-2">
+          <button
+            onClick={() => {
+              showToast(`Added "${product.name}" to cart! Redirecting...`);
+              setTimeout(() => navigate('/checkout'), 1000);
+            }}
+            className="flex-1 bg-primary text-black font-extrabold rounded-xl flex items-center justify-center gap-2 active:scale-95 transition-transform uppercase tracking-wider text-xs"
+          >
             <span className="material-symbols-outlined">shopping_bag</span>
             Buy Now
           </button>

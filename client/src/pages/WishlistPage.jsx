@@ -1,6 +1,6 @@
 // src/pages/WishlistPage.jsx
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 
@@ -8,74 +8,85 @@ import Footer from '../components/common/Footer';
  * WishlistPage Component
  * 
  * Displays all items saved by the user across Movies, Electronics, and Books.
- * 
- * Features:
- * - Filter tabs: All Items, Movies, Electronics, Books
- * - Wishlist cards with type badge and hover actions
- * - Quick actions: delete, request/buy/borrow, view details
- * - Responsive grid (1 col mobile, 2 tablet, 3-4 desktop)
- * 
- * State:
- * - activeTab: 'all' | 'movies' | 'electronics' | 'books'
  */
 const WishlistPage = () => {
-  // Active filter tab
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('all');
+  const [toastMessage, setToastMessage] = useState(null);
 
-  // Tabs data with counts
-  const tabs = [
-    { key: 'all', label: 'All Items', count: 12 },
-    { key: 'movies', label: 'Movies', count: 5 },
-    { key: 'electronics', label: 'Electronics', count: 4 },
-    { key: 'books', label: 'Books', count: 3 },
-  ];
-
-  // Dummy wishlist items
-  const wishlistItems = [
+  // Wishlist items state with clean Unsplash images
+  const [wishlistItems, setWishlistItems] = useState([
     {
       id: 1,
       type: 'Movie',
       title: 'Interstellar',
-      imageUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD5r_rp9BocBJQsxHRmAB-uqJCxQNyMd7ipnkcBdAtVDEIjy72-9RecHJQfQf1wwtQpPD6Yk4FjmVQuMpWEIA7wjK-nSIqEkGP-YSPURWuWtVa9FJelxVvBIc0IfzA9WxHRDJhbkc-fs0u1X7cu46G5qTTtoyr7axJ14zNO0NcsKi-nCkjoGw0MzCKMAutxaNRdqJBx0SkpEwvtt6d-BMcT0P1-wDZq4x6RMA-clwDU_Bi0vGxR9VqiDA',
+      imageUrl: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=600&q=80',
       rating: '8.7',
       category: 'Sci-Fi',
       price: null,
       status: 'Available',
       actionLabel: 'Request',
+      link: '/movies/1',
     },
     {
       id: 2,
       type: 'Electronics',
       title: 'Quantum Laptop M2',
-      imageUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCZhhHXge6NDlwEUWI_bmqqjW956cjsjagJDimCyd8UI19s1MlIYW4KaS954kiyAUychRDIM3Aajffv9yYSJP5h8Z0LGLaEWoJiazXqs_vKZLkEE3BXf07VtPL8ucR2K3GYJ3XXOF0I9L19gRyddgfeLv2KNpj7NKAr_fe6X2c9lgPoU7PEX_phz7tlCMfJdnM_AUeKNcfDM1PmP6K28dKL35cma3HokY1nwqUMzWxUuDWFvmj9I5qc2Q',
+      imageUrl: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=600&q=80',
       rating: '5.0',
       category: 'Tech',
       price: '$1,299.00',
       status: 'Brand New',
-      actionLabel: 'Buy Now',
+      actionLabel: 'Reserve',
+      link: '/electronics/1',
     },
     {
       id: 3,
       type: 'Book',
       title: 'The Glass Hotel',
-      imageUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuALLc4dNH9UmLrhsAN1JtmwPr7V06tqVLyUwnNCq7wEmiHxyCSBvxBrR9hAS_cB3WdleYHlaaqweVEicZ_PoKljcBSOuN4Uo4x3iUEYanA8J0S6cjZzeU5E0wYqncE_tFsiPDRXTSHPL3uHJtMatrZ4s4siGYqVi8j1KjrnK7ZfTZ9VhvDqXXlZS4apF08q5FVvcTEVkAhVpFm_KDQSoQHmuh2oytZ7SbPgnhFqBgouWV4EOAQWxIAPkw',
+      imageUrl: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80',
       rating: null,
       category: 'Emily St. John Mandel',
       price: null,
       status: 'Available to Borrow',
       actionLabel: 'Borrow',
+      link: '/books/1',
     },
     {
       id: 4,
       type: 'Movie',
       title: 'Blade Runner 2049',
-      imageUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDIxwb72t-2zp119yINMURiv3_fjM8XAGsBcgMRULnzhncEWtk9R11QGxfFPb2ogbtwtFyd50tH8bf-MIWPje_GX_47Z8mhVPlFg2Yw8L5Vf3fk3XMWCGGscWI07ytCxJL7qK5ZwvWBF6etNStjUCdFcJEtnV_UOXKirgwQcmAYWfU9jw1lUb5Xoi-AqqwT27SaWEeMbWlKryV_JVexw-tkKTSia3Jl01FzSTOdMSZuoI7GUZ7w7_qY3g',
+      imageUrl: 'https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?auto=format&fit=crop&w=600&q=80',
       rating: '8.0',
       category: 'Sci-Fi / Thriller',
       price: null,
       status: 'Available',
       actionLabel: 'Request',
+      link: '/movies/2',
     },
+  ]);
+
+  const handleRemove = (id, title) => {
+    setWishlistItems(wishlistItems.filter(item => item.id !== id));
+    setToastMessage(`Removed "${title}" from wishlist.`);
+    setTimeout(() => setToastMessage(null), 3000);
+  };
+
+  const handleAction = (item) => {
+    if (item.type === 'Electronics') {
+      navigate('/cart');
+    } else if (item.type === 'Movie') {
+      navigate('/movie-request');
+    } else {
+      navigate('/borrowing-history');
+    }
+  };
+
+  const tabs = [
+    { key: 'all', label: 'All Items', count: wishlistItems.length },
+    { key: 'movies', label: 'Movies', count: wishlistItems.filter(i => i.type === 'Movie').length },
+    { key: 'electronics', label: 'Electronics', count: wishlistItems.filter(i => i.type === 'Electronics').length },
+    { key: 'books', label: 'Books', count: wishlistItems.filter(i => i.type === 'Book').length },
   ];
 
   // Filter items based on active tab
@@ -101,6 +112,14 @@ const WishlistPage = () => {
   return (
     <div className="min-h-screen bg-background text-on-background flex flex-col">
       <Navbar />
+
+      {/* Toast notification */}
+      {toastMessage && (
+        <div className="fixed top-20 right-6 bg-primary text-black font-extrabold px-6 py-3 rounded-2xl shadow-2xl z-50 flex items-center gap-2 animate-bounce">
+          <span className="material-symbols-outlined">check_circle</span>
+          {toastMessage}
+        </div>
+      )}
 
       <main className="flex-grow pt-24 pb-12 px-4 md:px-8 max-w-7xl mx-auto w-full">
         {/* Page header */}
@@ -176,15 +195,24 @@ const WishlistPage = () => {
 
                 {/* Hover overlay actions */}
                 <div className="absolute inset-0 bg-background/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3 backdrop-blur-sm">
-                  <button className="w-10 h-10 rounded-full bg-surface-container border border-white/10 flex items-center justify-center text-white hover:text-error hover:border-error transition-colors">
+                  <button
+                    onClick={() => handleRemove(item.id, item.title)}
+                    className="w-10 h-10 rounded-full bg-surface-container border border-white/10 flex items-center justify-center text-white hover:text-error hover:border-error transition-colors cursor-pointer"
+                  >
                     <span className="material-symbols-outlined">delete</span>
                   </button>
-                  <button className="w-12 h-12 rounded-full bg-primary text-black flex items-center justify-center shadow-[0_0_15px_rgba(16,185,129,0.5)] hover:scale-110 transition-transform">
+                  <button
+                    onClick={() => handleAction(item)}
+                    className="w-12 h-12 rounded-full bg-primary text-black flex items-center justify-center shadow-[0_0_15px_rgba(16,185,129,0.5)] hover:scale-110 transition-transform cursor-pointer"
+                  >
                     <span className="material-symbols-outlined">{getActionIcon(item.type)}</span>
                   </button>
-                  <button className="w-10 h-10 rounded-full bg-surface-container border border-white/10 flex items-center justify-center text-white hover:text-primary hover:border-primary transition-colors">
+                  <Link
+                    to={item.link}
+                    className="w-10 h-10 rounded-full bg-surface-container border border-white/10 flex items-center justify-center text-white hover:text-primary hover:border-primary transition-colors cursor-pointer"
+                  >
                     <span className="material-symbols-outlined">visibility</span>
-                  </button>
+                  </Link>
                 </div>
               </div>
 

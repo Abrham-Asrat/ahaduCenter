@@ -1,5 +1,6 @@
 // src/components/movie/MovieHero.jsx
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 /**
  * MovieHero Component
@@ -10,12 +11,17 @@ import React from 'react';
  * - Gradient overlays for text readability
  * - Title "Movie Center"
  * - Two CTA buttons: Request a Movie, Browse by Country
- * 
- * Responsive:
- * - Height: 40vh on desktop (min 300px)
- * - Centered text content
  */
 const MovieHero = () => {
+    const navigate = useNavigate();
+
+    const handleBrowseClick = () => {
+        const catalogEl = document.getElementById('movie-catalog');
+        if (catalogEl) {
+            catalogEl.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
+
     return (
         <section className="relative w-full h-[40vh] min-h-[300px] flex items-center justify-center overflow-hidden border-b border-white/10">
 
@@ -23,7 +29,7 @@ const MovieHero = () => {
             <div
                 className="absolute inset-0 bg-surface-container-low z-0"
                 style={{
-                    backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuCqSV19wx-mnAob0Svjhs7F7rmVw9fp5cYhPV4rTgUkpYBCAis2Np9CXLSkaSUCo3HOygrfXtizQlCh2WwZNV1jR12zr08FuOumiCfpCZa4yLIux2nusGJuUoL-ChIQjeNRrxEwCjgul_SU7ygo2TyxD06Sseq7h8b0TqHYmmdaNwmmiyf3juYutW4TG5bSPaDcqiZ9fqqOtLENgUQjjZAFFd_i9cUZEjM9ycfju_h6eHWpNNByYmkqog')",
+                    backgroundImage: "url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1600&q=80')",
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                 }}
@@ -48,7 +54,10 @@ const MovieHero = () => {
                 {/* CTA Buttons */}
                 <div className="flex flex-wrap justify-center gap-3">
                     {/* Request a Movie - Primary button */}
-                    <button className="bg-primary-container text-white px-8 py-3 rounded transition-all hover:shadow-[0_0_20px_rgba(16,185,129,0.6)] flex items-center gap-2">
+                    <button
+                        onClick={() => navigate('/movie-request')}
+                        className="bg-primary-container text-white px-8 py-3 rounded transition-all hover:shadow-[0_0_20px_rgba(16,185,129,0.6)] hover:scale-105 active:scale-95 flex items-center gap-2 font-semibold"
+                    >
                         <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>
                             movie
                         </span>
@@ -56,7 +65,10 @@ const MovieHero = () => {
                     </button>
 
                     {/* Browse by Country - Secondary outline button */}
-                    <button className="bg-transparent text-secondary px-8 py-3 rounded border border-secondary transition-all hover:shadow-[0_0_20px_rgba(233,195,73,0.4)] flex items-center gap-2">
+                    <button
+                        onClick={handleBrowseClick}
+                        className="bg-transparent text-secondary px-8 py-3 rounded border border-secondary transition-all hover:shadow-[0_0_20px_rgba(233,195,73,0.4)] hover:bg-secondary/10 hover:scale-105 active:scale-95 flex items-center gap-2 font-semibold"
+                    >
                         <span className="material-symbols-outlined">public</span>
                         Browse by Country
                     </button>

@@ -30,8 +30,8 @@ const PurchaseHistoryPage = () => {
       status: 'Completed',
       total: '$1,450.00',
       items: [
-        'https://lh3.googleusercontent.com/aida-public/AB6AXuCRwMwyBGqHj-h2KmyXcW4u7_xpsyuO5Y8C5r-M1P-5b8q3f2xwA5CuB0bcPmdvSZClqV1lMycXy_VCzPRnR5XgyDoEcoxQRl3s546xHxFP52Geu6Kgms6CnGnvYDeeQzo9T9nbhZ87B-oMBT8WQEoSp4VhGsV9ypZHtNYe9p1v3QI5GoP_yhiAPusZdSTlD4Kw3CtBLL2Lc3febKshB1LV9w1hI6oUAlNHCmG5bYhf4NkpM6OOklHSjA',
-        'https://lh3.googleusercontent.com/aida-public/AB6AXuCy6LDql_OSx5880tpkuTPM7SV0P2m-C_rV4rjmWEgxvOWfoqPzJjpYmKhjRH5XYi3KwoiHbiPBRB-tJoJO265NssN62UeuYS7xw7WZApInxXhHw0pCOqHhEEy95LVeGlgN52XrOj0HUhVHNIfpNkEyNYv77ayBvqV0f0RaEOoASB-vAwySLypdTc02xhvVJzSPkebshj7nqHtoFHXRYmUC25MCM2IJxBx6asNrJoQhy-1W3ndcP_GWWA',
+        'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=600&q=80',
+        'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80',
       ],
       itemCount: 3,
     },
@@ -41,7 +41,7 @@ const PurchaseHistoryPage = () => {
       status: 'Processing',
       total: '$125.50',
       items: [
-        'https://lh3.googleusercontent.com/aida-public/AB6AXuAY_MeypWzVhM2ROCr2bYYK63MrGCHjhNDnmQvqiXHLXPEVKDJZD805q0MW2cWasZB6FxLMsawtzlrjZ728mnD5YR5zwxux7ovdd7w7douU8lOB2XH9sY4_d5xUB-hG0ZfXyVO73Jb209kOzLvZFRHu6HXkytjE1euwgMPF5VgLC9TLljkW4tgb8FC5OyohQLqdSaTLZuq4Z8BNObmfo2CIgy6dNy86YOfA263ZHIejl-lhkYXAdg4GHg',
+        'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&w=600&q=80',
       ],
       itemCount: 1,
     },

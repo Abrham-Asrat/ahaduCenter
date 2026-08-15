@@ -1,6 +1,6 @@
 // src/pages/SearchResultsPage.jsx
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 
@@ -8,34 +8,50 @@ import Footer from '../components/common/Footer';
  * SearchResultsPage Component
  * 
  * Displays global search results across all three modules (Movies, Electronics, Books).
- * 
- * Features:
- * - Search context bar showing query and result count
- * - Tabs: All Results, Movies, Electronics, Books
- * - Filter sidebar (desktop) / bottom sheet (mobile)
- * - Mixed result cards with type badges
- * - Pagination
- * 
- * State:
- * - activeTab: Current tab ('all', 'movies', 'electronics', 'books')
- * - showFilters: Boolean for mobile filter bottom sheet
- * - sortBy: Sort option
- * 
- * Responsive:
- * - Desktop: 2-column layout (filters left, results right)
- * - Tablet: Filters optional, grid 2 columns
- * - Mobile: Filters in bottom sheet, grid 2 columns, sticky search bar
  */
 const SearchResultsPage = () => {
+  const [searchParams] = useSearchParams();
+  const queryParam = searchParams.get('q') || 'Interstellar';
+
   // State for active tab
   const [activeTab, setActiveTab] = useState('all');
-  // State for mobile filter sheet
   const [showFilters, setShowFilters] = useState(false);
-  // State for sort option
   const [sortBy, setSortBy] = useState('Relevance');
 
-  // Dummy search query (in production, from URL params or state)
-  const searchQuery = 'Interstellar';
+  // Search results with clean imagery
+  const results = [
+    {
+      id: 1,
+      type: 'Movie',
+      title: 'Interstellar',
+      description: "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.",
+      imageUrl: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=600&q=80',
+      rating: '8.7 / 10',
+      category: 'Sci-Fi',
+      link: '/movies/1',
+    },
+    {
+      id: 2,
+      type: 'Electronics',
+      title: 'Quantum Laptop M2',
+      description: 'Next-generation computing power housed in a sleek, obsidian aluminum chassis.',
+      imageUrl: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=600&q=80',
+      rating: null,
+      category: 'High-Tech',
+      price: '$1,299',
+      link: '/electronics/1',
+    },
+    {
+      id: 3,
+      type: 'Book',
+      title: 'The Glass Hotel',
+      description: 'Author: Emily St. John Mandel. A captivating novel exploring money, beauty, and moral compromise.',
+      imageUrl: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80',
+      rating: null,
+      category: 'Hardcover',
+      link: '/books/1',
+    },
+  ];
 
   // Tabs data
   const tabs = [
@@ -43,40 +59,6 @@ const SearchResultsPage = () => {
     { key: 'movies', label: 'Movies', count: 35 },
     { key: 'electronics', label: 'Electronics', count: 42 },
     { key: 'books', label: 'Books', count: 43 },
-  ];
-
-  // Dummy search results
-  const results = [
-    {
-      id: 1,
-      type: 'Movie',
-      title: 'Interstellar',
-      description: "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.",
-      imageUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCNRuFgGEjiJOYXqcUfY_zVeJHj5w28By01-KLPsN5dWxsfC4G4StKfJ0L5z2VOSIF5nk6IZ7HzhjRkgBSFm5Bcp9sHUVjlc5NQ1_R43UgDOBizr5DGCA-dwbIRcqKEatHPqCyjC18AgDXti5xxjZB-GDlux82U6LJ3itYtNS8jxu6264d9mvGIsPFWZDLSKgAxts079YKxCuk51L2Ggr7Wo2l5v-5FR2m6DGSJeQD04Y1h-AXWbYwZWQ',
-      rating: '8.7 / 10',
-      category: 'Sci-Fi',
-      price: null,
-    },
-    {
-      id: 2,
-      type: 'Electronics',
-      title: 'Quantum Laptop M2',
-      description: 'Next-generation computing power housed in a sleek, obsidian chassis.',
-      imageUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBz2hFNx554fzOcIAPJILsk9q7nE8Qqgi69xLQlr6NJhhTUHiKrNeSoB9cEIVel7xdrXbatucZ6ZBNgCK27HSxsWdTHNjdisUA97FvW2eQY0yalXGXFw-pypQ8GuvGO8tfKOxvZeTKTMwShDDuG5HFclb1BRiyYv0pnhlQoMswtz22Uatz7CA67Dn4b93CEvA8dTTitKwohB7jq1Z4_j3vb0B1kBj-XAu_eFMfaKOieJ3IDLH_DTIHJMg',
-      rating: null,
-      category: 'Tech',
-      price: '$1,299',
-    },
-    {
-      id: 3,
-      type: 'Book',
-      title: 'The Glass Hotel',
-      description: 'Author: Emily St. John Mandel. A captivating novel exploring money, beauty, white-collar crime, ghosts, and moral compromise.',
-      imageUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD3USe80i_IRWQ6oCuG17AGr0gJKpdX_5VBM47M_fxk8YNW4IM1VF2AhkS51w6LjcIW-ZAoik5u5gnhXMdRD6RH4OL18tCQhagk7JIRuwjigNFFkV4uTZaUebzHt-N7opZ0pvvesq32tLe5WpW9iqqNZffnZustOwahrNNWh9Da88XUqhIQYyvmFHlGBJ9kUL6omF_7VJYLUU1ejuPioJGXhJ6mMJYlxX3M9haeuT23lMAyXPD1-ImL2A',
-      rating: null,
-      category: 'Hardcover',
-      price: null,
-    },
   ];
 
   // Filter options

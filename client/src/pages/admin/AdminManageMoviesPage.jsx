@@ -25,8 +25,8 @@ const AdminManageMoviesPage = () => {
     const [movies, setMovies] = useState([
         {
             id: 1,
-            title: 'Neon Horizon',
-            posterUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCgjHEGhtFxfiDnA48y-dHkDpDfiqw3iJiwfqaFJmHMEbwo8oqR6HRWz5hzYs0ie4Zr0vj3loZutahV0Lk7K-JK22ktntemU9CwdX9jhdyseBsZp5ty2fMI0i3k1TNQJU8k9pW7GBzzkFb1O6ODwiUBbqAxBK32RjtPxJdLNCHCDt21TX1B1njdo7crIwBCEMXiC4_X45-c5BGzhcBb_PAomffr_m7ym7He0aX-Rw6vnnirSFqkRNzGgg',
+            title: 'Inception',
+            posterUrl: 'https://images.unsplash.com/photo-1440404653325-ab127d49abc1?auto=format&fit=crop&w=400&q=80',
             genre: 'Sci-Fi',
             country: 'USA',
             year: 2024,
@@ -36,8 +36,8 @@ const AdminManageMoviesPage = () => {
         },
         {
             id: 2,
-            title: 'Sands of Time',
-            posterUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDMDsUu64jD_Eh7zXoqyh4wAtpJwyCkDXVa1IOOIslmCzXbQn14QnQX6FBeIhWERt7yqVxQm-6-vor3EFABcSo1VsKAi1r-5AvXXS3iduanY04gAA9pPIc6WNXaHXoAuOW5IUMc1T3q6zB-SKUlZqAwqyh29X3O_Q5qLB2FWnpnQnmWxTlIsS6jdq3HtQMYFgwqw185BRwRLdYGB9bgp4NVykKMnU2qim5CJfKYwX6dYOge4nMnVEvJYQ',
+            title: 'Interstellar',
+            posterUrl: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=400&q=80',
             genre: 'Drama',
             country: 'UK',
             year: 2023,
@@ -47,8 +47,8 @@ const AdminManageMoviesPage = () => {
         },
         {
             id: 3,
-            title: 'Velocity Shift',
-            posterUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC8FoNj2vU5UDGG0POY_ORfFluJ63j3ZiLJiaaeSJF5bkUwGZskZZQAfE618QKmAVxrzhy76hv6nBk81TsQ2q26arWu7EcgZBgwpiSi8mgsHFQjorrDv_ZgzC5GMxvVUhO6D-aDwqqBrm8UhdM-nuhIgS5FV44-SUUcDVUTHW0n4qh_7k9ICpi6toA67fgAJAWll59qmTlqbPq96jMvzDGXj7jpPgiaeFJmPEPaGh5oEYOQCyfSmYEF-w',
+            title: 'The Matrix',
+            posterUrl: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=400&q=80',
             genre: 'Action',
             country: 'Japan',
             year: 2025,
@@ -60,14 +60,21 @@ const AdminManageMoviesPage = () => {
 
     // UI state
     const [searchQuery, setSearchQuery] = useState('');
+    const [selectedGenre, setSelectedGenre] = useState('All Genres');
+    const [selectedCountry, setSelectedCountry] = useState('All Countries');
+    const [selectedStatus, setSelectedStatus] = useState('All Status');
     const [showModal, setShowModal] = useState(false);
     const [editingMovie, setEditingMovie] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
 
-    // Filter movies by search query
-    const filteredMovies = movies.filter((movie) =>
-        movie.title.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    // Filter movies by search query, genre, country, status
+    const filteredMovies = movies.filter((movie) => {
+        const matchesSearch = movie.title.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchesGenre = selectedGenre === 'All Genres' || movie.genre === selectedGenre;
+        const matchesCountry = selectedCountry === 'All Countries' || movie.country === selectedCountry;
+        const matchesStatus = selectedStatus === 'All Status' || movie.status === selectedStatus;
+        return matchesSearch && matchesGenre && matchesCountry && matchesStatus;
+    });
 
     // Handle add new movie button
     const handleAdd = () => {
@@ -88,7 +95,7 @@ const AdminManageMoviesPage = () => {
         }
     };
 
-    // Handle save from modal (simplified)
+    // Handle save from modal
     const handleSave = (formData) => {
         if (editingMovie) {
             // Update existing
@@ -98,7 +105,7 @@ const AdminManageMoviesPage = () => {
             const newMovie = {
                 id: movies.length + 1,
                 ...formData,
-                posterUrl: 'https://via.placeholder.com/300x450?text=New+Movie',
+                posterUrl: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=300&q=80',
             };
             setMovies([...movies, newMovie]);
         }
@@ -115,7 +122,7 @@ const AdminManageMoviesPage = () => {
                 </div>
                 <button
                     onClick={handleAdd}
-                    className="bg-primary text-white px-6 py-3 rounded-lg flex items-center justify-center gap-2 hover:shadow-[0_0_20px_rgba(16,185,129,0.5)] transition-all"
+                    className="bg-primary text-black px-6 py-3 rounded-lg flex items-center justify-center gap-2 hover:shadow-[0_0_20px_rgba(16,185,129,0.5)] font-bold transition-all"
                 >
                     <span className="material-symbols-outlined text-lg">add</span>
                     Add New Movie
@@ -135,19 +142,33 @@ const AdminManageMoviesPage = () => {
                     />
                 </div>
                 <div className="flex flex-wrap gap-3">
-                    <select className="bg-background border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-primary outline-none">
+                    <select
+                        value={selectedGenre}
+                        onChange={(e) => setSelectedGenre(e.target.value)}
+                        className="bg-background border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-primary outline-none cursor-pointer"
+                    >
                         <option>All Genres</option>
                         <option>Sci-Fi</option>
                         <option>Drama</option>
                         <option>Action</option>
+                        <option>Thriller</option>
                     </select>
-                    <select className="bg-background border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-primary outline-none">
+                    <select
+                        value={selectedCountry}
+                        onChange={(e) => setSelectedCountry(e.target.value)}
+                        className="bg-background border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-primary outline-none cursor-pointer"
+                    >
                         <option>All Countries</option>
+                        <option>Ethiopia</option>
                         <option>USA</option>
                         <option>UK</option>
                         <option>Japan</option>
                     </select>
-                    <select className="bg-background border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-primary outline-none">
+                    <select
+                        value={selectedStatus}
+                        onChange={(e) => setSelectedStatus(e.target.value)}
+                        className="bg-background border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-primary outline-none cursor-pointer"
+                    >
                         <option>All Status</option>
                         <option>Available</option>
                         <option>Coming Soon</option>

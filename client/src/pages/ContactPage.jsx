@@ -177,7 +177,7 @@ const ContactPage = () => {
             {/* Map Placeholder */}
             <div className="glass-panel rounded-xl overflow-hidden h-64 md:h-80 relative">
               <img
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxCa6ofkRzFeGvAL5sXllbpoLOx3_eBqHxvbj-Ig40QA06eqjcvVLpqwe0WBSRGuCO7AjHUCVxnElq2me-PyS4C0BTJxUE-v409Lxb1N15mlY6Nly-3NhtYgceb-PpvTis48yeXpeEVl07zEclxVjNtys7CPlL_GmqZULTqrvJDbOSRsj795SEnL1PtSq7rUQ7YZtRlqyu7smx7toGARl91WrdbulnhYEz2vwHeoLyD4Y9E2jJtXUk0Q"
+                src="https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=800&q=80"
                 alt="Ahadu Center Location Map"
                 className="w-full h-full object-cover"
               />

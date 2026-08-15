@@ -30,7 +30,7 @@ const AdminManageBooksPage = () => {
             id: 1,
             title: 'The Quantum Thief',
             author: 'Hannu Rajaniemi',
-            coverUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAUe6he6c5UlGhvB7OLqCBt0ab1rn9-HeBXEAMFxXrVc-JoOWEKQflXKP6ys6fOvVmFNdlnflIRc0LhgzNi2CvUJb5P6DaXbdcKnGF64DfdZDu2qzwLN97kdVbNw-UmawfOJOIAZZViCWKzbOZx9qvSFLE6ChyPQyrTUvZYQ3AvMv30vflKf8u4p1nCg_Oog9s9iMbpKtGILD56_Nz1x88vG-SXtLt-rjtGgcbQrNTNtqgrqzetSVx2TA',
+            coverUrl: 'https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&w=600&q=80',
             category: 'Sci-Fi',
             language: 'EN',
             totalCopies: 12,
@@ -41,7 +41,7 @@ const AdminManageBooksPage = () => {
             id: 2,
             title: 'Design Systems',
             author: 'Alla Kholmatova',
-            coverUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBqSscIY8mMM0P4D79vkFSH2PLj_dbVdI_8eCOlOeKtHTmlXmNlWpWLh00I3f-g7mzUZ1SeO4ijTU_Uur0CSRNsgoVy28QegqSR-ub9VG_Cam6k4RO-tf8wHqHTnNr6TD3aAfCGhotTJ4OyY_DeiWsTQYu7M6taTqNbgmYAq6PVEa8jKM2N01DZ2GlFYljmtb2VJ1rw5HjESMmUQx9Luww0PRQJjL-sNGlCVBSfLBGicId3Nge4SzBN6w',
+            coverUrl: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80',
             category: 'Design',
             language: 'EN',
             totalCopies: 5,
@@ -52,7 +52,7 @@ const AdminManageBooksPage = () => {
             id: 3,
             title: 'Fikir Eske Mekabir',
             author: 'Haddis Alemayehu',
-            coverUrl: null, // Will show placeholder
+            coverUrl: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=600&q=80',
             category: 'Classic',
             language: 'AM',
             totalCopies: 20,
@@ -65,13 +65,37 @@ const AdminManageBooksPage = () => {
     const [showModal, setShowModal] = useState(false);
     const [editingBook, setEditingBook] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
+    const [categoryFilter, setCategoryFilter] = useState('All Categories');
+    const [languageFilter, setLanguageFilter] = useState('All Languages');
 
-    // Filter books by search
-    const filteredBooks = books.filter(
-        (book) =>
+    // Filter books by search, category, language
+    const filteredBooks = books.filter((book) => {
+        const matchesSearch =
             book.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            book.author.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+            book.author.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchesCategory = categoryFilter === 'All Categories' || book.category === categoryFilter;
+        const matchesLanguage = languageFilter === 'All Languages' || book.language === languageFilter;
+
+        return matchesSearch && matchesCategory && matchesLanguage;
+    });
+
+    const handleResetFilters = () => {
+        setSearchQuery('');
+        setCategoryFilter('All Categories');
+        setLanguageFilter('All Languages');
+    };
+
+    const handleExportCSV = () => {
+        const csvContent = "data:text/csv;charset=utf-8," 
+            + ["ID,Title,Author,Category,Language,TotalCopies,AvailableCopies,Status", ...books.map(b => `${b.id},"${b.title}","${b.author}",${b.category},${b.language},${b.totalCopies},${b.availableCopies},${b.status}`)].join("\n");
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "books_inventory.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
 
     // Handle add new book
     const handleAdd = () => {
@@ -100,7 +124,7 @@ const AdminManageBooksPage = () => {
             const newBook = {
                 id: books.length + 1,
                 ...formData,
-                coverUrl: null,
+                coverUrl: 'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&w=600&q=80',
             };
             setBooks([...books, newBook]);
         }
@@ -145,13 +169,22 @@ const AdminManageBooksPage = () => {
                     <h2 className="text-4xl md:text-5xl font-bold text-white mb-2">Manage Books</h2>
                     <p className="text-lg text-on-surface-variant">Manage inventory, borrowing, reservations, and sales.</p>
                 </div>
-                <button
-                    onClick={handleAdd}
-                    className="bg-primary text-white px-6 py-3 rounded-lg flex items-center justify-center gap-2 hover:shadow-[0_0_20px_rgba(16,185,129,0.5)] transition-all"
-                >
-                    <span className="material-symbols-outlined text-lg">add_circle</span>
-                    Add New Book
-                </button>
+                <div className="flex flex-wrap gap-3">
+                    <button
+                        onClick={handleExportCSV}
+                        className="border border-secondary text-secondary px-5 py-3 rounded-lg flex items-center justify-center gap-2 hover:bg-secondary/10 transition-all font-bold text-xs uppercase tracking-wider cursor-pointer"
+                    >
+                        <span className="material-symbols-outlined text-lg">download</span>
+                        Export CSV
+                    </button>
+                    <button
+                        onClick={handleAdd}
+                        className="bg-primary text-black px-6 py-3 rounded-lg flex items-center justify-center gap-2 hover:shadow-[0_0_20px_rgba(16,185,129,0.5)] transition-all font-bold text-xs uppercase tracking-wider cursor-pointer"
+                    >
+                        <span className="material-symbols-outlined text-lg">add_circle</span>
+                        Add New Book
+                    </button>
+                </div>
             </div>
 
             {/* Sub-navigation tabs */}
@@ -161,7 +194,7 @@ const AdminManageBooksPage = () => {
                         <button
                             key={tab}
                             onClick={() => setActiveTab(tab)}
-                            className={`px-6 py-4 text-xs uppercase tracking-wider whitespace-nowrap transition-colors ${activeTab === tab
+                            className={`px-6 py-4 text-xs uppercase tracking-wider whitespace-nowrap transition-colors cursor-pointer ${activeTab === tab
                                     ? 'text-primary border-b-2 border-primary bg-white/5 font-semibold'
                                     : 'text-on-surface-variant hover:text-white'
                                 }`}

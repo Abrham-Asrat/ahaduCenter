@@ -18,21 +18,15 @@ import ContactPage from './pages/ContactPage';
 import AdminManageMoviesPage from './pages/admin/AdminManageMoviesPage';
 import AdminManageElectronicsPage from './pages/admin/AdminManageElectronicsPage';
 import AdminManageBooksPage from './pages/admin/AdminManageBooksPage';
-import AdminManageUsersPage from './pages/admin/AdminManageUsersPage';
 import CartPage from './pages/CartPage';
 import CheckoutPage from './pages/CheckoutPage';
 import OrderConfirmationPage from './pages/OrderConfirmationPage';
-import AdminCategoriesPage from './pages/admin/AdminCategoriesPage';
-import AdminAnalyticsPage from './pages/admin/AdminAnalyticsPage';
-import AdminSettingsPage from './pages/admin/AdminSettingsPage';
 import DesignSystemPage from './pages/DesignSystemPage';
 import ProductComparisonPage from './pages/ProductComparisonPage';
 import MovieRequestPage from './pages/MovieRequestPage';
 import PurchaseHistoryPage from './pages/PurchaseHistoryPage';
 import BorrowingHistoryPage from './pages/BorrowingHistoryPage';
 import BookConfirmPage from './pages/BookConfirmPage';
-import AdminManageMovieRequestsPage from './pages/admin/AdminManageMovieRequestsPage';
-import AdminManageOrdersPage from './pages/admin/AdminManageOrdersPage';
 import NotFoundPage from './pages/NotFoundPage';
 
 function App() {
@@ -56,21 +50,15 @@ function App() {
       <Route path="/admin/movies" element={<AdminManageMoviesPage />} />
       <Route path="/admin/electronics" element={<AdminManageElectronicsPage />} />
       <Route path="/admin/books" element={<AdminManageBooksPage />} />
-      <Route path="/admin/users" element={<AdminManageUsersPage />} />
       <Route path="/cart" element={<CartPage />} />
       <Route path="/checkout" element={<CheckoutPage />} />
       <Route path="/order-confirmation" element={<OrderConfirmationPage />} />
-      <Route path="/admin/categories" element={<AdminCategoriesPage />} />
-      <Route path="/admin/analytics" element={<AdminAnalyticsPage />} />
-      <Route path="/admin/settings" element={<AdminSettingsPage />} />
       <Route path="/design-system" element={<DesignSystemPage />} />
       <Route path="/compare" element={<ProductComparisonPage />} />
       <Route path="/movie-request" element={<MovieRequestPage />} />
       <Route path="/purchase-history" element={<PurchaseHistoryPage />} />
       <Route path="/borrowing-history" element={<BorrowingHistoryPage />} />
       <Route path="/book-confirm" element={<BookConfirmPage />} />
-      <Route path="/admin/movie-requests" element={<AdminManageMovieRequestsPage />} />
-      <Route path="/admin/orders" element={<AdminManageOrdersPage />} />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );

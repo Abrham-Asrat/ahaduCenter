@@ -1,6 +1,6 @@
 // src/pages/BookDetailPage.jsx
-import React from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import Navbar from '../components/common/Navbar';
 import BookCoverCard from '../components/book/BookCoverCard';
 import BookInfoSection from '../components/book/BookInfoSection';
@@ -12,22 +12,21 @@ import Footer from '../components/common/Footer';
  * BookDetailPage Component
  * 
  * Main page for displaying a single book's details.
- * Uses useParams to get book ID from URL.
- * 
- * Layout:
- * - Breadcrumbs (hidden on mobile)
- * - Two-column: Cover (left) + Info (right) on desktop
- * - Mobile: Cover centered, info below
- * - Tabs (desktop) / Accordions (mobile)
- * - Related books carousel
- * - Sticky bottom action bar (mobile only)
  */
 const BookDetailPage = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+
+  const [toastMessage, setToastMessage] = useState(null);
+
+  const showToast = (msg) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(null), 3000);
+  };
 
   // Dummy book data
   const book = {
-    id: parseInt(id),
+    id: parseInt(id) || 1,
     title: 'The Architecture of Tomorrow: Building the Void',
     author: 'Dr. Elara Vance',
     publisher: 'Nexus Press',
@@ -39,7 +38,7 @@ const BookDetailPage = () => {
     availableCopies: 3,
     location: 'Level 4, Section B-12',
     price: 24.99,
-    coverUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuB5o355OqHT96LU45ge-auf_AYpDlsg-_1mFGtJ2TwwWEyE7kdbHGNY5_GsZ4gmfvFEjey3oVYf5avZ9Wb1C-DzDg8ZuikQO7nJqQQWSlvIeyRnGvsfDueb95rDdSB-5F_3KkBbmxh32oQZXYPydTe9HjyP8ESQT72o4ebeKxfb7lR5-d9zIz69fLqMgcAI0DFf9nLIeOfgs9y1N8V5wLsGwhBeHsKZsKYD1IUxtkY8x5UZpq1WQg5sew',
+    coverUrl: 'https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&w=800&q=80',
     availability: 'Available to Borrow',
     format: 'Hardcover',
     pages: 412,
@@ -57,44 +56,52 @@ const BookDetailPage = () => {
       id: 201,
       title: 'Digital Systems Design',
       author: 'J. K. Thornton',
-      coverUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCf-tHwKufhY6IkfH2h4Rx82zYD7BRrmqBSX_Rw3oRD5HD4deODsLPNWwPYRUPP310_PwQVm2PeqQSLleO4hMGnrgw7oYrKn3bi_bElzXarZlx-4FALajcyt-IiR8-Ykz3jbXZoRkccRKmQHO_LKYyV6Czavw9VH8OxfMtsazzt7wovSZt0kCkk3XXtFpiWMPzSTlnyQu-5hj-kC-8d_4dmGarI6EPVaZvphLb2kbYnUzwMzTu76qrS8Q',
+      coverUrl: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80',
       price: 29.99,
     },
     {
       id: 202,
       title: 'Quantum Computing Basics',
       author: 'Sarah Chen',
-      coverUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuANYbTqizhNePFWGX3daocu1tDHPkCdDEHFdLz5V74JB4yl6NyNAw0R3cgPr30kFRSjwnw2CSTyB_6pxAXN8lcBfwNu0zD9pOhPVygijek2cstGkq9G9Sk334KCCGb4lCxGjkHTDIdugC84O3A19wf-L9_PWXPeIDgeWNSC8gsPlxvOl5qI2AXq_fEAoK_tvY4bZiFLPx82oUEaKDOGmp44PX4wXkLp2xKec4l0jZSIaidTyVCBTNNN1g',
+      coverUrl: 'https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=600&q=80',
       price: 34.99,
     },
     {
       id: 203,
-      title: 'The Golden Ratio',
+      title: 'The Golden Ratio in Design',
       author: 'Marcus Aurelius',
-      coverUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCBJ7oYB0lhoW6pYtbdBBkNrVGDfqhVarONqaBoBOhkoU9W-PJBEiOhlNpKPiKfMQgYgQdV_Zm4b7IdXI0bHQfHArYf_ycQf1ytNsfKPN7lZ7l58loRsKT3QBo3uhN1GHoeqdD80fuoxtSx6D-GtYX34oMq2LOvZCR2shRJ-b-kOSUvBy3dLoEdO67ZyU-kkD9zG9Cw9GOfkyUzxBCGCKRRVchD-L9z0A-ZMARk5f_paJTpUI19MBsmMQ',
+      coverUrl: 'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&w=600&q=80',
       price: 19.99,
     },
     {
       id: 204,
-      title: 'Urban Futures',
+      title: 'Urban Futures & Ecosystems',
       author: 'David M. Wright',
-      coverUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBeKXEZ4Tg7_yDFeEimx0im7HAsRBB0Equ30X9mzkoP0hccXj4bbzrvMRz48mKVmFRSDJFi0D8bFpHzI_J13bKW6FPXZ-IPepxDVFctd6elK5DVpiFpYF2oSsIeN2ZZErtCPuu1Xr4NDaI3ZI1yeiIae0sC3ERJCYghaAJtOd72lI-bcUTwSPS-yOkFWSEl-ZFvL1jFrUhbZ9lcHJ26eEojM_eJ2hjB1vjFQ5eAFwO9--oQUp-zVh-iEA',
+      coverUrl: 'https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=600&q=80',
       price: 27.50,
     },
   ];
 
   return (
-    <div className="min-h-screen bg-background text-on-background flex flex-col">
+    <div className="min-h-screen bg-background text-on-background flex flex-col relative">
       <Navbar />
+
+      {/* Toast Notification */}
+      {toastMessage && (
+        <div className="fixed bottom-24 right-8 z-50 bg-surface-container border border-primary/50 text-white px-5 py-3.5 rounded-xl shadow-2xl flex items-center gap-3 animate-bounce">
+          <span className="material-symbols-outlined text-primary">check_circle</span>
+          <span className="text-sm font-semibold">{toastMessage}</span>
+        </div>
+      )}
 
       <main className="flex-grow pt-24 pb-12 px-6 max-w-7xl mx-auto w-full">
         {/* Breadcrumbs */}
-        <div className="hidden md:flex items-center gap-2 text-sm text-on-surface-variant mb-6">
+        <div className="hidden md:flex items-center gap-2 text-sm text-on-surface-variant mb-6 font-medium">
           <a href="/books" className="hover:text-primary transition-colors">Books</a>
           <span className="material-symbols-outlined text-[16px]">chevron_right</span>
-          <a href="#" className="hover:text-primary transition-colors">Technology & Engineering</a>
+          <a href="/books" className="hover:text-primary transition-colors">Technology & Engineering</a>
           <span className="material-symbols-outlined text-[16px]">chevron_right</span>
-          <span className="text-white">{book.title}</span>
+          <span className="text-white font-semibold">{book.title}</span>
         </div>
 
         {/* Main two-column layout */}
@@ -106,7 +113,7 @@ const BookDetailPage = () => {
 
           {/* Right column: info and tabs */}
           <div className="md:col-span-8 flex flex-col gap-6">
-            <BookInfoSection book={book} />
+            <BookInfoSection book={book} onShowToast={showToast} />
             <BookDetailTabs book={book} />
           </div>
         </div>
@@ -116,13 +123,19 @@ const BookDetailPage = () => {
       </main>
 
       {/* Mobile sticky bottom action bar */}
-      <div className="md:hidden fixed bottom-0 left-0 w-full glass-panel border-t border-white/10 p-4 z-40 rounded-t-xl shadow-lg">
-        <div className="flex flex-col gap-3">
-          <button className="bg-primary text-white py-3 rounded-lg font-semibold flex items-center justify-center gap-2">
+      <div className="md:hidden fixed bottom-0 left-0 w-full glass-panel border-t border-white/10 p-4 z-40 rounded-t-2xl shadow-2xl">
+        <div className="flex gap-3">
+          <button
+            onClick={() => showToast(`Borrow request submitted for "${book.title}"!`)}
+            className="flex-1 bg-primary text-black py-3 rounded-xl font-bold flex items-center justify-center gap-2 text-xs uppercase"
+          >
             <span className="material-symbols-outlined">book</span>
             Borrow Now
           </button>
-          <button className="bg-transparent border border-secondary text-secondary py-3 rounded-lg font-semibold flex items-center justify-center gap-2">
+          <button
+            onClick={() => showToast(`Reserved place on waitlist for "${book.title}".`)}
+            className="flex-1 bg-transparent border border-secondary text-secondary py-3 rounded-xl font-bold flex items-center justify-center gap-2 text-xs uppercase"
+          >
             <span className="material-symbols-outlined">bookmark_add</span>
             Reserve
           </button>
@@ -130,7 +143,7 @@ const BookDetailPage = () => {
       </div>
 
       {/* Add bottom padding for mobile so content isn't hidden */}
-      <div className="md:hidden h-32" />
+      <div className="md:hidden h-28" />
 
       <Footer />
     </div>

@@ -6,14 +6,10 @@ import { Link, useLocation } from 'react-router-dom';
  * AdminLayout Component
  * 
  * Shared layout for all admin pages.
- * Includes:
+ * Features:
  * - Fixed sidebar (desktop expanded, mobile drawer)
  * - Fixed topbar with search, notifications, dark mode, avatar
- * - Main content area (children prop)
- * 
- * Props:
- * - children: React node to render inside main content
- * - activeNav: which sidebar item is active (optional)
+ * - Full navigation links to all 10 admin management modules
  */
 const AdminLayout = ({ children }) => {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -21,18 +17,18 @@ const AdminLayout = ({ children }) => {
 
     // Sidebar navigation items
     const navItems = [
-        { label: 'Analytics', icon: 'monitoring', path: '/admin' },
+        { label: 'Dashboard', icon: 'dashboard', path: '/admin' },
         { label: 'Movies', icon: 'movie', path: '/admin/movies' },
         { label: 'Electronics', icon: 'devices', path: '/admin/electronics' },
         { label: 'Books', icon: 'menu_book', path: '/admin/books' },
-        { label: 'Users', icon: 'group', path: '/admin/users' },
     ];
 
-    // Determine active item based on current route
     const isActive = (path) => {
         if (path === '/admin') return location.pathname === '/admin';
         return location.pathname.startsWith(path);
     };
+
+
 
     return (
         <div className="min-h-screen bg-background text-on-surface flex overflow-x-hidden">
@@ -43,38 +39,34 @@ const AdminLayout = ({ children }) => {
 
             {/* Sidebar */}
             <aside
-                className={`bg-surface-container/80 backdrop-blur-xl h-screen w-64 fixed left-0 top-0 border-r border-white/10 shadow-xl flex flex-col py-6 px-3 z-50 transition-transform duration-300 ${isDrawerOpen ? 'translate-x-0' : '-translate-x-full'
+                className={`bg-surface-container/90 backdrop-blur-xl h-screen w-64 fixed left-0 top-0 border-r border-white/10 shadow-2xl flex flex-col py-6 px-3 z-50 transition-transform duration-300 ${isDrawerOpen ? 'translate-x-0' : '-translate-x-full'
                     } md:translate-x-0 md:w-64`}
             >
                 {/* Brand */}
-                <div className="flex items-center gap-3 mb-8 px-3">
-                    <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
-                        <span className="material-symbols-outlined text-white">movie</span>
+                <div className="flex items-center gap-3 mb-6 px-3">
+                    <div className="w-10 h-10 rounded-xl bg-primary text-black flex items-center justify-center shadow-lg font-black">
+                        <span className="material-symbols-outlined text-black">storefront</span>
                     </div>
                     <div>
-                        <h1 className="font-heading text-xl font-bold text-primary">Ahadu Center</h1>
-                        <p className="text-xs text-on-surface-variant">Admin Terminal</p>
+                        <h1 className="font-heading text-lg font-bold text-white leading-tight">Ahadu Center</h1>
+                        <p className="text-xs text-primary font-semibold">Admin Terminal</p>
                     </div>
                 </div>
 
-                {/* CTA */}
-                <button className="w-full bg-primary text-white text-xs uppercase tracking-wider py-2 rounded-lg mb-6 hover:shadow-[0_0_20px_rgba(16,185,129,0.4)] transition-all flex items-center justify-center gap-2">
-                    <span className="material-symbols-outlined text-sm">add</span>
-                    Generate Report
-                </button>
 
                 {/* Navigation */}
-                <nav className="flex flex-col gap-1 flex-grow">
+                <nav className="flex flex-col gap-1 flex-grow overflow-y-auto no-scrollbar pr-1">
                     {navItems.map((item) => (
                         <Link
                             key={item.label}
                             to={item.path}
-                            className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all ${isActive(item.path)
-                                    ? 'text-primary font-bold bg-white/5 border-r-2 border-primary'
-                                    : 'text-on-surface-variant hover:bg-white/5 hover:text-primary'
+                            onClick={() => setIsDrawerOpen(false)}
+                            className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all text-xs uppercase tracking-wider font-bold ${isActive(item.path)
+                                    ? 'text-primary bg-primary/10 border-l-4 border-primary shadow-sm'
+                                    : 'text-on-surface-variant hover:bg-white/5 hover:text-white'
                                 }`}
                         >
-                            <span className="material-symbols-outlined">{item.icon}</span>
+                            <span className="material-symbols-outlined text-lg">{item.icon}</span>
                             <span>{item.label}</span>
                         </Link>
                     ))}
@@ -82,13 +74,10 @@ const AdminLayout = ({ children }) => {
 
                 {/* Footer nav */}
                 <div className="mt-auto flex flex-col gap-1 pt-4 border-t border-white/10">
-                    <Link to="#" className="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-white/5 hover:text-primary transition-all">
-                        <span className="material-symbols-outlined">settings</span>
-                        <span>Settings</span>
-                    </Link>
-                    <Link to="/" className="flex items-center gap-3 px-3 py-2 rounded-lg text-error hover:bg-error/10 transition-all">
-                        <span className="material-symbols-outlined">logout</span>
-                        <span>Logout</span>
+
+                    <Link to="/" className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-error hover:bg-error/10 transition-all text-xs uppercase tracking-wider font-bold">
+                        <span className="material-symbols-outlined text-lg">logout</span>
+                        <span>Exit Admin</span>
                     </Link>
                 </div>
             </aside>
@@ -103,30 +92,23 @@ const AdminLayout = ({ children }) => {
                     </button>
 
                     {/* Search */}
-                    <div className="hidden md:flex items-center gap-3 glass-panel rounded-lg px-3 py-2 w-96">
-                        <span className="material-symbols-outlined text-on-surface-variant">search</span>
+                    <div className="hidden md:flex items-center gap-3 glass-panel rounded-xl px-3 py-2 w-96 border border-white/10">
+                        <span className="material-symbols-outlined text-on-surface-variant text-base">search</span>
                         <input
                             type="text"
-                            placeholder="Search commands, records..."
+                            placeholder="Search admin records, commands..."
                             className="bg-transparent border-none outline-none text-sm text-white w-full placeholder-gray-500"
                         />
                     </div>
 
                     {/* Actions */}
                     <div className="flex items-center gap-4">
-                        <button className="relative text-on-surface-variant hover:text-secondary transition-colors">
-                            <span className="material-symbols-outlined">notifications</span>
-                            <span className="absolute top-0 right-0 w-2 h-2 bg-primary rounded-full" />
-                        </button>
-                        <button className="text-on-surface-variant hover:text-secondary transition-colors">
-                            <span className="material-symbols-outlined">dark_mode</span>
-                        </button>
-                        <div className="w-8 h-8 rounded-full bg-surface-container-high border border-white/10 overflow-hidden">
-                            <img
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBllpMvYcE2z2D1Cyki_HMSx3Cqh-ySkXAm6aHOYL6z8mMZoxKcbUe04AlvCZ0cXSaAP7Ox2YRVyHxFdtYB1vZjJLWCx6ShsNkdgajwvt5MtrghP2vSoXSwSe8gd0FI4p1ecvyu7wPb9K_1LdezOYFfuTvzdAfhikjZHek-aQye4phDUcsC5Ysu5TpHeINgVP4isrqZp_4bD0Ssia_Mjo2Yu1drhI3GO2fdCX9wq5fQMBBpYneeEpHeiw"
-                                alt="Admin Avatar"
-                                className="w-full h-full object-cover"
-                            />
+                        <div className="flex items-center gap-2 bg-primary/10 border border-primary/30 text-primary px-3 py-1 rounded-full text-xs font-bold uppercase">
+                            <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                            System Active
+                        </div>
+                        <div className="w-9 h-9 rounded-xl bg-surface-container-high border border-white/10 flex items-center justify-center font-bold text-white text-sm bg-gradient-to-br from-primary/20 to-secondary/20">
+                            AD
                         </div>
                     </div>
                 </header>

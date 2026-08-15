@@ -48,7 +48,7 @@ const HeroSection = () => {
                     <div className="absolute glass-border-gradient rounded-xl p-3 w-48 h-64 transform -rotate-6 -translate-x-12 translate-y-8 glow-hover transition-all duration-500 hover:scale-105 hover:z-20">
                         <img
                             className="w-full h-full object-cover rounded-lg"
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCyK0RSN-Zcx6B02SNRnubJV1vO_sFHPt9xRLfpP0EbGe2Ohgw_LU6iIKF3EVFv-etDmSonB5rxelbfGSzyyvkNeCYTMxHw0w6CF8siLLVuQUs7VfZOqZck99AI_3IUbZBbRzLizK5qBqzOlmBmXyLe2AkkVKqKM9czcER14cmWWhWFitrelhLzktlyHpJt225uRS5fucKx-BpzbbOZhdr2nCwdljUK7T82DU2QetnPYNgM8o5tGtfQTA"
+                            src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=800&q=80"
                             alt="Movie poster"
                         />
                     </div>
@@ -56,7 +56,7 @@ const HeroSection = () => {
                     <div className="absolute glass-border-gradient rounded-xl p-3 w-56 h-40 z-10 glow-hover transition-all duration-500 hover:scale-105">
                         <img
                             className="w-full h-full object-cover rounded-lg"
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWntT-x_0LyqZzy-bQv_g_xfKqK8jwl9qxSuZnhoBYmbvsN5IG8eGzFGz37xEd3LitIZn2_kfLx8Tz8Jn8rsbqH7O90dEMNLuPRE9Fz5-1EpI9a9-7hPlQTUNCefnAICANbAHQcA6K6dGg7hjIsaOfDKu4GkboRItTXZCz6xrKox4oKzMJ3GiRY9HkMEo_MpNxWM_g1WjyIh_CsSUwJH5q3Ik15pVkkLfXllqa6_nC_RECx-5IO6PCBQ"
+                            src="https://images.unsplash.com/photo-1498049794561-7780e7231661?auto=format&fit=crop&w=800&q=80"
                             alt="Laptop"
                         />
                     </div>
@@ -64,7 +64,7 @@ const HeroSection = () => {
                     <div className="absolute glass-border-gradient rounded-xl p-3 w-40 h-56 transform rotate-12 translate-x-16 translate-y-12 glow-hover transition-all duration-500 hover:scale-105 hover:z-20">
                         <img
                             className="w-full h-full object-cover rounded-lg"
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBN49PICYRc3Q5uehgU2mF-VojZTeW9qeE3TVTsRfibDYGy6qfe9s1NNAEm3MMmtoF0qHxtGRMbFtK_mSAoGKz4yNInDalteZdXwpUX4XIbnk2kWT4UVbYKqv2g8l2We7J_gXMSn4fZpbPTn11BF8GmuPTtkqpHx0DZbRO3eyaiV9aNyP0hMBUFb3uWEWNYmWYYZMHEHP9Zye04DJQgDTDfLZBIV4-l3IOBLgmkEfBq_6Bku5sYpewYjw"
+                            src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=800&q=80"
                             alt="Book"
                         />
                     </div>

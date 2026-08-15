@@ -34,7 +34,7 @@ const BookConfirmPage = () => {
         id: parseInt(bookId),
         title: 'The Great Gatsby',
         author: 'F. Scott Fitzgerald',
-        coverUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC8aR2FhvTBKz5ctrhh6kMBsVlA-EWSk9fhCcfKdNw12mkFepOsUtngaKGf087bhTXHOzUZp0gIgOVGU2wqXpnIO7g0gPFx503OP_J3fmP8zI80pjBaC-UN16er7totZQUQHj8v57ITrTDDltNjEGdTYWmwyCt6TYKzW9Uw7E-66y6OvjPgr7ZIXSPbMfp0JD_wW4gUOgmlM8bb8PLaMvNXibLUGuQ7kcrrAXfNr3pHcoama4wn0_fA0Q',
+        coverUrl: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80',
         price: 24.99,
         availability: 'Available',
     };
