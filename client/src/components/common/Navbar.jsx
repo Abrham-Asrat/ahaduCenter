@@ -90,7 +90,8 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="fixed top-0 w-full z-50 bg-surface-container/80 backdrop-blur-xl border-b border-white/10 shadow-xl transition-colors">
+    <>
+      <nav className="fixed top-0 w-full z-50 bg-surface-container/80 backdrop-blur-xl border-b border-white/10 shadow-xl transition-colors">
       <div className="flex justify-between items-center px-4 md:px-8 py-3 max-w-7xl mx-auto">
         {/* Brand Logo */}
         <Link to="/" className="font-heading text-2xl font-black text-primary flex items-center gap-2 tracking-wide">
@@ -315,27 +316,7 @@ const Navbar = () => {
       {isMobileMenuOpen && (
         <div className="md:hidden glass-panel border-b border-white/10 px-6 py-4 space-y-4">
           <div className="flex flex-col gap-3">
-            <Link
-              to="/movies"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="text-sm font-bold uppercase text-white py-1 border-b border-white/5"
-            >
-              Movies Catalog
-            </Link>
-            <Link
-              to="/electronics"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="text-sm font-bold uppercase text-white py-1 border-b border-white/5"
-            >
-              Electronics Marketplace
-            </Link>
-            <Link
-              to="/books"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="text-sm font-bold uppercase text-white py-1 border-b border-white/5"
-            >
-              Book Center
-            </Link>
+
             <Link
               to="/contact"
               onClick={() => setIsMobileMenuOpen(false)}
@@ -362,6 +343,29 @@ const Navbar = () => {
         </div>
       )}
     </nav>
+
+      {/* Bottom Navigation (Mobile Specific) */}
+      <nav className="fixed bottom-0 w-full z-50 bg-surface-container-lowest border-t border-white/5 md:hidden">
+        <div className="flex justify-around items-center py-2">
+          <Link to="/" className={`flex flex-col items-center transition-colors ${isActive('/') ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-primary'}`}>
+            <span className="material-symbols-outlined" style={{ fontVariationSettings: isActive('/') ? "'FILL' 1" : "'FILL' 0" }}>home</span>
+            <span className="text-[10px] uppercase tracking-wider font-semibold mt-1">Home</span>
+          </Link>
+          <Link to="/movies" className={`flex flex-col items-center transition-colors ${isActive('/movies') ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-primary'}`}>
+            <span className="material-symbols-outlined" style={{ fontVariationSettings: isActive('/movies') ? "'FILL' 1" : "'FILL' 0" }}>movie</span>
+            <span className="text-[10px] uppercase tracking-wider font-semibold mt-1">Movies</span>
+          </Link>
+          <Link to="/electronics" className={`flex flex-col items-center transition-colors ${isActive('/electronics') ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-primary'}`}>
+            <span className="material-symbols-outlined" style={{ fontVariationSettings: isActive('/electronics') ? "'FILL' 1" : "'FILL' 0" }}>devices</span>
+            <span className="text-[10px] uppercase tracking-wider font-semibold mt-1">Tech</span>
+          </Link>
+          <Link to="/books" className={`flex flex-col items-center transition-colors ${isActive('/books') ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-primary'}`}>
+            <span className="material-symbols-outlined" style={{ fontVariationSettings: isActive('/books') ? "'FILL' 1" : "'FILL' 0" }}>menu_book</span>
+            <span className="text-[10px] uppercase tracking-wider font-semibold mt-1">Books</span>
+          </Link>
+        </div>
+      </nav>
+    </>
   );
 };
 

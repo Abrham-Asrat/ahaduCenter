@@ -87,3 +87,41 @@ body {
   box-shadow: 0 0 20px rgba(16, 185, 129, 0.15);
   border-color: rgba(16, 185, 129, 0.5);
 }
+
+/* Keyframe Animations for Smooth Transitions */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Padding adjustment for mobile bottom navigation */
+@media (max-width: 767px) {
+  body {
+    padding-bottom: 64px;
+  }
+}
