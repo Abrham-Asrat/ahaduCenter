@@ -6,7 +6,7 @@ const Navbar = () => {
       <div className="flex justify-between items-center px-6 py-2 max-w-7xl mx-auto">
         {/* Logo */}
         <Link to="/" className="font-heading text-2xl font-bold text-primary">
-          NexusGlobal
+          AhaduCenter
         </Link>
 
         {/* Desktop Navigation */}
@@ -28,12 +28,12 @@ const Navbar = () => {
             <span className="material-symbols-outlined">search</span>
           </button>
           <div className="hidden md:flex gap-2">
-            <button className="btn-secondary px-4 py-2 rounded-lg text-sm font-semibold">
+            <Link to="/login"><button className="btn-secondary px-4 py-2 rounded-lg text-sm font-semibold">
               Sign In
-            </button>
-            <button className="btn-primary px-4 py-2 rounded-lg text-sm font-semibold">
+            </button></Link>
+            <Link to="/register"><button className="btn-primary px-4 py-2 rounded-lg text-sm font-semibold">
               Sign Up
-            </button>
+            </button></Link>
           </div>
         </div>
       </div>
