@@ -19,7 +19,7 @@ const SimilarProducts = ({ products }) => {
                     <Link
                         key={product.id}
                         to={`/electronics/${product.id}`}
-                        className="w-64 flex-shrink-0 glass-panel rounded-xl overflow-hidden snap-start group cursor-pointer hover:border-primary/50 transition-colors"
+                        className="w-64 flex-shrink-0 glass-panel rounded-xl overflow-hidden snap-start group cursor-pointer hover:border-primary/50 hover:-translate-y-1 transition-all duration-200"
                     >
                         <div className="h-40 w-full relative overflow-hidden bg-surface-container">
                             <img

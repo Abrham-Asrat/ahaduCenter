@@ -176,6 +176,7 @@ const BorrowingHistoryPage = () => {
           </div>
         ) : (
           /* Borrowing cards */
+          <div className="overflow-x-auto">
           <div className="flex flex-col gap-6">
             {filteredBorrowings.map((borrowing) => (
               <div
@@ -270,6 +271,7 @@ const BorrowingHistoryPage = () => {
                 </div>
               </div>
             ))}
+          </div>
           </div>
         )}
       </main>

@@ -125,7 +125,7 @@ const ContactPage = () => {
                       type="text"
                       value={formData.name}
                       onChange={handleInputChange}
-                      className="w-full bg-[#0B0F19] border border-white/10 rounded-lg p-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
+                      className="w-full bg-[#0B0F19] border border-white/10 rounded-lg p-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-200"
                       placeholder="Enter your name"
                       required
                     />
@@ -140,7 +140,7 @@ const ContactPage = () => {
                       type="email"
                       value={formData.email}
                       onChange={handleInputChange}
-                      className="w-full bg-[#0B0F19] border border-white/10 rounded-lg p-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
+                      className="w-full bg-[#0B0F19] border border-white/10 rounded-lg p-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-200"
                       placeholder="Enter your email"
                       required
                     />

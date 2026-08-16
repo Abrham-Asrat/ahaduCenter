@@ -36,7 +36,7 @@ const RelatedBooks = ({ books }) => {
                 {books.map((book) => (
                     <div
                         key={book.id}
-                        className="min-w-[160px] md:min-w-[200px] flex-shrink-0 glass-panel rounded-xl p-3 snap-start group cursor-pointer hover:border-primary/30 transition-colors"
+                        className="min-w-[160px] md:min-w-[200px] flex-shrink-0 glass-panel rounded-xl p-3 snap-start group cursor-pointer hover:border-primary/30 hover:-translate-y-1 transition-all duration-200"
                     >
                         <div className="aspect-[2/3] w-full rounded overflow-hidden mb-3">
                             <img

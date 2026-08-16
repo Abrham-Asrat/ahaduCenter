@@ -24,7 +24,7 @@ const RelatedMoviesCarousel = ({ movies }) => {
                     <Link
                         key={movie.id}
                         to={`/movies/${movie.id}`}
-                        className="min-w-[200px] md:min-w-[250px] glass-panel rounded-xl overflow-hidden group cursor-pointer flex-shrink-0"
+                        className="min-w-[200px] md:min-w-[250px] glass-panel rounded-xl overflow-hidden group cursor-pointer flex-shrink-0 hover:-translate-y-1 transition-transform duration-200"
                     >
                         <div className="relative w-full aspect-[2/3] overflow-hidden">
                             <img
