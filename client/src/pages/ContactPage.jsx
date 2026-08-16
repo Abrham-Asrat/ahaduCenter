@@ -5,10 +5,10 @@ import Footer from '../components/common/Footer';
 
 /**
  * ContactPage Component
- * 
- * Displays contact information, a contact form, map placeholder, 
+ *
+ * Displays contact information, a contact form, map placeholder,
  * social links, and FAQ section.
- * 
+ *
  * Features:
  * - Contact form with name, email, subject, message
  * - Company info card with phone, email, business hours
@@ -16,10 +16,11 @@ import Footer from '../components/common/Footer';
  * - Social media links (placeholders)
  * - FAQ accordion (4 items)
  * - Responsive: 2-column on desktop, stacked on mobile
- * 
+ *
  * State:
  * - formData: Object containing form field values
  * - openFaq: Index of currently open FAQ item (null = all closed)
+ * - isSubmitted: Boolean — true after form is submitted successfully
  */
 const ContactPage = () => {
   // Form state
@@ -33,6 +34,9 @@ const ContactPage = () => {
   // FAQ open state (null = all closed)
   const [openFaq, setOpenFaq] = useState(null);
 
+  // Submission success state
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
   // Handle form input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -44,7 +48,8 @@ const ContactPage = () => {
     e.preventDefault();
     // In production, send form data to API
     console.log('Contact form submitted:', formData);
-    alert('Message sent successfully!');
+    setIsSubmitted(true);
+    setFormData({ name: '', email: '', subject: '', message: '' });
   };
 
   // FAQ data
@@ -68,7 +73,7 @@ const ContactPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background text-on-surface flex flex-col">
+    <div className="min-h-screen bg-background text-on-surface flex flex-col animate-fade-in">
       <Navbar />
 
       <main className="flex-grow pt-24 pb-12 max-w-7xl mx-auto px-4 md:px-8 w-full flex flex-col gap-8">
@@ -84,7 +89,24 @@ const ContactPage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Left column: Form + Map (8 cols) */}
           <div className="lg:col-span-8 flex flex-col gap-6">
-            {/* Contact Form Card */}
+            {/* Contact Form Card OR Success Card */}
+            {isSubmitted ? (
+              /* Success Card */
+              <div className="glass-panel rounded-xl p-6 md:p-8 border border-green-500/50 animate-fade-in flex flex-col items-center justify-center gap-6 text-center py-12">
+                <span className="material-symbols-outlined text-green-400 text-6xl">check_circle</span>
+                <div>
+                  <h2 className="text-2xl font-bold text-white mb-2">Message sent successfully!</h2>
+                  <p className="text-on-surface-variant">We've received your message and will get back to you shortly.</p>
+                </div>
+                <button
+                  onClick={() => setIsSubmitted(false)}
+                  className="bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:shadow-[0_0_20px_rgba(16,185,129,0.4)] transition-all"
+                >
+                  Send Another
+                </button>
+              </div>
+            ) : (
+            /* Contact Form Card */
             <div className="glass-panel rounded-xl p-6 md:p-8">
               <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
                 <span className="material-symbols-outlined text-primary">mail</span>
@@ -173,6 +195,7 @@ const ContactPage = () => {
                 </button>
               </form>
             </div>
+            )} {/* end isSubmitted ternary */}
 
             {/* Map Placeholder */}
             <div className="glass-panel rounded-xl overflow-hidden h-64 md:h-80 relative">

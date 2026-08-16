@@ -22,6 +22,14 @@ import Footer from '../components/common/Footer';
 const NotificationsPage = () => {
   // Active filter tab
   const [activeTab, setActiveTab] = useState('All');
+  // Toast state
+  const [toastMessage, setToastMessage] = useState(null);
+
+  const showToast = (msg) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(null), 3000);
+  };
+
   // Notifications data (dummy, will be replaced with API)
   const [notifications, setNotifications] = useState([
     {
@@ -114,7 +122,7 @@ const NotificationsPage = () => {
   const unreadCount = notifications.filter(n => !n.isRead).length;
 
   return (
-    <div className="min-h-screen bg-background text-on-background flex flex-col">
+    <div className="min-h-screen bg-background text-on-background flex flex-col animate-fade-in">
       <Navbar />
 
       <main className="flex-grow pt-24 pb-12 max-w-7xl mx-auto px-4 md:px-8 w-full flex flex-col gap-6">

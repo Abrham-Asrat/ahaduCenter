@@ -110,7 +110,7 @@ const WishlistPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background text-on-background flex flex-col">
+    <div className="min-h-screen bg-background text-on-background flex flex-col animate-fade-in">
       <Navbar />
 
       {/* Toast notification */}
@@ -130,7 +130,7 @@ const WishlistPage = () => {
               Your saved movies, electronics, and books in one place.
             </p>
           </div>
-          <button className="border border-primary text-primary px-6 py-2 rounded hover:bg-primary/10 transition-all flex items-center gap-2">
+          <button onClick={() => navigate('/books')} className="border border-primary text-primary px-6 py-2 rounded hover:bg-primary/10 transition-all flex items-center gap-2">
             <span className="material-symbols-outlined text-sm">add</span>
             ADD ITEMS
           </button>

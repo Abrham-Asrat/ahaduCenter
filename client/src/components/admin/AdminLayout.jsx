@@ -13,7 +13,13 @@ import { Link, useLocation } from 'react-router-dom';
  */
 const AdminLayout = ({ children }) => {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
     const location = useLocation();
+
+    const handleSearch = (e) => {
+        setSearchQuery(e.target.value);
+        console.log('Admin search:', e.target.value);
+    };
 
     // Sidebar navigation items
     const navItems = [
@@ -98,6 +104,8 @@ const AdminLayout = ({ children }) => {
                             type="text"
                             placeholder="Search admin records, commands..."
                             className="bg-transparent border-none outline-none text-sm text-white w-full placeholder-gray-500"
+                            value={searchQuery}
+                            onChange={handleSearch}
                         />
                     </div>
 

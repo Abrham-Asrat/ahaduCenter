@@ -102,7 +102,7 @@ const BorrowingHistoryPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background text-on-surface flex flex-col relative">
+    <div className="min-h-screen bg-background text-on-surface flex flex-col relative animate-fade-in">
       <Navbar />
 
       {/* Toast Notification */}

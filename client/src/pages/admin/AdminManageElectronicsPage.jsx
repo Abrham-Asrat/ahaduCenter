@@ -72,6 +72,7 @@ const AdminManageElectronicsPage = () => {
     const [brandFilter, setBrandFilter] = useState('All Brands');
     const [showModal, setShowModal] = useState(false);
     const [editingProduct, setEditingProduct] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
 
     // Filter products by search query, category, condition, brand
     const filteredProducts = products.filter((product) => {
@@ -330,13 +331,13 @@ const AdminManageElectronicsPage = () => {
                             </div>
                         </div>
                         <div className="p-4">
-                            <div className="flex justify-between items-start mb-2">
-                                <span className="text-xs uppercase text-on-surface-variant">{product.category}</span>
-                                <span className="text-lg font-bold text-secondary">${product.price.toLocaleString()}</span>
+                            <div className="flex justify-between items-start mb-2 min-w-0">
+                                <span className="text-xs uppercase text-on-surface-variant truncate">{product.category}</span>
+                                <span className="text-lg font-bold text-secondary shrink-0 ml-2">${product.price.toLocaleString()}</span>
                             </div>
-                            <h3 className="text-lg font-semibold text-white mb-3">{product.name}</h3>
-                            <div className="flex items-center justify-between border-t border-white/10 pt-3">
-                                <span className="text-xs text-on-surface-variant">SKU: {product.sku}</span>
+                            <h3 className="text-lg font-semibold text-white mb-3 truncate">{product.name}</h3>
+                            <div className="flex items-center justify-between border-t border-white/10 pt-3 min-w-0">
+                                <span className="text-xs text-on-surface-variant truncate min-w-0 mr-2">SKU: {product.sku}</span>
                                 <div className="flex gap-2">
                                     <button onClick={() => handleEdit(product)} className="p-1 text-on-surface-variant hover:text-primary">
                                         <span className="material-symbols-outlined">edit</span>
@@ -353,15 +354,32 @@ const AdminManageElectronicsPage = () => {
 
             {/* Pagination */}
             <div className="mt-8 flex justify-center items-center gap-2">
-                <button className="w-10 h-10 rounded-lg glass-panel flex items-center justify-center text-on-surface-variant hover:text-primary">
+                <button
+                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                    className="w-10 h-10 rounded-lg glass-panel flex items-center justify-center text-on-surface-variant hover:text-primary"
+                >
                     <span className="material-symbols-outlined">chevron_left</span>
                 </button>
-                <button className="w-10 h-10 rounded-lg bg-primary text-white font-bold">1</button>
-                <button className="w-10 h-10 rounded-lg glass-panel text-white hover:text-primary">2</button>
-                <button className="w-10 h-10 rounded-lg glass-panel text-white hover:text-primary">3</button>
+                {[1, 2, 3].map((n) => (
+                    <button
+                        key={n}
+                        onClick={() => setCurrentPage(n)}
+                        className={`w-10 h-10 rounded-lg font-bold ${currentPage === n ? 'bg-primary text-white' : 'glass-panel text-white hover:text-primary'}`}
+                    >
+                        {n}
+                    </button>
+                ))}
                 <span className="text-on-surface-variant">...</span>
-                <button className="w-10 h-10 rounded-lg glass-panel text-white hover:text-primary">10</button>
-                <button className="w-10 h-10 rounded-lg glass-panel flex items-center justify-center text-on-surface-variant hover:text-primary">
+                <button
+                    onClick={() => setCurrentPage(10)}
+                    className={`w-10 h-10 rounded-lg font-bold ${currentPage === 10 ? 'bg-primary text-white' : 'glass-panel text-white hover:text-primary'}`}
+                >
+                    10
+                </button>
+                <button
+                    onClick={() => setCurrentPage(p => p + 1)}
+                    className="w-10 h-10 rounded-lg glass-panel flex items-center justify-center text-on-surface-variant hover:text-primary"
+                >
                     <span className="material-symbols-outlined">chevron_right</span>
                 </button>
             </div>
@@ -406,7 +424,7 @@ const ProductModal = ({ product, onClose, onSave }) => {
 
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-            <div className="glass-panel w-full max-w-2xl rounded-xl shadow-2xl border border-white/20 flex flex-col max-h-[90vh] overflow-hidden">
+            <div className="glass-panel w-full max-w-2xl rounded-xl shadow-2xl border border-white/20 flex flex-col max-h-[90vh] overflow-hidden animate-slide-up">
                 {/* Header */}
                 <div className="p-6 border-b border-white/10 flex items-center justify-between bg-white/5">
                     <h3 className="text-2xl font-bold text-white">{product ? 'Edit Product' : 'Add New Product'}</h3>

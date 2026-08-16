@@ -71,7 +71,7 @@ const ProductComparisonPage = () => {
 
   const handleBuyNow = (product) => {
     showToast(`Redirecting to checkout for "${product.name}"...`);
-    setTimeout(() => navigate('/checkout'), 1000);
+    setTimeout(() => navigate('/order-confirmation'), 1000);
   };
 
   const handleWishlist = (product) => {
@@ -79,7 +79,7 @@ const ProductComparisonPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background text-on-surface flex flex-col relative">
+    <div className="min-h-screen bg-background text-on-surface flex flex-col relative animate-fade-in">
       <Navbar />
 
       {/* Toast Notification */}

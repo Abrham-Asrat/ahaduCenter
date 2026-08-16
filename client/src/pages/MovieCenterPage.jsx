@@ -288,14 +288,15 @@ const MovieCenterPage = () => {
 
                 {paginatedMovies.length > 0 ? (
                   <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-                    {paginatedMovies.map((movie) => (
-                      <MovieCard
-                        key={movie.id}
-                        movie={movie}
-                        onPlayTrailer={handlePlayTrailer}
-                        onToggleBookmark={handleToggleBookmark}
-                        isBookmarked={bookmarkedIds.includes(movie.id)}
-                      />
+                    {paginatedMovies.map((movie, index) => (
+                      <div key={movie.id} className="animate-fade-in" style={{ animationDelay: `${index * 0.05}s` }}>
+                        <MovieCard
+                          movie={movie}
+                          onPlayTrailer={handlePlayTrailer}
+                          onToggleBookmark={handleToggleBookmark}
+                          isBookmarked={bookmarkedIds.includes(movie.id)}
+                        />
+                      </div>
                     ))}
                   </div>
                 ) : (

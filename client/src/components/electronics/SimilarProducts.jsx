@@ -1,5 +1,6 @@
 // src/components/electronics/SimilarProducts.jsx
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 /**
  * SimilarProducts Component
@@ -15,8 +16,9 @@ const SimilarProducts = ({ products }) => {
             <h2 className="text-2xl md:text-3xl font-bold text-white mb-6">Similar Products</h2>
             <div className="flex gap-4 overflow-x-auto hide-scrollbar pb-4 snap-x">
                 {products.map((product) => (
-                    <div
+                    <Link
                         key={product.id}
+                        to={`/electronics/${product.id}`}
                         className="w-64 flex-shrink-0 glass-panel rounded-xl overflow-hidden snap-start group cursor-pointer hover:border-primary/50 transition-colors"
                     >
                         <div className="h-40 w-full relative overflow-hidden bg-surface-container">
@@ -28,9 +30,10 @@ const SimilarProducts = ({ products }) => {
                         </div>
                         <div className="p-4 flex flex-col gap-2">
                             <span className="text-xs text-on-surface-variant">{product.brand}</span>
+                            <span className="text-white font-semibold">{product.name}</span>
                             <span className="text-white font-semibold">${product.price.toLocaleString()}</span>
                         </div>
-                    </div>
+                    </Link>
                 ))}
             </div>
         </section>

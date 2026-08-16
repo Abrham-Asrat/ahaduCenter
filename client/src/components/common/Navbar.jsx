@@ -175,7 +175,7 @@ const Navbar = () => {
 
                   {/* User Profile Dropdown Menu */}
                   {isProfileOpen && (
-                    <div className="absolute right-0 mt-3 w-72 glass-panel rounded-2xl p-4 border border-white/10 shadow-2xl z-50 animate-fadeIn">
+                    <div className="absolute right-0 mt-3 w-72 glass-panel rounded-2xl p-4 border border-white/10 shadow-2xl z-50 animate-fade-in">
                       {/* User Info Header */}
                       <div className="flex items-center gap-3 pb-3 border-b border-white/10 mb-3">
                         <div className="w-11 h-11 rounded-full bg-primary text-black font-black flex items-center justify-center text-base shadow-lg">

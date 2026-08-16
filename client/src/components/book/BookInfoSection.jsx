@@ -24,7 +24,7 @@ const BookInfoSection = ({ book, onShowToast }) => {
 
     const handleBuy = () => {
         if (onShowToast) onShowToast(`Added "${book.title}" to cart! Redirecting to checkout...`);
-        setTimeout(() => navigate('/checkout'), 1000);
+        setTimeout(() => navigate('/book-confirm'), 1000);
     };
 
     return (

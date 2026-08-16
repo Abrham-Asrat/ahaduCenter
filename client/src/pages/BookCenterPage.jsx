@@ -273,8 +273,10 @@ const BookCenterPage = () => {
               </div>
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
-                {sortedBooks.map((book) => (
-                  <BookCard key={book.id} book={book} onQuickAction={handleQuickAction} />
+                {sortedBooks.map((book, index) => (
+                  <div key={book.id} className="animate-fade-in" style={{ animationDelay: `${index * 0.05}s` }}>
+                    <BookCard book={book} onQuickAction={handleQuickAction} />
+                  </div>
                 ))}
               </div>
             )}

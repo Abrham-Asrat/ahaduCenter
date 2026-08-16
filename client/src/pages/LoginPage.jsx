@@ -47,7 +47,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background text-on-surface flex flex-col relative overflow-x-hidden">
+    <div className="min-h-screen bg-background text-on-surface flex flex-col relative overflow-x-hidden animate-fade-in">
       {/* Toast notification */}
       {toastMessage && (
         <div className="fixed top-20 right-6 bg-primary text-black font-extrabold px-6 py-3 rounded-2xl shadow-2xl z-50 flex items-center gap-2 animate-bounce">

@@ -25,6 +25,8 @@ import MovieRequestPage from './pages/MovieRequestPage';
 import PurchaseHistoryPage from './pages/PurchaseHistoryPage';
 import BorrowingHistoryPage from './pages/BorrowingHistoryPage';
 import BookConfirmPage from './pages/BookConfirmPage';
+import NotificationsPage from './pages/NotificationsPage';
+import OrderConfirmationPage from './pages/OrderConfirmationPage';
 import NotFoundPage from './pages/NotFoundPage';
 import ScrollToTop from './components/common/ScrollToTop';
 
@@ -58,6 +60,8 @@ function App() {
       <Route path="/purchase-history" element={<PurchaseHistoryPage />} />
       <Route path="/borrowing-history" element={<BorrowingHistoryPage />} />
       <Route path="/book-confirm" element={<BookConfirmPage />} />
+      <Route path="/notifications" element={<NotificationsPage />} />
+      <Route path="/order-confirmation" element={<OrderConfirmationPage />} />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
     </>

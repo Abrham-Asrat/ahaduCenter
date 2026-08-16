@@ -1,5 +1,5 @@
 // src/components/book/RelatedBooks.jsx
-import React from 'react';
+import React, { useRef } from 'react';
 
 /**
  * RelatedBooks Component
@@ -10,15 +10,22 @@ import React from 'react';
  * - books: Array of book objects { id, title, author, coverUrl, price }
  */
 const RelatedBooks = ({ books }) => {
+    const scrollRef = useRef(null);
+
+    const scroll = (dir) => {
+        const el = scrollRef.current;
+        if (el) el.scrollBy({ left: dir === 'next' ? 220 : -220, behavior: 'smooth' });
+    };
+
     return (
         <section className="mt-12 border-t border-white/5 pt-8">
             <div className="flex justify-between items-end mb-6">
                 <h2 className="text-2xl md:text-3xl font-bold text-white">You May Also Like</h2>
                 <div className="flex gap-2">
-                    <button className="w-10 h-10 rounded glass-panel flex items-center justify-center text-white hover:text-primary transition-colors">
+                    <button onClick={() => scroll('prev')} className="w-10 h-10 rounded glass-panel flex items-center justify-center text-white hover:text-primary transition-colors">
                         <span className="material-symbols-outlined">chevron_left</span>
                     </button>
-                    <button className="w-10 h-10 rounded glass-panel flex items-center justify-center text-white hover:text-primary transition-colors">
+                    <button onClick={() => scroll('next')} className="w-10 h-10 rounded glass-panel flex items-center justify-center text-white hover:text-primary transition-colors">
                         <span className="material-symbols-outlined">chevron_right</span>
                     </button>
                 </div>

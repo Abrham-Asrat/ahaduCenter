@@ -1,5 +1,6 @@
 // src/components/movie/RelatedMoviesCarousel.jsx
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 /**
  * RelatedMoviesCarousel Component
@@ -20,8 +21,9 @@ const RelatedMoviesCarousel = ({ movies }) => {
             <h2 className="text-2xl md:text-3xl font-bold text-white mb-8">You Might Also Like</h2>
             <div className="flex gap-6 overflow-x-auto hide-scrollbar pb-4">
                 {movies.map((movie) => (
-                    <div
+                    <Link
                         key={movie.id}
+                        to={`/movies/${movie.id}`}
                         className="min-w-[200px] md:min-w-[250px] glass-panel rounded-xl overflow-hidden group cursor-pointer flex-shrink-0"
                     >
                         <div className="relative w-full aspect-[2/3] overflow-hidden">
@@ -46,7 +48,7 @@ const RelatedMoviesCarousel = ({ movies }) => {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </Link>
                 ))}
             </div>
         </section>

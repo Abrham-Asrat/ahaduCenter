@@ -140,7 +140,7 @@ const ElectronicsPage = () => {
 
   const handleCompare = (product) => {
     showToast(`"${product.name}" added to product comparison!`);
-    setTimeout(() => navigate('/electronics/compare'), 1200);
+    setTimeout(() => navigate('/compare'), 1200);
   };
 
   const handleToggleWishlist = (product, isSaved) => {
@@ -260,15 +260,16 @@ const ElectronicsPage = () => {
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {sortedProducts.map((product) => (
-                  <ProductCard
-                    key={product.id}
-                    product={product}
-                    isWishlisted={wishlistIds.includes(product.id)}
-                    onAddToCart={handleAddToCart}
-                    onCompare={handleCompare}
-                    onToggleWishlist={handleToggleWishlist}
-                  />
+                {sortedProducts.map((product, index) => (
+                  <div key={product.id} className="animate-fade-in" style={{ animationDelay: `${index * 0.05}s` }}>
+                    <ProductCard
+                      product={product}
+                      isWishlisted={wishlistIds.includes(product.id)}
+                      onAddToCart={handleAddToCart}
+                      onCompare={handleCompare}
+                      onToggleWishlist={handleToggleWishlist}
+                    />
+                  </div>
                 ))}
               </div>
             )}

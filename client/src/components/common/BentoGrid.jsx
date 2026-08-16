@@ -1,5 +1,6 @@
 // src/components/common/BentoGrid.jsx
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 /**
  * BentoGrid Component
@@ -17,12 +18,12 @@ import React from 'react';
  */
 const BentoGrid = () => {
     return (
-        <section className="py-12 px-20 max-w-7xl mx-auto">
+        <section className="py-12 px-4 sm:px-8 lg:px-20 max-w-7xl mx-auto">
             <h2 className="text-3xl font-bold text-white mb-8">Curated Collections</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
                 {/* Movies large card */}
-                <div className="md:col-span-2 glass-border-gradient rounded-xl overflow-hidden group relative min-h-[400px]">
+                <Link to="/movies" className="md:col-span-2 glass-border-gradient rounded-xl overflow-hidden group relative min-h-[400px] cursor-pointer">
                     <div
                         className="absolute inset-0 bg-cover bg-center opacity-40 group-hover:opacity-60 transition-opacity duration-500"
                         style={{
@@ -40,10 +41,10 @@ const BentoGrid = () => {
                             Immerse yourself in our hand-picked selection of award-winning films and blockbuster hits.
                         </p>
                     </div>
-                </div>
+                </Link>
 
                 {/* Electronics card */}
-                <div className="glass-border-gradient rounded-xl overflow-hidden group relative min-h-[400px]">
+                <Link to="/electronics" className="glass-border-gradient rounded-xl overflow-hidden group relative min-h-[400px] cursor-pointer">
                     <div
                         className="absolute inset-0 bg-cover bg-center opacity-40 group-hover:opacity-60 transition-opacity duration-500"
                         style={{
@@ -56,10 +57,10 @@ const BentoGrid = () => {
                         <h3 className="text-2xl font-semibold text-white mb-2">Next-Gen Tech</h3>
                         <p className="text-sm text-on-surface-variant">Elevate your setup.</p>
                     </div>
-                </div>
+                </Link>
 
                 {/* Books card */}
-                <div className="glass-border-gradient rounded-xl overflow-hidden group relative min-h-[300px] md:col-span-1">
+                <Link to="/books" className="glass-border-gradient rounded-xl overflow-hidden group relative min-h-[300px] md:col-span-1 cursor-pointer">
                     <div
                         className="absolute inset-0 bg-cover bg-center opacity-40 group-hover:opacity-60 transition-opacity duration-500"
                         style={{
@@ -72,18 +73,18 @@ const BentoGrid = () => {
                         <h3 className="text-2xl font-semibold text-white mb-2">Bestsellers</h3>
                         <p className="text-sm text-on-surface-variant">Expand your mind.</p>
                     </div>
-                </div>
+                </Link>
 
                 {/* Community card */}
-                <div className="md:col-span-2 glass-border-gradient rounded-xl p-6 flex items-center justify-between group glow-hover">
+                <Link to="/register" className="md:col-span-2 glass-border-gradient rounded-xl p-6 flex items-center justify-between group glow-hover cursor-pointer">
                     <div>
                         <h4 className="text-2xl font-semibold text-white">Join the Community</h4>
                         <p className="text-sm text-on-surface-variant">Get access to exclusive drops.</p>
                     </div>
-                    <button className="btn-primary rounded-full w-12 h-12 flex items-center justify-center">
+                    <span className="btn-primary rounded-full w-12 h-12 flex items-center justify-center">
                         <span className="material-symbols-outlined">arrow_forward</span>
-                    </button>
-                </div>
+                    </span>
+                </Link>
             </div>
         </section>
     );

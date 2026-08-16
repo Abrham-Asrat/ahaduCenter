@@ -19,7 +19,7 @@ const AdminDashboardPage = () => {
 
   return (
     <AdminLayout>
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-8 animate-fade-in">
         {/* Header */}
         <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-4">
           <div>

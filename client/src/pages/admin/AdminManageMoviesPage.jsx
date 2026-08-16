@@ -251,10 +251,10 @@ const AdminManageMoviesPage = () => {
                                 )}
                             </div>
                         </div>
-                        <div className="p-4">
+                        <div className="p-4 min-w-0">
                             <h3 className="text-lg font-semibold text-white truncate">{movie.title}</h3>
-                            <p className="text-sm text-on-surface-variant mt-1">{movie.genre} • {movie.year}</p>
-                            <div className="flex justify-between items-center mt-4">
+                            <p className="text-sm text-on-surface-variant mt-1 truncate">{movie.genre} • {movie.year}</p>
+                            <div className="flex justify-between items-center mt-4 min-w-0">
                                 <span className="text-sm text-secondary">{movie.rating ? `${movie.rating}/5` : '-'}</span>
                                 <div className="flex gap-2">
                                     <button onClick={() => handleEdit(movie)} className="p-1 text-on-surface-variant hover:text-primary">
@@ -272,15 +272,32 @@ const AdminManageMoviesPage = () => {
 
             {/* Pagination */}
             <div className="mt-8 flex justify-center items-center gap-2">
-                <button className="w-10 h-10 rounded-lg glass-panel flex items-center justify-center text-on-surface-variant hover:text-primary">
+                <button
+                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                    className="w-10 h-10 rounded-lg glass-panel flex items-center justify-center text-on-surface-variant hover:text-primary"
+                >
                     <span className="material-symbols-outlined">chevron_left</span>
                 </button>
-                <button className="w-10 h-10 rounded-lg bg-primary text-white font-bold">1</button>
-                <button className="w-10 h-10 rounded-lg glass-panel text-white hover:text-primary">2</button>
-                <button className="w-10 h-10 rounded-lg glass-panel text-white hover:text-primary">3</button>
+                {[1, 2, 3].map((n) => (
+                    <button
+                        key={n}
+                        onClick={() => setCurrentPage(n)}
+                        className={`w-10 h-10 rounded-lg font-bold ${currentPage === n ? 'bg-primary text-white' : 'glass-panel text-white hover:text-primary'}`}
+                    >
+                        {n}
+                    </button>
+                ))}
                 <span className="text-on-surface-variant">...</span>
-                <button className="w-10 h-10 rounded-lg glass-panel text-white hover:text-primary">12</button>
-                <button className="w-10 h-10 rounded-lg glass-panel flex items-center justify-center text-on-surface-variant hover:text-primary">
+                <button
+                    onClick={() => setCurrentPage(12)}
+                    className={`w-10 h-10 rounded-lg font-bold ${currentPage === 12 ? 'bg-primary text-white' : 'glass-panel text-white hover:text-primary'}`}
+                >
+                    12
+                </button>
+                <button
+                    onClick={() => setCurrentPage(p => p + 1)}
+                    className="w-10 h-10 rounded-lg glass-panel flex items-center justify-center text-on-surface-variant hover:text-primary"
+                >
                     <span className="material-symbols-outlined">chevron_right</span>
                 </button>
             </div>
@@ -324,7 +341,7 @@ const MovieModal = ({ movie, onClose, onSave }) => {
 
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-            <div className="glass-panel w-full max-w-2xl rounded-xl shadow-2xl border border-white/20 flex flex-col max-h-[90vh] overflow-hidden">
+            <div className="glass-panel w-full max-w-2xl rounded-xl shadow-2xl border border-white/20 flex flex-col max-h-[90vh] overflow-hidden animate-slide-up">
                 {/* Header */}
                 <div className="p-6 border-b border-white/10 flex items-center justify-between bg-white/5">
                     <h3 className="text-2xl font-bold text-white">{movie ? 'Edit Movie' : 'Add New Movie'}</h3>

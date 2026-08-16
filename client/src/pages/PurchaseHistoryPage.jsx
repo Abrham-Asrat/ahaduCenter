@@ -5,22 +5,33 @@ import Footer from '../components/common/Footer';
 
 /**
  * PurchaseHistoryPage Component
- * 
+ *
  * Displays user's past purchase orders with status and actions.
- * 
+ *
  * Features:
  * - Filter tabs: All Orders, Processing, Shipped, Delivered, Cancelled
  * - Order cards with order ID, date, status, items, total
  * - Action buttons: Buy Again, Track Order, View Details
  * - Export History button
- * - Pagination
- * 
+ * - Pagination with currentPage state
+ * - Toast notifications (3 s auto-dismiss)
+ *
  * State:
  * - activeFilter: Currently selected filter
+ * - currentPage: Active page number (1-indexed)
+ * - toastMessage: Temporary notification text or null
  * - orders: Array of order objects
  */
 const PurchaseHistoryPage = () => {
   const [activeFilter, setActiveFilter] = useState('All Orders');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [toastMessage, setToastMessage] = useState(null);
+
+  /** Show a transient toast that auto-dismisses after 3 seconds. */
+  const showToast = (msg) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(null), 3000);
+  };
 
   // Orders data
   const orders = [
@@ -51,9 +62,10 @@ const PurchaseHistoryPage = () => {
   const filters = ['All Orders', 'Processing', 'Shipped', 'Delivered', 'Cancelled'];
 
   // Filter orders based on active filter
-  const filteredOrders = activeFilter === 'All Orders'
-    ? orders
-    : orders.filter((o) => o.status === activeFilter);
+  const filteredOrders =
+    activeFilter === 'All Orders'
+      ? orders
+      : orders.filter((o) => o.status === activeFilter);
 
   // Status badge styles
   const getStatusBadge = (status) => {
@@ -72,7 +84,7 @@ const PurchaseHistoryPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background text-on-surface flex flex-col">
+    <div className="min-h-screen bg-background text-on-surface flex flex-col animate-fade-in">
       <Navbar />
 
       <main className="flex-grow pt-24 pb-12 max-w-7xl mx-auto px-4 md:px-8 w-full">
@@ -82,7 +94,10 @@ const PurchaseHistoryPage = () => {
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">Purchase History</h1>
             <p className="text-lg text-on-surface-variant">Review your past orders for electronics and books.</p>
           </div>
-          <button className="border border-secondary text-secondary px-6 py-2 rounded-lg hover:shadow-[0_0_15px_rgba(212,175,55,0.3)] transition-all text-xs uppercase tracking-wider flex items-center gap-2">
+          <button
+            onClick={() => window.print()}
+            className="border border-secondary text-secondary px-6 py-2 rounded-lg hover:shadow-[0_0_15px_rgba(212,175,55,0.3)] transition-all text-xs uppercase tracking-wider flex items-center gap-2"
+          >
             <span className="material-symbols-outlined text-sm">download</span>
             Export History
           </button>
@@ -94,10 +109,11 @@ const PurchaseHistoryPage = () => {
             <button
               key={filter}
               onClick={() => setActiveFilter(filter)}
-              className={`px-5 py-2 rounded-full text-xs uppercase tracking-wider whitespace-nowrap transition-all ${activeFilter === filter
+              className={`px-5 py-2 rounded-full text-xs uppercase tracking-wider whitespace-nowrap transition-all ${
+                activeFilter === filter
                   ? 'bg-primary text-black font-semibold'
                   : 'bg-transparent text-on-surface-variant border border-white/10 hover:border-primary hover:text-primary'
-                }`}
+              }`}
             >
               {filter}
             </button>
@@ -115,7 +131,10 @@ const PurchaseHistoryPage = () => {
           /* Orders list */
           <div className="flex flex-col gap-6">
             {filteredOrders.map((order) => (
-              <div key={order.id} className="glass-panel rounded-xl p-6 flex flex-col md:flex-row gap-6 hover:border-primary/50 transition-all group relative overflow-hidden">
+              <div
+                key={order.id}
+                className="glass-panel rounded-xl p-6 flex flex-col md:flex-row gap-6 hover:border-primary/50 transition-all group relative overflow-hidden"
+              >
                 {/* Ambient glow */}
                 <div className="absolute -top-10 -right-10 w-32 h-32 bg-primary/5 rounded-full blur-[40px] group-hover:bg-primary/10 transition-all" />
 
@@ -137,7 +156,10 @@ const PurchaseHistoryPage = () => {
                   {/* Item thumbnails */}
                   <div className="flex gap-2 mt-auto pt-2">
                     {order.items.map((img, index) => (
-                      <div key={index} className="w-16 h-16 rounded-lg overflow-hidden border border-white/10 bg-background">
+                      <div
+                        key={index}
+                        className="w-16 h-16 rounded-lg overflow-hidden border border-white/10 bg-background"
+                      >
                         <img src={img} alt={`Item ${index + 1}`} className="w-full h-full object-cover" />
                       </div>
                     ))}
@@ -152,19 +174,26 @@ const PurchaseHistoryPage = () => {
                 {/* Right: actions */}
                 <div className="flex md:flex-col justify-end gap-3 md:w-48 shrink-0 relative z-10">
                   {order.status === 'Processing' ? (
-                    <>
-                      <button className="flex-1 md:flex-none border border-secondary text-secondary px-4 py-2 rounded-lg hover:bg-secondary/10 transition-all text-xs uppercase flex items-center justify-center gap-2">
-                        <span className="material-symbols-outlined text-sm">local_shipping</span>
-                        Track Order
-                      </button>
-                    </>
+                    <button
+                      onClick={() => showToast('Tracking coming soon')}
+                      className="flex-1 md:flex-none border border-secondary text-secondary px-4 py-2 rounded-lg hover:bg-secondary/10 transition-all text-xs uppercase flex items-center justify-center gap-2"
+                    >
+                      <span className="material-symbols-outlined text-sm">local_shipping</span>
+                      Track Order
+                    </button>
                   ) : (
-                    <button className="flex-1 md:flex-none border border-primary text-primary px-4 py-2 rounded-lg hover:bg-primary hover:text-black transition-all text-xs uppercase flex items-center justify-center gap-2">
+                    <button
+                      onClick={() => showToast('Added to wishlist')}
+                      className="flex-1 md:flex-none border border-primary text-primary px-4 py-2 rounded-lg hover:bg-primary hover:text-black transition-all text-xs uppercase flex items-center justify-center gap-2"
+                    >
                       <span className="material-symbols-outlined text-sm">shopping_bag</span>
                       Buy Again
                     </button>
                   )}
-                  <button className="flex-1 md:flex-none border border-white/20 text-white px-4 py-2 rounded-lg hover:border-white/50 transition-all text-xs uppercase flex items-center justify-center gap-2">
+                  <button
+                    onClick={() => showToast('Details coming soon')}
+                    className="flex-1 md:flex-none border border-white/20 text-white px-4 py-2 rounded-lg hover:border-white/50 transition-all text-xs uppercase flex items-center justify-center gap-2"
+                  >
                     <span className="material-symbols-outlined text-sm">visibility</span>
                     View Details
                   </button>
@@ -177,11 +206,21 @@ const PurchaseHistoryPage = () => {
         {/* Pagination */}
         {filteredOrders.length > 0 && (
           <div className="flex justify-center items-center gap-3 mt-8">
-            <button className="w-10 h-10 rounded-lg glass-panel flex items-center justify-center text-on-surface-variant hover:text-primary">
+            <button
+              aria-label="Previous page"
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              className="w-10 h-10 rounded-lg glass-panel flex items-center justify-center text-on-surface-variant hover:text-primary"
+            >
               <span className="material-symbols-outlined">chevron_left</span>
             </button>
-            <span className="text-sm text-white">1 OF 3</span>
-            <button className="w-10 h-10 rounded-lg glass-panel flex items-center justify-center text-on-surface-variant hover:text-primary">
+            <span className="text-sm text-white" aria-live="polite">
+              {currentPage} OF 3
+            </span>
+            <button
+              aria-label="Next page"
+              onClick={() => setCurrentPage((p) => p + 1)}
+              className="w-10 h-10 rounded-lg glass-panel flex items-center justify-center text-on-surface-variant hover:text-primary"
+            >
               <span className="material-symbols-outlined">chevron_right</span>
             </button>
           </div>
@@ -189,6 +228,17 @@ const PurchaseHistoryPage = () => {
       </main>
 
       <Footer />
+
+      {/* Toast notification */}
+      {toastMessage && (
+        <div
+          role="status"
+          className="fixed bottom-8 right-8 z-50 bg-surface-container border border-primary/50 text-white px-5 py-3.5 rounded-xl shadow-2xl flex items-center gap-3 animate-bounce"
+        >
+          <span className="material-symbols-outlined text-primary">check_circle</span>
+          <span className="text-sm font-semibold">{toastMessage}</span>
+        </div>
+      )}
     </div>
   );
 };

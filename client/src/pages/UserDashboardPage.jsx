@@ -65,6 +65,8 @@ const UserDashboardPage = () => {
     { label: 'Purchase History', icon: 'receipt_long', path: '/purchase-history' },
     { label: 'Borrowing History', icon: 'library_books', path: '/borrowing-history' },
     { label: 'Movie Requests', icon: 'movie', path: '/movie-request' },
+    { label: 'Notifications', icon: 'notifications', path: '/notifications' },
+    { label: 'Contact', icon: 'contact_support', path: '/contact' },
   ];
 
   // Stats data
@@ -104,7 +106,7 @@ const UserDashboardPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background text-on-background flex flex-col">
+    <div className="min-h-screen bg-background text-on-background flex flex-col animate-fade-in">
       <Navbar />
 
       <main className="flex-grow pt-24 pb-12 max-w-7xl mx-auto w-full px-4 md:px-8">
@@ -152,7 +154,7 @@ const UserDashboardPage = () => {
               {navItems.map((item) => (
                 <Link
                   key={item.label}
-                  to={item.label === 'Logout' ? '/' : '#'}
+                  to={item.path}
                   className={`flex items-center gap-4 px-4 py-2 rounded-lg transition-all ${item.danger
                       ? 'text-error hover:bg-error/10'
                       : item.active
@@ -253,7 +255,7 @@ const UserDashboardPage = () => {
       {/* Edit Profile Modal */}
       {isEditModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-          <div className="glass-panel w-full max-w-md rounded-2xl shadow-2xl border border-white/20 overflow-hidden">
+          <div className="glass-panel w-full max-w-md rounded-2xl shadow-2xl border border-white/20 overflow-hidden animate-slide-up">
             <div className="p-6 border-b border-white/10 flex items-center justify-between bg-white/5">
               <h3 className="text-xl font-bold text-white flex items-center gap-2">
                 <span className="material-symbols-outlined text-primary">edit</span>

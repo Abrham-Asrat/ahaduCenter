@@ -42,7 +42,7 @@ const OrderConfirmationPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background text-on-surface flex flex-col items-center justify-center px-4 py-12">
+    <div className="min-h-screen bg-background text-on-surface flex flex-col items-center justify-center px-4 py-12 animate-fade-in">
       <main className="w-full max-w-4xl flex flex-col items-center gap-8">
         {/* Success Header */}
         <header className="text-center flex flex-col items-center">

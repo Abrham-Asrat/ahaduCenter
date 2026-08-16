@@ -1,5 +1,6 @@
 // src/components/common/HeroSection.jsx
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import ShaderHero from './ShaderHero';
 
 /**
@@ -17,8 +18,9 @@ import ShaderHero from './ShaderHero';
  * - Single column on mobile, two columns on desktop
  */
 const HeroSection = () => {
+    const navigate = useNavigate();
     return (
-        <section className="relative min-h-[80vh] flex items-center px-20 py-12 overflow-hidden">
+        <section className="relative min-h-[80vh] flex items-center px-4 sm:px-8 lg:px-20 py-12 overflow-hidden">
             {/* Shader background canvas */}
             <div className="absolute inset-0 w-full h-full -z-10">
                 <ShaderHero />
@@ -37,8 +39,8 @@ const HeroSection = () => {
                         Experience a cinematic journey through premium entertainment, cutting-edge technology, and profound literature.
                     </p>
                     <div className="flex gap-3 pt-2">
-                        <button className="btn-primary px-8 py-3 rounded-lg font-bold">Explore Now</button>
-                        <button className="btn-secondary px-8 py-3 rounded-lg font-bold">Latest Arrivals</button>
+                        <button onClick={() => navigate('/books')} className="btn-primary px-8 py-3 rounded-lg font-bold">Explore Now</button>
+                        <button onClick={() => navigate('/electronics')} className="btn-secondary px-8 py-3 rounded-lg font-bold">Latest Arrivals</button>
                     </div>
                 </div>
 

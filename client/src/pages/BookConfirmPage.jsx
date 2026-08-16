@@ -69,7 +69,7 @@ const BookConfirmPage = () => {
     // If submitted, show success state
     if (submitted) {
         return (
-            <div className="min-h-screen bg-background text-on-surface flex flex-col">
+            <div className="min-h-screen bg-background text-on-surface flex flex-col animate-fade-in">
                 <Navbar />
                 <main className="flex-grow flex items-center justify-center px-4 py-12">
                     <div className="w-full max-w-md">
@@ -106,7 +106,7 @@ const BookConfirmPage = () => {
     }
 
     return (
-        <div className="min-h-screen bg-background text-on-surface flex flex-col">
+        <div className="min-h-screen bg-background text-on-surface flex flex-col animate-fade-in">
             <Navbar />
 
             <main className="flex-grow flex items-center justify-center px-4 py-12">
