@@ -253,12 +253,12 @@ Each task touches 1–5 files and can be executed independently. Tasks are order
   - In `src/pages/ElectronicsPage.jsx`: add `className="animate-fade-in"` and `style={{ animationDelay: \`${index * 0.05}s\` }}` to each `<ProductCard>` wrapper `<div>` in the sorted product grid.
   - _Requirements: 12.1, 12.2, 12.3_
 
-  - [~] 23.1 Write property test for staggered animation delays
+  - [x] 23.1 Write property test for staggered animation delays
     - **Property 6: Staggered animation delay matches index**
     - Using fast-check: generate an array of N mock items (N between 1 and 20); render `BookCenterPage` (or a focused test component) with those items; for each rendered card at index i, assert `style.animationDelay === \`${i * 0.05}s\``.
     - **Validates: Requirements 12.1, 12.2, 12.3**
 
-- [~] 24. Add hover lift classes to clickable cards
+- [x] 24. Add hover lift classes to clickable cards
   - Audit the following components and add `hover:-translate-y-1 transition-transform duration-200` to clickable cards that do not already have a `hover:-translate-y` or `hover:scale` transform:
     - `src/pages/BookCenterPage.jsx` — book card elements
     - `src/pages/MovieCenterPage.jsx` — movie card elements
@@ -267,18 +267,18 @@ Each task touches 1–5 files and can be executed independently. Tasks are order
     - `src/components/electronics/SimilarProducts.jsx` — similar product cards
   - _Requirements: 13.1_
 
-- [~] 25. Add `transition-all duration-200` to form inputs and `animate-slide-up` to modals
+- [x] 25. Add `transition-all duration-200` to form inputs and `animate-slide-up` to modals
   - Verify every `<input>`, `<textarea>`, and `<select>` in `ContactPage`, `RegisterPage`, and the `UserDashboardPage` edit modal has `transition-all duration-200` in its className. Add it where missing.
   - Add `animate-slide-up` to the modal panel in `UserDashboardPage` (`<div className="glass-panel w-full max-w-md rounded-2xl ...">`).
   - Add `animate-slide-up` to the `BookModal` panel in `AdminManageBooksPage` (handled in Task 19; verify here).
   - _Requirements: 13.2, 13.3_
 
-- [~] 26. Fix `BorrowingHistoryPage.jsx`: horizontal scroll wrapper and entrance animation
+- [x] 26. Fix `BorrowingHistoryPage.jsx`: horizontal scroll wrapper and entrance animation
   - Wrap the borrowing records list (the `<div className="flex flex-col gap-6">` containing the borrowing cards) in an `overflow-x-auto` container so content scrolls horizontally on very narrow screens rather than overflowing.
   - Add `animate-fade-in` to the outermost page `<div>`.
   - _Requirements: 9.2, 11.1_
 
-- [~] 27. Final checkpoint — ensure all tests pass and animations are visible
+- [x] 27. Final checkpoint — ensure all tests pass and animations are visible
   - Ensure all tests pass, ask the user if questions arise.
 
 ---

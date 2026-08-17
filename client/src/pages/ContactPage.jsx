@@ -157,7 +157,7 @@ const ContactPage = () => {
                     name="subject"
                     value={formData.subject}
                     onChange={handleInputChange}
-                    className="w-full bg-[#0B0F19] border border-white/10 rounded-lg p-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all appearance-none"
+                    className="w-full bg-[#0B0F19] border border-white/10 rounded-lg p-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-200 appearance-none"
                     required
                   >
                     <option value="" disabled>Select an area of interest</option>
@@ -179,7 +179,7 @@ const ContactPage = () => {
                     rows="5"
                     value={formData.message}
                     onChange={handleInputChange}
-                    className="w-full bg-[#0B0F19] border border-white/10 rounded-lg p-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all resize-none"
+                    className="w-full bg-[#0B0F19] border border-white/10 rounded-lg p-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-200 resize-none"
                     placeholder="How can we assist you today?"
                     required
                   />
