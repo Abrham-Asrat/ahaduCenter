@@ -17,12 +17,12 @@ const Footer = () => {
         </div>
         <div className="flex flex-col gap-3">
           <h4 className="font-bold text-white mb-3">Legal</h4>
-          <a href="#" className="text-sm text-on-surface-variant hover:text-secondary transition-all opacity-80 hover:opacity-100">
+          <Link to="/contact" className="text-sm text-on-surface-variant hover:text-secondary transition-all opacity-80 hover:opacity-100">
             Privacy Policy
-          </a>
-          <a href="#" className="text-sm text-on-surface-variant hover:text-secondary transition-all opacity-80 hover:opacity-100">
+          </Link>
+          <Link to="/contact" className="text-sm text-on-surface-variant hover:text-secondary transition-all opacity-80 hover:opacity-100">
             Terms of Service
-          </a>
+          </Link>
         </div>
         <div className="flex flex-col gap-3">
           <h4 className="font-bold text-white mb-3">Support</h4>

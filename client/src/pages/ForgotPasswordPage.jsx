@@ -1,7 +1,6 @@
 // src/pages/ForgotPasswordPage.jsx
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-
 /**
  * ForgotPasswordPage Component
  * 
@@ -25,7 +24,6 @@ const ForgotPasswordPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // In production, call API to send reset email
-    console.log('Password reset requested for:', email);
     setSubmitted(true);
   };
 
@@ -165,11 +163,11 @@ const ForgotPasswordPage = () => {
           <div className="text-lg font-bold text-primary">Ahadu Center</div>
           <div className="text-sm text-on-surface-variant">© 2024 Ahadu Center. All rights reserved.</div>
           <div className="flex gap-4 text-sm text-on-surface-variant">
-            <a href="#" className="hover:text-secondary transition-colors">About Us</a>
-            <a href="#" className="hover:text-secondary transition-colors">Support</a>
-            <a href="#" className="hover:text-secondary transition-colors">Terms of Service</a>
-            <a href="#" className="hover:text-secondary transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-secondary transition-colors">Contact</a>
+            <Link to="/" className="hover:text-secondary transition-colors">About Us</Link>
+            <Link to="/contact" className="hover:text-secondary transition-colors">Support</Link>
+            <Link to="/contact" className="hover:text-secondary transition-colors">Terms of Service</Link>
+            <Link to="/contact" className="hover:text-secondary transition-colors">Privacy Policy</Link>
+            <Link to="/contact" className="hover:text-secondary transition-colors">Contact</Link>
           </div>
         </div>
       </footer>

@@ -84,7 +84,7 @@ const BookDetailPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background text-on-background flex flex-col relative">
+    <div className="min-h-screen bg-background text-on-background flex flex-col relative animate-fade-in">
       <Navbar />
 
       {/* Toast Notification */}

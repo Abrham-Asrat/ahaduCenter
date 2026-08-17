@@ -212,7 +212,7 @@ const MovieCenterPage = () => {
   }, [filteredMovies, currentPage, itemsPerPage]);
 
   return (
-    <div className="min-h-screen bg-background text-on-surface flex flex-col relative">
+    <div className="min-h-screen bg-background text-on-surface flex flex-col relative animate-fade-in">
       <Navbar />
 
       {/* Toast Notification */}
@@ -252,7 +252,7 @@ const MovieCenterPage = () => {
         </div>
       )}
 
-      <main className="flex-grow pt-[80px]">
+      <main className="flex-grow pt-[80px] pb-20 md:pb-0">
         <MovieHero />
         <SubNav onTabChange={handleTabChange} />
 

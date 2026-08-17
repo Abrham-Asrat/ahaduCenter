@@ -219,7 +219,10 @@ const NotificationsPage = () => {
           {/* Load More */}
           {filteredNotifications.length > 0 && (
             <div className="mt-6 flex justify-center">
-              <button className="py-3 px-8 rounded-lg border border-secondary/50 text-secondary text-xs uppercase tracking-wider hover:bg-secondary/10 transition-colors">
+              <button
+                className="py-3 px-8 rounded-lg border border-secondary/50 text-secondary text-xs uppercase tracking-wider hover:bg-secondary/10 transition-colors"
+                onClick={() => showToast('No more notifications')}
+              >
                 Load More
               </button>
             </div>

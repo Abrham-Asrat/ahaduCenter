@@ -186,7 +186,7 @@ const BookCenterPage = () => {
   });
 
   return (
-    <div className="min-h-screen bg-background text-on-background flex flex-col relative">
+    <div className="min-h-screen bg-background text-on-background flex flex-col relative animate-fade-in">
       <Navbar />
 
       {/* Toast Notification */}
@@ -205,7 +205,7 @@ const BookCenterPage = () => {
         />
       </div>
 
-      <main className="flex-grow max-w-7xl mx-auto px-6 py-8">
+      <main className="flex-grow max-w-7xl mx-auto px-6 pt-8 pb-20 md:pb-8">
         {/* Hero banner compact */}
         <div className="relative w-full rounded-2xl overflow-hidden glass-panel p-8 border border-white/10 flex items-center justify-between min-h-[160px] mb-8 shadow-xl">
           <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-secondary/5 opacity-50" />

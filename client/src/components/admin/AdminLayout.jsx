@@ -18,7 +18,6 @@ const AdminLayout = ({ children }) => {
 
     const handleSearch = (e) => {
         setSearchQuery(e.target.value);
-        console.log('Admin search:', e.target.value);
     };
 
     // Sidebar navigation items

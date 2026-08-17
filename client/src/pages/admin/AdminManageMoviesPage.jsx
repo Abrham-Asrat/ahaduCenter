@@ -1,64 +1,14 @@
 // src/pages/admin/AdminManageMoviesPage.jsx
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import AdminLayout from '../../components/admin/AdminLayout';
 
-/**
- * AdminManageMoviesPage Component
- * 
- * Allows admins to view, add, edit, delete movies.
- * 
- * Features:
- * - Search and filter toolbar
- * - Desktop: table with checkboxes, poster, title, genre, country, year, type, status, actions
- * - Tablet/Mobile: card grid with poster, title, genre, status, edit/delete actions
- * - Add/Edit modal with form fields
- * - Pagination
- * 
- * State:
- * - movies: Array of movie objects
- * - searchQuery: String
- * - showModal: Boolean
- * - editingMovie: Object or null
- */
 const AdminManageMoviesPage = () => {
-    // Movie data
     const [movies, setMovies] = useState([
-        {
-            id: 1,
-            title: 'Inception',
-            posterUrl: 'https://images.unsplash.com/photo-1440404653325-ab127d49abc1?auto=format&fit=crop&w=400&q=80',
-            genre: 'Sci-Fi',
-            country: 'USA',
-            year: 2024,
-            type: 'Feature Film',
-            status: 'Available',
-            rating: 8.4,
-        },
-        {
-            id: 2,
-            title: 'Interstellar',
-            posterUrl: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=400&q=80',
-            genre: 'Drama',
-            country: 'UK',
-            year: 2023,
-            type: 'Feature Film',
-            status: 'Coming Soon',
-            rating: 7.9,
-        },
-        {
-            id: 3,
-            title: 'The Matrix',
-            posterUrl: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=400&q=80',
-            genre: 'Action',
-            country: 'Japan',
-            year: 2025,
-            type: 'Short Film',
-            status: 'Available',
-            rating: 8.0,
-        },
+        { id: 1, title: 'Inception', posterUrl: 'https://images.unsplash.com/photo-1440404653325-ab127d49abc1?auto=format&fit=crop&w=400&q=80', genre: 'Sci-Fi', country: 'USA', year: 2024, type: 'Feature Film', status: 'Available', rating: 8.4, duration: 148, director: 'Christopher Nolan', description: 'A thief who steals corporate secrets through dream-sharing technology.' },
+        { id: 2, title: 'Interstellar', posterUrl: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=400&q=80', genre: 'Drama', country: 'UK', year: 2023, type: 'Feature Film', status: 'Coming Soon', rating: 7.9, duration: 169, director: 'Christopher Nolan', description: 'A team of explorers travel through a wormhole in space.' },
+        { id: 3, title: 'The Matrix', posterUrl: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=400&q=80', genre: 'Action', country: 'Japan', year: 2025, type: 'Short Film', status: 'Available', rating: 8.0, duration: 136, director: 'The Wachowskis', description: 'A computer hacker learns about the true nature of reality.' },
     ]);
 
-    // UI state
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedGenre, setSelectedGenre] = useState('All Genres');
     const [selectedCountry, setSelectedCountry] = useState('All Countries');
@@ -67,63 +17,37 @@ const AdminManageMoviesPage = () => {
     const [editingMovie, setEditingMovie] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
 
-    // Filter movies by search query, genre, country, status
-    const filteredMovies = movies.filter((movie) => {
-        const matchesSearch = movie.title.toLowerCase().includes(searchQuery.toLowerCase());
-        const matchesGenre = selectedGenre === 'All Genres' || movie.genre === selectedGenre;
-        const matchesCountry = selectedCountry === 'All Countries' || movie.country === selectedCountry;
-        const matchesStatus = selectedStatus === 'All Status' || movie.status === selectedStatus;
+    const filteredMovies = movies.filter((m) => {
+        const matchesSearch = m.title.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchesGenre = selectedGenre === 'All Genres' || m.genre === selectedGenre;
+        const matchesCountry = selectedCountry === 'All Countries' || m.country === selectedCountry;
+        const matchesStatus = selectedStatus === 'All Status' || m.status === selectedStatus;
         return matchesSearch && matchesGenre && matchesCountry && matchesStatus;
     });
 
-    // Handle add new movie button
-    const handleAdd = () => {
-        setEditingMovie(null);
-        setShowModal(true);
-    };
-
-    // Handle edit button
-    const handleEdit = (movie) => {
-        setEditingMovie(movie);
-        setShowModal(true);
-    };
-
-    // Handle delete button
+    const handleAdd = () => { setEditingMovie(null); setShowModal(true); };
+    const handleEdit = (movie) => { setEditingMovie(movie); setShowModal(true); };
     const handleDelete = (id) => {
-        if (confirm('Are you sure you want to delete this movie?')) {
-            setMovies(movies.filter((m) => m.id !== id));
-        }
+        if (confirm('Delete this movie?')) setMovies(movies.filter((m) => m.id !== id));
     };
-
-    // Handle save from modal
     const handleSave = (formData) => {
         if (editingMovie) {
-            // Update existing
             setMovies(movies.map((m) => (m.id === editingMovie.id ? { ...m, ...formData } : m)));
         } else {
-            // Add new
-            const newMovie = {
-                id: movies.length + 1,
-                ...formData,
-                posterUrl: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=300&q=80',
-            };
-            setMovies([...movies, newMovie]);
+            setMovies([...movies, { id: Date.now(), ...formData }]);
         }
         setShowModal(false);
     };
 
     return (
         <AdminLayout>
-            {/* Page header */}
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+            {/* Header */}
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
                 <div>
-                    <h2 className="text-4xl md:text-5xl font-bold text-white mb-2">Manage Movies</h2>
-                    <p className="text-lg text-on-surface-variant">Add, edit, delete, and organize movie content.</p>
+                    <h2 className="text-3xl md:text-5xl font-bold text-white mb-2">Manage Movies</h2>
+                    <p className="text-on-surface-variant">Add, edit, delete, and organize movie content.</p>
                 </div>
-                <button
-                    onClick={handleAdd}
-                    className="bg-primary text-black px-6 py-3 rounded-lg flex items-center justify-center gap-2 hover:shadow-[0_0_20px_rgba(16,185,129,0.5)] font-bold transition-all"
-                >
+                <button onClick={handleAdd} className="bg-primary text-black px-6 py-3 rounded-lg flex items-center justify-center gap-2 hover:shadow-[0_0_20px_rgba(16,185,129,0.5)] font-bold transition-all self-start sm:self-auto">
                     <span className="material-symbols-outlined text-lg">add</span>
                     Add New Movie
                 </button>
@@ -131,104 +55,75 @@ const AdminManageMoviesPage = () => {
 
             {/* Toolbar */}
             <div className="glass-panel rounded-xl p-4 flex flex-col md:flex-row gap-4 justify-between items-center mb-6">
-                <div className="flex items-center bg-background rounded-lg px-3 py-2 border border-white/10 flex-1 max-w-md">
+                <div className="flex items-center bg-background rounded-lg px-3 py-2 border border-white/10 flex-1 max-w-md w-full">
                     <span className="material-symbols-outlined text-on-surface-variant text-lg mr-2">search</span>
-                    <input
-                        type="text"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder="Search movies by title..."
-                        className="bg-transparent border-none outline-none text-white w-full placeholder-gray-500"
-                    />
+                    <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="Search by title..." className="bg-transparent border-none outline-none text-white w-full placeholder-gray-500 transition-all duration-200" />
                 </div>
-                <div className="flex flex-wrap gap-3">
-                    <select
-                        value={selectedGenre}
-                        onChange={(e) => setSelectedGenre(e.target.value)}
-                        className="bg-background border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-primary outline-none cursor-pointer"
-                    >
-                        <option>All Genres</option>
-                        <option>Sci-Fi</option>
-                        <option>Drama</option>
-                        <option>Action</option>
-                        <option>Thriller</option>
+                <div className="flex flex-wrap gap-3 w-full md:w-auto">
+                    <select value={selectedGenre} onChange={(e) => setSelectedGenre(e.target.value)} className="bg-background border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-primary outline-none cursor-pointer transition-all duration-200">
+                        <option>All Genres</option><option>Sci-Fi</option><option>Drama</option><option>Action</option><option>Thriller</option><option>Comedy</option>
                     </select>
-                    <select
-                        value={selectedCountry}
-                        onChange={(e) => setSelectedCountry(e.target.value)}
-                        className="bg-background border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-primary outline-none cursor-pointer"
-                    >
-                        <option>All Countries</option>
-                        <option>Ethiopia</option>
-                        <option>USA</option>
-                        <option>UK</option>
-                        <option>Japan</option>
+                    <select value={selectedCountry} onChange={(e) => setSelectedCountry(e.target.value)} className="bg-background border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-primary outline-none cursor-pointer transition-all duration-200">
+                        <option>All Countries</option><option>Ethiopia</option><option>USA</option><option>UK</option><option>Japan</option><option>Korea</option>
                     </select>
-                    <select
-                        value={selectedStatus}
-                        onChange={(e) => setSelectedStatus(e.target.value)}
-                        className="bg-background border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-primary outline-none cursor-pointer"
-                    >
-                        <option>All Status</option>
-                        <option>Available</option>
-                        <option>Coming Soon</option>
+                    <select value={selectedStatus} onChange={(e) => setSelectedStatus(e.target.value)} className="bg-background border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-primary outline-none cursor-pointer transition-all duration-200">
+                        <option>All Status</option><option>Available</option><option>Coming Soon</option>
                     </select>
                 </div>
             </div>
 
             {/* Desktop table */}
-            <div className="hidden md:block glass-panel rounded-xl overflow-hidden">
+            <div className="hidden md:block glass-panel rounded-xl overflow-hidden mb-6">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left">
                         <thead>
                             <tr className="border-b border-white/10 bg-white/5">
                                 <th className="py-3 px-4 w-12"><input type="checkbox" className="rounded" /></th>
                                 <th className="py-3 px-4 text-xs uppercase text-on-surface-variant">Poster</th>
-                                <th className="py-3 px-4 text-xs uppercase text-on-surface-variant">Title</th>
+                                <th className="py-3 px-4 text-xs uppercase text-on-surface-variant">Title / Director</th>
                                 <th className="py-3 px-4 text-xs uppercase text-on-surface-variant">Genre</th>
                                 <th className="py-3 px-4 text-xs uppercase text-on-surface-variant">Country</th>
                                 <th className="py-3 px-4 text-xs uppercase text-on-surface-variant">Year</th>
-                                <th className="py-3 px-4 text-xs uppercase text-on-surface-variant">Type</th>
                                 <th className="py-3 px-4 text-xs uppercase text-on-surface-variant">Status</th>
                                 <th className="py-3 px-4 text-xs uppercase text-on-surface-variant text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {filteredMovies.map((movie) => (
-                                <tr key={movie.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
+                                <tr key={movie.id} className="border-b border-white/5 hover:bg-white/5 transition-colors group">
                                     <td className="py-3 px-4"><input type="checkbox" className="rounded" /></td>
                                     <td className="py-3 px-4">
-                                        <img src={movie.posterUrl} alt={movie.title} className="w-12 h-16 object-cover rounded border border-white/10" />
+                                        <img src={movie.posterUrl} alt={movie.title} className="w-10 h-14 object-cover rounded border border-white/10" />
                                     </td>
-                                    <td className="py-3 px-4 font-semibold text-white">{movie.title}</td>
                                     <td className="py-3 px-4">
-                                        <span className="px-2 py-1 bg-secondary/10 border border-secondary/30 rounded text-xs uppercase text-secondary">
-                                            {movie.genre}
-                                        </span>
+                                        <div className="font-semibold text-white">{movie.title}</div>
+                                        <div className="text-xs text-on-surface-variant">{movie.director || '—'}</div>
+                                    </td>
+                                    <td className="py-3 px-4">
+                                        <span className="px-2 py-1 bg-secondary/10 border border-secondary/30 rounded text-xs uppercase text-secondary">{movie.genre}</span>
                                     </td>
                                     <td className="py-3 px-4 text-sm text-on-surface-variant">{movie.country}</td>
                                     <td className="py-3 px-4 text-sm text-on-surface-variant">{movie.year}</td>
-                                    <td className="py-3 px-4 text-sm text-on-surface-variant">{movie.type}</td>
                                     <td className="py-3 px-4">
                                         {movie.status === 'Available' ? (
-                                            <span className="px-3 py-1 bg-primary/10 border border-primary/30 rounded-full text-xs uppercase text-primary flex items-center gap-1 w-fit">
-                                                <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-                                                Available
+                                            <span className="px-2 py-1 bg-primary/10 border border-primary/30 rounded-full text-xs uppercase text-primary flex items-center gap-1 w-fit">
+                                                <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" /> Available
                                             </span>
                                         ) : (
-                                            <span className="px-3 py-1 bg-secondary/10 border border-secondary/30 rounded-full text-xs uppercase text-secondary flex items-center gap-1 w-fit">
-                                                <span className="w-1.5 h-1.5 rounded-full bg-secondary" />
-                                                Coming Soon
+                                            <span className="px-2 py-1 bg-secondary/10 border border-secondary/30 rounded-full text-xs uppercase text-secondary flex items-center gap-1 w-fit">
+                                                <span className="w-1.5 h-1.5 rounded-full bg-secondary" /> Coming Soon
                                             </span>
                                         )}
                                     </td>
                                     <td className="py-3 px-4 text-right">
-                                        <button onClick={() => handleEdit(movie)} className="p-1 text-on-surface-variant hover:text-primary transition-colors mr-1" title="Edit">
-                                            <span className="material-symbols-outlined text-lg">edit</span>
-                                        </button>
-                                        <button onClick={() => handleDelete(movie.id)} className="p-1 text-on-surface-variant hover:text-error transition-colors" title="Delete">
-                                            <span className="material-symbols-outlined text-lg">delete</span>
-                                        </button>
+                                        <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <button onClick={() => handleEdit(movie)} className="p-1.5 text-on-surface-variant hover:text-primary" title="Edit">
+                                                <span className="material-symbols-outlined text-lg">edit</span>
+                                            </button>
+                                            <button onClick={() => handleDelete(movie.id)} className="p-1.5 text-on-surface-variant hover:text-error" title="Delete">
+                                                <span className="material-symbols-outlined text-lg">delete</span>
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
                             ))}
@@ -237,25 +132,23 @@ const AdminManageMoviesPage = () => {
                 </div>
             </div>
 
-            {/* Mobile/Tablet cards */}
-            <div className="md:hidden grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* Mobile cards */}
+            <div className="md:hidden grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
                 {filteredMovies.map((movie) => (
-                    <div key={movie.id} className="glass-panel rounded-xl overflow-hidden relative">
+                    <div key={movie.id} className="glass-panel rounded-xl overflow-hidden">
                         <div className="aspect-[2/3] w-full relative">
                             <img src={movie.posterUrl} alt={movie.title} className="w-full h-full object-cover" />
                             <div className="absolute top-2 right-2">
-                                {movie.status === 'Available' ? (
-                                    <span className="px-2 py-1 bg-primary/20 text-primary rounded text-xs border border-primary/30">ACTIVE</span>
-                                ) : (
-                                    <span className="px-2 py-1 bg-secondary/20 text-secondary rounded text-xs border border-secondary/30">DRAFT</span>
-                                )}
+                                {movie.status === 'Available'
+                                    ? <span className="px-2 py-1 bg-primary/20 text-primary rounded text-xs border border-primary/30">ACTIVE</span>
+                                    : <span className="px-2 py-1 bg-secondary/20 text-secondary rounded text-xs border border-secondary/30">SOON</span>}
                             </div>
                         </div>
                         <div className="p-4 min-w-0">
-                            <h3 className="text-lg font-semibold text-white truncate">{movie.title}</h3>
+                            <h3 className="text-base font-semibold text-white truncate">{movie.title}</h3>
                             <p className="text-sm text-on-surface-variant mt-1 truncate">{movie.genre} • {movie.year}</p>
-                            <div className="flex justify-between items-center mt-4 min-w-0">
-                                <span className="text-sm text-secondary">{movie.rating ? `${movie.rating}/5` : '-'}</span>
+                            <div className="flex justify-between items-center mt-3 min-w-0">
+                                <span className="text-sm text-secondary">{movie.rating ? `★ ${movie.rating}` : '—'}</span>
                                 <div className="flex gap-2">
                                     <button onClick={() => handleEdit(movie)} className="p-1 text-on-surface-variant hover:text-primary">
                                         <span className="material-symbols-outlined">edit</span>
@@ -271,149 +164,191 @@ const AdminManageMoviesPage = () => {
             </div>
 
             {/* Pagination */}
-            <div className="mt-8 flex justify-center items-center gap-2">
-                <button
-                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                    className="w-10 h-10 rounded-lg glass-panel flex items-center justify-center text-on-surface-variant hover:text-primary"
-                >
+            <div className="flex justify-center items-center gap-2">
+                <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} className="w-10 h-10 rounded-lg glass-panel flex items-center justify-center text-on-surface-variant hover:text-primary">
                     <span className="material-symbols-outlined">chevron_left</span>
                 </button>
                 {[1, 2, 3].map((n) => (
-                    <button
-                        key={n}
-                        onClick={() => setCurrentPage(n)}
-                        className={`w-10 h-10 rounded-lg font-bold ${currentPage === n ? 'bg-primary text-white' : 'glass-panel text-white hover:text-primary'}`}
-                    >
-                        {n}
-                    </button>
+                    <button key={n} onClick={() => setCurrentPage(n)} className={`w-10 h-10 rounded-lg font-bold ${currentPage === n ? 'bg-primary text-white' : 'glass-panel text-white hover:text-primary'}`}>{n}</button>
                 ))}
-                <span className="text-on-surface-variant">...</span>
-                <button
-                    onClick={() => setCurrentPage(12)}
-                    className={`w-10 h-10 rounded-lg font-bold ${currentPage === 12 ? 'bg-primary text-white' : 'glass-panel text-white hover:text-primary'}`}
-                >
-                    12
-                </button>
-                <button
-                    onClick={() => setCurrentPage(p => p + 1)}
-                    className="w-10 h-10 rounded-lg glass-panel flex items-center justify-center text-on-surface-variant hover:text-primary"
-                >
+                <button onClick={() => setCurrentPage(p => p + 1)} className="w-10 h-10 rounded-lg glass-panel flex items-center justify-center text-on-surface-variant hover:text-primary">
                     <span className="material-symbols-outlined">chevron_right</span>
                 </button>
             </div>
 
-            {/* Modal for Add/Edit */}
-            {showModal && (
-                <MovieModal
-                    movie={editingMovie}
-                    onClose={() => setShowModal(false)}
-                    onSave={handleSave}
-                />
-            )}
+            {showModal && <MovieModal movie={editingMovie} onClose={() => setShowModal(false)} onSave={handleSave} />}
         </AdminLayout>
     );
 };
 
-/**
- * MovieModal Component (internal)
- * Displays add/edit form in a modal.
- */
+/* ─────────────────────────────────────────────────────────────────────────── */
+/* MovieModal                                                                  */
+/* ─────────────────────────────────────────────────────────────────────────── */
 const MovieModal = ({ movie, onClose, onSave }) => {
     const [formData, setFormData] = useState({
         title: movie?.title || '',
-        description: '',
+        director: movie?.director || '',
+        cast: movie?.cast || '',
+        description: movie?.description || '',
         genre: movie?.genre || 'Action',
-        country: movie?.country || 'USA',
+        country: movie?.country || 'Ethiopia',
         year: movie?.year || new Date().getFullYear(),
+        duration: movie?.duration || '',
         type: movie?.type || 'Feature Film',
+        rating: movie?.rating || '',
         status: movie?.status || 'Available',
+        trailerUrl: movie?.trailerUrl || '',
     });
+
+    const [photos, setPhotos] = useState([]);
+    const [photoPreviews, setPhotoPreviews] = useState(movie?.posterUrl ? [movie.posterUrl] : []);
+    const fileInputRef = useRef(null);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
+        setFormData((prev) => ({ ...prev, [name]: value }));
     };
+
+    const handlePhotoChange = (e) => {
+        const files = Array.from(e.target.files);
+        if (!files.length) return;
+        const newPreviews = files.map((f) => URL.createObjectURL(f));
+        setPhotoPreviews((prev) => [...prev, ...newPreviews].slice(0, 5));
+    };
+
+    const removePhoto = (idx) => setPhotoPreviews((prev) => prev.filter((_, i) => i !== idx));
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        onSave(formData);
+        onSave({ ...formData, posterUrl: photoPreviews[0] || movie?.posterUrl || '', photos: photoPreviews });
     };
 
+    const inputCls = "w-full bg-background border border-white/10 rounded-lg px-3 py-2.5 text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all duration-200 placeholder-gray-500";
+    const labelCls = "block text-xs uppercase text-on-surface-variant font-semibold mb-1.5 tracking-wider";
+
     return (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-            <div className="glass-panel w-full max-w-2xl rounded-xl shadow-2xl border border-white/20 flex flex-col max-h-[90vh] overflow-hidden animate-slide-up">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-3 sm:p-6">
+            <div className="glass-panel animate-slide-up w-full max-w-2xl rounded-2xl shadow-2xl border border-white/20 flex flex-col max-h-[92vh] overflow-hidden">
                 {/* Header */}
-                <div className="p-6 border-b border-white/10 flex items-center justify-between bg-white/5">
-                    <h3 className="text-2xl font-bold text-white">{movie ? 'Edit Movie' : 'Add New Movie'}</h3>
+                <div className="p-5 border-b border-white/10 flex items-center justify-between bg-white/5">
+                    <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                        <span className="material-symbols-outlined text-primary">movie</span>
+                        {movie ? 'Edit Movie' : 'Add New Movie'}
+                    </h3>
                     <button onClick={onClose} className="text-on-surface-variant hover:text-error transition-colors">
                         <span className="material-symbols-outlined">close</span>
                     </button>
                 </div>
 
                 {/* Body */}
-                <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-5">
+                <form onSubmit={handleSubmit} className="p-5 overflow-y-auto space-y-5">
+
+                    {/* Photo Upload */}
                     <div>
-                        <label className="block text-xs uppercase text-on-surface-variant mb-2">Movie Title</label>
-                        <input
-                            type="text"
-                            name="title"
-                            value={formData.title}
-                            onChange={handleChange}
-                            className="w-full bg-background border border-white/10 rounded-lg px-3 py-2 text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none"
-                            placeholder="Enter title"
-                            required
-                        />
+                        <label className={labelCls}>Poster & Screenshots <span className="text-on-surface-variant/50 normal-case font-normal">(optional, up to 5)</span></label>
+                        <div className="flex flex-wrap gap-3 mb-3">
+                            {photoPreviews.map((src, idx) => (
+                                <div key={idx} className="relative w-20 h-28 rounded-lg overflow-hidden border border-white/20 group">
+                                    <img src={src} alt={`Photo ${idx + 1}`} className="w-full h-full object-cover" />
+                                    <button type="button" onClick={() => removePhoto(idx)} className="absolute top-1 right-1 w-5 h-5 rounded-full bg-error flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <span className="material-symbols-outlined text-white text-xs">close</span>
+                                    </button>
+                                    {idx === 0 && <span className="absolute bottom-0 left-0 right-0 text-center text-[9px] bg-primary/80 text-black font-bold py-0.5">POSTER</span>}
+                                </div>
+                            ))}
+                            {photoPreviews.length < 5 && (
+                                <button type="button" onClick={() => fileInputRef.current?.click()} className="w-20 h-28 rounded-lg border-2 border-dashed border-white/20 hover:border-primary/50 flex flex-col items-center justify-center gap-1 text-on-surface-variant hover:text-primary transition-colors">
+                                    <span className="material-symbols-outlined text-2xl">add_photo_alternate</span>
+                                    <span className="text-[10px] font-semibold">Add Photo</span>
+                                </button>
+                            )}
+                        </div>
+                        <input ref={fileInputRef} type="file" accept="image/*" multiple className="hidden" onChange={handlePhotoChange} />
+                        <p className="text-xs text-on-surface-variant/60">First image becomes the poster. Max 5 photos.</p>
                     </div>
 
-                    <div>
-                        <label className="block text-xs uppercase text-on-surface-variant mb-2">Description</label>
-                        <textarea
-                            name="description"
-                            value={formData.description}
-                            onChange={handleChange}
-                            rows="3"
-                            className="w-full bg-background border border-white/10 rounded-lg px-3 py-2 text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none resize-none"
-                            placeholder="Enter synopsis..."
-                        />
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
+                    {/* Title & Director */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-xs uppercase text-on-surface-variant mb-2">Country</label>
-                            <select
-                                name="country"
-                                value={formData.country}
-                                onChange={handleChange}
-                                className="w-full bg-background border border-white/10 rounded-lg px-3 py-2 text-white focus:border-primary outline-none"
-                            >
-                                <option>USA</option>
-                                <option>UK</option>
-                                <option>Japan</option>
+                            <label className={labelCls}>Title <span className="text-error">*</span></label>
+                            <input type="text" name="title" value={formData.title} onChange={handleChange} className={inputCls} placeholder="Movie title" required />
+                        </div>
+                        <div>
+                            <label className={labelCls}>Director</label>
+                            <input type="text" name="director" value={formData.director} onChange={handleChange} className={inputCls} placeholder="Director name" />
+                        </div>
+                    </div>
+
+                    {/* Cast */}
+                    <div>
+                        <label className={labelCls}>Cast</label>
+                        <input type="text" name="cast" value={formData.cast} onChange={handleChange} className={inputCls} placeholder="e.g. Actor A, Actor B, Actor C" />
+                    </div>
+
+                    {/* Description */}
+                    <div>
+                        <label className={labelCls}>Synopsis</label>
+                        <textarea name="description" value={formData.description} onChange={handleChange} rows={3} className={`${inputCls} resize-none`} placeholder="Brief synopsis of the movie..." />
+                    </div>
+
+                    {/* Genre, Country, Year, Duration */}
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                        <div>
+                            <label className={labelCls}>Genre</label>
+                            <select name="genre" value={formData.genre} onChange={handleChange} className={inputCls}>
+                                <option>Action</option><option>Drama</option><option>Sci-Fi</option><option>Thriller</option><option>Comedy</option><option>Horror</option><option>Romance</option>
                             </select>
                         </div>
                         <div>
-                            <label className="block text-xs uppercase text-on-surface-variant mb-2">Year</label>
-                            <input
-                                type="number"
-                                name="year"
-                                value={formData.year}
-                                onChange={handleChange}
-                                className="w-full bg-background border border-white/10 rounded-lg px-3 py-2 text-white focus:border-primary outline-none"
-                            />
+                            <label className={labelCls}>Country</label>
+                            <select name="country" value={formData.country} onChange={handleChange} className={inputCls}>
+                                <option>Ethiopia</option><option>USA</option><option>UK</option><option>Japan</option><option>Korea</option><option>France</option>
+                            </select>
                         </div>
+                        <div>
+                            <label className={labelCls}>Year</label>
+                            <input type="number" name="year" value={formData.year} onChange={handleChange} className={inputCls} placeholder="2024" />
+                        </div>
+                        <div>
+                            <label className={labelCls}>Duration (min)</label>
+                            <input type="number" name="duration" value={formData.duration} onChange={handleChange} className={inputCls} placeholder="120" />
+                        </div>
+                    </div>
+
+                    {/* Type, Rating, Status */}
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div>
+                            <label className={labelCls}>Type</label>
+                            <select name="type" value={formData.type} onChange={handleChange} className={inputCls}>
+                                <option>Feature Film</option><option>Short Film</option><option>Documentary</option><option>TV Series</option><option>Animation</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label className={labelCls}>Rating (0–10)</label>
+                            <input type="number" name="rating" value={formData.rating} onChange={handleChange} min="0" max="10" step="0.1" className={inputCls} placeholder="8.5" />
+                        </div>
+                        <div>
+                            <label className={labelCls}>Status</label>
+                            <select name="status" value={formData.status} onChange={handleChange} className={inputCls}>
+                                <option>Available</option><option>Coming Soon</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    {/* Trailer URL */}
+                    <div>
+                        <label className={labelCls}>Trailer URL (YouTube embed)</label>
+                        <input type="url" name="trailerUrl" value={formData.trailerUrl} onChange={handleChange} className={inputCls} placeholder="https://www.youtube.com/embed/..." />
                     </div>
                 </form>
 
                 {/* Footer */}
-                <div className="p-6 border-t border-white/10 bg-white/5 flex justify-end gap-3">
-                    <button onClick={onClose} className="px-6 py-2 rounded-lg border border-secondary text-secondary hover:bg-secondary/10 transition-all">
+                <div className="p-5 border-t border-white/10 bg-white/5 flex flex-col sm:flex-row justify-end gap-3">
+                    <button type="button" onClick={onClose} className="px-6 py-2.5 rounded-xl border border-secondary text-secondary hover:bg-secondary/10 transition-all font-semibold">
                         Cancel
                     </button>
-                    <button
-                        onClick={handleSubmit}
-                        className="px-6 py-2 rounded-lg bg-primary text-white hover:shadow-[0_0_20px_rgba(16,185,129,0.5)] transition-all"
-                    >
-                        Save Movie
+                    <button type="button" onClick={handleSubmit} className="px-6 py-2.5 rounded-xl bg-primary text-black font-bold hover:shadow-[0_0_20px_rgba(16,185,129,0.5)] transition-all">
+                        {movie ? 'Save Changes' : 'Add Movie'}
                     </button>
                 </div>
             </div>

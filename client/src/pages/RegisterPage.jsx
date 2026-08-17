@@ -223,9 +223,9 @@ const RegisterPage = () => {
                 />
                 <label htmlFor="terms" className="text-sm text-on-surface-variant">
                   I agree to the{' '}
-                  <a href="#" className="text-secondary hover:text-secondary-fixed transition-colors underline">Terms and Conditions</a>{' '}
+                  <Link to="/contact" className="text-secondary hover:text-secondary-fixed transition-colors underline">Terms and Conditions</Link>{' '}
                   and{' '}
-                  <a href="#" className="text-secondary hover:text-secondary-fixed transition-colors underline">Privacy Policy</a>.
+                  <Link to="/contact" className="text-secondary hover:text-secondary-fixed transition-colors underline">Privacy Policy</Link>.
                 </label>
               </div>
 
@@ -241,21 +241,8 @@ const RegisterPage = () => {
             {/* Divider */}
             <div className="flex items-center gap-3 my-6">
               <div className="flex-grow h-[1px] bg-white/10" />
-              <span className="text-xs uppercase text-on-surface-variant">Or register with</span>
+              <span className="text-xs uppercase text-on-surface-variant">Or sign in with email above</span>
               <div className="flex-grow h-[1px] bg-white/10" />
-            </div>
-
-            {/* Social buttons (desktop only) */}
-            <div className="hidden md:grid grid-cols-3 gap-3">
-              <button className="flex justify-center items-center py-3 border border-white/10 rounded-lg hover:border-secondary transition-all">
-                <span className="material-symbols-outlined text-white">login</span>
-              </button>
-              <button className="flex justify-center items-center py-3 border border-white/10 rounded-lg hover:border-secondary transition-all">
-                <span className="material-symbols-outlined text-white">public</span>
-              </button>
-              <button className="flex justify-center items-center py-3 border border-white/10 rounded-lg hover:border-secondary transition-all">
-                <span className="material-symbols-outlined text-white">devices</span>
-              </button>
             </div>
 
             {/* Login link */}
@@ -275,10 +262,10 @@ const RegisterPage = () => {
           <div className="text-lg font-bold text-primary">Ahadu Center</div>
           <div className="text-sm text-on-surface-variant">© 2024 Ahadu Center. All rights reserved.</div>
           <div className="flex gap-4 text-sm text-on-surface-variant">
-            <a href="#" className="hover:text-secondary transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-secondary transition-colors">Terms of Service</a>
-            <a href="#" className="hover:text-secondary transition-colors">Help Center</a>
-            <a href="#" className="hover:text-secondary transition-colors">Contact Us</a>
+            <Link to="/contact" className="hover:text-secondary transition-colors">Privacy Policy</Link>
+            <Link to="/contact" className="hover:text-secondary transition-colors">Terms of Service</Link>
+            <Link to="/contact" className="hover:text-secondary transition-colors">Help Center</Link>
+            <Link to="/contact" className="hover:text-secondary transition-colors">Contact Us</Link>
           </div>
         </div>
       </footer>

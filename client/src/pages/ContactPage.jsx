@@ -46,8 +46,6 @@ const ContactPage = () => {
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-    // In production, send form data to API
-    console.log('Contact form submitted:', formData);
     setIsSubmitted(true);
     setFormData({ name: '', email: '', subject: '', message: '' });
   };

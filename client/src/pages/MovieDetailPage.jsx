@@ -9,6 +9,7 @@ import TrailerSection from '../components/movie/TrailerSection';
 import MovieInfoSidebar from '../components/movie/MovieInfoSidebar';
 import RelatedMoviesCarousel from '../components/movie/RelatedMoviesCarousel';
 import ReviewsCommentsSection from '../components/common/ReviewsCommentsSection';
+import Footer from '../components/common/Footer';
 
 const MovieDetailPage = () => {
     const { id } = useParams();
@@ -67,7 +68,7 @@ const MovieDetailPage = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-background text-on-background flex flex-col relative">
+        <div className="min-h-screen bg-background text-on-background flex flex-col relative animate-fade-in">
             <Navbar />
 
             {/* Toast Notification */}

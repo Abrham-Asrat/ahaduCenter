@@ -65,7 +65,7 @@ const ElectronicsPage = () => {
     {
       id: 3,
       name: 'Nexus X-Fold Comm Smartphone',
-      brand: 'NexusGlobal',
+      brand: 'Ahadu Tech',
       category: 'Smartphones',
       imageUrl: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80',
       condition: 'New',
@@ -188,7 +188,7 @@ const ElectronicsPage = () => {
   });
 
   return (
-    <div className="min-h-screen bg-background text-on-background flex flex-col relative">
+    <div className="min-h-screen bg-background text-on-background flex flex-col relative animate-fade-in">
       <Navbar />
 
       {/* Toast Notification */}
