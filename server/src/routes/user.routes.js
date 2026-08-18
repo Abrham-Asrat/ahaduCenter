@@ -14,15 +14,7 @@
  *
  * Stub handlers (501 Not Implemented) — to be replaced when the respective
  * controllers are implemented in later tasks:
- *   GET    /me/borrowings                → getBorrowingHistory  (task 5.3)
- *   GET    /me/orders                    → getOrderHistory      (task 7.4)
- *   GET    /me/movie-requests            → getUserMovieRequests (task 6.3)
- *   GET    /me/wishlist                  → getWishlist          (task 9.1)
- *   POST   /me/wishlist                  → addToWishlist        (task 9.1)
- *   DELETE /me/wishlist/:itemId          → removeFromWishlist   (task 9.1)
- *   GET    /me/notifications             → getNotifications     (task 10.2)
- *   POST   /me/notifications/read-all   → markAllRead          (task 10.2)
- *   DELETE /me/notifications             → deleteAllNotifications (task 10.2)
+ *   (none remaining)
  */
 
 const express = require('express');
@@ -68,10 +60,6 @@ const {
   markAllRead,
   deleteAllNotifications,
 } = require('../controllers/notification.controller');
-
-// ── Stub handler for controllers not yet implemented ─────────────────────────
-const notImplemented = (_req, res) =>
-  res.status(501).json({ error: 'Not yet implemented' });
 
 // ── Apply authenticate to all routes in this router ──────────────────────────
 router.use(authenticate);
