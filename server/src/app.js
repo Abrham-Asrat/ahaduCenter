@@ -62,7 +62,10 @@ app.use('/api/notifications', notificationRouter);
 const stub = (name) => (_req, res) =>
   res.status(501).json({ error: `${name} not yet implemented` });
 app.use('/api/search',         stub('search'));
-app.use('/api/uploads',        stub('uploads'));
+
+// ── Upload routes ─────────────────────────────────────────────────────────────
+const uploadRouter = require('./routes/upload.routes');
+app.use('/api/uploads', uploadRouter);
 app.use('/api/contact',        stub('contact'));
 app.use('/api/admin',          stub('admin'));
 

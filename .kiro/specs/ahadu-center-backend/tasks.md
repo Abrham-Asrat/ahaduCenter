@@ -346,7 +346,7 @@ This plan implements the full AhaduCenter Node.js/Express REST API backend acros
   - Create `server/src/routes/notification.routes.js` for `PATCH /:id/read` → `authenticate`, `objectIdParam('id')`, `validate`, `markOneRead`
   - Mount in `app.js` at `/api/notifications`
 
-- [~] 10.4 Wire notification side-effects
+- [x] 10.4 Wire notification side-effects
   - In `borrowing.controller.js` `borrowBook`: call `createNotification` after Borrowing created (Requirement 12.8)
   - In `order.controller.js` `placeOrder`: call `createNotification` after Order created (Requirement 12.7)
   - In `admin.controller.js` `updateMovieRequestStatus`: call `createNotification` after status update (Requirement 12.9)

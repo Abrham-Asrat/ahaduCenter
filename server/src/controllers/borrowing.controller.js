@@ -21,15 +21,8 @@ const Book      = require('../../models/Book');
 const Borrowing = require('../../models/Borrowing');
 const { calculateOverdueFee } = require('../../utils/overdue');
 
-// Notification service — imported with a try/catch guard because task 10.1
-// has not been implemented yet.  If the module is missing, `createNotification`
-// becomes a no-op so borrowBook never fails because of it.
-let createNotification;
-try {
-  ({ createNotification } = require('../../services/notification.service'));
-} catch (_err) {
-  createNotification = async () => {};
-}
+// Notification service (Requirement 12.8)
+const { createNotification } = require('../services/notification.service');
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
