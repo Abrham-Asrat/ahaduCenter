@@ -1,3 +1,12 @@
+'use strict';
+
+/**
+ * Reservation.js
+ *
+ * Mongoose model for book reservations.
+ * Schema per design document (section "Data Models → Reservation").
+ */
+
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 

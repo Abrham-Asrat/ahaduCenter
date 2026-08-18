@@ -1,3 +1,12 @@
+'use strict';
+
+/**
+ * Book.js
+ *
+ * Mongoose model for library books.
+ * Schema per design document (section "Data Models → Book").
+ */
+
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
