@@ -341,7 +341,7 @@ This plan implements the full AhaduCenter Node.js/Express REST API backend acros
   - `markAllRead`: `updateMany({ userId, isRead: false }, { isRead: true })` → respond 200
   - `deleteAllNotifications`: `deleteMany({ userId })` → respond 200
 
-- [~] 10.3 Notification routes
+- [x] 10.3 Notification routes
   - Notification list/mark-all-read/delete-all are mounted inside `user.routes.js` (task 4.3)
   - Create `server/src/routes/notification.routes.js` for `PATCH /:id/read` → `authenticate`, `objectIdParam('id')`, `validate`, `markOneRead`
   - Mount in `app.js` at `/api/notifications`
