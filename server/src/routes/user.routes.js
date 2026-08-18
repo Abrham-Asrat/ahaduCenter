@@ -62,6 +62,13 @@ const {
   removeFromWishlist,
 } = require('../controllers/wishlist.controller');
 
+// ── Notification controller (task 10.2) ───────────────────────────────────────
+const {
+  getNotifications,
+  markAllRead,
+  deleteAllNotifications,
+} = require('../controllers/notification.controller');
+
 // ── Stub handler for controllers not yet implemented ─────────────────────────
 const notImplemented = (_req, res) =>
   res.status(501).json({ error: 'Not yet implemented' });
@@ -108,14 +115,14 @@ router.post('/me/wishlist', addToWishlist);
 // DELETE /api/users/me/wishlist/:itemId — Requirements 11.4, 11.5
 router.delete('/me/wishlist/:itemId', removeFromWishlist);
 
-// ── Notification routes (stub — task 10.2) ────────────────────────────────────
+// ── Notification routes (task 10.2) ──────────────────────────────────────────
 // GET /api/users/me/notifications — Requirement 12.1
-router.get('/me/notifications', notImplemented);
+router.get('/me/notifications', getNotifications);
 
 // POST /api/users/me/notifications/read-all — Requirement 12.5
-router.post('/me/notifications/read-all', notImplemented);
+router.post('/me/notifications/read-all', markAllRead);
 
 // DELETE /api/users/me/notifications — Requirement 12.6
-router.delete('/me/notifications', notImplemented);
+router.delete('/me/notifications', deleteAllNotifications);
 
 module.exports = router;

@@ -334,7 +334,7 @@ This plan implements the full AhaduCenter Node.js/Express REST API backend acros
   - Export `async createNotification({ userId, type, title, description })`
   - Wrap Mongoose operations in `try/catch`; log errors but never rethrow so upstream operations are never rolled back (Requirement 12.9)
 
-- [ ] 10.2 Notification controller
+- [x] 10.2 Notification controller
   - Create `server/src/controllers/notification.controller.js`
   - `getNotifications`: fetch user's notifications ordered by timestamp desc; support optional `type` query filter; validate type enum (400 on unrecognised); respond with list or empty array
   - `markOneRead`: find notification by id, verify ownership → set `isRead: true` → respond 200; 404 if not found or wrong owner
