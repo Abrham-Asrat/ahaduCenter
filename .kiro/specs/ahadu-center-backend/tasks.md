@@ -352,67 +352,67 @@ This plan implements the full AhaduCenter Node.js/Express REST API backend acros
   - In `admin.controller.js` `updateMovieRequestStatus`: call `createNotification` after status update (Requirement 12.9)
   - Confirm all three wired calls are inside try/catch blocks that do not roll back the primary operation
 
-- [~] 11.1 Search controller
+- [x] 11.1 Search controller
   - Create `server/src/controllers/search.controller.js`
   - `search`: validate `q` (non-empty, 1–200 chars, required → 400 if absent/empty); validate `type` if present (movie|book|product → 400 on unrecognised); validate price params if present
   - Run `Promise.all([Book.find(...), Movie.find(...), Product.find(...)])` filtered by `q`; skip domains excluded by `type` filter; apply `minPrice`/`maxPrice` to Product query only
   - Tag each result with `type` field; merge arrays; apply optional `sort: "newest"` (sort merged array by `createdAt` desc); paginate via slice; respond with standard envelope per Requirement 19.2
 
-- [~] 11.2 Search routes
+- [x] 11.2 Search routes
   - Create `server/src/routes/search.routes.js`
   - GET `/` → `searchQueryRules`, `validate`, `search`
   - Mount in `app.js` at `/api/search`
 
-- [~] 12.1 Upload service
+- [x] 12.1 Upload service
   - Create `server/src/services/upload.service.js`
   - Export `getFileUrl(filename)` → returns `/uploads/<filename>` path string
   - The `uploads/` directory is created automatically by multer diskStorage
 
-- [~] 12.2 Upload controller
+- [x] 12.2 Upload controller
   - Create `server/src/controllers/upload.controller.js`
   - `uploadFile`: ensure file was received (400 if missing) → call `getFileUrl(req.file.filename)` → respond 201 `{ url }`
 
-- [~] 12.3 Upload routes
+- [x] 12.3 Upload routes
   - Create `server/src/routes/upload.routes.js`
   - POST `/` → `authenticate`, `requireRole('admin')`, `upload.single('file')`, `uploadFile`
   - Mount in `app.js` at `/api/uploads`
 
-- [~] 13.1 Contact validators
+- [x] 13.1 Contact validators
   - Create `server/src/validators/contact.validators.js`
   - `contactRules`: name (non-empty, trim), email (valid format), subject (non-empty, trim), message (non-empty, trim); all required → 422 on failure
 
-- [~] 13.2 Contact controller
+- [x] 13.2 Contact controller
   - Create `server/src/controllers/contact.controller.js`
   - `submitContact`: create ContactSubmission → respond 201 `{ message: "Message received. We will get back to you shortly." }`
   - `listContacts`: `paginate(ContactSubmission, {}, { sort: { createdAt: -1 } })` → respond with paginated envelope
 
-- [~] 13.3 Contact routes
+- [x] 13.3 Contact routes
   - Create `server/src/routes/contact.routes.js`
   - POST `/` → `contactRules`, `validate`, `submitContact`
   - Mount in `app.js` at `/api/contact`
   - Admin contact list endpoint is mounted under admin routes (task 14.4)
 
-- [~] 14.1 Admin controller — stats & recent
+- [x] 14.1 Admin controller — stats & recent
   - Create `server/src/controllers/admin.controller.js`
   - `getStats`: `Promise.all` of six `countDocuments()` calls (Movie, Book, Product, User, Order, Borrowing) → respond `{ totalMovies, totalBooks, totalProducts, totalUsers, totalOrders, totalBorrowings }`
   - `getRecent`: three parallel queries → `Model.find().sort({ createdAt: -1 }).limit(5).select('id title/name createdAt')` → respond `{ recentMovies, recentBooks, recentProducts }`
 
-- [~] 14.2 Admin content CRUD
+- [x] 14.2 Admin content CRUD
   - In `admin.controller.js`:
   - `createBook`, `updateBook`, `deleteBook` — create / findByIdAndUpdate / findByIdAndDelete; respond 201/200; 404 on missing
   - `createMovie`, `updateMovie`, `deleteMovie` — same pattern
   - `createProduct`, `updateProduct`, `deleteProduct` — same pattern
 
-- [~] 14.3 Admin movie-request management
+- [x] 14.3 Admin movie-request management
   - In `admin.controller.js`:
   - `getAllMovieRequests`: fetch all MovieRequests, populate userId → name; respond with list
   - `updateMovieRequestStatus`: find by id (404 if missing), validate status value → update status → call `createNotification` for requesting user → respond 200
 
-- [~] 14.4 Admin contact submissions
+- [x] 14.4 Admin contact submissions
   - In `admin.controller.js`:
   - `getContactSubmissions`: `paginate(ContactSubmission, {}, { sort: { createdAt: -1 } })` → respond with paginated envelope
 
-- [~] 14.5 Admin routes
+- [x] 14.5 Admin routes
   - Create `server/src/routes/admin.routes.js`
   - All routes prefixed with `authenticate`, `requireRole('admin')`
   - GET `/stats` → `getStats`
@@ -431,14 +431,14 @@ This plan implements the full AhaduCenter Node.js/Express REST API backend acros
   - GET `/contacts` → `paginationRules`, `validate`, `getContactSubmissions`
   - Mount in `app.js` at `/api/admin`
 
-- [~] 15.1 PBT: Overdue fee is linear (Property 13)
+- [x] 15.1 PBT: Overdue fee is linear (Property 13)
   - Create `server/src/__tests__/unit/overdue.test.js`
   - Use `fast-check` with `fc.integer({ min: 0, max: 3650 })` to generate N overdue days
   - Assert `calculateOverdueFee(dueDate, now) === N * OVERDUE_FEE_PER_DAY` for all N >= 0
   - Assert fee === 0 when dueDate is in the future
   - **Validates: Requirements 5.8**
 
-- [~] 15.2 PBT: Pagination metadata invariant (Property 9)
+- [x] 15.2 PBT: Pagination metadata invariant (Property 9)
   - Create `server/src/__tests__/unit/paginate.test.js`
   - Use `fast-check` with `fc.integer({ min: 1, max: 500 })` for totalCount, `fc.integer({ min: 1, max: 100 })` for limit, valid page values
   - Assert `totalPages === Math.ceil(totalCount / limit)` (and 0 when totalCount is 0)
@@ -446,13 +446,13 @@ This plan implements the full AhaduCenter Node.js/Express REST API backend acros
   - Assert returned `page` matches requested `page`
   - **Validates: Requirements 4.4, 6.4, 8.5, 19.2**
 
-- [~] 15.3 PBT: Upload filenames are unique (Property 18)
+- [x] 15.3 PBT: Upload filenames are unique (Property 18)
   - Create `server/src/__tests__/unit/upload.service.test.js`
   - Generate 1000 filenames via the upload service (UUID-based)
   - Assert all are distinct (no collisions in the generated set)
   - **Validates: Requirements 14.5**
 
-- [~] 15.4 PBT: Order subtotal and total correctness (Property 16)
+- [ ] 15.4 PBT: Order subtotal and total correctness (Property 16)
   - Create `server/src/__tests__/unit/order.total.test.js`
   - Use `fast-check` with arrays of `{ price: fc.float({ min: 0, max: 10000 }), quantity: fc.integer({ min: 1, max: 99 }) }`
   - Assert `subtotal === sum(price * qty)` and `totalPayableAtStore === subtotal + RESERVATION_FEE`

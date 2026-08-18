@@ -57,17 +57,25 @@ app.use('/api/orders', orderRouter);
 const notificationRouter = require('./routes/notification.routes');
 app.use('/api/notifications', notificationRouter);
 
+// ── Search routes ─────────────────────────────────────────────────────────────
+const searchRouter = require('./routes/search.routes');
+app.use('/api/search', searchRouter);
+
 // ── Route stubs (return 501 until routes are implemented) ────────────────────
 // These will be replaced by real routers as each task is implemented.
 const stub = (name) => (_req, res) =>
   res.status(501).json({ error: `${name} not yet implemented` });
-app.use('/api/search',         stub('search'));
 
 // ── Upload routes ─────────────────────────────────────────────────────────────
 const uploadRouter = require('./routes/upload.routes');
 app.use('/api/uploads', uploadRouter);
-app.use('/api/contact',        stub('contact'));
-app.use('/api/admin',          stub('admin'));
+// ── Contact routes ───────────────────────────────────────────────────────────
+const contactRouter = require('./routes/contact.routes');
+app.use('/api/contact', contactRouter);
+
+// ── Admin routes ─────────────────────────────────────────────────────────────
+const adminRouter = require('./routes/admin.routes');
+app.use('/api/admin', adminRouter);
 
 // ── Global error handler (mounted last) ──────────────────────────────────────
 const errorHandler = require('../middleware/errorHandler');
