@@ -282,22 +282,22 @@ This plan implements the full AhaduCenter Node.js/Express REST API backend acros
   - `productQueryRules`: optional `q`, optional `category`, optional `minPrice`/`maxPrice` (numeric >= 0), `paginationRules`
   - `productBodyRules` (admin): name, price required; optional typed fields
 
-- [ ] 7.2 Product catalog controller
+- [x] 7.2 Product catalog controller
   - Create `server/src/controllers/product.controller.js`
   - `listProducts`: build filter (text search on `q`, category match, price range with `$gte`/`$lte`) → `paginate` → respond
   - `getProduct`: populate similar products (same category, limit 10, exclude self) → respond 200; 404 if not found
 
-- [~] 7.3 Order validators
+- [x] 7.3 Order validators
   - Create `server/src/validators/order.validators.js`
   - `orderBodyRules`: `items` array non-empty; each item: `productId` valid ObjectId, `quantity` integer 1–99
 
-- [~] 7.4 Order controller
+- [x] 7.4 Order controller
   - Create `server/src/controllers/order.controller.js`
   - `placeOrder`: enrich items with product snapshots (price, name, image) → compute subtotal = sum(price × qty) → totalPayableAtStore = subtotal + `RESERVATION_FEE` (default 50 ETB) → create Order (status: "Processing") → call `createNotification` (type: "Electronics") → respond 201
   - `getOrder`: verify ownership or admin role (403 otherwise); 404 if not found → respond with full order document
   - `getOrderHistory`: fetch all Orders for user ordered by createdAt desc → respond with list (`id`, `date`, `status`, `items`, `itemCount`, `total`)
 
-- [~] 7.5 Product & order routes
+- [x] 7.5 Product & order routes
   - Create `server/src/routes/product.routes.js`
   - GET `/` → `productQueryRules`, `validate`, `listProducts`
   - GET `/:id` → `objectIdParam('id')`, `validate`, `getProduct`
@@ -306,35 +306,35 @@ This plan implements the full AhaduCenter Node.js/Express REST API backend acros
   - GET `/:id` → `authenticate`, `objectIdParam('id')`, `validate`, `getOrder`
   - Mount in `app.js` at `/api/products` and `/api/orders`
 
-- [~] 8.1 Review validators
+- [x] 8.1 Review validators
   - Create `server/src/validators/review.validators.js`
   - `reviewRules`: `rating` (integer 1–5, required), `comment` (1–2000 chars, trim, required)
 
-- [~] 8.2 Review controller
+- [x] 8.2 Review controller
   - Create `server/src/controllers/review.controller.js`
   - `listReviews`: paginate Review documents filtered by `itemId` + `itemType`; populate `userId` → `name` for `userName` field; respond with paginated envelope
   - `createReview`: verify item exists (404 if not) → save Review → recompute aggregate rating via `$avg` aggregation → update parent item's `rating` and `reviewCount` → respond 201; 409 on duplicate (compound index violation); 422 on invalid rating
 
-- [~] 8.3 Review routes
+- [x] 8.3 Review routes
   - Review endpoints are wired inside `book.routes.js` and `movie.routes.js` (handled in tasks 5.5 and 6.4)
   - Ensure `listReviews` and `createReview` correctly derive `itemType` from the mounting context
 
-- [~] 9.1 Wishlist controller
+- [x] 9.1 Wishlist controller
   - Create `server/src/controllers/wishlist.controller.js`
   - `getWishlist`: fetch all WishlistItems for user; for each item populate full data from appropriate collection (Movie/Book/Product) → build response with `id, type, title, imageUrl, rating, category, price, availability, link`
   - `addToWishlist`: validate `itemId` (ObjectId) and `itemType` (Movie|Book|Product); check item exists → save WishlistItem → respond 201 with `addedAt`; 409 on duplicate
   - `removeFromWishlist`: find WishlistItem by `{ userId, itemId: params.itemId }` → delete → respond 200; 404 if not found
 
-- [~] 9.2 Wishlist routes
+- [x] 9.2 Wishlist routes
   - Wishlist routes are wired inside `user.routes.js` (already referenced in task 4.3)
   - Ensure wishlist controller is imported and all handler functions are connected
 
-- [~] 10.1 Notification service
+- [x] 10.1 Notification service
   - Create `server/src/services/notification.service.js`
   - Export `async createNotification({ userId, type, title, description })`
   - Wrap Mongoose operations in `try/catch`; log errors but never rethrow so upstream operations are never rolled back (Requirement 12.9)
 
-- [~] 10.2 Notification controller
+- [ ] 10.2 Notification controller
   - Create `server/src/controllers/notification.controller.js`
   - `getNotifications`: fetch user's notifications ordered by timestamp desc; support optional `type` query filter; validate type enum (400 on unrecognised); respond with list or empty array
   - `markOneRead`: find notification by id, verify ownership → set `isRead: true` → respond 200; 404 if not found or wrong owner

@@ -49,8 +49,18 @@ const {
 // ── Borrowing controller (task 5.3) ───────────────────────────────────────────
 const { getBorrowingHistory } = require('../controllers/borrowing.controller');
 
+// ── Order controller (task 7.4) ────────────────────────────────────────────────
+const { getOrderHistory } = require('../controllers/order.controller');
+
 // ── MovieRequest controller (task 6.3) ────────────────────────────────────────
 const { getUserMovieRequests } = require('../controllers/movieRequest.controller');
+
+// ── Wishlist controller (task 9.1) ────────────────────────────────────────────
+const {
+  getWishlist,
+  addToWishlist,
+  removeFromWishlist,
+} = require('../controllers/wishlist.controller');
 
 // ── Stub handler for controllers not yet implemented ─────────────────────────
 const notImplemented = (_req, res) =>
@@ -80,23 +90,23 @@ router.get('/me/activity', getActivity);
 // GET /api/users/me/borrowings — Requirement 5.4
 router.get('/me/borrowings', getBorrowingHistory);
 
-// ── Order history (stub — task 7.4) ──────────────────────────────────────────
+// ── Order history (task 7.4) ──────────────────────────────────────────────────
 // GET /api/users/me/orders — Requirement 9.3
-router.get('/me/orders', notImplemented);
+router.get('/me/orders', getOrderHistory);
 
 // ── Movie requests (task 6.3) ─────────────────────────────────────────────────
 // GET /api/users/me/movie-requests — Requirement 7.2
 router.get('/me/movie-requests', getUserMovieRequests);
 
-// ── Wishlist routes (stub — task 9.1) ─────────────────────────────────────────
+// ── Wishlist routes (task 9.1) ────────────────────────────────────────────────
 // GET /api/users/me/wishlist — Requirement 11.1
-router.get('/me/wishlist', notImplemented);
+router.get('/me/wishlist', getWishlist);
 
-// POST /api/users/me/wishlist — Requirement 11.2
-router.post('/me/wishlist', notImplemented);
+// POST /api/users/me/wishlist — Requirements 11.2, 11.3, 11.7
+router.post('/me/wishlist', addToWishlist);
 
-// DELETE /api/users/me/wishlist/:itemId — Requirement 11.4
-router.delete('/me/wishlist/:itemId', notImplemented);
+// DELETE /api/users/me/wishlist/:itemId — Requirements 11.4, 11.5
+router.delete('/me/wishlist/:itemId', removeFromWishlist);
 
 // ── Notification routes (stub — task 10.2) ────────────────────────────────────
 // GET /api/users/me/notifications — Requirement 12.1

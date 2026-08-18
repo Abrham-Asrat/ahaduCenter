@@ -45,12 +45,18 @@ app.use('/api/movies', movieRouter);
 const movieRequestRouter = require('./routes/movieRequest.routes');
 app.use('/api/movie-requests', movieRequestRouter);
 
+// ── Product routes ────────────────────────────────────────────────────────────
+const productRouter = require('./routes/product.routes');
+app.use('/api/products', productRouter);
+
+// ── Order routes ──────────────────────────────────────────────────────────────
+const orderRouter = require('./routes/order.routes');
+app.use('/api/orders', orderRouter);
+
 // ── Route stubs (return 501 until routes are implemented) ────────────────────
 // These will be replaced by real routers as each task is implemented.
 const stub = (name) => (_req, res) =>
   res.status(501).json({ error: `${name} not yet implemented` });
-app.use('/api/products',       stub('products'));
-app.use('/api/orders',         stub('orders'));
 app.use('/api/search',         stub('search'));
 app.use('/api/uploads',        stub('uploads'));
 app.use('/api/contact',        stub('contact'));

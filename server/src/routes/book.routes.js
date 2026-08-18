@@ -6,12 +6,12 @@
  * Mounts all /api/books endpoints.
  *
  * Requirements covered:
- *   4.1–4.4  — GET /          (listBooks with bookQueryRules + pagination)
- *   4.5–4.6  — GET /:id       (getBook with objectIdParam)
+ *   4.1–4.4  — GET /              (listBooks with bookQueryRules + pagination)
+ *   4.5–4.6  — GET /:id           (getBook with objectIdParam)
  *   5.1–5.2  — POST /:id/borrow   (borrowBook — auth required)
  *   5.3      — POST /:id/reserve  (reserveBook — auth required)
- *   10.1–10.2 — GET  /:id/reviews (stub 501 — review controller not yet implemented)
- *   10.3     — POST /:id/reviews  (stub 501 — review controller not yet implemented)
+ *   10.1     — GET /:id/reviews   (listReviews)
+ *   10.3     — POST /:id/reviews  (createReview — auth required)
  */
 
 const express = require('express');
@@ -23,15 +23,16 @@ const validate     = require('../../middleware/validate');
 
 // ── Validators ────────────────────────────────────────────────────────────────
 const { bookQueryRules } = require('../validators/book.validators');
+const { reviewRules }    = require('../validators/review.validators');
 const { objectIdParam, paginationRules } = require('../validators/common.validators');
 
 // ── Controllers ───────────────────────────────────────────────────────────────
 const { listBooks, getBook, reserveBook } = require('../controllers/book.controller');
 const { borrowBook } = require('../controllers/borrowing.controller');
+const { listReviews, createReview } = require('../controllers/review.controller');
 
-// ── Inline stub for review endpoints (not yet implemented) ───────────────────
-const notImplemented = (_req, res) =>
-  res.status(501).json({ error: 'Reviews not yet implemented' });
+// ── Middleware: inject itemType for review handlers ───────────────────────────
+const setBookItemType = (_req, res, next) => { _req.itemType = 'Book'; next(); };
 
 // ── Routes ────────────────────────────────────────────────────────────────────
 
@@ -43,13 +44,13 @@ router.get('/', bookQueryRules, validate, listBooks);
 // Requirements 4.5, 4.6
 router.get('/:id', objectIdParam('id'), validate, getBook);
 
-// GET /api/books/:id/reviews  (stub — review controller not yet implemented)
+// GET /api/books/:id/reviews
 // Requirements 10.1, 10.8
-router.get('/:id/reviews', objectIdParam('id'), paginationRules, validate, notImplemented);
+router.get('/:id/reviews', objectIdParam('id'), paginationRules, validate, setBookItemType, listReviews);
 
-// POST /api/books/:id/reviews  (stub — review validators/controller not yet implemented)
-// Requirements 10.3
-router.post('/:id/reviews', authenticate, objectIdParam('id'), validate, notImplemented);
+// POST /api/books/:id/reviews
+// Requirements 10.3, 10.5, 10.6
+router.post('/:id/reviews', authenticate, objectIdParam('id'), ...reviewRules, validate, setBookItemType, createReview);
 
 // POST /api/books/:id/borrow
 // Requirements 5.1, 5.2, 5.10
