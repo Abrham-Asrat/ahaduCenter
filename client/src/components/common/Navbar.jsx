@@ -91,10 +91,10 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="fixed top-0 w-full z-50 bg-surface-container/80 backdrop-blur-xl border-b border-white/10 shadow-xl transition-colors">
-        <div className="flex justify-between items-center px-4 md:px-8 py-3 max-w-7xl mx-auto">
+      <nav className="fixed inset-x-0 top-0 z-50 w-full bg-surface-container/80 backdrop-blur-xl border-b border-white/10 shadow-xl transition-colors animate-nav-drop">
+        <div className="grid grid-cols-[1fr_auto_1fr] items-center px-4 sm:px-6 md:px-8 py-3 max-w-7xl mx-auto min-h-[4.25rem]">
           {/* Brand Logo */}
-          <Link to="/" className="font-heading text-2xl font-black text-primary flex items-center gap-2 tracking-wide">
+          <Link to="/" className="justify-self-start font-heading text-2xl font-black text-primary flex items-center gap-2 tracking-wide">
             <div className="w-9 h-9 rounded-xl bg-primary text-black flex items-center justify-center font-black shadow-lg">
               <span className="material-symbols-outlined text-black text-xl">storefront</span>
             </div>
@@ -105,7 +105,7 @@ const Navbar = () => {
           <div className="hidden md:flex gap-8 items-center">
             <Link
               to="/movies"
-              className={`text-sm font-bold tracking-wide uppercase transition-all pb-1 ${isActive('/movies')
+              className={`nav-link text-sm font-bold tracking-wide uppercase transition-all pb-1 ${isActive('/movies')
                 ? 'text-primary border-b-2 border-primary'
                 : 'text-on-surface-variant hover:text-primary'
                 }`}
@@ -114,7 +114,7 @@ const Navbar = () => {
             </Link>
             <Link
               to="/electronics"
-              className={`text-sm font-bold tracking-wide uppercase transition-all pb-1 ${isActive('/electronics')
+              className={`nav-link text-sm font-bold tracking-wide uppercase transition-all pb-1 ${isActive('/electronics')
                 ? 'text-primary border-b-2 border-primary'
                 : 'text-on-surface-variant hover:text-primary'
                 }`}
@@ -123,7 +123,7 @@ const Navbar = () => {
             </Link>
             <Link
               to="/books"
-              className={`text-sm font-bold tracking-wide uppercase transition-all pb-1 ${isActive('/books')
+              className={`nav-link text-sm font-bold tracking-wide uppercase transition-all pb-1 ${isActive('/books')
                 ? 'text-primary border-b-2 border-primary'
                 : 'text-on-surface-variant hover:text-primary'
                 }`}
@@ -132,7 +132,7 @@ const Navbar = () => {
             </Link>
             <Link
               to="/contact"
-              className={`text-sm font-bold tracking-wide uppercase transition-all pb-1 ${isActive('/contact')
+              className={`nav-link text-sm font-bold tracking-wide uppercase transition-all pb-1 ${isActive('/contact')
                 ? 'text-primary border-b-2 border-primary'
                 : 'text-on-surface-variant hover:text-primary'
                 }`}
@@ -142,7 +142,7 @@ const Navbar = () => {
           </div>
 
           {/* Right Action Icons & Controls */}
-          <div className="flex items-center gap-4">
+          <div className="justify-self-end flex items-center gap-4">
 
 
             {isLoggedIn ? (
@@ -164,7 +164,9 @@ const Navbar = () => {
                 <div className="relative" ref={dropdownRef}>
                   <button
                     onClick={() => setIsProfileOpen(!isProfileOpen)}
-                    className="flex items-center gap-2 p-1 rounded-full border-2 border-primary/50 hover:border-primary transition-all cursor-pointer focus:outline-none bg-surface-container-high"
+                    aria-expanded={isProfileOpen}
+                    aria-label="User Profile Menu"
+                    className="flex items-center gap-2 p-1 rounded-full border-2 border-primary/50 hover:border-primary transition-all cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primary bg-surface-container-high"
                     title="User Profile Menu"
                   >
                     <div className="w-9 h-9 rounded-full bg-gradient-to-br from-primary/30 via-secondary/20 to-surface-container-high border border-white/20 flex items-center justify-center font-black text-white text-sm relative">
@@ -292,28 +294,28 @@ const Navbar = () => {
       </nav>
 
       {/* Bottom Navigation (Mobile Specific - Includes 5 items: Home, Movies, Tech, Books, About) */}
-      <nav className="fixed bottom-0 w-full z-50 bg-surface-container-lowest border-t border-white/5 md:hidden">
-        <div className="flex justify-around items-center py-2">
-          <Link to="/" className={`flex flex-col items-center transition-colors ${isActive('/') ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-primary'}`}>
+      <nav className="fixed inset-x-0 bottom-0 z-50 w-full bg-surface-container-lowest/95 backdrop-blur-xl border-t border-white/5 md:hidden animate-nav-rise" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
+        <div className="grid grid-cols-5 items-center gap-1 px-2 py-2.5 min-h-16">
+          <Link to="/" className={`mobile-nav-link ${isActive('/') ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-primary'}`}>
             <span className="material-symbols-outlined" style={{ fontVariationSettings: isActive('/') ? "'FILL' 1" : "'FILL' 0" }}>home</span>
             <span className="text-[10px] uppercase tracking-wider font-semibold mt-1">Home</span>
           </Link>
-          <Link to="/movies" className={`flex flex-col items-center transition-colors ${isActive('/movies') ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-primary'}`}>
+          <Link to="/movies" className={`mobile-nav-link ${isActive('/movies') ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-primary'}`}>
             <span className="material-symbols-outlined" style={{ fontVariationSettings: isActive('/movies') ? "'FILL' 1" : "'FILL' 0" }}>movie</span>
             <span className="text-[10px] uppercase tracking-wider font-semibold mt-1">Movies</span>
           </Link>
           {/* Search Trigger */}
-          <Link to="/search" className={`flex flex-col items-center transition-colors ${isActive('/search') ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-primary'}`}>
+          <Link to="/search" className={`mobile-nav-link ${isActive('/search') ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-primary'}`}>
             <span className="material-symbols-outlined" style={{ fontVariationSettings: isActive('/search') ? "'FILL' 1" : "'FILL' 0" }}>search</span>
             <span className="text-[10px] uppercase tracking-wider font-semibold mt-1">Search</span>
           </Link>
 
 
-          <Link to="/electronics" className={`flex flex-col items-center transition-colors ${isActive('/electronics') ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-primary'}`}>
+          <Link to="/electronics" className={`mobile-nav-link ${isActive('/electronics') ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-primary'}`}>
             <span className="material-symbols-outlined" style={{ fontVariationSettings: isActive('/electronics') ? "'FILL' 1" : "'FILL' 0" }}>devices</span>
             <span className="text-[10px] uppercase tracking-wider font-semibold mt-1">Tech</span>
           </Link>
-          <Link to="/books" className={`flex flex-col items-center transition-colors ${isActive('/books') ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-primary'}`}>
+          <Link to="/books" className={`mobile-nav-link ${isActive('/books') ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-primary'}`}>
             <span className="material-symbols-outlined" style={{ fontVariationSettings: isActive('/books') ? "'FILL' 1" : "'FILL' 0" }}>menu_book</span>
             <span className="text-[10px] uppercase tracking-wider font-semibold mt-1">Books</span>
           </Link>

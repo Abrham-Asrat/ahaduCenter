@@ -9,6 +9,7 @@ body {
   background-color: #0B0F19;
   color: #d6e4f7;
   font-family: 'Inter', sans-serif;
+  padding-top: 4.25rem;
 }
 
 .glass-panel {
@@ -138,6 +139,67 @@ body {
   transform: translateX(4px);
 }
 
+.nav-link {
+  position: relative;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 100%;
+  bottom: -2px;
+  height: 2px;
+  background: #10B981;
+  transition: right 0.3s ease;
+}
+
+.nav-link:hover::after,
+.nav-link.text-primary::after {
+  right: 0;
+}
+
+.mobile-nav-link {
+  position: relative;
+  display: flex;
+  width: 100%;
+  min-width: 3.75rem;
+  min-height: 2.75rem;
+  height: 2.75rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.75rem;
+  transition: color 0.25s ease, background-color 0.25s ease, transform 0.25s ease;
+}
+
+.mobile-nav-link:active {
+  transform: scale(0.94);
+}
+
+.mobile-nav-link.text-primary {
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.mobile-nav-link.text-primary::before {
+  content: '';
+  position: absolute;
+  top: -0.625rem;
+  width: 1.5rem;
+  height: 2px;
+  border-radius: 999px;
+  background: #10B981;
+  animation: navIndicator 0.3s ease-out both;
+}
+
+.animate-nav-drop {
+  animation: navDrop 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-nav-rise {
+  animation: navRise 0.55s cubic-bezier(0.16, 1, 0.3, 1) 100ms both;
+}
+
 @keyframes footerReveal {
   from {
     opacity: 0;
@@ -147,6 +209,21 @@ body {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+@keyframes navDrop {
+  from { opacity: 0; transform: translateY(-100%); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes navRise {
+  from { opacity: 0; transform: translateY(100%); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes navIndicator {
+  from { opacity: 0; transform: scaleX(0.4); }
+  to { opacity: 1; transform: scaleX(1); }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -174,6 +251,6 @@ body {
 /* Padding adjustment for mobile bottom navigation */
 @media (max-width: 767px) {
   body {
-    padding-bottom: 64px;
+    padding-bottom: calc(64px + env(safe-area-inset-bottom));
   }
 }
