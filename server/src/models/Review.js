@@ -1,4 +1,5 @@
-const { Schema, model } = require('mongoose');
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
 const ReviewSchema = new Schema(
   {
@@ -14,4 +15,4 @@ const ReviewSchema = new Schema(
 // Prevents duplicate reviews from the same user for the same item
 ReviewSchema.index({ userId: 1, itemId: 1 }, { unique: true });
 
-module.exports = model('Review', ReviewSchema);
+module.exports = mongoose.models.Review || mongoose.model('Review', ReviewSchema);

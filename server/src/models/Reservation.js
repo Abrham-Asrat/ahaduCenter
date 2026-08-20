@@ -17,4 +17,4 @@ const ReservationSchema = new Schema({
   reservationDate: { type: Date, default: Date.now },
 }, { timestamps: true });
 
-module.exports = mongoose.model('Reservation', ReservationSchema);
+module.exports = mongoose.models.Reservation || mongoose.model('Reservation', ReservationSchema);

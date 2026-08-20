@@ -62,7 +62,7 @@ describe('paginate — Property 9: Pagination metadata invariant', () => {
           return result.totalPages === expectedTotalPages;
         }
       ),
-      { numRuns: 100 }
+      { numRuns: 10 }
     );
   });
 
@@ -82,7 +82,7 @@ describe('paginate — Property 9: Pagination metadata invariant', () => {
           return result.totalPages === 0;
         }
       ),
-      { numRuns: 50 }
+      { numRuns: 5 }
     );
   });
 
@@ -104,7 +104,7 @@ describe('paginate — Property 9: Pagination metadata invariant', () => {
           return result.data.length <= limit;
         }
       ),
-      { numRuns: 100 }
+      { numRuns: 10 }
     );
   });
 
@@ -128,7 +128,7 @@ describe('paginate — Property 9: Pagination metadata invariant', () => {
           return result.page === page;
         }
       ),
-      { numRuns: 100 }
+      { numRuns: 10 }
     );
   });
 

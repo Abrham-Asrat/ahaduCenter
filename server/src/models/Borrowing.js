@@ -21,4 +21,4 @@ const BorrowingSchema = new Schema({
   fee:          { type: Number, default: 0 },
 }, { timestamps: true });
 
-module.exports = mongoose.model('Borrowing', BorrowingSchema);
+module.exports = mongoose.models.Borrowing || mongoose.model('Borrowing', BorrowingSchema);

@@ -1,4 +1,5 @@
-const { Schema, model } = require('mongoose');
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
 const WishlistItemSchema = new Schema(
   {
@@ -13,4 +14,4 @@ const WishlistItemSchema = new Schema(
 // Prevents the same item from being added to a user's wishlist more than once
 WishlistItemSchema.index({ userId: 1, itemId: 1 }, { unique: true });
 
-module.exports = model('WishlistItem', WishlistItemSchema);
+module.exports = mongoose.models.WishlistItem || mongoose.model('WishlistItem', WishlistItemSchema);

@@ -9,7 +9,8 @@
  * to support full-text search via $text queries.
  */
 
-const { Schema, model } = require('mongoose');
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
 const ProductSchema = new Schema(
   {
@@ -34,4 +35,4 @@ const ProductSchema = new Schema(
 // Text index for full-text search on name, brand, category (Requirement 8.2)
 ProductSchema.index({ name: 'text', brand: 'text', category: 'text' });
 
-module.exports = model('Product', ProductSchema);
+module.exports = mongoose.models.Product || mongoose.model('Product', ProductSchema);

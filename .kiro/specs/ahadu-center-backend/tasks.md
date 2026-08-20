@@ -452,13 +452,13 @@ This plan implements the full AhaduCenter Node.js/Express REST API backend acros
   - Assert all are distinct (no collisions in the generated set)
   - **Validates: Requirements 14.5**
 
-- [ ] 15.4 PBT: Order subtotal and total correctness (Property 16)
+- [x] 15.4 PBT: Order subtotal and total correctness (Property 16)
   - Create `server/src/__tests__/unit/order.total.test.js`
   - Use `fast-check` with arrays of `{ price: fc.float({ min: 0, max: 10000 }), quantity: fc.integer({ min: 1, max: 99 }) }`
   - Assert `subtotal === sum(price * qty)` and `totalPayableAtStore === subtotal + RESERVATION_FEE`
   - **Validates: Requirements 9.1**
 
-- [~] 15.5 Integration PBT: Auth round trip (Properties 1, 2, 3)
+- [x] 15.5 Integration PBT: Auth round trip (Properties 1, 2, 3)
   - Create `server/src/__tests__/integration/auth.test.js`
   - Use `mongodb-memory-server` + supertest
   - **Property 1**: valid (email, password, name) → register → login → HTTP 200 + JWT + correct `name`, `email`, `role: "user"`
@@ -466,13 +466,13 @@ This plan implements the full AhaduCenter Node.js/Express REST API backend acros
   - **Property 3**: `POST /api/auth/forgot-password` with any email string always returns HTTP 200 `{ message: "Reset instructions sent" }`
   - **Validates: Requirements 2.1, 2.3, 2.6, 2.9**
 
-- [~] 15.6 Integration PBT: User profile update round trip (Property 4)
+- [x] 15.6 Integration PBT: User profile update round trip (Property 4)
   - Create `server/src/__tests__/integration/user.test.js`
   - Use `mongodb-memory-server` + supertest; register and login first to obtain JWT
   - **Property 4**: for any valid `{ name, email, phone }` payload → `PUT /api/users/me` → `GET /api/users/me` → returned fields match sent fields
   - **Validates: Requirements 3.2**
 
-- [~] 15.7 Integration PBT: Book filter, borrow, return, renew (Properties 5, 10, 11, 12)
+- [x] 15.7 Integration PBT: Book filter, borrow, return, renew (Properties 5, 10, 11, 12)
   - Create `server/src/__tests__/integration/book.filter.test.js`
   - **Property 5**: for any non-empty `q` → every returned book's title, author, or isbn contains `q` (case-insensitive)
   - **Property 10**: borrow creates Borrowing with dueDate = borrowDate + 14 days, renewalsLeft = 2, status = Active; book.availableCopies decremented by 1
@@ -480,39 +480,39 @@ This plan implements the full AhaduCenter Node.js/Express REST API backend acros
   - **Property 12**: for any active Borrowing with renewalsLeft > 0 → renew → dueDate += 14 days, renewalsLeft -= 1
   - **Validates: Requirements 4.2, 5.1, 5.5, 5.7**
 
-- [~] 15.8 Integration PBT: Movie search filter (Property 6)
+- [x] 15.8 Integration PBT: Movie search filter (Property 6)
   - Create `server/src/__tests__/integration/movie.filter.test.js`
   - **Property 6**: for any non-empty `q` → every returned movie's title, director, or genres array contains `q` (case-insensitive)
   - **Validates: Requirements 6.2**
 
-- [~] 15.9 Integration PBT: Product search & price filter (Properties 7, 8)
+- [x] 15.9 Integration PBT: Product search & price filter (Properties 7, 8)
   - Create `server/src/__tests__/integration/product.filter.test.js`
   - **Property 7**: for any non-empty `q` → every returned product's name, brand, or category contains `q` (case-insensitive)
   - **Property 8**: for any `minPrice`/`maxPrice` combination → every returned product has price within the specified range
   - **Validates: Requirements 8.2, 8.4**
 
-- [~] 15.10 Integration PBT: Aggregate review rating is arithmetic mean (Property 17)
+- [x] 15.10 Integration PBT: Aggregate review rating is arithmetic mean (Property 17)
   - Create `server/src/__tests__/integration/review.rating.test.js`
   - **Property 17**: for any sequence of N ratings (integers 1–5) submitted for the same Book or Movie → parent item's `rating` equals the arithmetic mean of all submitted ratings after each new review
   - **Validates: Requirements 10.3, 10.7**
 
-- [~] 15.11 Integration PBT: Movie request title preservation & whitespace rejection (Properties 14, 15)
+- [x] 15.11 Integration PBT: Movie request title preservation & whitespace rejection (Properties 14, 15)
   - Create `server/src/__tests__/integration/movieRequest.test.js`
   - **Property 14**: for any trimmed title (1–200 chars) → created record has `status: "Pending"` and `title === trimmedInput`
   - **Property 15**: for any whitespace-only string as title → HTTP 400, no record created
   - **Validates: Requirements 7.1, 7.7, 18.5**
 
-- [~] 15.12 Integration PBT: Cross-domain search type filter isolation (Property 20)
+- [x] 15.12 Integration PBT: Cross-domain search type filter isolation (Property 20)
   - Create `server/src/__tests__/integration/search.test.js`
   - **Property 20**: for any `q` combined with `type` in ["movie", "book", "product"] → every result in the response has `type` matching the specified filter only
   - **Validates: Requirements 13.3**
 
-- [~] 15.13 Integration PBT: String inputs are trimmed before persistence (Property 19)
+- [x] 15.13 Integration PBT: String inputs are trimmed before persistence (Property 19)
   - Create `server/src/__tests__/integration/validation.trim.test.js`
   - **Property 19**: for any string with arbitrary leading/trailing whitespace → persisted value equals the trimmed string; if trimming yields an empty required field → HTTP 422 is returned
   - **Validates: Requirements 18.5**
 
-- [~] 15.14 Unit tests — JWT helpers, middleware guards, validation shapes
+- [x] 15.14 Unit tests — JWT helpers, middleware guards, validation shapes
   - Create `server/src/__tests__/unit/jwt.test.js` — sign/verify round trip; expired token throws/returns error
   - Write middleware tests covering: authenticate returns 401 on missing/invalid/expired JWT; requireRole returns 403 on wrong role; validate returns 422 with `{ errors: [{ field, message }] }` structure; errorHandler returns 500 without stack trace, 400 for CastError, 409 for duplicate key error
   - Cover CORS preflight: OPTIONS request from `CLIENT_ORIGIN` → HTTP 204 with correct CORS headers
@@ -526,5 +526,5 @@ This plan implements the full AhaduCenter Node.js/Express REST API backend acros
 - Notification creation failures must never roll back the primary operation (order, borrowing, movie request status change)
 - The `server/uploads/` directory is served as static assets at `/uploads` without authentication
 - Integration tests use `mongodb-memory-server` — no real MongoDB connection is required during CI
-- Property-based tests use `fast-check` configured with `numRuns: 100` minimum iterations per property
+- Property-based tests  klj use `fast-check` configured with `numRuns: 100` minimum iterations per property
 - Each PBT task comment format: `// Feature: ahadu-center-backend, Property N: <description>`

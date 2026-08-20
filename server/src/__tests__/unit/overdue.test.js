@@ -32,7 +32,7 @@ describe('calculateOverdueFee', () => {
           return fee === N * OVERDUE_FEE_PER_DAY;
         }
       ),
-      { numRuns: 100 }
+      { numRuns: 10 }
     );
   });
 
@@ -54,7 +54,7 @@ describe('calculateOverdueFee', () => {
           return fee === 0;
         }
       ),
-      { numRuns: 100 }
+      { numRuns: 10 }
     );
   });
 

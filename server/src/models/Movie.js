@@ -52,4 +52,4 @@ const MovieSchema = new Schema({
 // Text index for full-text search on title and director (Requirement 6.2)
 MovieSchema.index({ title: 'text', director: 'text' });
 
-module.exports = mongoose.model('Movie', MovieSchema);
+module.exports = mongoose.models.Movie || mongoose.model('Movie', MovieSchema);

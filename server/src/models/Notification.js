@@ -1,4 +1,5 @@
-const { Schema, model } = require('mongoose');
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
 const NotificationSchema = new Schema(
   {
@@ -12,4 +13,4 @@ const NotificationSchema = new Schema(
   { timestamps: false }
 );
 
-module.exports = model('Notification', NotificationSchema);
+module.exports = mongoose.models.Notification || mongoose.model('Notification', NotificationSchema);

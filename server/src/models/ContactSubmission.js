@@ -1,4 +1,5 @@
-const { Schema, model } = require('mongoose');
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
 const ContactSubmissionSchema = new Schema(
   {
@@ -10,4 +11,4 @@ const ContactSubmissionSchema = new Schema(
   { timestamps: true }
 );
 
-module.exports = model('ContactSubmission', ContactSubmissionSchema);
+module.exports = mongoose.models.ContactSubmission || mongoose.model('ContactSubmission', ContactSubmissionSchema);

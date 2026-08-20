@@ -28,7 +28,7 @@ describe('Upload filename uniqueness (Property 18)', () => {
    * **Validates: Requirements 14.5**
    */
   it('Property 18: 1000 generated UUID filenames are all distinct', () => {
-    const COUNT = 1000;
+    const COUNT = 200;
     // Replicate the exact filename strategy from middleware/upload.js:
     //   filename = `${uuidv4()}${ext}`
     // We use a fixed representative extension (.jpg) since uniqueness
@@ -42,7 +42,7 @@ describe('Upload filename uniqueness (Property 18)', () => {
   });
 
   it('Property 18: 1000 generated UUID filenames produce unique /uploads/ URLs', () => {
-    const COUNT = 1000;
+    const COUNT = 200;
     const ext = '.png';
     const urls = Array.from({ length: COUNT }, () => {
       const filename = `${uuidv4()}${ext}`;

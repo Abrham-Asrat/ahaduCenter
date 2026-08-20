@@ -13,7 +13,8 @@
  * Requirements covered: 9.1 – 9.6
  */
 
-const { Schema, model } = require('mongoose');
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
 const OrderItemSchema = new Schema(
   {
@@ -47,4 +48,4 @@ const OrderSchema = new Schema(
   { timestamps: true }
 );
 
-module.exports = model('Order', OrderSchema);
+module.exports = mongoose.models.Order || mongoose.model('Order', OrderSchema);

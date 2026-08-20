@@ -26,4 +26,4 @@ const MovieRequestSchema = new Schema({
 }, { timestamps: true });
 // requestedAt is derived from createdAt
 
-module.exports = mongoose.model('MovieRequest', MovieRequestSchema);
+module.exports = mongoose.models.MovieRequest || mongoose.model('MovieRequest', MovieRequestSchema);
