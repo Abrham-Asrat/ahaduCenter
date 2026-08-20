@@ -23,5 +23,16 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: './src/test/setup.js',
     testTimeout: 30000,
+    hookTimeout: 30000,
+    teardownTimeout: 30000,
+    // Run test files sequentially to avoid worker pool resource contention.
+    // PBT tests do many renders per file; parallel workers exhaust memory/CPU
+    // and cause "Timeout waiting for worker to respond" failures.
+    pool: 'forks',
+    poolOptions: {
+      forks: {
+        singleFork: true,
+      },
+    },
   },
 });
