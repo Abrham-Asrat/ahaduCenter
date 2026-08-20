@@ -4,21 +4,23 @@ import { useNavigate } from 'react-router-dom';
 
 /**
  * BookInfoSection Component
- * 
- * Displays book metadata and action buttons.
- * 
+ *
  * Props:
  * - book: Object { title, author, publisher, year, isbn, rating, reviews, description, availableCopies, location, price }
  * - onShowToast: Callback for toast notifications
+ * - onBorrow: Optional callback override for Borrow button (if provided, used instead of default toast)
+ * - onReserve: Optional callback override for Reserve button
  */
-const BookInfoSection = ({ book, onShowToast }) => {
+const BookInfoSection = ({ book, onShowToast, onBorrow, onReserve }) => {
     const navigate = useNavigate();
 
     const handleBorrow = () => {
+        if (onBorrow) { onBorrow(); return; }
         if (onShowToast) onShowToast(`Borrow request submitted for "${book.title}"! Pick up at ${book.location}.`);
     };
 
     const handleReserve = () => {
+        if (onReserve) { onReserve(); return; }
         if (onShowToast) onShowToast(`Reserved place on waitlist for "${book.title}".`);
     };
 

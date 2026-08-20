@@ -1,61 +1,31 @@
 // src/pages/LoginPage.jsx
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginThunk } from '../redux/slices/authSlice';
 
-/**
- * LoginPage Component
- * 
- * Features pre-filled default login credentials for demo/testing before backend connection.
- */
 const LoginPage = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { loading, error } = useSelector((s) => s.auth);
 
-  // State for form fields - pre-filled defaults
-  const [email, setEmail] = useState('admin@ahaducenter.com');
-  const [password, setPassword] = useState('admin123');
-  const [rememberMe, setRememberMe] = useState(true);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [toastMessage, setToastMessage] = useState(null);
 
-  // Quick fill helper
-  const handleQuickLogin = (userEmail, userPass, targetRoute) => {
-    setEmail(userEmail);
-    setPassword(userPass);
-    localStorage.setItem('ahadu_logged_in', 'true');
-    localStorage.setItem('ahadu_user_email', userEmail);
-    window.dispatchEvent(new Event('auth-change'));
-    setToastMessage(`Signing in as ${userEmail}...`);
-    setTimeout(() => {
-      navigate(targetRoute);
-    }, 600);
-  };
-
-  // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    localStorage.setItem('ahadu_logged_in', 'true');
-    localStorage.setItem('ahadu_user_email', email);
-    window.dispatchEvent(new Event('auth-change'));
-    setToastMessage('Authenticated successfully!');
-    setTimeout(() => {
-      if (email.includes('admin')) {
-        navigate('/admin');
-      } else {
-        navigate('/account');
-      }
-    }, 600);
+    const result = await dispatch(loginThunk({ email, password }));
+    if (loginThunk.fulfilled.match(result)) {
+      // Navigate based on role returned in the payload
+      const role = result.payload?.user?.role;
+      navigate(role === 'admin' ? '/admin' : '/');
+    }
   };
 
   return (
     <div className="min-h-screen bg-background text-on-surface flex flex-col relative overflow-x-hidden animate-fade-in">
-      {/* Toast notification */}
-      {toastMessage && (
-        <div className="fixed top-20 right-6 bg-primary text-black font-extrabold px-6 py-3 rounded-2xl shadow-2xl z-50 flex items-center gap-2 animate-bounce">
-          <span className="material-symbols-outlined">check_circle</span>
-          {toastMessage}
-        </div>
-      )}
-
       {/* Atmospheric background glows */}
       <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-primary/20 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-secondary/10 rounded-full blur-[150px] pointer-events-none" />
@@ -87,31 +57,13 @@ const LoginPage = () => {
             <p className="text-on-surface-variant text-sm">Sign in to access your Ahadu Center portal</p>
           </div>
 
-          {/* Default Credentials Notice */}
-          <div className="bg-primary/10 border border-primary/30 p-4 rounded-xl mb-6">
-            <div className="flex items-center gap-2 text-primary font-bold text-xs uppercase mb-2">
-              <span className="material-symbols-outlined text-sm">info</span>
-              Default Demo Credentials (Temporary)
+          {/* Error message from Redux */}
+          {error && (
+            <div className="bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-3 rounded-xl mb-5 flex items-center gap-2 text-sm font-medium">
+              <span className="material-symbols-outlined text-sm">error</span>
+              {error}
             </div>
-            <div className="grid grid-cols-2 gap-2">
-              <button
-                type="button"
-                onClick={() => handleQuickLogin('admin@ahaducenter.com', 'admin123', '/admin')}
-                className="bg-primary text-black font-extrabold px-3 py-2 rounded-lg text-xs hover:shadow-lg transition-all flex items-center justify-center gap-1 cursor-pointer"
-              >
-                <span className="material-symbols-outlined text-sm">admin_panel_settings</span>
-                Admin Login
-              </button>
-              <button
-                type="button"
-                onClick={() => handleQuickLogin('user@ahaducenter.com', 'user123', '/account')}
-                className="bg-surface-variant text-white border border-white/10 font-bold px-3 py-2 rounded-lg text-xs hover:bg-white/10 transition-all flex items-center justify-center gap-1 cursor-pointer"
-              >
-                <span className="material-symbols-outlined text-sm">person</span>
-                User Login
-              </button>
-            </div>
-          </div>
+          )}
 
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Email field */}
@@ -180,16 +132,20 @@ const LoginPage = () => {
                 className="h-4 w-4 bg-[#0B0F19] border-white/10 rounded text-primary focus:ring-primary cursor-pointer"
               />
               <label htmlFor="remember-me" className="ml-2 text-xs text-on-surface-variant cursor-pointer font-medium">
-                Remember default session for 30 days
+                Remember me for 30 days
               </label>
             </div>
 
             {/* Submit button */}
             <button
               type="submit"
-              className="w-full bg-primary text-black font-extrabold py-3.5 rounded-xl hover:shadow-[0_0_20px_rgba(16,185,129,0.5)] transition-all cursor-pointer uppercase text-xs tracking-wider"
+              disabled={loading}
+              className="w-full bg-primary text-black font-extrabold py-3.5 rounded-xl hover:shadow-[0_0_20px_rgba(16,185,129,0.5)] transition-all cursor-pointer uppercase text-xs tracking-wider disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
-              Sign In
+              {loading && (
+                <span className="material-symbols-outlined animate-spin text-[18px]">progress_activity</span>
+              )}
+              {loading ? 'Signing In...' : 'Sign In'}
             </button>
           </form>
 

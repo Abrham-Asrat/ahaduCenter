@@ -1,19 +1,29 @@
 // src/pages/BookCenterPage.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchBooks } from '../redux/slices/bookSlice';
 import Navbar from '../components/common/Navbar';
 import SubNav from '../components/common/SubNav';
 import BookFilters from '../components/book/BookFilters';
 import BookCard from '../components/book/BookCard';
+import Pagination from '../components/common/Pagination';
 import Footer from '../components/common/Footer';
 import { useNavigate } from 'react-router-dom';
 
 /**
  * BookCenterPage Component
- * 
+ *
  * Main page for the Book Center module.
+ * Wired to Redux store — dispatches fetchBooks on mount and on filter/page change.
  */
 const BookCenterPage = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  // ── Redux state ──────────────────────────────────────────────────────────────
+  const { books, loading, error, pagination } = useSelector((s) => s.book);
+
+  // ── Local UI state ───────────────────────────────────────────────────────────
   const [activeCategory, setActiveCategory] = useState('All Categories');
   const [sortOption, setSortOption] = useState('Newest Arrivals');
   const [filterState, setFilterState] = useState({
@@ -22,6 +32,7 @@ const BookCenterPage = () => {
     format: [],
     language: 'All Languages',
   });
+  const [currentPage, setCurrentPage] = useState(1);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [toastMessage, setToastMessage] = useState(null);
 
@@ -39,151 +50,73 @@ const BookCenterPage = () => {
     'Arts & Humanities',
   ];
 
-  // Rich mock book dataset with clean Unsplash images
-  const [books] = useState([
-    {
-      id: 1,
-      title: 'Advanced Algorithm Design',
-      author: 'Dr. Sarah Jenkins',
-      category: 'Technology',
-      coverUrl: 'https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&w=600&q=80',
-      availability: 'Borrow',
-      format: 'Hardcover',
-      language: 'English',
-      rating: 4.9,
-    },
-    {
-      id: 2,
-      title: 'UI/UX Principles & Systems',
-      author: 'Marcus Chen',
-      category: 'Arts & Humanities',
-      coverUrl: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80',
-      availability: 'Reserve',
-      format: 'Digital (eBook)',
-      language: 'English',
-      waitlist: 3,
-      rating: 4.7,
-    },
-    {
-      id: 3,
-      title: 'Quantum Computing Fundamentals',
-      author: 'Elena Rostova',
-      category: 'Science',
-      coverUrl: 'https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=600&q=80',
-      availability: 'Buy',
-      format: 'Paperback',
-      language: 'English',
-      price: 85,
-      rating: 4.8,
-    },
-    {
-      id: 4,
-      title: 'Neural Networks Applied',
-      author: 'David Kim',
-      category: 'Technology',
-      coverUrl: 'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&w=600&q=80',
-      availability: 'Borrow',
-      format: 'Hardcover',
-      language: 'English',
-      rating: 4.6,
-    },
-    {
-      id: 5,
-      title: 'Modern Business Leadership',
-      author: 'Abebe Bikila',
-      category: 'Business',
-      coverUrl: 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=600&q=80',
-      availability: 'Borrow',
-      format: 'Paperback',
-      language: 'Amharic',
-      rating: 4.9,
-    },
-    {
-      id: 6,
-      title: 'Pedagogy & Classroom Systems',
-      author: 'Prof. Helen Taylor',
-      category: 'Education',
-      coverUrl: 'https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=600&q=80',
-      availability: 'Buy',
-      format: 'Hardcover',
-      language: 'English',
-      price: 65,
-      rating: 4.5,
-    },
-    {
-      id: 7,
-      title: 'Ethiopian Classical Art & History',
-      author: 'Tadesse Worku',
-      category: 'Arts & Humanities',
-      coverUrl: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=600&q=80',
-      availability: 'Reserve',
-      format: 'Paperback',
-      language: 'Amharic',
-      waitlist: 5,
-      rating: 4.8,
-    },
-    {
-      id: 8,
-      title: 'Astrophysics for Modern Thinkers',
-      author: 'Dr. Michael Vance',
-      category: 'Science',
-      coverUrl: 'https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=600&q=80',
-      availability: 'Borrow',
-      format: 'Digital (eBook)',
-      language: 'English',
-      rating: 4.9,
-    },
-  ]);
+  // ── Build query params from local filter/sort state ──────────────────────────
+  const buildParams = useCallback(() => {
+    const params = { page: currentPage, limit: 12 };
 
+    if (activeCategory !== 'All Categories') params.category = activeCategory;
+    if (filterState.searchQuery) params.search = filterState.searchQuery;
+    if (filterState.availability.length === 1) params.availability = filterState.availability[0].toLowerCase();
+    if (filterState.language !== 'All Languages') params.language = filterState.language;
+    if (filterState.format.length === 1) params.format = filterState.format[0];
+
+    // Map UI sort labels to API sort values
+    if (sortOption === 'Highest Rated') params.sort = 'rating';
+    else if (sortOption === 'Most Popular') params.sort = 'popular';
+    else params.sort = 'newest';
+
+    return params;
+  }, [activeCategory, filterState, sortOption, currentPage]);
+
+  // ── Fetch on mount and whenever filters / page change ────────────────────────
+  useEffect(() => {
+    dispatch(fetchBooks(buildParams()));
+  }, [dispatch, buildParams]);
+
+  // Reset to page 1 when filters/sort change (but not when currentPage changes)
   const handleFilterChange = (newFilters) => {
     setFilterState((prev) => ({ ...prev, ...newFilters }));
+    setCurrentPage(1);
+  };
+
+  const handleCategoryChange = (cat) => {
+    setActiveCategory(cat);
+    setCurrentPage(1);
+  };
+
+  const handleSortChange = (e) => {
+    setSortOption(e.target.value);
+    setCurrentPage(1);
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleRetry = () => {
+    dispatch(fetchBooks(buildParams()));
   };
 
   const handleQuickAction = (book) => {
-    if (book.availability === 'Borrow') {
-      showToast(`Borrow request for "${book.title}" initiated!`);
-    } else if (book.availability === 'Reserve') {
-      showToast(`Reserved place on waitlist for "${book.title}"!`);
-    } else if (book.availability === 'Buy') {
-      showToast(`Inquiry sent for "${book.title}". Visit our store for physical purchase!`);
-      setTimeout(() => navigate('/contact'), 1000);
+    if (book.availability === 'available') {
+      navigate(`/book-confirm?action=borrow&id=${book._id || book.id}`);
+    } else if (book.availability === 'reserved' || book.availability === 'borrowed') {
+      navigate(`/book-confirm?action=reserve&id=${book._id || book.id}`);
     }
   };
 
-  // Filter books
-  const filteredBooks = books.filter((b) => {
-    // Category
-    if (activeCategory !== 'All Categories' && b.category !== activeCategory) return false;
-    // Search
-    if (
-      filterState.searchQuery &&
-      !b.title.toLowerCase().includes(filterState.searchQuery.toLowerCase()) &&
-      !b.author.toLowerCase().includes(filterState.searchQuery.toLowerCase())
-    ) {
-      return false;
-    }
-    // Availability
-    if (filterState.availability.length > 0 && !filterState.availability.includes(b.availability)) {
-      return false;
-    }
-    // Format
-    if (filterState.format.length > 0 && !filterState.format.includes(b.format)) {
-      return false;
-    }
-    // Language
-    if (filterState.language !== 'All Languages' && b.language !== filterState.language) {
-      return false;
-    }
-
-    return true;
-  });
-
-  // Sort books
-  const sortedBooks = [...filteredBooks].sort((a, b) => {
-    if (sortOption === 'Highest Rated') return b.rating - a.rating;
-    if (sortOption === 'Most Popular') return (b.waitlist || 0) - (a.waitlist || 0);
-    return a.id - b.id; // Newest Arrivals
-  });
+  // ── Loading skeleton ─────────────────────────────────────────────────────────
+  const SkeletonCard = () => (
+    <div className="glass-panel rounded-xl border border-white/10 overflow-hidden animate-pulse">
+      <div className="w-full h-52 bg-surface-container" />
+      <div className="p-4 flex flex-col gap-2">
+        <div className="h-4 bg-surface-container rounded w-3/4" />
+        <div className="h-3 bg-surface-container rounded w-1/2" />
+        <div className="h-8 bg-surface-container rounded mt-2" />
+      </div>
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-background text-on-background flex flex-col relative animate-fade-in">
@@ -201,7 +134,7 @@ const BookCenterPage = () => {
       <div className="pt-20">
         <SubNav
           tabs={categories}
-          onTabChange={setActiveCategory}
+          onTabChange={handleCategoryChange}
         />
       </div>
 
@@ -235,13 +168,20 @@ const BookCenterPage = () => {
             {/* Grid controls */}
             <div className="flex justify-between items-center glass-panel p-3.5 rounded-xl border border-white/10 mb-6">
               <span className="text-sm text-on-surface-variant font-medium">
-                Showing <strong className="text-white">{sortedBooks.length}</strong> of {books.length} titles
+                {loading ? (
+                  <span className="inline-block w-32 h-4 bg-surface-container rounded animate-pulse" />
+                ) : (
+                  <>
+                    Showing <strong className="text-white">{books.length}</strong> of{' '}
+                    <strong className="text-white">{pagination.totalItems}</strong> titles
+                  </>
+                )}
               </span>
               <div className="flex items-center gap-2">
                 <span className="text-sm text-on-surface-variant font-medium">Sort by:</span>
                 <select
                   value={sortOption}
-                  onChange={(e) => setSortOption(e.target.value)}
+                  onChange={handleSortChange}
                   className="bg-background border border-white/10 text-sm text-primary rounded-lg py-1 px-3 outline-none cursor-pointer font-semibold"
                 >
                   <option>Newest Arrivals</option>
@@ -251,20 +191,43 @@ const BookCenterPage = () => {
               </div>
             </div>
 
-            {/* Book grid */}
-            {sortedBooks.length === 0 ? (
+            {/* Error banner */}
+            {error && (
+              <div className="glass-panel rounded-xl border border-red-500/30 bg-red-500/5 p-5 mb-6 flex items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <span className="material-symbols-outlined text-red-400">error</span>
+                  <p className="text-sm text-red-300">{error}</p>
+                </div>
+                <button
+                  onClick={handleRetry}
+                  className="text-xs font-bold uppercase tracking-wider text-primary border border-primary/40 px-4 py-2 rounded-lg hover:bg-primary/10 transition-colors flex-shrink-0"
+                >
+                  Retry
+                </button>
+              </div>
+            )}
+
+            {/* Book grid — skeleton while loading */}
+            {loading ? (
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+                {Array.from({ length: 8 }).map((_, i) => (
+                  <SkeletonCard key={i} />
+                ))}
+              </div>
+            ) : books.length === 0 && !error ? (
               <div className="glass-panel rounded-2xl p-12 text-center border border-white/10 my-8">
                 <span className="material-symbols-outlined text-6xl text-on-surface-variant/40 mb-3">
                   menu_book
                 </span>
                 <h3 className="text-2xl font-bold text-white mb-2">No Books Found</h3>
                 <p className="text-on-surface-variant text-sm mb-6 max-w-md mx-auto">
-                  We couldn't find any books matching your selected filters.
+                  We couldn&apos;t find any books matching your selected filters.
                 </p>
                 <button
                   onClick={() => {
                     setActiveCategory('All Categories');
                     setFilterState({ searchQuery: '', availability: [], format: [], language: 'All Languages' });
+                    setCurrentPage(1);
                   }}
                   className="bg-primary text-black px-6 py-2.5 rounded-lg font-bold hover:shadow-[0_0_15px_rgba(16,185,129,0.4)] transition-all text-sm"
                 >
@@ -272,13 +235,28 @@ const BookCenterPage = () => {
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
-                {sortedBooks.map((book, index) => (
-                  <div key={book.id} className="animate-fade-in hover:-translate-y-1 transition-transform duration-200" style={{ animationDelay: `${index * 0.05}s` }}>
-                    <BookCard book={book} onQuickAction={handleQuickAction} />
-                  </div>
-                ))}
-              </div>
+              <>
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+                  {books.map((book, index) => (
+                    <div
+                      key={book._id || book.id}
+                      className="animate-fade-in hover:-translate-y-1 transition-transform duration-200"
+                      style={{ animationDelay: `${index * 0.05}s` }}
+                    >
+                      <BookCard book={book} onQuickAction={handleQuickAction} />
+                    </div>
+                  ))}
+                </div>
+
+                {/* Pagination */}
+                {pagination.totalPages > 1 && (
+                  <Pagination
+                    currentPage={pagination.currentPage}
+                    totalPages={pagination.totalPages}
+                    onPageChange={handlePageChange}
+                  />
+                )}
+              </>
             )}
           </div>
         </div>

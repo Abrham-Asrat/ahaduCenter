@@ -12,8 +12,23 @@ import React, { useState } from 'react';
  * - Like/Helpful button toggle for existing comments
  * - Community prompt banner to inspire user engagement
  */
-const ReviewsCommentsSection = ({ title = "Community Reviews & Comments", initialReviews = [] }) => {
-  // Default mock reviews if none provided
+/**
+ * ReviewsCommentsSection Component
+ *
+ * Props:
+ * - title: string — section heading
+ * - initialReviews: array — pre-populated reviews (used for Redux-driven data)
+ * - onSubmitReview: async (payload: { rating, comment }) => void — if provided,
+ *     called instead of the local optimistic add; errors are caught and shown in toast
+ * - isAuthenticated: boolean — when false, hides the submit form
+ */
+const ReviewsCommentsSection = ({
+  title = 'Community Reviews & Comments',
+  initialReviews = [],
+  onSubmitReview = null,
+  isAuthenticated = true,
+}) => {
+  // Default mock reviews if none provided and no Redux data injected
   const [reviews, setReviews] = useState(
     initialReviews.length > 0
       ? initialReviews
@@ -41,6 +56,13 @@ const ReviewsCommentsSection = ({ title = "Community Reviews & Comments", initia
         ]
   );
 
+  // Sync reviews when initialReviews prop changes (e.g., Redux fetch completes)
+  React.useEffect(() => {
+    if (initialReviews.length > 0) {
+      setReviews(initialReviews);
+    }
+  }, [initialReviews]);
+
   // Form State
   const [newRating, setNewRating] = useState(5);
   const [hoverRating, setHoverRating] = useState(0);
@@ -66,10 +88,25 @@ const ReviewsCommentsSection = ({ title = "Community Reviews & Comments", initia
   };
 
   // Submit new review
-  const handleSubmitReview = (e) => {
+  const handleSubmitReview = async (e) => {
     e.preventDefault();
     if (!commentText.trim()) return;
 
+    if (onSubmitReview) {
+      // Redux-wired path: delegate to parent handler
+      try {
+        await onSubmitReview({ rating: newRating, comment: commentText.trim() });
+        setCommentText('');
+        setToast('Thank you! Your review has been published.');
+        setTimeout(() => setToast(null), 3000);
+      } catch (err) {
+        setToast(typeof err === 'string' ? err : 'Failed to submit review. Please try again.');
+        setTimeout(() => setToast(null), 4000);
+      }
+      return;
+    }
+
+    // Local-only path (no Redux wiring)
     const newReview = {
       id: Date.now(),
       name: userName.trim() || 'Ahadu Member',
@@ -114,8 +151,14 @@ const ReviewsCommentsSection = ({ title = "Community Reviews & Comments", initia
         </div>
       </div>
 
-      {/* Write a Review Form */}
-      <form onSubmit={handleSubmitReview} className="mb-10 bg-surface-container/40 p-5 rounded-xl border border-white/5 flex flex-col gap-4">
+      {/* Write a Review Form — only shown to authenticated users */}
+      {!isAuthenticated && (
+        <div className="mb-6 p-4 bg-surface-container/40 rounded-xl border border-white/10 flex items-center gap-3 text-on-surface-variant text-sm">
+          <span className="material-symbols-outlined">lock</span>
+          <span>Please <a href="/login" className="text-primary hover:underline">sign in</a> to leave a review.</span>
+        </div>
+      )}
+      <form onSubmit={handleSubmitReview} className={`mb-10 bg-surface-container/40 p-5 rounded-xl border border-white/5 flex flex-col gap-4 ${!isAuthenticated ? 'hidden' : ''}`}>
         <h4 className="text-lg font-bold text-white mb-1">Leave a Review</h4>
         
         {/* Rating Stars Picker */}

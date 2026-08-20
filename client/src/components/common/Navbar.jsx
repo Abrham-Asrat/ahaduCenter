@@ -1,6 +1,8 @@
 // src/components/common/Navbar.jsx
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { logoutAction } from '../../redux/slices/authSlice';
 
 /**
  * Navbar Component
@@ -15,17 +17,12 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const dropdownRef = useRef(null);
 
-  // Auth state - check localStorage or default to true for previewing logged-in user UI
-  const [isLoggedIn, setIsLoggedIn] = useState(() => {
-    const saved = localStorage.getItem('ahadu_logged_in');
-    return saved !== null ? saved === 'true' : true;
-  });
-
-  const [userEmail, setUserEmail] = useState(() => {
-    return localStorage.getItem('ahadu_user_email') || 'alex.mercer@ahaducenter.com';
-  });
+  // Auth state from Redux store
+  const { token, user } = useSelector((s) => s.auth);
+  const { unreadCount } = useSelector((s) => s.notification) ?? {};
 
   // Profile menu dropdown toggle
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -38,18 +35,6 @@ const Navbar = () => {
 
   // Mobile menu drawer
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  // Listen for auth state changes
-  useEffect(() => {
-    const handleAuthChange = () => {
-      const saved = localStorage.getItem('ahadu_logged_in');
-      setIsLoggedIn(saved !== null ? saved === 'true' : true);
-      setUserEmail(localStorage.getItem('ahadu_user_email') || 'alex.mercer@ahaducenter.com');
-    };
-
-    window.addEventListener('auth-change', handleAuthChange);
-    return () => window.removeEventListener('auth-change', handleAuthChange);
-  }, []);
 
   // Sync theme with HTML root class
   useEffect(() => {
@@ -78,11 +63,9 @@ const Navbar = () => {
   };
 
   const handleLogout = () => {
-    localStorage.setItem('ahadu_logged_in', 'false');
-    setIsLoggedIn(false);
+    dispatch(logoutAction());
     setIsProfileOpen(false);
-    window.dispatchEvent(new Event('auth-change'));
-    navigate('/login');
+    navigate('/');
   };
 
   const isActive = (path) => {
@@ -145,7 +128,7 @@ const Navbar = () => {
           <div className="justify-self-end flex items-center gap-4">
 
 
-            {isLoggedIn ? (
+            {token ? (
               /* Logged-In User Actions: Wishlist, Cart, Circular Profile Avatar */
               <div className="flex items-center gap-3">
                 {/* Wishlist Link */}
@@ -170,7 +153,13 @@ const Navbar = () => {
                     title="User Profile Menu"
                   >
                     <div className="w-9 h-9 rounded-full bg-gradient-to-br from-primary/30 via-secondary/20 to-surface-container-high border border-white/20 flex items-center justify-center font-black text-white text-sm relative">
-                      <span>AM</span>
+                      <span>{user?.name ? user.name.slice(0, 2).toUpperCase() : 'U'}</span>
+                      {/* Notification badge */}
+                      {unreadCount > 0 && (
+                        <span className="absolute -top-1 -right-1 w-4 h-4 bg-error rounded-full flex items-center justify-center text-[9px] font-black text-white border border-background">
+                          {unreadCount > 9 ? '9+' : unreadCount}
+                        </span>
+                      )}
                       <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-primary border-2 border-background rounded-full" />
                     </div>
                   </button>
@@ -181,13 +170,13 @@ const Navbar = () => {
                       {/* User Info Header */}
                       <div className="flex items-center gap-3 pb-3 border-b border-white/10 mb-3">
                         <div className="w-11 h-11 rounded-full bg-primary text-black font-black flex items-center justify-center text-base shadow-lg">
-                          AM
+                          {user?.name ? user.name.slice(0, 2).toUpperCase() : 'U'}
                         </div>
                         <div className="overflow-hidden">
-                          <h4 className="text-white font-extrabold text-sm truncate">Alex Mercer</h4>
-                          <p className="text-xs text-on-surface-variant truncate">{userEmail}</p>
+                          <h4 className="text-white font-extrabold text-sm truncate">{user?.name || 'User'}</h4>
+                          <p className="text-xs text-on-surface-variant truncate">{user?.email || ''}</p>
                           <span className="inline-block mt-1 bg-primary/15 text-primary border border-primary/30 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase">
-                            Verified Member
+                            {user?.role === 'admin' ? 'Admin' : 'Verified Member'}
                           </span>
                         </div>
                       </div>
@@ -247,6 +236,22 @@ const Navbar = () => {
                         >
                           <span className="material-symbols-outlined text-lg text-error">favorite</span>
                           Saved Wishlist
+                        </Link>
+
+                        <Link
+                          to="/notifications"
+                          onClick={() => setIsProfileOpen(false)}
+                          className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-on-surface-variant hover:text-white hover:bg-white/5 transition-colors"
+                        >
+                          <span className="material-symbols-outlined text-lg text-yellow-400 relative">
+                            notifications
+                          </span>
+                          <span className="flex-1">Notifications</span>
+                          {unreadCount > 0 && (
+                            <span className="ml-auto bg-error text-white text-[10px] font-black px-1.5 py-0.5 rounded-full">
+                              {unreadCount > 9 ? '9+' : unreadCount}
+                            </span>
+                          )}
                         </Link>
 
 

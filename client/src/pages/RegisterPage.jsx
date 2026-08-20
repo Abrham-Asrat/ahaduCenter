@@ -1,6 +1,8 @@
 // src/pages/RegisterPage.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { registerThunk, clearAuthError } from '../redux/slices/authSlice';
 
 /**
  * RegisterPage Component
@@ -19,6 +21,8 @@ import { Link, useNavigate } from 'react-router-dom';
  */
 const RegisterPage = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { loading, error, user } = useSelector((s) => s.auth);
 
   // State for form fields
   const [fullName, setFullName] = useState('');
@@ -29,19 +33,35 @@ const RegisterPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [agreeTerms, setAgreeTerms] = useState(false);
+  const [validationError, setValidationError] = useState(null);
 
-  // Toast state
-  const [toastMessage, setToastMessage] = useState(null);
-  const showToast = (msg) => {
-    setToastMessage(msg);
-    setTimeout(() => setToastMessage(null), 3000);
-  };
+  // Clear Redux auth error when component mounts
+  useEffect(() => {
+    dispatch(clearAuthError());
+  }, [dispatch]);
+
+  // Navigate after successful registration
+  useEffect(() => {
+    if (user) {
+      if (user.role === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate('/');
+      }
+    }
+  }, [user, navigate]);
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    showToast('Account created successfully!');
-    setTimeout(() => navigate('/login'), 1500);
+    setValidationError(null);
+
+    if (password !== confirmPassword) {
+      setValidationError('Passwords do not match.');
+      return;
+    }
+
+    dispatch(registerThunk({ name: fullName, email, password }));
   };
 
   return (
@@ -229,12 +249,28 @@ const RegisterPage = () => {
                 </label>
               </div>
 
+              {/* Error display */}
+              {(validationError || error) && (
+                <div className="flex items-start gap-2 bg-red-500/10 border border-red-500/30 rounded-lg px-4 py-3">
+                  <span className="material-symbols-outlined text-red-400 text-[18px] mt-0.5 flex-shrink-0">error</span>
+                  <p className="text-sm text-red-400">{validationError || error}</p>
+                </div>
+              )}
+
               {/* Submit button */}
               <button
                 type="submit"
-                className="w-full bg-primary text-white font-semibold py-3 rounded-lg hover:shadow-[0_0_20px_rgba(16,185,129,0.5)] transition-all flex items-center justify-center gap-2"
+                disabled={loading}
+                className="w-full bg-primary text-white font-semibold py-3 rounded-lg hover:shadow-[0_0_20px_rgba(16,185,129,0.5)] transition-all flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
               >
-                Create Account
+                {loading ? (
+                  <>
+                    <span className="material-symbols-outlined animate-spin text-[20px]">progress_activity</span>
+                    Creating Account…
+                  </>
+                ) : (
+                  'Create Account'
+                )}
               </button>
             </form>
 
@@ -270,13 +306,6 @@ const RegisterPage = () => {
         </div>
       </footer>
 
-      {/* Toast notification */}
-      {toastMessage && (
-        <div className="fixed top-20 right-6 z-50 bg-surface-container border border-primary/50 text-white px-5 py-3.5 rounded-xl shadow-2xl flex items-center gap-3 animate-bounce">
-          <span className="material-symbols-outlined text-primary">check_circle</span>
-          <span className="text-sm font-semibold">{toastMessage}</span>
-        </div>
-      )}
     </div>
   );
 };

@@ -1,6 +1,7 @@
 // src/pages/ForgotPasswordPage.jsx
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { authService } from '../services/authService';
 /**
  * ForgotPasswordPage Component
  * 
@@ -19,12 +20,23 @@ const ForgotPasswordPage = () => {
   const [email, setEmail] = useState('');
   // State for submission status
   const [submitted, setSubmitted] = useState(false);
+  // Loading and error state for API call
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // In production, call API to send reset email
-    setSubmitted(true);
+    setLoading(true);
+    setError(null);
+    try {
+      await authService.forgotPassword(email);
+      setSubmitted(true);
+    } catch (err) {
+      setError(typeof err === 'string' ? err : 'Something went wrong. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -105,11 +117,26 @@ const ForgotPasswordPage = () => {
                   {/* Submit button */}
                   <button
                     type="submit"
-                    className="w-full bg-primary text-white font-semibold py-3 rounded-lg hover:shadow-[0_0_20px_rgba(16,185,129,0.5)] transition-all flex items-center justify-center gap-2 active:scale-95"
+                    disabled={loading}
+                    className="w-full bg-primary text-white font-semibold py-3 rounded-lg hover:shadow-[0_0_20px_rgba(16,185,129,0.5)] transition-all flex items-center justify-center gap-2 active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed"
                   >
-                    Send Reset Link
-                    <span className="material-symbols-outlined text-[20px]">arrow_forward</span>
+                    {loading ? (
+                      <>
+                        <span className="material-symbols-outlined text-[20px] animate-spin">progress_activity</span>
+                        Sending...
+                      </>
+                    ) : (
+                      <>
+                        Send Reset Link
+                        <span className="material-symbols-outlined text-[20px]">arrow_forward</span>
+                      </>
+                    )}
                   </button>
+
+                  {/* Error message */}
+                  {error && (
+                    <p className="text-red-400 text-sm text-center">{error}</p>
+                  )}
                 </form>
 
                 {/* Back to login */}
@@ -144,7 +171,7 @@ const ForgotPasswordPage = () => {
                   <p className="text-on-surface-variant text-sm mt-4">
                     Didn't receive the email?{' '}
                     <button
-                      onClick={() => setSubmitted(false)}
+                      onClick={() => { setSubmitted(false); setError(null); }}
                       className="text-secondary hover:text-secondary-fixed transition-colors"
                     >
                       Resend
