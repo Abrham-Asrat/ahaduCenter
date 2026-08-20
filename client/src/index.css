@@ -124,6 +124,42 @@ body {
   animation: fadeIn 0.4s ease-out forwards;
 }
 
+.footer-reveal {
+  animation: footerReveal 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: var(--footer-delay, 0ms);
+}
+
+.footer-link {
+  width: fit-content;
+  transition: transform 0.25s ease, color 0.25s ease, opacity 0.25s ease;
+}
+
+.footer-link:hover {
+  transform: translateX(4px);
+}
+
+@keyframes footerReveal {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 @keyframes shimmer {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
