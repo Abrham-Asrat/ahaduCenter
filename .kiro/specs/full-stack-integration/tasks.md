@@ -96,49 +96,49 @@ These tasks wire the AhaduCenter React frontend to the existing Express/MongoDB 
   - [x] 13.5 Implement `createMovieReview(id, payload)` thunk; on fulfilled append to `reviews`
   - [x] 13.6 Wire all pending/rejected cases
 
-- [ ] 14. Movie page wiring
-  - [ ] 14.1 `MovieCenterPage.jsx` — dispatch `fetchMovies` with current filter/tab/page params on mount and on every control change; replace hardcoded `ALL_MOVIES` array; show loading/error states
-  - [~] 14.2 `MovieDetailPage.jsx` — dispatch `fetchMovie(id)` on mount; wire `RelatedMoviesCarousel` to dispatch `fetchMovies({ genres: selectedMovie.genres[0] })` when `selectedMovie` is loaded, excluding the current movie; wire `ReviewsCommentsSection` to `fetchMovieReviews` / `createMovieReview`
-  - [~] 14.3 `MovieRequestPage.jsx` — call `movieService.getUserMovieRequests()` on mount; replace hardcoded `requests` array; show loading indicator while in-flight; call `submitMovieRequest` on form submit (re-fetch on success, show error without clearing form on failure); call `cancelMovieRequest` on cancel click (remove entry on success, show error and retain entry on failure)
+- [x] 14. Movie page wiring
+  - [x] 14.1 `MovieCenterPage.jsx` — dispatch `fetchMovies` with current filter/tab/page params on mount and on every control change; replace hardcoded `ALL_MOVIES` array; show loading/error states
+  - [x] 14.2 `MovieDetailPage.jsx` — dispatch `fetchMovie(id)` on mount; wire `RelatedMoviesCarousel` to dispatch `fetchMovies({ genres: selectedMovie.genres[0] })` when `selectedMovie` is loaded, excluding the current movie; wire `ReviewsCommentsSection` to `fetchMovieReviews` / `createMovieReview`
+  - [x] 14.3 `MovieRequestPage.jsx` — call `movieService.getUserMovieRequests()` on mount; replace hardcoded `requests` array; show loading indicator while in-flight; call `submitMovieRequest` on form submit (re-fetch on success, show error without clearing form on failure); call `cancelMovieRequest` on cancel click (remove entry on success, show error and retain entry on failure)
 
-- [ ] 15. Product service (`productService.js`)
-  - [~] 15.1 Implement `getProducts(params)` → `GET /api/products`
-  - [~] 15.2 Implement `getProduct(id)` → `GET /api/products/:id`
+- [x] 15. Product service (`productService.js`)
+  - [x] 15.1 Implement `getProducts(params)` → `GET /api/products`
+  - [x] 15.2 Implement `getProduct(id)` → `GET /api/products/:id`
 
-- [ ] 16. Product Redux slice (`productSlice.js`)
-  - [~] 16.1 Define initial state: `products: [], selectedProduct: null, loading: false, error: null, pagination: { totalItems: 0, totalPages: 0, currentPage: 1, limit: 12 }`
-  - [~] 16.2 Implement `fetchProducts(params)` thunk; on fulfilled map paginated envelope to slice state
-  - [~] 16.3 Implement `fetchProduct(id)` thunk; on fulfilled set `selectedProduct`
-  - [~] 16.4 Wire all pending/rejected cases
+- [x] 16. Product Redux slice (`productSlice.js`)
+  - [x] 16.1 Define initial state: `products: [], selectedProduct: null, loading: false, error: null, pagination: { totalItems: 0, totalPages: 0, currentPage: 1, limit: 12 }`
+  - [x] 16.2 Implement `fetchProducts(params)` thunk; on fulfilled map paginated envelope to slice state
+  - [x] 16.3 Implement `fetchProduct(id)` thunk; on fulfilled set `selectedProduct`
+  - [x] 16.4 Wire all pending/rejected cases
 
-- [ ] 17. Product page wiring
-  - [~] 17.1 `ElectronicsPage.jsx` — dispatch `fetchProducts` with current filter/sort/page params on mount and on every control change; replace hardcoded products array; show loading/error states
-  - [~] 17.2 `ProductDetailPage.jsx` — dispatch `fetchProduct(id)` on mount; wire `SimilarProducts` to dispatch `fetchProducts({ category: selectedProduct.category })` when `selectedProduct` is loaded, excluding the current product
+- [x] 17. Product page wiring
+  - [x] 17.1 `ElectronicsPage.jsx` — dispatch `fetchProducts` with current filter/sort/page params on mount and on every control change; replace hardcoded products array; show loading/error states
+  - [x] 17.2 `ProductDetailPage.jsx` — dispatch `fetchProduct(id)` on mount; wire `SimilarProducts` to dispatch `fetchProducts({ category: selectedProduct.category })` when `selectedProduct` is loaded, excluding the current product
 
-- [ ] 18. Order service (`orderService.js`)
-  - [~] 18.1 Implement `placeOrder(payload)` → `POST /api/orders` with `{ productId, quantity }`
-  - [~] 18.2 Implement `getOrder(id)` → `GET /api/orders/:id`
-  - [~] 18.3 Implement `getOrderHistory()` → `GET /api/users/me/orders`
+- [x] 18. Order service (`orderService.js`)
+  - [x] 18.1 Implement `placeOrder(payload)` → `POST /api/orders` with `{ productId, quantity }`
+  - [x] 18.2 Implement `getOrder(id)` → `GET /api/orders/:id`
+  - [x] 18.3 Implement `getOrderHistory()` → `GET /api/users/me/orders`
 
-- [ ] 19. Order page wiring
-  - [~] 19.1 `ProductDetailPage.jsx` (order flow) — on confirm pick-up button click call `orderService.placeOrder`; disable button with loading indicator while in-flight; on success navigate to `/order-confirmation` passing returned order data via `location.state`; on failure display server error and re-enable button
-  - [~] 19.2 `OrderConfirmationPage.jsx` — read order from `location.state.order`; if absent call `orderService.getOrder(id)` using route param; display real order ID, items, and total; replace hardcoded reservation object
-  - [~] 19.3 `PurchaseHistoryPage.jsx` — call `orderService.getOrderHistory()` on mount; replace hardcoded orders array with API response; display real pagination data
+- [x] 19. Order page wiring
+  - [x] 19.1 `ProductDetailPage.jsx` (order flow) — on confirm pick-up button click call `orderService.placeOrder`; disable button with loading indicator while in-flight; on success navigate to `/order-confirmation` passing returned order data via `location.state`; on failure display server error and re-enable button
+  - [x] 19.2 `OrderConfirmationPage.jsx` — read order from `location.state.order`; if absent call `orderService.getOrder(id)` using route param; display real order ID, items, and total; replace hardcoded reservation object
+  - [x] 19.3 `PurchaseHistoryPage.jsx` — call `orderService.getOrderHistory()` on mount; replace hardcoded orders array with API response; display real pagination data
 
-- [ ] 20. User profile service (`userService.js` — profile methods)
-  - [~] 20.1 Implement `getProfile()` → `GET /api/users/me`
-  - [~] 20.2 Implement `updateProfile(payload)` → `PUT /api/users/me`
-  - [~] 20.3 Implement `uploadAvatar(formData)` → `POST /api/users/me/avatar` with `Content-Type: multipart/form-data`
-  - [~] 20.4 Implement `getUserStats()` → `GET /api/users/me/stats`
-  - [~] 20.5 Implement `getUserActivity()` → `GET /api/users/me/activity`
+- [x] 20. User profile service (`userService.js` — profile methods)
+  - [x] 20.1 Implement `getProfile()` → `GET /api/users/me`
+  - [x] 20.2 Implement `updateProfile(payload)` → `PUT /api/users/me`
+  - [x] 20.3 Implement `uploadAvatar(formData)` → `POST /api/users/me/avatar` with `Content-Type: multipart/form-data`
+  - [x] 20.4 Implement `getUserStats()` → `GET /api/users/me/stats`
+  - [x] 20.5 Implement `getUserActivity()` → `GET /api/users/me/activity`
 
 - [ ] 21. User dashboard page wiring (`UserDashboardPage.jsx`)
-  - [~] 21.1 On mount call `Promise.all([getProfile(), getUserStats(), getUserActivity()])` concurrently; replace hardcoded `user`, `stats`, and `activities` objects; show loading skeleton while any call is pending
-  - [~] 21.2 On profile edit form submit call `userService.updateProfile`; update displayed profile with server response on success; display error on failure
+  - [x] 21.1 On mount call `Promise.all([getProfile(), getUserStats(), getUserActivity()])` concurrently; replace hardcoded `user`, `stats`, and `activities` objects; show loading skeleton while any call is pending
+  - [ ] 21.2 On profile edit form submit call `userService.updateProfile`; update displayed profile with server response on success; display error on failure
   - [~] 21.3 On avatar file select and upload form submit call `userService.uploadAvatar`; update displayed avatar URL on success; display error on failure
 
 - [ ] 22. Borrowing history service (`userService.js` — borrowing methods)
-  - [~] 22.1 Implement `getBorrowingHistory()` → `GET /api/users/me/borrowings`
+  - [x] 22.1 Implement `getBorrowingHistory()` → `GET /api/users/me/borrowings`
   - [~] 22.2 Implement `renewBorrowing(borrowingId)` → `POST /api/borrowings/:id/renew`
   - [~] 22.3 Implement `returnBook(borrowingId)` → `POST /api/borrowings/:id/return`
 
@@ -307,3 +307,4 @@ These tasks wire the AhaduCenter React frontend to the existing Express/MongoDB 
 - `contactService.js` is a new file (no stub exists); all other service files are stubs that need their functions implemented.
 - The seed script must be idempotent — re-running it must not create duplicate documents.
 - Property tests live in `client/src/__tests__/properties/` and use Vitest + fast-check with `numRuns: 100`. Each test must be tagged with `// Feature: full-stack-integration, Property N: <title>`.
+           

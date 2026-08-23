@@ -1,6 +1,5 @@
 // src/components/electronics/ProductInfo.jsx
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 /**
  * ProductInfo Component
@@ -11,15 +10,22 @@ import { useNavigate } from 'react-router-dom';
  * Props:
  * - product: Object with all product details
  * - onShowToast: Callback function to display toast notification
+ * - onConfirmPickUp: Async callback invoked when the user clicks the pick-up
+ *   button; receives quantity as its first argument
+ * - orderLoading: boolean — true while a place-order request is in-flight
+ * - orderError: string | null — server error message to display below the button
  */
-const ProductInfo = ({ product, onShowToast }) => {
-    const navigate = useNavigate();
+const ProductInfo = ({ product, onShowToast, onConfirmPickUp, orderLoading = false, orderError = null }) => {
     const [isWishlisted, setIsWishlisted] = useState(false);
     const [isContactModalOpen, setIsContactModalOpen] = useState(false);
     const [contactMessage, setContactMessage] = useState('');
 
     const handleReserveForPickUp = () => {
-        if (onShowToast) onShowToast(`Reserved "${product.name}" for physical pick-up at our store!`);
+        if (onConfirmPickUp) {
+            onConfirmPickUp(1);
+        } else if (onShowToast) {
+            onShowToast(`Reserved "${product.name}" for physical pick-up at our store!`);
+        }
     };
 
     const handleToggleWishlist = () => {
@@ -99,10 +105,20 @@ const ProductInfo = ({ product, onShowToast }) => {
             <div className="flex flex-wrap items-center gap-3 mb-6">
                 <button
                     onClick={handleReserveForPickUp}
-                    className="flex-1 bg-primary text-black font-extrabold py-3.5 px-6 rounded-xl shadow-lg hover:shadow-emerald-500/40 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer uppercase text-xs tracking-wider"
+                    disabled={orderLoading}
+                    className="flex-1 bg-primary text-black font-extrabold py-3.5 px-6 rounded-xl shadow-lg hover:shadow-emerald-500/40 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer uppercase text-xs tracking-wider disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
                 >
-                    <span className="material-symbols-outlined">storefront</span>
-                    Reserve for Pick-Up
+                    {orderLoading ? (
+                        <>
+                            <span className="animate-spin material-symbols-outlined text-[18px]">progress_activity</span>
+                            Placing Order…
+                        </>
+                    ) : (
+                        <>
+                            <span className="material-symbols-outlined">storefront</span>
+                            Confirm Pick-Up
+                        </>
+                    )}
                 </button>
                 <button
                     onClick={() => setIsContactModalOpen(true)}
@@ -122,6 +138,14 @@ const ProductInfo = ({ product, onShowToast }) => {
                     </span>
                 </button>
             </div>
+
+            {/* Order error */}
+            {orderError && (
+                <div className="mb-4 flex items-start gap-2 text-error text-sm font-semibold bg-error/10 border border-error/30 rounded-xl px-4 py-3">
+                    <span className="material-symbols-outlined text-[18px] mt-0.5 flex-shrink-0">error</span>
+                    <span>{orderError}</span>
+                </div>
+            )}
 
             {/* Trust badges */}
             <div className="grid grid-cols-3 gap-3 pt-4 border-t border-white/10">

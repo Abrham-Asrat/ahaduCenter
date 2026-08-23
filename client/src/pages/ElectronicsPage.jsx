@@ -1,25 +1,30 @@
 // src/pages/ElectronicsPage.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchProducts } from '../redux/slices/productSlice';
 import Navbar from '../components/common/Navbar';
 import ElectronicsHero from '../components/electronics/ElectronicsHero';
 import CategoryPills from '../components/electronics/CategoryPills';
 import ElectronicsFilters from '../components/electronics/ElectronicsFilters';
 import ProductCard from '../components/electronics/ProductCard';
+import Pagination from '../components/common/Pagination';
 import Footer from '../components/common/Footer';
 import { useNavigate } from 'react-router-dom';
 
 /**
  * ElectronicsPage Component
- * 
+ *
  * Main page for the Electronics Marketplace module.
- * Features:
- * - Dynamic category filtering & sidebar criteria (search, brand, price, condition)
- * - Sorting (Featured, Low to High, High to Low, Rating)
- * - Toast notifications for Cart, Wishlist, Compare actions
- * - Mobile filter drawer modal
+ * Wired to Redux store — dispatches fetchProducts on mount and on filter/sort/page change.
  */
 const ElectronicsPage = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  // ── Redux state ──────────────────────────────────────────────────────────────
+  const { products, loading, error, pagination } = useSelector((s) => s.product);
+
+  // ── Local UI state ───────────────────────────────────────────────────────────
   const [activeCategory, setActiveCategory] = useState('All');
   const [sortOption, setSortOption] = useState('Featured');
   const [filterState, setFilterState] = useState({
@@ -28,6 +33,7 @@ const ElectronicsPage = () => {
     searchQuery: '',
     maxPrice: 3000,
   });
+  const [currentPage, setCurrentPage] = useState(1);
 
   const [toastMessage, setToastMessage] = useState(null);
   const [wishlistIds, setWishlistIds] = useState([]);
@@ -38,100 +44,61 @@ const ElectronicsPage = () => {
     setTimeout(() => setToastMessage(null), 3000);
   };
 
-  // Rich mock dataset
-  const [products] = useState([
-    {
-      id: 1,
-      name: 'Quantum X Pro Laptop',
-      brand: 'AhaduTech',
-      category: 'Laptops',
-      imageUrl: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=600&q=80',
-      condition: 'New',
-      price: 1499,
-      originalPrice: 1699,
-      rating: 4.8,
-    },
-    {
-      id: 2,
-      name: 'Silence 400 Wireless ANC Headphones',
-      brand: 'SonicAura',
-      category: 'Audio',
-      imageUrl: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80',
-      condition: 'Used',
-      price: 249,
-      originalPrice: 349,
-      rating: 4.5,
-    },
-    {
-      id: 3,
-      name: 'Nexus X-Fold Comm Smartphone',
-      brand: 'Ahadu Tech',
-      category: 'Smartphones',
-      imageUrl: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80',
-      condition: 'New',
-      price: 1199,
-      rating: 4.7,
-    },
-    {
-      id: 4,
-      name: 'Command Center Hub 10-in-1',
-      brand: 'AhaduTech',
-      category: 'Accessories',
-      imageUrl: 'https://images.unsplash.com/photo-1544652478-6653e09f18a2?auto=format&fit=crop&w=600&q=80',
-      condition: 'Refurbished',
-      price: 149,
-      originalPrice: 199,
-      rating: 4.2,
-    },
-    {
-      id: 5,
-      name: 'Studio Master Studio Headphones',
-      brand: 'SonicAura',
-      category: 'Audio',
-      imageUrl: 'https://images.unsplash.com/photo-1484704849700-f032a568e944?auto=format&fit=crop&w=600&q=80',
-      condition: 'New',
-      price: 399,
-      rating: 4.9,
-    },
-    {
-      id: 6,
-      name: 'Visionary Ultra Curved Monitor 34"',
-      brand: 'Visionary Tech',
-      category: 'Accessories',
-      imageUrl: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=600&q=80',
-      condition: 'New',
-      price: 899,
-      originalPrice: 999,
-      rating: 4.6,
-    },
-    {
-      id: 7,
-      name: 'Auraline Wireless Mechanical Keyboard',
-      brand: 'Auraline',
-      category: 'Accessories',
-      imageUrl: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=600&q=80',
-      condition: 'Used',
-      price: 129,
-      originalPrice: 179,
-      rating: 4.4,
-    },
-    {
-      id: 8,
-      name: 'Quantum SlimBook Air',
-      brand: 'AhaduTech',
-      category: 'Laptops',
-      imageUrl: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=600&q=80',
-      condition: 'Refurbished',
-      price: 899,
-      originalPrice: 1099,
-      rating: 4.3,
-    },
-  ]);
-
   const categories = ['All', 'Laptops', 'Smartphones', 'Audio', 'Accessories'];
 
+  // ── Build query params from local filter/sort/page state ─────────────────────
+  const buildParams = useCallback(() => {
+    const params = { page: currentPage, limit: 12 };
+
+    if (activeCategory && activeCategory !== 'All') params.category = activeCategory;
+    if (filterState.searchQuery) params.search = filterState.searchQuery;
+    if (filterState.conditions && filterState.conditions.length > 0)
+      params.condition = filterState.conditions.join(',');
+    if (filterState.brands && filterState.brands.length > 0)
+      params.brand = filterState.brands.join(',');
+    if (filterState.maxPrice && filterState.maxPrice < 3000)
+      params.maxPrice = filterState.maxPrice;
+
+    // Sort param mapping
+    if (sortOption === 'Price: Low to High') params.sort = 'price_asc';
+    else if (sortOption === 'Price: High to Low') params.sort = 'price_desc';
+    else if (sortOption === 'Rating') params.sort = 'rating';
+    // 'Featured' is the default — no sort param needed
+
+    return params;
+  }, [activeCategory, filterState, sortOption, currentPage]);
+
+  // ── Fetch on mount and whenever category/filters/sort/page change ─────────────
+  useEffect(() => {
+    dispatch(fetchProducts(buildParams()));
+  }, [dispatch, buildParams]);
+
+  // ── Control change handlers ───────────────────────────────────────────────────
   const handleFilterChange = (newFilters) => {
     setFilterState((prev) => ({ ...prev, ...newFilters }));
+    setCurrentPage(1);
+  };
+
+  const handleCategoryChange = (category) => {
+    setActiveCategory(category);
+    setCurrentPage(1);
+  };
+
+  const handleSortChange = (e) => {
+    setSortOption(e.target.value);
+    setCurrentPage(1);
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    const catalogEl = document.getElementById('electronics-catalog');
+    if (catalogEl) {
+      catalogEl.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const handleRetry = () => {
+    dispatch(fetchProducts(buildParams()));
   };
 
   const handleAddToCart = (product) => {
@@ -144,48 +111,35 @@ const ElectronicsPage = () => {
   };
 
   const handleToggleWishlist = (product, isSaved) => {
+    const productId = product._id || product.id;
     if (isSaved) {
-      setWishlistIds((prev) => [...prev, product.id]);
+      setWishlistIds((prev) => [...prev, productId]);
       showToast(`"${product.name}" saved to wishlist!`);
     } else {
-      setWishlistIds((prev) => prev.filter((id) => id !== product.id));
+      setWishlistIds((prev) => prev.filter((id) => id !== productId));
       showToast(`"${product.name}" removed from wishlist.`);
     }
   };
 
-  // Filter products dynamically
-  const filteredProducts = products.filter((p) => {
-    // Category
-    if (activeCategory !== 'All' && p.category !== activeCategory) return false;
-    // Search query
-    if (
-      filterState.searchQuery &&
-      !p.name.toLowerCase().includes(filterState.searchQuery.toLowerCase()) &&
-      !p.brand.toLowerCase().includes(filterState.searchQuery.toLowerCase())
-    ) {
-      return false;
-    }
-    // Condition
-    if (filterState.conditions.length > 0 && !filterState.conditions.includes(p.condition)) {
-      return false;
-    }
-    // Brand
-    if (filterState.brands.length > 0 && !filterState.brands.includes(p.brand)) {
-      return false;
-    }
-    // Max price
-    if (p.price > filterState.maxPrice) return false;
+  const handleResetFilters = () => {
+    setActiveCategory('All');
+    setFilterState({ conditions: [], brands: [], searchQuery: '', maxPrice: 3000 });
+    setSortOption('Featured');
+    setCurrentPage(1);
+  };
 
-    return true;
-  });
-
-  // Sort products dynamically
-  const sortedProducts = [...filteredProducts].sort((a, b) => {
-    if (sortOption === 'Price: Low to High') return a.price - b.price;
-    if (sortOption === 'Price: High to Low') return b.price - a.price;
-    if (sortOption === 'Rating') return b.rating - a.rating;
-    return a.id - b.id; // Featured
-  });
+  // ── Loading skeleton ──────────────────────────────────────────────────────────
+  const SkeletonCard = () => (
+    <div className="glass-panel rounded-xl border border-white/10 overflow-hidden animate-pulse">
+      <div className="aspect-square bg-surface-container" />
+      <div className="p-4 flex flex-col gap-2">
+        <div className="h-3 bg-surface-container rounded w-1/3" />
+        <div className="h-4 bg-surface-container rounded w-3/4" />
+        <div className="h-4 bg-surface-container rounded w-1/2" />
+        <div className="h-8 bg-surface-container rounded mt-2" />
+      </div>
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-background text-on-background flex flex-col relative animate-fade-in">
@@ -205,7 +159,7 @@ const ElectronicsPage = () => {
 
         {/* Catalog Section Header */}
         <div id="electronics-catalog" className="max-w-7xl mx-auto px-6 mb-6">
-          <CategoryPills categories={categories} onCategoryChange={setActiveCategory} />
+          <CategoryPills categories={categories} onCategoryChange={handleCategoryChange} />
         </div>
 
         {/* Main content: sidebar + grid */}
@@ -221,13 +175,20 @@ const ElectronicsPage = () => {
             {/* Toolbar */}
             <div className="glass-panel p-4 rounded-xl flex flex-wrap justify-between items-center gap-4 mb-6 border border-white/10">
               <span className="text-on-surface-variant text-sm font-medium">
-                Showing <strong className="text-white">{sortedProducts.length}</strong> of {products.length} products
+                {loading ? (
+                  <span className="inline-block w-36 h-4 bg-surface-container rounded animate-pulse" />
+                ) : (
+                  <>
+                    Showing <strong className="text-white">{products.length}</strong> of{' '}
+                    <strong className="text-white">{pagination.totalItems}</strong> products
+                  </>
+                )}
               </span>
               <div className="flex items-center gap-3">
                 <span className="text-on-surface-variant text-sm font-medium">Sort by:</span>
                 <select
                   value={sortOption}
-                  onChange={(e) => setSortOption(e.target.value)}
+                  onChange={handleSortChange}
                   className="bg-background border border-white/10 text-white text-sm rounded-lg focus:border-primary py-1.5 pl-3 pr-8 outline-none cursor-pointer"
                 >
                   <option>Featured</option>
@@ -238,39 +199,77 @@ const ElectronicsPage = () => {
               </div>
             </div>
 
-            {/* Product grid */}
-            {sortedProducts.length === 0 ? (
+            {/* Error banner */}
+            {error && (
+              <div className="glass-panel rounded-xl border border-red-500/30 bg-red-500/5 p-5 mb-6 flex items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <span className="material-symbols-outlined text-red-400">error</span>
+                  <p className="text-sm text-red-300">
+                    {typeof error === 'string' ? error : 'Failed to load products. Please try again.'}
+                  </p>
+                </div>
+                <button
+                  onClick={handleRetry}
+                  className="text-xs font-bold uppercase tracking-wider text-primary border border-primary/40 px-4 py-2 rounded-lg hover:bg-primary/10 transition-colors flex-shrink-0"
+                >
+                  Retry
+                </button>
+              </div>
+            )}
+
+            {/* Loading skeleton */}
+            {loading ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {Array.from({ length: 9 }).map((_, i) => (
+                  <SkeletonCard key={i} />
+                ))}
+              </div>
+            ) : products.length === 0 && !error ? (
+              /* Empty state */
               <div className="glass-panel rounded-2xl p-12 text-center border border-white/10 my-8">
                 <span className="material-symbols-outlined text-6xl text-on-surface-variant/40 mb-3">
                   devices_off
                 </span>
                 <h3 className="text-2xl font-bold text-white mb-2">No Products Found</h3>
                 <p className="text-on-surface-variant text-sm mb-6 max-w-md mx-auto">
-                  We couldn't find any electronics matching your current search and filter criteria.
+                  We couldn&apos;t find any electronics matching your current search and filter criteria.
                 </p>
                 <button
-                  onClick={() => {
-                    setActiveCategory('All');
-                    setFilterState({ conditions: [], brands: [], searchQuery: '', maxPrice: 3000 });
-                  }}
+                  onClick={handleResetFilters}
                   className="bg-primary text-black px-6 py-2.5 rounded-lg font-bold hover:shadow-[0_0_15px_rgba(16,185,129,0.4)] transition-all text-sm"
                 >
                   Reset Filters
                 </button>
               </div>
             ) : (
+              /* Product grid */
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {sortedProducts.map((product, index) => (
-                  <div key={product.id} className="animate-fade-in" style={{ animationDelay: `${index * 0.05}s` }}>
+                {products.map((product, index) => (
+                  <div
+                    key={product._id || product.id}
+                    className="animate-fade-in"
+                    style={{ animationDelay: `${index * 0.05}s` }}
+                  >
                     <ProductCard
                       product={product}
-                      isWishlisted={wishlistIds.includes(product.id)}
+                      isWishlisted={wishlistIds.includes(product._id || product.id)}
                       onAddToCart={handleAddToCart}
                       onCompare={handleCompare}
                       onToggleWishlist={handleToggleWishlist}
                     />
                   </div>
                 ))}
+              </div>
+            )}
+
+            {/* Pagination */}
+            {!loading && pagination.totalPages > 1 && (
+              <div className="mt-8">
+                <Pagination
+                  currentPage={pagination.currentPage}
+                  totalPages={pagination.totalPages}
+                  onPageChange={handlePageChange}
+                />
               </div>
             )}
 

@@ -61,6 +61,7 @@ function App() {
         <Route path="/design-system" element={<DesignSystemPage />} />
         <Route path="/compare" element={<ProductComparisonPage />} />
         <Route path="/order-confirmation" element={<OrderConfirmationPage />} />
+        <Route path="/order-confirmation/:id" element={<OrderConfirmationPage />} />
 
         {/* Protected routes — require authentication */}
         <Route element={<ProtectedRoute />}>

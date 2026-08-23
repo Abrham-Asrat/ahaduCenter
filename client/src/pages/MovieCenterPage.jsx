@@ -1,4 +1,7 @@
-import React, { useState, useMemo } from 'react';
+// src/pages/MovieCenterPage.jsx
+import React, { useState, useEffect, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchMovies } from '../redux/slices/movieSlice';
 import Navbar from '../components/common/Navbar';
 import MovieHero from '../components/movie/MovieHero';
 import SubNav from '../components/common/SubNav';
@@ -7,120 +10,25 @@ import MovieCard from '../components/movie/MovieCard';
 import Pagination from '../components/common/Pagination';
 import Footer from '../components/common/Footer';
 
-const ALL_MOVIES = [
-  {
-    id: 1,
-    title: 'Echoes of Eden',
-    posterUrl: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=600&q=80',
-    rating: 8.8,
-    quality: '4K',
-    availability: 'Available',
-    genres: ['Sci-Fi', 'Adventure'],
-    year: 2024,
-    country: 'Ethiopia',
-    type: 'Movie',
-    tab: 'Featured',
-    trailerUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-  },
-  {
-    id: 2,
-    title: 'Neon Drifters',
-    posterUrl: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=600&q=80',
-    rating: 7.9,
-    quality: 'HD',
-    availability: 'Coming Soon',
-    genres: ['Action', 'Thriller'],
-    year: 2023,
-    country: 'USA',
-    type: 'Movie',
-    tab: 'Coming Soon',
-    trailerUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-  },
-  {
-    id: 3,
-    title: 'The Silent Horizon',
-    posterUrl: 'https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=600&q=80',
-    rating: 9.1,
-    quality: '4K',
-    availability: 'Available',
-    genres: ['Drama'],
-    year: 2024,
-    country: 'UK',
-    type: 'Movie',
-    tab: 'Trending',
-    trailerUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-  },
-  {
-    id: 4,
-    title: 'Quantum Paradox',
-    posterUrl: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80',
-    rating: 8.7,
-    quality: '4K',
-    availability: 'Available',
-    genres: ['Sci-Fi'],
-    year: 2024,
-    country: 'USA',
-    type: 'Movie',
-    tab: 'Latest',
-    trailerUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-  },
-  {
-    id: 5,
-    title: 'Abyssinia Chronicles',
-    posterUrl: 'https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=600&q=80',
-    rating: 9.3,
-    quality: '4K',
-    availability: 'Available',
-    genres: ['Drama', 'Action'],
-    year: 2024,
-    country: 'Ethiopia',
-    type: 'TV Series',
-    tab: 'Trending',
-    trailerUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-  },
-  {
-    id: 6,
-    title: 'Cyber City 2099',
-    posterUrl: 'https://images.unsplash.com/photo-1542204165-65bf26472b9b?auto=format&fit=crop&w=600&q=80',
-    rating: 8.1,
-    quality: 'HD',
-    availability: 'Available',
-    genres: ['Sci-Fi', 'Action'],
-    year: 2023,
-    country: 'Japan',
-    type: 'TV Series',
-    tab: 'Recently Added',
-  },
-  {
-    id: 7,
-    title: 'Shadows of Lalibela',
-    posterUrl: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=600&q=80',
-    rating: 8.9,
-    quality: '4K',
-    availability: 'Available',
-    genres: ['Drama', 'Thriller'],
-    year: 2024,
-    country: 'Ethiopia',
-    type: 'Movie',
-    tab: 'Featured',
-  },
-  {
-    id: 8,
-    title: 'Solaris Vanguard',
-    posterUrl: 'https://images.unsplash.com/photo-1440404653325-ab127d49abc1?auto=format&fit=crop&w=600&q=80',
-    rating: 7.6,
-    quality: 'HD',
-    availability: 'Coming Soon',
-    genres: ['Sci-Fi'],
-    year: 2025,
-    country: 'Korea',
-    type: 'Movie',
-    tab: 'Coming Soon',
-  },
-];
-
+/**
+ * MovieCenterPage Component
+ *
+ * Main page for the Movie Center module.
+ * Wired to Redux store — dispatches fetchMovies on mount and on filter/tab/page change.
+ */
 const MovieCenterPage = () => {
-  const [filters, setFilters] = useState({ genres: [], contentType: 'All', searchQuery: '', country: 'All' });
+  const dispatch = useDispatch();
+
+  // ── Redux state ──────────────────────────────────────────────────────────────
+  const { movies, loading, error, pagination } = useSelector((s) => s.movie);
+
+  // ── Local UI state ───────────────────────────────────────────────────────────
+  const [filters, setFilters] = useState({
+    genres: [],
+    contentType: 'All',
+    searchQuery: '',
+    country: 'All',
+  });
   const [activeTab, setActiveTab] = useState('All');
   const [currentPage, setCurrentPage] = useState(1);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
@@ -130,11 +38,34 @@ const MovieCenterPage = () => {
 
   const showToast = (msg) => {
     setToastMessage(msg);
-    setTimeout(() => {
-      setToastMessage(null);
-    }, 3000);
+    setTimeout(() => setToastMessage(null), 3000);
   };
 
+  // ── Build query params from local filter/tab state ───────────────────────────
+  const buildParams = useCallback(() => {
+    const params = { page: currentPage, limit: 12 };
+
+    // Tab → API param mapping
+    if (activeTab === 'Latest')         params.sort = 'latest';
+    else if (activeTab === 'Trending')  params.sort = 'trending';
+    else if (activeTab === 'Coming Soon') params.availability = 'Coming Soon';
+    else if (activeTab === 'Featured')  params.featured = true;
+    else if (activeTab === 'Recently Added') params.sort = 'newest';
+
+    if (filters.searchQuery)                         params.search = filters.searchQuery;
+    if (filters.country && filters.country !== 'All') params.country = filters.country;
+    if (filters.contentType && filters.contentType !== 'All') params.type = filters.contentType;
+    if (filters.genres && filters.genres.length > 0) params.genres = filters.genres.join(',');
+
+    return params;
+  }, [activeTab, filters, currentPage]);
+
+  // ── Fetch on mount and whenever tab/filters/page change ──────────────────────
+  useEffect(() => {
+    dispatch(fetchMovies(buildParams()));
+  }, [dispatch, buildParams]);
+
+  // ── Control change handlers ──────────────────────────────────────────────────
   const handleFilterChange = (newFilters) => {
     setFilters(newFilters);
     setCurrentPage(1);
@@ -153,63 +84,36 @@ const MovieCenterPage = () => {
     }
   };
 
+  const handleRetry = () => {
+    dispatch(fetchMovies(buildParams()));
+  };
+
   const handlePlayTrailer = (movie) => {
     setActiveTrailer(movie);
   };
 
   const handleToggleBookmark = (movie, isSaved) => {
     setBookmarkedIds((prev) =>
-      isSaved ? [...prev, movie.id] : prev.filter((id) => id !== movie.id)
+      isSaved ? [...prev, movie.id || movie._id] : prev.filter((id) => id !== (movie.id || movie._id))
     );
-    showToast(isSaved ? `"${movie.title}" saved to Wishlist!` : `"${movie.title}" removed from Wishlist.`);
+    showToast(
+      isSaved
+        ? `"${movie.title}" saved to Wishlist!`
+        : `"${movie.title}" removed from Wishlist.`
+    );
   };
 
-  // Filter movies dynamically
-  const filteredMovies = useMemo(() => {
-    return ALL_MOVIES.filter((movie) => {
-      // Tab filter
-      if (activeTab !== 'All') {
-        if (activeTab === 'Latest' && movie.year < 2024) return false;
-        if (activeTab === 'Trending' && movie.rating < 8.5) return false;
-        if (activeTab === 'Coming Soon' && movie.availability !== 'Coming Soon') return false;
-        if (activeTab === 'Featured' && movie.tab !== 'Featured') return false;
-        if (activeTab === 'Recently Added' && movie.id % 2 !== 0) return false;
-      }
-
-      // Search query filter
-      if (filters.searchQuery) {
-        const query = filters.searchQuery.toLowerCase();
-        const matchesTitle = movie.title.toLowerCase().includes(query);
-        const matchesGenre = movie.genres.some((g) => g.toLowerCase().includes(query));
-        if (!matchesTitle && !matchesGenre) return false;
-      }
-
-      // Country filter
-      if (filters.country && filters.country !== 'All') {
-        if (movie.country !== filters.country) return false;
-      }
-
-      // Content Type filter
-      if (filters.contentType && filters.contentType !== 'All') {
-        if (movie.type !== filters.contentType) return false;
-      }
-
-      // Genre filter
-      if (filters.genres && filters.genres.length > 0) {
-        const hasGenre = filters.genres.some((g) => movie.genres.includes(g));
-        if (!hasGenre) return false;
-      }
-
-      return true;
-    });
-  }, [filters, activeTab]);
-
-  const itemsPerPage = 4;
-  const totalPages = Math.max(1, Math.ceil(filteredMovies.length / itemsPerPage));
-  const paginatedMovies = useMemo(() => {
-    const start = (currentPage - 1) * itemsPerPage;
-    return filteredMovies.slice(start, start + itemsPerPage);
-  }, [filteredMovies, currentPage, itemsPerPage]);
+  // ── Loading skeleton ─────────────────────────────────────────────────────────
+  const SkeletonCard = () => (
+    <div className="glass-panel rounded-xl border border-white/10 overflow-hidden animate-pulse">
+      <div className="w-full aspect-[2/3] bg-surface-container" />
+      <div className="p-3.5 flex flex-col gap-2">
+        <div className="h-4 bg-surface-container rounded w-3/4" />
+        <div className="h-3 bg-surface-container rounded w-1/2" />
+        <div className="h-6 bg-surface-container rounded mt-2" />
+      </div>
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-background text-on-surface flex flex-col relative animate-fade-in">
@@ -242,7 +146,7 @@ const MovieCenterPage = () => {
             <div className="relative w-full pt-[56.25%] bg-black">
               <iframe
                 className="absolute inset-0 w-full h-full"
-                src={activeTrailer.trailerUrl || "https://www.youtube.com/embed/dQw4w9WgXcQ"}
+                src={activeTrailer.trailerUrl || 'https://www.youtube.com/embed/dQw4w9WgXcQ'}
                 title={activeTrailer.title}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
@@ -260,7 +164,13 @@ const MovieCenterPage = () => {
           {/* Mobile Filter Toggle */}
           <div className="md:hidden mb-6 flex justify-between items-center">
             <p className="text-sm text-on-surface-variant font-medium">
-              Showing <span className="text-white font-bold">{filteredMovies.length}</span> movies
+              {loading ? (
+                <span className="inline-block w-28 h-4 bg-surface-container rounded animate-pulse" />
+              ) : (
+                <>
+                  Showing <span className="text-white font-bold">{pagination.totalItems}</span> movies
+                </>
+              )}
             </p>
             <button
               onClick={() => setShowMobileFilters(!showMobileFilters)}
@@ -280,48 +190,91 @@ const MovieCenterPage = () => {
             {/* Catalog Grid */}
             <div className="flex-grow flex flex-col justify-between">
               <div>
+                {/* Desktop results count */}
                 <div className="hidden md:flex justify-between items-center mb-6">
                   <p className="text-sm text-on-surface-variant font-medium">
-                    Showing <span className="text-white font-bold">{filteredMovies.length}</span> results
+                    {loading ? (
+                      <span className="inline-block w-36 h-4 bg-surface-container rounded animate-pulse" />
+                    ) : (
+                      <>
+                        Showing <span className="text-white font-bold">{movies.length}</span> of{' '}
+                        <span className="text-white font-bold">{pagination.totalItems}</span> results
+                      </>
+                    )}
                   </p>
                 </div>
 
-                {paginatedMovies.length > 0 ? (
+                {/* Error banner */}
+                {error && (
+                  <div className="glass-panel rounded-xl border border-red-500/30 bg-red-500/5 p-5 mb-6 flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-3">
+                      <span className="material-symbols-outlined text-red-400">error</span>
+                      <p className="text-sm text-red-300">
+                        {typeof error === 'string' ? error : 'Failed to load movies.'}
+                      </p>
+                    </div>
+                    <button
+                      onClick={handleRetry}
+                      className="text-xs font-bold uppercase tracking-wider text-primary border border-primary/40 px-4 py-2 rounded-lg hover:bg-primary/10 transition-colors flex-shrink-0"
+                    >
+                      Retry
+                    </button>
+                  </div>
+                )}
+
+                {/* Loading skeleton */}
+                {loading ? (
                   <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-                    {paginatedMovies.map((movie, index) => (
-                      <div key={movie.id} className="animate-fade-in hover:-translate-y-1 transition-transform duration-200" style={{ animationDelay: `${index * 0.05}s` }}>
-                        <MovieCard
-                          movie={movie}
-                          onPlayTrailer={handlePlayTrailer}
-                          onToggleBookmark={handleToggleBookmark}
-                          isBookmarked={bookmarkedIds.includes(movie.id)}
-                        />
-                      </div>
+                    {Array.from({ length: 12 }).map((_, i) => (
+                      <SkeletonCard key={i} />
                     ))}
                   </div>
-                ) : (
+                ) : movies.length === 0 && !error ? (
+                  /* Empty state */
                   <div className="glass-panel p-12 text-center rounded-2xl my-8">
                     <span className="material-symbols-outlined text-5xl text-on-surface-variant mb-4">search_off</span>
                     <h3 className="text-xl font-bold text-white mb-2">No Movies Found</h3>
                     <p className="text-on-surface-variant max-w-md mx-auto mb-6">
-                      We couldn't find any movies matching your current filter criteria. Try clearing some filters.
+                      We couldn&apos;t find any movies matching your current filter criteria. Try clearing some filters.
                     </p>
                     <button
-                      onClick={() => setFilters({ genres: [], contentType: 'All', searchQuery: '', country: 'All' })}
+                      onClick={() => {
+                        setFilters({ genres: [], contentType: 'All', searchQuery: '', country: 'All' });
+                        setActiveTab('All');
+                        setCurrentPage(1);
+                      }}
                       className="bg-primary text-black px-6 py-2.5 rounded-lg font-bold hover:shadow-[0_0_15px_rgba(16,185,129,0.5)] transition-all"
                     >
                       Reset All Filters
                     </button>
                   </div>
+                ) : (
+                  /* Movie grid */
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                    {movies.map((movie, index) => (
+                      <div
+                        key={movie._id || movie.id}
+                        className="animate-fade-in hover:-translate-y-1 transition-transform duration-200"
+                        style={{ animationDelay: `${index * 0.05}s` }}
+                      >
+                        <MovieCard
+                          movie={movie}
+                          onPlayTrailer={handlePlayTrailer}
+                          onToggleBookmark={handleToggleBookmark}
+                          isBookmarked={bookmarkedIds.includes(movie._id || movie.id)}
+                        />
+                      </div>
+                    ))}
+                  </div>
                 )}
               </div>
 
               {/* Pagination */}
-              {totalPages > 1 && (
+              {!loading && pagination.totalPages > 1 && (
                 <div className="mt-8">
                   <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
+                    currentPage={pagination.currentPage}
+                    totalPages={pagination.totalPages}
                     onPageChange={handlePageChange}
                   />
                 </div>
