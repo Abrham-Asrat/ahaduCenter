@@ -1,13 +1,17 @@
 // src/pages/admin/AdminManageMoviesPage.jsx
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import AdminLayout from '../../components/admin/AdminLayout';
+import {
+  fetchAdminMovies,
+  createMovie,
+  updateMovie,
+  deleteMovie,
+} from '../../redux/slices/adminSlice';
 
 const AdminManageMoviesPage = () => {
-    const [movies, setMovies] = useState([
-        { id: 1, title: 'Inception', posterUrl: 'https://images.unsplash.com/photo-1440404653325-ab127d49abc1?auto=format&fit=crop&w=400&q=80', genre: 'Sci-Fi', country: 'USA', year: 2024, type: 'Feature Film', status: 'Available', rating: 8.4, duration: 148, director: 'Christopher Nolan', description: 'A thief who steals corporate secrets through dream-sharing technology.' },
-        { id: 2, title: 'Interstellar', posterUrl: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=400&q=80', genre: 'Drama', country: 'UK', year: 2023, type: 'Feature Film', status: 'Coming Soon', rating: 7.9, duration: 169, director: 'Christopher Nolan', description: 'A team of explorers travel through a wormhole in space.' },
-        { id: 3, title: 'The Matrix', posterUrl: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=400&q=80', genre: 'Action', country: 'Japan', year: 2025, type: 'Short Film', status: 'Available', rating: 8.0, duration: 136, director: 'The Wachowskis', description: 'A computer hacker learns about the true nature of reality.' },
-    ]);
+    const dispatch = useDispatch();
+    const { movies, loading, error } = useSelector((s) => s.admin);
 
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedGenre, setSelectedGenre] = useState('All Genres');
@@ -16,27 +20,47 @@ const AdminManageMoviesPage = () => {
     const [showModal, setShowModal] = useState(false);
     const [editingMovie, setEditingMovie] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
+    const [actionError, setActionError] = useState(null);
+
+    useEffect(() => {
+        dispatch(fetchAdminMovies());
+    }, [dispatch]);
 
     const filteredMovies = movies.filter((m) => {
-        const matchesSearch = m.title.toLowerCase().includes(searchQuery.toLowerCase());
-        const matchesGenre = selectedGenre === 'All Genres' || m.genre === selectedGenre;
-        const matchesCountry = selectedCountry === 'All Countries' || m.country === selectedCountry;
-        const matchesStatus = selectedStatus === 'All Status' || m.status === selectedStatus;
+        const title = m.title || '';
+        const matchesSearch = title.toLowerCase().includes(searchQuery.toLowerCase());
+        const genreStr = Array.isArray(m.genres) ? m.genres[0] : (m.genre || '');
+        const matchesGenre = selectedGenre === 'All Genres' || genreStr === selectedGenre;
+        const matchesCountry = selectedCountry === 'All Countries' || (m.country || 'USA') === selectedCountry;
+        const matchesStatus = selectedStatus === 'All Status' || (m.status || 'Available') === selectedStatus;
         return matchesSearch && matchesGenre && matchesCountry && matchesStatus;
     });
 
-    const handleAdd = () => { setEditingMovie(null); setShowModal(true); };
-    const handleEdit = (movie) => { setEditingMovie(movie); setShowModal(true); };
-    const handleDelete = (id) => {
-        if (confirm('Delete this movie?')) setMovies(movies.filter((m) => m.id !== id));
-    };
-    const handleSave = (formData) => {
-        if (editingMovie) {
-            setMovies(movies.map((m) => (m.id === editingMovie.id ? { ...m, ...formData } : m)));
-        } else {
-            setMovies([...movies, { id: Date.now(), ...formData }]);
+    const handleAdd = () => { setActionError(null); setEditingMovie(null); setShowModal(true); };
+    const handleEdit = (movie) => { setActionError(null); setEditingMovie(movie); setShowModal(true); };
+    const handleDelete = async (id) => {
+        if (confirm('Delete this movie?')) {
+            setActionError(null);
+            try {
+                await dispatch(deleteMovie(id)).unwrap();
+            } catch (err) {
+                setActionError(typeof err === 'string' ? err : 'Failed to delete movie');
+            }
         }
-        setShowModal(false);
+    };
+    const handleSave = async (formData) => {
+        setActionError(null);
+        try {
+            if (editingMovie) {
+                const targetId = editingMovie._id || editingMovie.id;
+                await dispatch(updateMovie({ id: targetId, payload: formData })).unwrap();
+            } else {
+                await dispatch(createMovie(formData)).unwrap();
+            }
+            setShowModal(false);
+        } catch (err) {
+            setActionError(typeof err === 'string' ? err : 'Failed to save movie');
+        }
     };
 
     return (
@@ -52,6 +76,13 @@ const AdminManageMoviesPage = () => {
                     Add New Movie
                 </button>
             </div>
+
+            {(error || actionError) && (
+                <div className="mb-6 p-4 rounded-xl bg-error/10 border border-error/30 text-error flex items-center gap-3">
+                    <span className="material-symbols-outlined flex-shrink-0">error</span>
+                    <span>{actionError || error}</span>
+                </div>
+            )}
 
             {/* Toolbar */}
             <div className="glass-panel rounded-xl p-4 flex flex-col md:flex-row gap-4 justify-between items-center mb-6">

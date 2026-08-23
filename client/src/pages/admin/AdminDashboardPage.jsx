@@ -1,21 +1,52 @@
 // src/pages/admin/AdminDashboardPage.jsx
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import AdminLayout from '../../components/admin/AdminLayout';
+import { fetchAdminStats, fetchRecentActivity } from '../../redux/slices/adminSlice';
 
 /**
  * AdminDashboardPage Component
  * 
- * Simplified admin dashboard overview page focusing purely on inventory.
+ * Overview page focusing on inventory stats and recent additions.
  */
 const AdminDashboardPage = () => {
+  const dispatch = useDispatch();
+  const { stats: adminStats, recentActivity, loading, error } = useSelector((s) => s.admin);
 
-  // Stats data
+  useEffect(() => {
+    dispatch(fetchAdminStats());
+    dispatch(fetchRecentActivity());
+  }, [dispatch]);
+
+  // Derived stats data
   const stats = [
-    { label: 'Total Movies', value: '450', icon: 'movie', color: 'text-primary', glow: 'bg-primary/10' },
-    { label: 'Total Electronics', value: '120', icon: 'devices', color: 'text-secondary', glow: 'bg-secondary/10' },
-    { label: 'Total Books', value: '890', icon: 'menu_book', color: 'text-tertiary', glow: 'bg-tertiary/10' },
+    {
+      label: 'Total Movies',
+      value: adminStats?.movies ?? adminStats?.totalMovies ?? '0',
+      icon: 'movie',
+      color: 'text-primary',
+      glow: 'bg-primary/10',
+    },
+    {
+      label: 'Total Electronics',
+      value: adminStats?.products ?? adminStats?.totalProducts ?? '0',
+      icon: 'devices',
+      color: 'text-secondary',
+      glow: 'bg-secondary/10',
+    },
+    {
+      label: 'Total Books',
+      value: adminStats?.books ?? adminStats?.totalBooks ?? '0',
+      icon: 'menu_book',
+      color: 'text-tertiary',
+      glow: 'bg-tertiary/10',
+    },
   ];
+
+  const moviesRecent = (recentActivity || []).filter((item) => item.type === 'movie' || item.type === 'Movie');
+  const productsRecent = (recentActivity || []).filter((item) => item.type === 'product' || item.type === 'Product' || item.type === 'electronics');
+  const booksRecent = (recentActivity || []).filter((item) => item.type === 'book' || item.type === 'Book');
 
   return (
     <AdminLayout>
@@ -27,6 +58,14 @@ const AdminDashboardPage = () => {
             <p className="text-lg text-on-surface-variant">Manage the Ahadu Center physical store catalog.</p>
           </div>
         </div>
+
+        {/* Error Banner */}
+        {error && (
+          <div className="p-4 rounded-xl bg-error/10 border border-error/30 text-error flex items-center gap-3">
+            <span className="material-symbols-outlined">error</span>
+            <span>{error}</span>
+          </div>
+        )}
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
@@ -40,7 +79,11 @@ const AdminDashboardPage = () => {
               </div>
               <div className="mt-4 relative z-10">
                 <p className="text-xs text-on-surface-variant uppercase tracking-wider font-bold mb-1">{stat.label}</p>
-                <h3 className="text-3xl font-extrabold text-white">{stat.value}</h3>
+                {loading ? (
+                  <div className="h-9 w-20 bg-white/10 rounded animate-pulse" />
+                ) : (
+                  <h3 className="text-3xl font-extrabold text-white">{stat.value}</h3>
+                )}
               </div>
             </div>
           ))}
@@ -48,23 +91,23 @@ const AdminDashboardPage = () => {
 
         {/* Quick Actions */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-4">
-            <Link to="/admin/movies" className="glass-panel rounded-2xl p-6 flex flex-col items-center justify-center text-center border border-white/10 hover:border-primary hover:bg-primary/5 transition-all shadow-xl cursor-pointer">
-              <span className="material-symbols-outlined text-4xl text-primary mb-3">add_circle</span>
-              <h3 className="text-xl font-bold text-white">Manage Movies</h3>
-              <p className="text-sm text-on-surface-variant mt-2">Add, edit, or remove movies from the catalog.</p>
-            </Link>
+          <Link to="/admin/movies" className="glass-panel rounded-2xl p-6 flex flex-col items-center justify-center text-center border border-white/10 hover:border-primary hover:bg-primary/5 transition-all shadow-xl cursor-pointer">
+            <span className="material-symbols-outlined text-4xl text-primary mb-3">add_circle</span>
+            <h3 className="text-xl font-bold text-white">Manage Movies</h3>
+            <p className="text-sm text-on-surface-variant mt-2">Add, edit, or remove movies from the catalog.</p>
+          </Link>
 
-            <Link to="/admin/electronics" className="glass-panel rounded-2xl p-6 flex flex-col items-center justify-center text-center border border-white/10 hover:border-secondary hover:bg-secondary/5 transition-all shadow-xl cursor-pointer">
-              <span className="material-symbols-outlined text-4xl text-secondary mb-3">devices</span>
-              <h3 className="text-xl font-bold text-white">Manage Electronics</h3>
-              <p className="text-sm text-on-surface-variant mt-2">Add, edit, or remove tech products.</p>
-            </Link>
+          <Link to="/admin/electronics" className="glass-panel rounded-2xl p-6 flex flex-col items-center justify-center text-center border border-white/10 hover:border-secondary hover:bg-secondary/5 transition-all shadow-xl cursor-pointer">
+            <span className="material-symbols-outlined text-4xl text-secondary mb-3">devices</span>
+            <h3 className="text-xl font-bold text-white">Manage Electronics</h3>
+            <p className="text-sm text-on-surface-variant mt-2">Add, edit, or remove tech products.</p>
+          </Link>
 
-            <Link to="/admin/books" className="glass-panel rounded-2xl p-6 flex flex-col items-center justify-center text-center border border-white/10 hover:border-tertiary hover:bg-tertiary/5 transition-all shadow-xl cursor-pointer">
-              <span className="material-symbols-outlined text-4xl text-tertiary mb-3">menu_book</span>
-              <h3 className="text-xl font-bold text-white">Manage Books</h3>
-              <p className="text-sm text-on-surface-variant mt-2">Add, edit, or remove books from the library.</p>
-            </Link>
+          <Link to="/admin/books" className="glass-panel rounded-2xl p-6 flex flex-col items-center justify-center text-center border border-white/10 hover:border-tertiary hover:bg-tertiary/5 transition-all shadow-xl cursor-pointer">
+            <span className="material-symbols-outlined text-4xl text-tertiary mb-3">menu_book</span>
+            <h3 className="text-xl font-bold text-white">Manage Books</h3>
+            <p className="text-sm text-on-surface-variant mt-2">Add, edit, or remove books from the library.</p>
+          </Link>
         </div>
 
         {/* Recent Additions Preview */}
@@ -77,16 +120,20 @@ const AdminDashboardPage = () => {
                 <span className="material-symbols-outlined text-primary">movie</span>
                 Movies
               </h4>
-              <ul className="flex flex-col gap-3">
-                <li className="flex justify-between items-center text-sm border-b border-white/5 pb-2">
-                  <span className="text-white">Inception</span>
-                  <span className="text-on-surface-variant text-xs">Added Today</span>
-                </li>
-                <li className="flex justify-between items-center text-sm border-b border-white/5 pb-2">
-                  <span className="text-white">Interstellar</span>
-                  <span className="text-on-surface-variant text-xs">Added Yesterday</span>
-                </li>
-              </ul>
+              {loading ? (
+                <div className="h-16 bg-white/5 rounded animate-pulse" />
+              ) : moviesRecent.length === 0 ? (
+                <p className="text-sm text-on-surface-variant">No recent movie additions</p>
+              ) : (
+                <ul className="flex flex-col gap-3">
+                  {moviesRecent.map((item, idx) => (
+                    <li key={item.id || idx} className="flex justify-between items-center text-sm border-b border-white/5 pb-2">
+                      <span className="text-white">{item.title}</span>
+                      <span className="text-on-surface-variant text-xs">{item.date || 'Recent'}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
 
             {/* Electronics */}
@@ -95,16 +142,20 @@ const AdminDashboardPage = () => {
                 <span className="material-symbols-outlined text-secondary">devices</span>
                 Electronics
               </h4>
-              <ul className="flex flex-col gap-3">
-                <li className="flex justify-between items-center text-sm border-b border-white/5 pb-2">
-                  <span className="text-white">Quantum Laptop X</span>
-                  <span className="text-on-surface-variant text-xs">Added Today</span>
-                </li>
-                <li className="flex justify-between items-center text-sm border-b border-white/5 pb-2">
-                  <span className="text-white">Neural Headset Pro</span>
-                  <span className="text-on-surface-variant text-xs">Added 2 days ago</span>
-                </li>
-              </ul>
+              {loading ? (
+                <div className="h-16 bg-white/5 rounded animate-pulse" />
+              ) : productsRecent.length === 0 ? (
+                <p className="text-sm text-on-surface-variant">No recent electronics additions</p>
+              ) : (
+                <ul className="flex flex-col gap-3">
+                  {productsRecent.map((item, idx) => (
+                    <li key={item.id || idx} className="flex justify-between items-center text-sm border-b border-white/5 pb-2">
+                      <span className="text-white">{item.title || item.name}</span>
+                      <span className="text-on-surface-variant text-xs">{item.date || 'Recent'}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
 
             {/* Books */}
@@ -113,16 +164,20 @@ const AdminDashboardPage = () => {
                 <span className="material-symbols-outlined text-tertiary">menu_book</span>
                 Books
               </h4>
-              <ul className="flex flex-col gap-3">
-                <li className="flex justify-between items-center text-sm border-b border-white/5 pb-2">
-                  <span className="text-white">The Great Gatsby</span>
-                  <span className="text-on-surface-variant text-xs">Added Today</span>
-                </li>
-                <li className="flex justify-between items-center text-sm border-b border-white/5 pb-2">
-                  <span className="text-white">1984</span>
-                  <span className="text-on-surface-variant text-xs">Added 5 days ago</span>
-                </li>
-              </ul>
+              {loading ? (
+                <div className="h-16 bg-white/5 rounded animate-pulse" />
+              ) : booksRecent.length === 0 ? (
+                <p className="text-sm text-on-surface-variant">No recent book additions</p>
+              ) : (
+                <ul className="flex flex-col gap-3">
+                  {booksRecent.map((item, idx) => (
+                    <li key={item.id || idx} className="flex justify-between items-center text-sm border-b border-white/5 pb-2">
+                      <span className="text-white">{item.title}</span>
+                      <span className="text-on-surface-variant text-xs">{item.date || 'Recent'}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           </div>
         </div>

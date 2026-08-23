@@ -2,25 +2,13 @@
 import React, { useState } from 'react';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
+import { contactService } from '../services/contactService';
 
 /**
  * ContactPage Component
  *
  * Displays contact information, a contact form, map placeholder,
  * social links, and FAQ section.
- *
- * Features:
- * - Contact form with name, email, subject, message
- * - Company info card with phone, email, business hours
- * - Map placeholder with location overlay
- * - Social media links (placeholders)
- * - FAQ accordion (4 items)
- * - Responsive: 2-column on desktop, stacked on mobile
- *
- * State:
- * - formData: Object containing form field values
- * - openFaq: Index of currently open FAQ item (null = all closed)
- * - isSubmitted: Boolean — true after form is submitted successfully
  */
 const ContactPage = () => {
   // Form state
@@ -31,23 +19,39 @@ const ContactPage = () => {
     message: '',
   });
 
+  // UI state
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
   // FAQ open state (null = all closed)
   const [openFaq, setOpenFaq] = useState(null);
-
-  // Submission success state
-  const [isSubmitted, setIsSubmitted] = useState(false);
 
   // Handle form input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitted(true);
-    setFormData({ name: '', email: '', subject: '', message: '' });
+    setLoading(true);
+    setError(null);
+    try {
+      await contactService.submitContact({
+        name: formData.name,
+        email: formData.email,
+        subject: formData.subject,
+        message: formData.message,
+      });
+      setIsSubmitted(true);
+      setFormData({ name: '', email: '', subject: '', message: '' });
+    } catch (err) {
+      setError(typeof err === 'string' ? err : 'Something went wrong. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   // FAQ data
@@ -98,7 +102,7 @@ const ContactPage = () => {
                 </div>
                 <button
                   onClick={() => setIsSubmitted(false)}
-                  className="bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:shadow-[0_0_20px_rgba(16,185,129,0.4)] transition-all"
+                  className="bg-primary text-black px-8 py-3 rounded-lg font-semibold hover:shadow-[0_0_20px_rgba(16,185,129,0.4)] transition-all cursor-pointer"
                 >
                   Send Another
                 </button>
@@ -110,11 +114,20 @@ const ContactPage = () => {
                 <span className="material-symbols-outlined text-primary">mail</span>
                 Send Us a Message
               </h2>
+
+              {/* Inline error banner */}
+              {error && (
+                <div className="mb-5 p-4 rounded-xl bg-error/10 border border-error/30 text-error flex items-center gap-3 text-sm">
+                  <span className="material-symbols-outlined flex-shrink-0">error</span>
+                  <span>{error}</span>
+                </div>
+              )}
+
               <form onSubmit={handleSubmit} className="space-y-5">
                 {/* Name and Email row */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <div className="space-y-2">
-                    <label htmlFor="name" className="block text-xs uppercase tracking-wider text-on-surface-variant">
+                    <label htmlFor="name" className="block text-xs uppercase tracking-wider text-on-surface-variant font-bold">
                       Full Name
                     </label>
                     <input
@@ -123,13 +136,14 @@ const ContactPage = () => {
                       type="text"
                       value={formData.name}
                       onChange={handleInputChange}
+                      disabled={loading}
                       className="w-full bg-[#0B0F19] border border-white/10 rounded-lg p-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-200"
                       placeholder="Enter your name"
                       required
                     />
                   </div>
                   <div className="space-y-2">
-                    <label htmlFor="email" className="block text-xs uppercase tracking-wider text-on-surface-variant">
+                    <label htmlFor="email" className="block text-xs uppercase tracking-wider text-on-surface-variant font-bold">
                       Email Address
                     </label>
                     <input
@@ -138,6 +152,7 @@ const ContactPage = () => {
                       type="email"
                       value={formData.email}
                       onChange={handleInputChange}
+                      disabled={loading}
                       className="w-full bg-[#0B0F19] border border-white/10 rounded-lg p-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-200"
                       placeholder="Enter your email"
                       required
@@ -147,7 +162,7 @@ const ContactPage = () => {
 
                 {/* Subject */}
                 <div className="space-y-2">
-                  <label htmlFor="subject" className="block text-xs uppercase tracking-wider text-on-surface-variant">
+                  <label htmlFor="subject" className="block text-xs uppercase tracking-wider text-on-surface-variant font-bold">
                     Subject Inquiry
                   </label>
                   <select
@@ -155,7 +170,8 @@ const ContactPage = () => {
                     name="subject"
                     value={formData.subject}
                     onChange={handleInputChange}
-                    className="w-full bg-[#0B0F19] border border-white/10 rounded-lg p-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-200 appearance-none"
+                    disabled={loading}
+                    className="w-full bg-[#0B0F19] border border-white/10 rounded-lg p-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-200 appearance-none cursor-pointer"
                     required
                   >
                     <option value="" disabled>Select an area of interest</option>
@@ -168,7 +184,7 @@ const ContactPage = () => {
 
                 {/* Message */}
                 <div className="space-y-2">
-                  <label htmlFor="message" className="block text-xs uppercase tracking-wider text-on-surface-variant">
+                  <label htmlFor="message" className="block text-xs uppercase tracking-wider text-on-surface-variant font-bold">
                     Your Message
                   </label>
                   <textarea
@@ -177,6 +193,7 @@ const ContactPage = () => {
                     rows="5"
                     value={formData.message}
                     onChange={handleInputChange}
+                    disabled={loading}
                     className="w-full bg-[#0B0F19] border border-white/10 rounded-lg p-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-200 resize-none"
                     placeholder="How can we assist you today?"
                     required
@@ -186,10 +203,14 @@ const ContactPage = () => {
                 {/* Submit button */}
                 <button
                   type="submit"
-                  className="bg-primary text-white w-full md:w-auto px-8 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 hover:shadow-[0_0_20px_rgba(16,185,129,0.4)] transition-all"
+                  disabled={loading}
+                  className="bg-primary text-black w-full md:w-auto px-8 py-3 rounded-lg font-bold flex items-center justify-center gap-2 hover:shadow-[0_0_20px_rgba(16,185,129,0.4)] transition-all cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
                 >
-                  Send Message
-                  <span className="material-symbols-outlined text-sm">send</span>
+                  {loading && (
+                    <span className="w-4 h-4 border-2 border-black/40 border-t-black rounded-full animate-spin" />
+                  )}
+                  {loading ? 'Sending…' : 'Send Message'}
+                  {!loading && <span className="material-symbols-outlined text-sm">send</span>}
                 </button>
               </form>
             </div>

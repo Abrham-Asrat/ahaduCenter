@@ -1,6 +1,8 @@
 // src/components/electronics/ProductCard.jsx
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { addWishlistItem, removeWishlistItem } from '../../redux/slices/wishlistSlice';
 
 /**
  * ProductCard Component
@@ -14,7 +16,13 @@ import { Link } from 'react-router-dom';
  * - onToggleWishlist: Function
  */
 const ProductCard = ({ product, onAddToCart, onCompare, onToggleWishlist, isWishlisted: initialWishlisted = false }) => {
-  const [isWishlisted, setIsWishlisted] = useState(initialWishlisted);
+  const dispatch = useDispatch();
+  const wishlistItems = useSelector((s) => s.wishlist?.items ?? []);
+
+  const productId = product.id || product._id;
+  const isWishlisted = wishlistItems.some(
+    (item) => item.id === productId || item.itemId === productId
+  ) || initialWishlisted;
 
   const conditionStyles = {
     New: 'bg-primary-container/20 text-primary border-primary/30',
@@ -40,12 +48,24 @@ const ProductCard = ({ product, onAddToCart, onCompare, onToggleWishlist, isWish
     e.preventDefault();
     e.stopPropagation();
     const next = !isWishlisted;
-    setIsWishlisted(next);
+    if (next) {
+      dispatch(
+        addWishlistItem({
+          itemId: productId,
+          itemType: 'Product',
+          title: product.name || product.title,
+          imageUrl: product.imageUrl || product.images?.[0],
+          category: product.category || product.brand || 'Electronics',
+        })
+      );
+    } else {
+      dispatch(removeWishlistItem(productId));
+    }
     if (onToggleWishlist) onToggleWishlist(product, next);
   };
 
   return (
-    <Link to={`/electronics/${product.id}`} className="block h-full group">
+    <Link to={`/electronics/${productId}`} className="block h-full group">
       <div className="glass-panel rounded-xl p-4 relative group glow-hover transition-all duration-300 flex flex-col h-full cursor-pointer border border-white/10 hover:-translate-y-1 shadow-lg">
 
         {/* Condition badge */}
@@ -59,7 +79,7 @@ const ProductCard = ({ product, onAddToCart, onCompare, onToggleWishlist, isWish
         <button
           onClick={handleWishlistClick}
           title={isWishlisted ? "Remove from Wishlist" : "Add to Wishlist"}
-          className={`absolute top-3 right-3 z-10 w-9 h-9 rounded-full glass-panel flex items-center justify-center transition-all ${isWishlisted ? 'text-error border-error/40 bg-error/15' : 'text-on-surface-variant hover:text-error hover:border-error/30'
+          className={`absolute top-3 right-3 z-10 w-9 h-9 rounded-full glass-panel flex items-center justify-center transition-all cursor-pointer ${isWishlisted ? 'text-error border-error/40 bg-error/15' : 'text-on-surface-variant hover:text-error hover:border-error/30'
             }`}
         >
           <span className="material-symbols-outlined text-lg" style={{ fontVariationSettings: isWishlisted ? "'FILL' 1" : "'FILL' 0" }}>
@@ -91,7 +111,7 @@ const ProductCard = ({ product, onAddToCart, onCompare, onToggleWishlist, isWish
           <div className="mt-3 pt-3 border-t border-white/5 flex flex-col gap-3">
             <div className="flex items-center justify-between">
               <div>
-                <span className="text-primary font-extrabold text-xl">${product.price.toLocaleString()}</span>
+                <span className="text-primary font-extrabold text-xl">${product.price?.toLocaleString()}</span>
                 {product.originalPrice && (
                   <span className="text-on-surface-variant line-through text-xs ml-2">
                     ${product.originalPrice.toLocaleString()}
@@ -115,14 +135,14 @@ const ProductCard = ({ product, onAddToCart, onCompare, onToggleWishlist, isWish
                   e.preventDefault();
                   e.stopPropagation();
                 }}
-                className="bg-primary/20 border border-primary/40 hover:bg-primary text-primary hover:text-black py-2 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition-all shadow"
+                className="bg-primary/20 border border-primary/40 hover:bg-primary text-primary hover:text-black py-2 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition-all shadow cursor-pointer"
               >
                 <span className="material-symbols-outlined text-sm">visibility</span>
                 View Product
               </button>
               <button
                 onClick={handleCompareClick}
-                className="bg-surface-variant border border-white/10 hover:border-secondary hover:text-secondary text-on-surface-variant py-2 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition-all"
+                className="bg-surface-variant border border-white/10 hover:border-secondary hover:text-secondary text-on-surface-variant py-2 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer"
               >
                 <span className="material-symbols-outlined text-sm">compare_arrows</span>
                 Compare

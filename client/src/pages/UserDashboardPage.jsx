@@ -123,6 +123,11 @@ const UserDashboardPage = () => {
   const [saveError, setSaveError] = useState(null);
   const [toastMessage, setToastMessage] = useState(null);
 
+  // ── Avatar upload state ──
+  const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
+  const [avatarUploadError, setAvatarUploadError] = useState(null);
+  const avatarFileInputRef = React.useRef(null);
+
   // ── Fetch all three concurrently on mount ──────────────────────────────────
   useEffect(() => {
     let cancelled = false;
@@ -238,6 +243,39 @@ const UserDashboardPage = () => {
     setSaveError(null);
   };
 
+  // ── Avatar upload handler ──────────────────────────────────────────────────
+  const handleAvatarFileChange = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Reset the file input so the same file can be re-selected after an error
+    e.target.value = '';
+
+    setIsUploadingAvatar(true);
+    setAvatarUploadError(null);
+    try {
+      const formData = new FormData();
+      formData.append('avatar', file);
+      const response = await userService.uploadAvatar(formData);
+      // Normalise — API may return { avatarUrl: '...' } or { user: { avatarUrl: '...' } }
+      const newAvatarUrl =
+        response?.avatarUrl ??
+        response?.user?.avatarUrl ??
+        response?.user?.avatar ??
+        response?.avatar ??
+        null;
+      if (newAvatarUrl) {
+        setUser((prev) => ({ ...prev, avatarUrl: newAvatarUrl, avatar: newAvatarUrl }));
+      }
+      setToastMessage('Avatar updated successfully!');
+      setTimeout(() => setToastMessage(null), 3000);
+    } catch (err) {
+      setAvatarUploadError(typeof err === 'string' ? err : 'Failed to upload avatar. Please try again.');
+    } finally {
+      setIsUploadingAvatar(false);
+    }
+  };
+
   // ── Sidebar nav ────────────────────────────────────────────────────────────
   const navItems = [
     { label: 'Overview', icon: 'dashboard', active: true, path: '/account' },
@@ -286,6 +324,31 @@ const UserDashboardPage = () => {
                     <span className="font-heading text-3xl font-bold text-primary">{displayInitials}</span>
                   )}
                 </div>
+                {/* Avatar upload button */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setAvatarUploadError(null);
+                    avatarFileInputRef.current?.click();
+                  }}
+                  disabled={isUploadingAvatar}
+                  title="Change avatar"
+                  className="absolute bottom-0 right-0 w-9 h-9 rounded-full bg-primary text-black flex items-center justify-center shadow-lg border-2 border-background cursor-pointer hover:bg-primary/80 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
+                >
+                  {isUploadingAvatar ? (
+                    <span className="w-4 h-4 border-2 border-black/40 border-t-black rounded-full animate-spin" />
+                  ) : (
+                    <span className="material-symbols-outlined text-base">photo_camera</span>
+                  )}
+                </button>
+                {/* Hidden file input */}
+                <input
+                  ref={avatarFileInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleAvatarFileChange}
+                />
               </div>
 
               {/* User info */}
@@ -300,6 +363,21 @@ const UserDashboardPage = () => {
                     </>
                   )}
                 </p>
+                {/* Avatar upload error */}
+                {avatarUploadError && (
+                  <div className="mt-2 flex items-center gap-2 px-3 py-2 rounded-lg bg-error/10 border border-error/30 text-error text-sm max-w-sm mx-auto md:mx-0">
+                    <span className="material-symbols-outlined text-base flex-shrink-0">error</span>
+                    <span>{avatarUploadError}</span>
+                    <button
+                      type="button"
+                      onClick={() => setAvatarUploadError(null)}
+                      className="ml-auto flex-shrink-0 text-error/70 hover:text-error cursor-pointer"
+                      title="Dismiss"
+                    >
+                      <span className="material-symbols-outlined text-sm">close</span>
+                    </button>
+                  </div>
+                )}
                 <div className="mt-4">
                   <button
                     onClick={() => setIsEditModalOpen(true)}

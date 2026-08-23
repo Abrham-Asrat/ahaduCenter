@@ -1,50 +1,19 @@
 // src/pages/admin/AdminManageBooksPage.jsx
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import AdminLayout from '../../components/admin/AdminLayout';
+import {
+  fetchAdminBooks,
+  createBook,
+  updateBook,
+  deleteBook,
+} from '../../redux/slices/adminSlice';
 
 const AdminManageBooksPage = () => {
+    const dispatch = useDispatch();
+    const { books, loading, error } = useSelector((s) => s.admin);
+
     const [activeTab, setActiveTab] = useState('Inventory');
-    const [books, setBooks] = useState([
-        {
-            id: 1,
-            title: 'The Quantum Thief',
-            author: 'Hannu Rajaniemi',
-            coverUrl: 'https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&w=600&q=80',
-            category: 'Sci-Fi',
-            language: 'EN',
-            totalCopies: 12,
-            availableCopies: 8,
-            status: 'Available',
-            isbn: '978-0-575-08895-0',
-            description: 'A far-future heist novel set in a post-singularity solar system.',
-        },
-        {
-            id: 2,
-            title: 'Design Systems',
-            author: 'Alla Kholmatova',
-            coverUrl: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80',
-            category: 'Design',
-            language: 'EN',
-            totalCopies: 5,
-            availableCopies: 1,
-            status: 'Limited',
-            isbn: '978-3-945749-58-6',
-            description: 'A practical guide to creating design languages for digital products.',
-        },
-        {
-            id: 3,
-            title: 'Fikir Eske Mekabir',
-            author: 'Haddis Alemayehu',
-            coverUrl: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=600&q=80',
-            category: 'Classic',
-            language: 'AM',
-            totalCopies: 20,
-            availableCopies: 0,
-            status: 'Out of Stock',
-            isbn: '',
-            description: 'One of the greatest Ethiopian novels, a timeless classic.',
-        },
-    ]);
 
     const [showModal, setShowModal] = useState(false);
     const [editingBook, setEditingBook] = useState(null);
@@ -54,14 +23,21 @@ const AdminManageBooksPage = () => {
     const [languageFilter, setLanguageFilter] = useState('All Languages');
     const [availabilityFilter, setAvailabilityFilter] = useState('All Availability');
     const [currentPage, setCurrentPage] = useState(1);
+    const [actionError, setActionError] = useState(null);
+
+    useEffect(() => {
+        dispatch(fetchAdminBooks());
+    }, [dispatch]);
 
     const filteredBooks = books.filter((book) => {
+        const title = book.title || '';
+        const author = book.author || '';
         const matchesSearch =
-            book.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            book.author.toLowerCase().includes(searchQuery.toLowerCase());
+            title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            author.toLowerCase().includes(searchQuery.toLowerCase());
         const matchesCategory = categoryFilter === 'All Categories' || book.category === categoryFilter;
         const matchesLanguage = languageFilter === 'All Languages' || book.language === languageFilter;
-        const matchesAvailability = availabilityFilter === 'All Availability' || book.status === availabilityFilter;
+        const matchesAvailability = availabilityFilter === 'All Availability' || (book.status || 'Available') === availabilityFilter;
         return matchesSearch && matchesCategory && matchesLanguage && matchesAvailability;
     });
 
@@ -73,27 +49,39 @@ const AdminManageBooksPage = () => {
         setCurrentPage(1);
     };
 
-    const handleAdd = () => { setEditingBook(null); setShowModal(true); };
-    const handleEdit = (book) => { setEditingBook(book); setShowModal(true); };
+    const handleAdd = () => { setActionError(null); setEditingBook(null); setShowModal(true); };
+    const handleEdit = (book) => { setActionError(null); setEditingBook(book); setShowModal(true); };
     const handleDelete = (id) => {
-        const book = books.find((b) => b.id === id);
-        setDeleteConfirm({ id, title: book?.title || 'this book' });
+        const book = books.find((b) => (b._id || b.id) === id);
+        setActionError(null);
+        setDeleteConfirm({ id: book?._id || book?.id, title: book?.title || 'this book' });
     };
 
-    const confirmDelete = () => {
+    const confirmDelete = async () => {
         if (deleteConfirm) {
-            setBooks(books.filter((b) => b.id !== deleteConfirm.id));
-            setDeleteConfirm(null);
+            try {
+                await dispatch(deleteBook(deleteConfirm.id)).unwrap();
+                setDeleteConfirm(null);
+            } catch (err) {
+                setActionError(typeof err === 'string' ? err : 'Failed to delete book');
+                setDeleteConfirm(null);
+            }
         }
     };
 
-    const handleSave = (formData) => {
-        if (editingBook) {
-            setBooks(books.map((b) => (b.id === editingBook.id ? { ...b, ...formData } : b)));
-        } else {
-            setBooks([...books, { id: Date.now(), ...formData }]);
+    const handleSave = async (formData) => {
+        setActionError(null);
+        try {
+            if (editingBook) {
+                const targetId = editingBook._id || editingBook.id;
+                await dispatch(updateBook({ id: targetId, payload: formData })).unwrap();
+            } else {
+                await dispatch(createBook(formData)).unwrap();
+            }
+            setShowModal(false);
+        } catch (err) {
+            setActionError(typeof err === 'string' ? err : 'Failed to save book');
         }
-        setShowModal(false);
     };
 
     const getStatusBadge = (status) => {
@@ -123,6 +111,13 @@ const AdminManageBooksPage = () => {
                     Add New Book
                 </button>
             </div>
+
+            {(error || actionError) && (
+                <div className="mb-6 p-4 rounded-xl bg-error/10 border border-error/30 text-error flex items-center gap-3">
+                    <span className="material-symbols-outlined flex-shrink-0">error</span>
+                    <span>{actionError || error}</span>
+                </div>
+            )}
 
             {/* Sub-navigation tabs */}
             <div className="glass-panel rounded-xl overflow-hidden mb-6">

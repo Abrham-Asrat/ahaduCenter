@@ -1,6 +1,8 @@
 // src/components/movie/MovieCard.jsx
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { addWishlistItem, removeWishlistItem } from '../../redux/slices/wishlistSlice';
 
 /**
  * MovieCard Component
@@ -13,7 +15,13 @@ import { Link } from 'react-router-dom';
  * - onToggleBookmark: Optional callback function when bookmark is clicked
  */
 const MovieCard = ({ movie, onPlayTrailer, onToggleBookmark, isBookmarked: initialBookmarked = false }) => {
-  const [isBookmarked, setIsBookmarked] = useState(initialBookmarked);
+  const dispatch = useDispatch();
+  const wishlistItems = useSelector((s) => s.wishlist?.items ?? []);
+
+  const movieId = movie.id || movie._id;
+  const isBookmarked = wishlistItems.some(
+    (item) => item.id === movieId || item.itemId === movieId
+  ) || initialBookmarked;
 
   const handlePlayTrailer = (e) => {
     e.preventDefault();
@@ -27,14 +35,26 @@ const MovieCard = ({ movie, onPlayTrailer, onToggleBookmark, isBookmarked: initi
     e.preventDefault();
     e.stopPropagation();
     const newState = !isBookmarked;
-    setIsBookmarked(newState);
+    if (newState) {
+      dispatch(
+        addWishlistItem({
+          itemId: movieId,
+          itemType: 'Movie',
+          title: movie.title,
+          imageUrl: movie.posterUrl,
+          category: movie.genres?.[0] ?? 'Movie',
+        })
+      );
+    } else {
+      dispatch(removeWishlistItem(movieId));
+    }
     if (onToggleBookmark) {
       onToggleBookmark(movie, newState);
     }
   };
 
   return (
-    <Link to={`/movies/${movie.id}`} className="block h-full group">
+    <Link to={`/movies/${movieId}`} className="block h-full group">
       <div className="glass-panel rounded-lg overflow-hidden cursor-pointer transition-all duration-300 glow-hover relative flex flex-col h-full hover:-translate-y-1">
 
         {/* Poster Container - maintains 2:3 aspect ratio */}
@@ -74,7 +94,7 @@ const MovieCard = ({ movie, onPlayTrailer, onToggleBookmark, isBookmarked: initi
             <button
               onClick={handlePlayTrailer}
               title="Play Trailer"
-              className="w-11 h-11 rounded-full bg-primary-container text-white flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-lg hover:shadow-[0_0_15px_rgba(16,185,129,0.8)]"
+              className="w-11 h-11 rounded-full bg-primary-container text-white flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-lg hover:shadow-[0_0_15px_rgba(16,185,129,0.8)] cursor-pointer"
             >
               <span className="material-symbols-outlined text-2xl" style={{ fontVariationSettings: "'FILL' 1" }}>
                 play_arrow
@@ -85,7 +105,7 @@ const MovieCard = ({ movie, onPlayTrailer, onToggleBookmark, isBookmarked: initi
             <button
               onClick={handleBookmark}
               title={isBookmarked ? "Remove from Wishlist" : "Save to Wishlist"}
-              className={`w-11 h-11 rounded-full glass-panel flex items-center justify-center hover:scale-110 active:scale-95 transition-all ${isBookmarked
+              className={`w-11 h-11 rounded-full glass-panel flex items-center justify-center hover:scale-110 active:scale-95 transition-all cursor-pointer ${isBookmarked
                   ? 'text-secondary border-secondary bg-secondary/20 shadow-[0_0_15px_rgba(233,195,73,0.5)]'
                   : 'text-on-surface hover:text-secondary hover:border-secondary'
                 }`}

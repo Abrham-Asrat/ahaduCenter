@@ -1,13 +1,17 @@
 // src/pages/admin/AdminManageElectronicsPage.jsx
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import AdminLayout from '../../components/admin/AdminLayout';
+import {
+  fetchAdminProducts,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+} from '../../redux/slices/adminSlice';
 
 const AdminManageElectronicsPage = () => {
-    const [products, setProducts] = useState([
-        { id: 1, name: 'AuraBook Pro 16"', sku: 'AB-16-M3-1TB', imageUrl: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=600&q=80', category: 'Laptops', condition: 'New', brand: 'AuraTech', price: 2499, originalPrice: null, stock: 42, status: 'In Stock', description: 'Professional-grade laptop with M3 chip and 1TB storage.', specifications: 'M3 Pro · 18GB RAM · 1TB SSD · 16" Liquid Retina' },
-        { id: 2, name: 'NovaPhone Z5 Fold', sku: 'NP-Z5-512G', imageUrl: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80', category: 'Smartphones', condition: 'Refurbished', brand: 'NovaSystems', price: 1299, originalPrice: 1599, stock: 8, status: 'Low Stock', description: 'Foldable smartphone with 512GB storage.', specifications: 'Snapdragon 8 Gen 2 · 12GB RAM · 512GB · 7.6" AMOLED' },
-        { id: 3, name: 'SonicWave Elite Headphones', sku: 'SW-E-ANC-BLK', imageUrl: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80', category: 'Audio', condition: 'New', brand: 'SonicWave', price: 349, originalPrice: null, stock: 0, status: 'Out of Stock', description: 'Active noise-cancelling headphones with 40h battery.', specifications: 'ANC · 40hr Battery · Hi-Res Audio · Bluetooth 5.3' },
-    ]);
+    const dispatch = useDispatch();
+    const { products, loading, error } = useSelector((s) => s.admin);
 
     const [searchQuery, setSearchQuery] = useState('');
     const [categoryFilter, setCategoryFilter] = useState('All Categories');
@@ -16,26 +20,49 @@ const AdminManageElectronicsPage = () => {
     const [showModal, setShowModal] = useState(false);
     const [editingProduct, setEditingProduct] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
+    const [actionError, setActionError] = useState(null);
+
+    useEffect(() => {
+        dispatch(fetchAdminProducts());
+    }, [dispatch]);
 
     const filteredProducts = products.filter((p) => {
-        const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) || p.sku.toLowerCase().includes(searchQuery.toLowerCase()) || p.brand.toLowerCase().includes(searchQuery.toLowerCase());
+        const name = p.name || p.title || '';
+        const sku = p.sku || '';
+        const brand = p.brand || '';
+        const matchesSearch = name.toLowerCase().includes(searchQuery.toLowerCase()) || sku.toLowerCase().includes(searchQuery.toLowerCase()) || brand.toLowerCase().includes(searchQuery.toLowerCase());
         const matchesCategory = categoryFilter === 'All Categories' || p.category === categoryFilter;
-        const matchesCondition = conditionFilter === 'All Conditions' || p.condition === conditionFilter;
+        const matchesCondition = conditionFilter === 'All Conditions' || (p.condition || 'New') === conditionFilter;
         const matchesBrand = brandFilter === 'All Brands' || p.brand === brandFilter;
         return matchesSearch && matchesCategory && matchesCondition && matchesBrand;
     });
 
     const handleResetFilters = () => { setSearchQuery(''); setCategoryFilter('All Categories'); setConditionFilter('All Conditions'); setBrandFilter('All Brands'); };
-    const handleAdd = () => { setEditingProduct(null); setShowModal(true); };
-    const handleEdit = (p) => { setEditingProduct(p); setShowModal(true); };
-    const handleDelete = (id) => { if (confirm('Delete this product?')) setProducts(products.filter((p) => p.id !== id)); };
-    const handleSave = (formData) => {
-        if (editingProduct) {
-            setProducts(products.map((p) => (p.id === editingProduct.id ? { ...p, ...formData } : p)));
-        } else {
-            setProducts([...products, { id: Date.now(), ...formData }]);
+    const handleAdd = () => { setActionError(null); setEditingProduct(null); setShowModal(true); };
+    const handleEdit = (p) => { setActionError(null); setEditingProduct(p); setShowModal(true); };
+    const handleDelete = async (id) => {
+        if (confirm('Delete this product?')) {
+            setActionError(null);
+            try {
+                await dispatch(deleteProduct(id)).unwrap();
+            } catch (err) {
+                setActionError(typeof err === 'string' ? err : 'Failed to delete product');
+            }
         }
-        setShowModal(false);
+    };
+    const handleSave = async (formData) => {
+        setActionError(null);
+        try {
+            if (editingProduct) {
+                const targetId = editingProduct._id || editingProduct.id;
+                await dispatch(updateProduct({ id: targetId, payload: formData })).unwrap();
+            } else {
+                await dispatch(createProduct(formData)).unwrap();
+            }
+            setShowModal(false);
+        } catch (err) {
+            setActionError(typeof err === 'string' ? err : 'Failed to save product');
+        }
     };
 
     const getStatusBadge = (status) => {
@@ -62,6 +89,13 @@ const AdminManageElectronicsPage = () => {
                     Add New Product
                 </button>
             </div>
+
+            {(error || actionError) && (
+                <div className="mb-6 p-4 rounded-xl bg-error/10 border border-error/30 text-error flex items-center gap-3">
+                    <span className="material-symbols-outlined flex-shrink-0">error</span>
+                    <span>{actionError || error}</span>
+                </div>
+            )}
 
             {/* Toolbar */}
             <div className="glass-panel rounded-xl p-4 flex flex-col md:flex-row gap-4 justify-between items-center mb-6">

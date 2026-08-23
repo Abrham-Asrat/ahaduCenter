@@ -1,8 +1,9 @@
 // src/pages/SearchResultsPage.jsx
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
+import { searchService } from '../services/searchService';
 
 /**
  * SearchResultsPage Component
@@ -23,83 +24,51 @@ const SearchResultsPage = () => {
   const [priceMin, setPriceMin] = useState('');
   const [priceMax, setPriceMax] = useState('');
 
-  // Sample comprehensive search items dataset
-  const allResults = [
-    {
-      id: 1,
-      type: 'Movie',
-      title: 'Interstellar',
-      description: "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.",
-      imageUrl: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=600&q=80',
-      rating: '8.7 / 10',
-      category: 'Sci-Fi',
-      link: '/movies/1',
-      date: '2024-01-15',
-      priceValue: 0
-    },
-    {
-      id: 2,
-      type: 'Electronics',
-      title: 'Quantum Laptop M2',
-      description: 'Next-generation computing power housed in a sleek, obsidian aluminum chassis with OLED display.',
-      imageUrl: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=600&q=80',
-      rating: '4.9 / 5',
-      category: 'High-Tech',
-      price: '$1,299',
-      priceValue: 1299,
-      link: '/electronics/1',
-      date: '2024-03-10'
-    },
-    {
-      id: 3,
-      type: 'Book',
-      title: 'The Glass Hotel',
-      description: 'Author: Emily St. John Mandel. A captivating novel exploring money, beauty, and moral compromise.',
-      imageUrl: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80',
-      rating: '4.6 / 5',
-      category: 'Hardcover',
-      link: '/books/1',
-      date: '2023-11-20',
-      priceValue: 0
-    },
-    {
-      id: 4,
-      type: 'Movie',
-      title: 'Inception',
-      description: 'A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task.',
-      imageUrl: 'https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?auto=format&fit=crop&w=600&q=80',
-      rating: '8.8 / 10',
-      category: 'Sci-Fi',
-      link: '/movies/2',
-      date: '2024-02-01',
-      priceValue: 0
-    },
-    {
-      id: 5,
-      type: 'Electronics',
-      title: 'CyberSound Headphones Pro',
-      description: 'Active noise cancelling wireless headphones with 40-hour battery life and spatial audio.',
-      imageUrl: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80',
-      rating: '4.8 / 5',
-      category: 'Audio',
-      price: '$349',
-      priceValue: 349,
-      link: '/electronics/2',
-      date: '2024-02-15'
-    },
-    {
-      id: 6,
-      type: 'Book',
-      title: 'Dune Chronicles',
-      description: 'Author: Frank Herbert. The epic masterwork of sci-fi set on the desert planet Arrakis.',
-      imageUrl: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=600&q=80',
-      rating: '4.9 / 5',
-      category: 'Sci-Fi',
-      link: '/books/2',
-      date: '2024-01-05',
-      priceValue: 0
-    }
-  ];
+  // API Data State
+  const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [totalCount, setTotalCount] = useState(0);
+
+  // Fetch search results whenever searchQuery or activeTab changes
+  useEffect(() => {
+    let cancelled = false;
+    const fetchResults = async () => {
+      if (!searchQuery.trim()) {
+        setResults([]);
+        setTotalCount(0);
+        return;
+      }
+
+      setLoading(true);
+      setError(null);
+      try {
+        const typeParam = activeTab === 'movies' ? 'movie' : activeTab === 'electronics' ? 'product' : activeTab === 'books' ? 'book' : undefined;
+        const res = await searchService.search({
+          q: searchQuery,
+          type: typeParam,
+          sort: sortBy === 'Newest' ? 'newest' : undefined,
+          minPrice: priceMin ? parseFloat(priceMin) : undefined,
+          maxPrice: priceMax ? parseFloat(priceMax) : undefined,
+        });
+
+        if (!cancelled) {
+          const list = Array.isArray(res) ? res : (res?.data ?? []);
+          setResults(list);
+          setTotalCount(res?.totalCount ?? list.length);
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setError(typeof err === 'string' ? err : 'Search failed. Please try again.');
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
+
+    fetchResults();
+    return () => { cancelled = true; };
+  }, [searchQuery, activeTab, sortBy, priceMin, priceMax]);
 
   // Toggle Genre filter selection
   const handleGenreToggle = (genre) => {
@@ -114,62 +83,29 @@ const SearchResultsPage = () => {
     setPriceMax('');
   };
 
-  // Dynamically filter results
+  // Local filtering for genres if movie
   const filteredResults = useMemo(() => {
-    return allResults.filter((item) => {
-      // 1. Search Query Filter
-      if (searchQuery.trim() !== '') {
-        const query = searchQuery.toLowerCase();
-        const matchesTitle = item.title.toLowerCase().includes(query);
-        const matchesDesc = item.description.toLowerCase().includes(query);
-        const matchesCat = item.category.toLowerCase().includes(query);
-        if (!matchesTitle && !matchesDesc && !matchesCat) return false;
+    return results.filter((item) => {
+      const type = item.type || item.itemType;
+      if ((type === 'Movie' || type === 'movie') && selectedGenres.length > 0) {
+        if (item.category && !selectedGenres.includes(item.category)) return false;
       }
-
-      // 2. Tab Filter
-      if (activeTab === 'movies' && item.type !== 'Movie') return false;
-      if (activeTab === 'electronics' && item.type !== 'Electronics') return false;
-      if (activeTab === 'books' && item.type !== 'Book') return false;
-
-      // 3. Genre Filter (for movies)
-      if (item.type === 'Movie' && selectedGenres.length > 0) {
-        if (!selectedGenres.includes(item.category)) return false;
-      }
-
-      // 4. Price Filter (for electronics)
-      if (item.type === 'Electronics') {
-        if (priceMin && item.priceValue < parseFloat(priceMin)) return false;
-        if (priceMax && item.priceValue > parseFloat(priceMax)) return false;
-      }
-
       return true;
-    }).sort((a, b) => {
-      if (sortBy === 'Newest') return new Date(b.date) - new Date(a.date);
-      if (sortBy === 'Price (Low to High)') return (a.priceValue || 0) - (b.priceValue || 0);
-      return 0; // Default relevance
     });
-  }, [searchQuery, activeTab, selectedGenres, priceMin, priceMax, sortBy]);
+  }, [results, selectedGenres]);
 
-  // Tab counts
+  // Tab counts derived from current results
   const counts = useMemo(() => {
-    const query = searchQuery.toLowerCase().trim();
-    const matchesSearch = (item) => {
-      if (!query) return true;
-      return (
-        item.title.toLowerCase().includes(query) ||
-        item.description.toLowerCase().includes(query) ||
-        item.category.toLowerCase().includes(query)
-      );
-    };
-
-    const baseList = allResults.filter(matchesSearch);
     return {
-      all: baseList.length,
-      movies: baseList.filter((i) => i.type === 'Movie').length,
-      electronics: baseList.filter((i) => i.type === 'Electronics').length,
-      books: baseList.filter((i) => i.type === 'Book').length,
+      all: results.length,
+      movies: results.filter((i) => (i.type || i.itemType)?.toLowerCase() === 'movie').length,
+      electronics: results.filter((i) => {
+        const t = (i.type || i.itemType)?.toLowerCase();
+        return t === 'product' || t === 'electronics';
+      }).length,
+      books: results.filter((i) => (i.type || i.itemType)?.toLowerCase() === 'book').length,
     };
-  }, [searchQuery]);
+  }, [results]);
 
   const tabs = [
     { key: 'all', label: 'All Results', count: counts.all },
@@ -212,6 +148,14 @@ const SearchResultsPage = () => {
             </select>
           </div>
         </header>
+
+        {/* Error banner (preserves previous results while showing error) */}
+        {error && (
+          <div className="p-4 rounded-xl bg-error/10 border border-error/30 text-error flex items-center gap-3">
+            <span className="material-symbols-outlined">error</span>
+            <span>{error}</span>
+          </div>
+        )}
 
         {/* Tabs */}
         <div className="flex border-b border-white/10 overflow-x-auto hide-scrollbar">
@@ -300,7 +244,13 @@ const SearchResultsPage = () => {
 
           {/* Results Grid */}
           <div className="flex-grow w-full">
-            {filteredResults.length === 0 ? (
+            {loading ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="glass-panel rounded-xl h-64 animate-pulse bg-white/5" />
+                ))}
+              </div>
+            ) : filteredResults.length === 0 ? (
               <div className="glass-panel rounded-xl p-12 text-center flex flex-col items-center justify-center min-h-[300px]">
                 <span className="material-symbols-outlined text-5xl text-on-surface-variant mb-4">search_off</span>
                 <h3 className="text-xl font-bold text-white mb-2">No Matching Results Found</h3>
@@ -316,71 +266,79 @@ const SearchResultsPage = () => {
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-                {filteredResults.map((result) => (
-                  <article
-                    key={result.id}
-                    onClick={() => navigate(result.link)}
-                    className="glass-panel rounded-xl overflow-hidden hover:border-primary/50 hover:shadow-[0_0_20px_rgba(16,185,129,0.2)] transition-all group cursor-pointer flex flex-col h-full"
-                  >
-                    {/* Card image */}
-                    <div className="relative h-48 w-full overflow-hidden">
-                      <div
-                        className="w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-500"
-                        style={{ backgroundImage: `url('${result.imageUrl}')` }}
-                      />
-                      {/* Type badge */}
-                      <div className="absolute top-3 left-3">
-                        <span
-                          className={`px-2 py-1 rounded text-xs uppercase font-bold flex items-center gap-1 ${result.type === 'Movie'
-                            ? 'bg-surface/90 text-primary border border-primary/30'
-                            : result.type === 'Electronics'
-                              ? 'bg-surface/90 text-secondary border border-secondary/30'
-                              : 'bg-surface/90 text-tertiary border border-tertiary/30'
-                            }`}
-                        >
-                          <span className="material-symbols-outlined text-sm">
-                            {result.type === 'Movie' ? 'movie' : result.type === 'Electronics' ? 'devices' : 'menu_book'}
-                          </span>
-                          {result.type}
-                        </span>
-                      </div>
-                      {/* Rating badge */}
-                      {result.rating && (
-                        <div className="absolute top-3 right-3">
-                          <span className="bg-secondary/90 text-black px-2 py-1 rounded text-xs font-bold">
-                            {result.rating}
+                {filteredResults.map((result) => {
+                  const id = result.id || result._id;
+                  const type = result.type || result.itemType || 'Item';
+                  const title = result.title || result.name || 'Untitled';
+                  const img = result.imageUrl || result.posterUrl || result.coverUrl || 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=600&q=80';
+                  const link = result.link || (type === 'Movie' ? `/movies/${id}` : type === 'Book' ? `/books/${id}` : `/electronics/${id}`);
+
+                  return (
+                    <article
+                      key={id}
+                      onClick={() => navigate(link)}
+                      className="glass-panel rounded-xl overflow-hidden hover:border-primary/50 hover:shadow-[0_0_20px_rgba(16,185,129,0.2)] transition-all group cursor-pointer flex flex-col h-full"
+                    >
+                      {/* Card image */}
+                      <div className="relative h-48 w-full overflow-hidden">
+                        <div
+                          className="w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-500"
+                          style={{ backgroundImage: `url('${img}')` }}
+                        />
+                        {/* Type badge */}
+                        <div className="absolute top-3 left-3">
+                          <span
+                            className={`px-2 py-1 rounded text-xs uppercase font-bold flex items-center gap-1 ${type === 'Movie'
+                              ? 'bg-surface/90 text-primary border border-primary/30'
+                              : type === 'Product' || type === 'Electronics'
+                                ? 'bg-surface/90 text-secondary border border-secondary/30'
+                                : 'bg-surface/90 text-tertiary border border-tertiary/30'
+                              }`}
+                          >
+                            <span className="material-symbols-outlined text-sm">
+                              {type === 'Movie' ? 'movie' : type === 'Product' || type === 'Electronics' ? 'devices' : 'menu_book'}
+                            </span>
+                            {type}
                           </span>
                         </div>
-                      )}
-                    </div>
-
-                    {/* Card content */}
-                    <div className="p-5 flex flex-col flex-grow">
-                      <h3 className="text-xl font-semibold text-white mb-2 group-hover:text-primary transition-colors line-clamp-2">
-                        {result.title}
-                      </h3>
-                      <p className="text-sm text-on-surface-variant line-clamp-3 flex-grow">{result.description}</p>
-                      <div className="mt-4 pt-4 border-t border-white/5 flex justify-between items-center">
-                        <span className="text-xs uppercase text-on-surface-variant">{result.category}</span>
-                        <Link
-                          to={result.link}
-                          onClick={(e) => e.stopPropagation()}
-                          className="text-primary hover:text-primary-fixed transition-colors flex items-center gap-1 text-xs uppercase font-extrabold"
-                        >
-                          {result.type === 'Electronics' ? 'View Tech' : 'Details'}
-                          <span className="material-symbols-outlined text-sm">arrow_forward</span>
-                        </Link>
+                        {/* Rating badge */}
+                        {result.rating != null && (
+                          <div className="absolute top-3 right-3">
+                            <span className="bg-secondary/90 text-black px-2 py-1 rounded text-xs font-bold">
+                              {result.rating}
+                            </span>
+                          </div>
+                        )}
                       </div>
-                    </div>
-                  </article>
-                ))}
+
+                      {/* Card content */}
+                      <div className="p-5 flex flex-col flex-grow">
+                        <h3 className="text-xl font-semibold text-white mb-2 group-hover:text-primary transition-colors line-clamp-2">
+                          {title}
+                        </h3>
+                        <p className="text-sm text-on-surface-variant line-clamp-3 flex-grow">{result.description}</p>
+                        <div className="mt-4 pt-4 border-t border-white/5 flex justify-between items-center">
+                          <span className="text-xs uppercase text-on-surface-variant">{result.category || type}</span>
+                          <Link
+                            to={link}
+                            onClick={(e) => e.stopPropagation()}
+                            className="text-primary hover:text-primary-fixed transition-colors flex items-center gap-1 text-xs uppercase font-extrabold"
+                          >
+                            {type === 'Product' || type === 'Electronics' ? 'View Tech' : 'Details'}
+                            <span className="material-symbols-outlined text-sm">arrow_forward</span>
+                          </Link>
+                        </div>
+                      </div>
+                    </article>
+                  );
+                })}
               </div>
             )}
           </div>
         </div>
       </main>
 
-      {/* Mobile filter button (floating, placed bottom-20 to avoid bottom nav overlay) */}
+      {/* Mobile filter button */}
       <button
         className="md:hidden fixed bottom-20 right-6 z-40 p-4 rounded-full bg-surface-container border border-primary/30 text-primary shadow-lg cursor-pointer"
         onClick={() => setShowFilters(true)}

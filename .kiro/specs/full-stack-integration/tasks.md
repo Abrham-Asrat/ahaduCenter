@@ -132,116 +132,116 @@ These tasks wire the AhaduCenter React frontend to the existing Express/MongoDB 
   - [x] 20.4 Implement `getUserStats()` → `GET /api/users/me/stats`
   - [x] 20.5 Implement `getUserActivity()` → `GET /api/users/me/activity`
 
-- [ ] 21. User dashboard page wiring (`UserDashboardPage.jsx`)
+- [x] 21. User dashboard page wiring (`UserDashboardPage.jsx`)
   - [x] 21.1 On mount call `Promise.all([getProfile(), getUserStats(), getUserActivity()])` concurrently; replace hardcoded `user`, `stats`, and `activities` objects; show loading skeleton while any call is pending
-  - [ ] 21.2 On profile edit form submit call `userService.updateProfile`; update displayed profile with server response on success; display error on failure
-  - [~] 21.3 On avatar file select and upload form submit call `userService.uploadAvatar`; update displayed avatar URL on success; display error on failure
+  - [x] 21.2 On profile edit form submit call `userService.updateProfile`; update displayed profile with server response on success; display error on failure
+  - [x] 21.3 On avatar file select and upload form submit call `userService.uploadAvatar`; update displayed avatar URL on success; display error on failure
 
-- [ ] 22. Borrowing history service (`userService.js` — borrowing methods)
+- [x] 22. Borrowing history service (`userService.js` — borrowing methods)
   - [x] 22.1 Implement `getBorrowingHistory()` → `GET /api/users/me/borrowings`
-  - [~] 22.2 Implement `renewBorrowing(borrowingId)` → `POST /api/borrowings/:id/renew`
-  - [~] 22.3 Implement `returnBook(borrowingId)` → `POST /api/borrowings/:id/return`
+  - [x] 22.2 Implement `renewBorrowing(borrowingId)` → `POST /api/borrowings/:id/renew`
+  - [x] 22.3 Implement `returnBook(borrowingId)` → `POST /api/borrowings/:id/return`
 
-- [ ] 23. Borrowing history page wiring (`BorrowingHistoryPage.jsx`)
-  - [~] 23.1 Call `getBorrowingHistory()` on mount; replace hardcoded `borrowings` array; show loading indicator while in-flight
-  - [~] 23.2 On Renew click call `userService.renewBorrowing(id)`; on success update record's due date and renewal count from response; on failure show error and retain original record
-  - [~] 23.3 On Return click call `userService.returnBook(id)`; on success update record status to `Returned`; on failure show error and retain original status
+- [x] 23. Borrowing history page wiring (`BorrowingHistoryPage.jsx`)
+  - [x] 23.1 Call `getBorrowingHistory()` on mount; replace hardcoded `borrowings` array; show loading indicator while in-flight
+  - [x] 23.2 On Renew click call `userService.renewBorrowing(id)`; on success update record's due date and renewal count from response; on failure show error and retain original record
+  - [x] 23.3 On Return click call `userService.returnBook(id)`; on success update record status to `Returned`; on failure show error and retain original status
 
-- [ ] 24. Wishlist service (`userService.js` — wishlist methods)
-  - [~] 24.1 Implement `getWishlist()` → `GET /api/users/me/wishlist`
-  - [~] 24.2 Implement `addToWishlist(payload)` → `POST /api/users/me/wishlist` with `{ itemId, itemType }`
-  - [~] 24.3 Implement `removeFromWishlist(itemId)` → `DELETE /api/users/me/wishlist/:itemId`
+- [x] 24. Wishlist service (`userService.js` — wishlist methods)
+  - [x] 24.1 Implement `getWishlist()` → `GET /api/users/me/wishlist`
+  - [x] 24.2 Implement `addToWishlist(payload)` → `POST /api/users/me/wishlist` with `{ itemId, itemType }`
+  - [x] 24.3 Implement `removeFromWishlist(itemId)` → `DELETE /api/users/me/wishlist/:itemId`
 
-- [ ] 25. Wishlist Redux slice (`wishlistSlice.js`)
-  - [~] 25.1 Define initial state: `items: [], loading: false, error: null`
-  - [~] 25.2 Implement `fetchWishlist` thunk → `userService.getWishlist`; on fulfilled set `items`
-  - [~] 25.3 Implement `addWishlistItem` thunk → `userService.addToWishlist`; in pending case snapshot current items and immediately push an optimistic entry; in fulfilled case replace items with server response; in rejected case restore snapshot and set error
-  - [~] 25.4 Implement `removeWishlistItem` thunk → `userService.removeFromWishlist`; in pending case snapshot current items and immediately filter out the target id; in fulfilled case set `loading: false`; in rejected case restore snapshot and set error
-  - [~] 25.5 Wire all pending/rejected cases for `fetchWishlist`
+- [x] 25. Wishlist Redux slice (`wishlistSlice.js`)
+  - [x] 25.1 Define initial state: `items: [], loading: false, error: null`
+  - [x] 25.2 Implement `fetchWishlist` thunk → `userService.getWishlist`; on fulfilled set `items`
+  - [x] 25.3 Implement `addWishlistItem` thunk → `userService.addToWishlist`; in pending case snapshot current items and immediately push an optimistic entry; in fulfilled case replace items with server response; in rejected case restore snapshot and set error
+  - [x] 25.4 Implement `removeWishlistItem` thunk → `userService.removeFromWishlist`; in pending case snapshot current items and immediately filter out the target id; in fulfilled case set `loading: false`; in rejected case restore snapshot and set error
+  - [x] 25.5 Wire all pending/rejected cases for `fetchWishlist`
 
-- [ ] 26. Wishlist page wiring
-  - [~] 26.1 `WishlistPage.jsx` — dispatch `fetchWishlist()` on mount; replace hardcoded `wishlistItems` array with `wishlist.items` from store; show loading/error states
-  - [~] 26.2 `BookCard.jsx`, `MovieCard.jsx`, `ProductCard.jsx` — wire wishlist bookmark/icon to dispatch `addWishlistItem` or `removeWishlistItem` with `{ itemId, itemType }` as appropriate
+- [x] 26. Wishlist page wiring
+  - [x] 26.1 `WishlistPage.jsx` — dispatch `fetchWishlist()` on mount; replace hardcoded `wishlistItems` array with `wishlist.items` from store; show loading/error states
+  - [x] 26.2 `BookCard.jsx`, `MovieCard.jsx`, `ProductCard.jsx` — wire wishlist bookmark/icon to dispatch `addWishlistItem` or `removeWishlistItem` with `{ itemId, itemType }` as appropriate
 
-- [ ] 27. Notifications service (`userService.js` — notification methods)
-  - [~] 27.1 Implement `getNotifications()` → `GET /api/users/me/notifications`
-  - [~] 27.2 Implement `markNotificationRead(id)` → `PATCH /api/notifications/:id/read`
-  - [~] 27.3 Implement `markAllNotificationsRead()` → `POST /api/users/me/notifications/read-all`
-  - [~] 27.4 Implement `deleteAllNotifications()` → `DELETE /api/users/me/notifications`
+- [x] 27. Notifications service (`userService.js` — notification methods)
+  - [x] 27.1 Implement `getNotifications()` → `GET /api/users/me/notifications`
+  - [x] 27.2 Implement `markNotificationRead(id)` → `PATCH /api/notifications/:id/read`
+  - [x] 27.3 Implement `markAllNotificationsRead()` → `POST /api/users/me/notifications/read-all`
+  - [x] 27.4 Implement `deleteAllNotifications()` → `DELETE /api/users/me/notifications`
 
-- [ ] 28. Notification Redux slice (`notificationSlice.js`)
-  - [~] 28.1 Define initial state: `notifications: [], unreadCount: 0, loading: false, error: null`
-  - [~] 28.2 Implement `fetchNotifications` thunk; on fulfilled set `notifications` and recalculate `unreadCount` from `notifications.filter(n => !n.isRead).length`
-  - [~] 28.3 Implement `markOneRead(id)` thunk; on fulfilled set `isRead: true` on the matching notification and decrement `unreadCount`; on rejected set error and preserve previous state
-  - [~] 28.4 Implement `markAllRead` thunk; on fulfilled set all `isRead: true` and `unreadCount: 0`; on rejected set error and preserve state
-  - [~] 28.5 Implement `clearAll` thunk; on fulfilled set `notifications: []` and `unreadCount: 0`; on rejected set error and preserve state
-  - [~] 28.6 Wire all pending cases: `loading: true`
+- [x] 28. Notification Redux slice (`notificationSlice.js`)
+  - [x] 28.1 Define initial state: `notifications: [], unreadCount: 0, loading: false, error: null`
+  - [x] 28.2 Implement `fetchNotifications` thunk; on fulfilled set `notifications` and recalculate `unreadCount` from `notifications.filter(n => !n.isRead).length`
+  - [x] 28.3 Implement `markOneRead(id)` thunk; on fulfilled set `isRead: true` on the matching notification and decrement `unreadCount`; on rejected set error and preserve previous state
+  - [x] 28.4 Implement `markAllRead` thunk; on fulfilled set all `isRead: true` and `unreadCount: 0`; on rejected set error and preserve state
+  - [x] 28.5 Implement `clearAll` thunk; on fulfilled set `notifications: []` and `unreadCount: 0`; on rejected set error and preserve state
+  - [x] 28.6 Wire all pending cases: `loading: true`
 
-- [ ] 29. Notifications page wiring
-  - [~] 29.1 `NotificationsPage.jsx` — dispatch `fetchNotifications()` on mount; replace hardcoded notifications array; show loading state; show error banner with retry on failure
-  - [~] 29.2 On single notification click dispatch `markOneRead(id)`; on failure show error
-  - [~] 29.3 On "Mark All as Read" click dispatch `markAllRead`; on failure show error and retain previous state
-  - [~] 29.4 On "Clear All" click dispatch `clearAll`; on failure show error and retain previous state
+- [x] 29. Notifications page wiring
+  - [x] 29.1 `NotificationsPage.jsx` — dispatch `fetchNotifications()` on mount; replace hardcoded notifications array; show loading state; show error banner with retry on failure
+  - [x] 29.2 On single notification click dispatch `markOneRead(id)`; on failure show error
+  - [x] 29.3 On "Mark All as Read" click dispatch `markAllRead`; on failure show error and retain previous state
+  - [x] 29.4 On "Clear All" click dispatch `clearAll`; on failure show error and retain previous state
 
-- [ ] 30. Search service (`searchService.js`)
-  - [~] 30.1 Implement `search({ q, type, page, limit = 20 })` → `GET /api/search` with query params `q`, `type`, `page`, `limit`
+- [x] 30. Search service (`searchService.js`)
+  - [x] 30.1 Implement `search({ q, type, page, limit = 20 })` → `GET /api/search` with query params `q`, `type`, `page`, `limit`
 
-- [ ] 31. Search page wiring (`SearchResultsPage.jsx`)
-  - [~] 31.1 On mount and whenever URL `?q=` changes, call `searchService.search({ q, type, page })`; replace hardcoded `allResults` array
-  - [~] 31.2 On tab selection pass `type=movie|book|product` or omit for "All"; on failure display error banner while preserving any previously loaded results; on empty results show empty-state message distinct from error
+- [x] 31. Search page wiring (`SearchResultsPage.jsx`)
+  - [x] 31.1 On mount and whenever URL `?q=` changes, call `searchService.search({ q, type, page })`; replace hardcoded `allResults` array
+  - [x] 31.2 On tab selection pass `type=movie|book|product` or omit for "All"; on failure display error banner while preserving any previously loaded results; on empty results show empty-state message distinct from error
 
-- [ ] 32. Contact service (`contactService.js`)
-  - [~] 32.1 Create `client/src/services/contactService.js`
-  - [~] 32.2 Implement `submitContact(payload)` → `POST /api/contact` with `{ name, email, subject, message }`
+- [x] 32. Contact service (`contactService.js`)
+  - [x] 32.1 Create `client/src/services/contactService.js`
+  - [x] 32.2 Implement `submitContact(payload)` → `POST /api/contact` with `{ name, email, subject, message }`
 
-- [ ] 33. Contact page wiring (`ContactPage.jsx`)
-  - [~] 33.1 On form submit call `contactService.submitContact`; disable submit button with loading indicator while in-flight
-  - [~] 33.2 On success show the success card and hide any error
-  - [~] 33.3 On failure show server error message (or `"Something went wrong. Please try again."` fallback) inside the form area, retain user's form data, do not show the success card
+- [x] 33. Contact page wiring (`ContactPage.jsx`)
+  - [x] 33.1 On form submit call `contactService.submitContact`; disable submit button with loading indicator while in-flight
+  - [x] 33.2 On success show the success card and hide any error
+  - [x] 33.3 On failure show server error message (or `"Something went wrong. Please try again."` fallback) inside the form area, retain user's form data, do not show the success card
 
-- [ ] 34. Admin service (`adminService.js`)
-  - [~] 34.1 Implement dashboard methods: `getStats()` → `GET /api/admin/stats`; `getRecentActivity()` → `GET /api/admin/recent`
-  - [~] 34.2 Implement book CRUD: `getAdminBooks()` → `GET /api/admin/books`; `createBook(payload)` → `POST /api/admin/books`; `updateBook(id, payload)` → `PUT /api/admin/books/:id`; `deleteBook(id)` → `DELETE /api/admin/books/:id`
-  - [~] 34.3 Implement movie CRUD: `getAdminMovies()`, `createMovie`, `updateMovie`, `deleteMovie` — same pattern for `/api/admin/movies`
-  - [~] 34.4 Implement product CRUD: `getAdminProducts()`, `createProduct`, `updateProduct`, `deleteProduct` — same pattern for `/api/admin/products`
-  - [~] 34.5 Implement movie requests methods: `getMovieRequests()` → `GET /api/admin/movie-requests`; `updateMovieRequestStatus(id, status)` → `PATCH /api/admin/movie-requests/:id`
-  - [~] 34.6 Implement `getContactSubmissions()` → `GET /api/admin/contacts`
+- [x] 34. Admin service (`adminService.js`)
+  - [x] 34.1 Implement dashboard methods: `getStats()` → `GET /api/admin/stats`; `getRecentActivity()` → `GET /api/admin/recent`
+  - [x] 34.2 Implement book CRUD: `getAdminBooks()` → `GET /api/admin/books`; `createBook(payload)` → `POST /api/admin/books`; `updateBook(id, payload)` → `PUT /api/admin/books/:id`; `deleteBook(id)` → `DELETE /api/admin/books/:id`
+  - [x] 34.3 Implement movie CRUD: `getAdminMovies()`, `createMovie`, `updateMovie`, `deleteMovie` — same pattern for `/api/admin/movies`
+  - [x] 34.4 Implement product CRUD: `getAdminProducts()`, `createProduct`, `updateProduct`, `deleteProduct` — same pattern for `/api/admin/products`
+  - [x] 34.5 Implement movie requests methods: `getMovieRequests()` → `GET /api/admin/movie-requests`; `updateMovieRequestStatus(id, status)` → `PATCH /api/admin/movie-requests/:id`
+  - [x] 34.6 Implement `getContactSubmissions()` → `GET /api/admin/contacts`
 
-- [ ] 35. Admin Redux slice (`adminSlice.js`)
-  - [~] 35.1 Define initial state: `stats: null, recentActivity: [], books: [], movies: [], products: [], movieRequests: [], contactSubmissions: [], loading: false, error: null`
-  - [~] 35.2 Implement `fetchAdminStats` and `fetchRecentActivity` thunks
-  - [~] 35.3 Implement book thunks: `fetchAdminBooks`, `createBook`, `updateBook`, `deleteBook`; on fulfilled `createBook` push to `state.books`; on fulfilled `updateBook` replace the item; on fulfilled `deleteBook` filter out
-  - [~] 35.4 Implement movie thunks: `fetchAdminMovies`, `createMovie`, `updateMovie`, `deleteMovie` — same fulfilled patterns
-  - [~] 35.5 Implement product thunks: `fetchAdminProducts`, `createProduct`, `updateProduct`, `deleteProduct` — same fulfilled patterns
-  - [~] 35.6 Implement `fetchMovieRequests` and `updateMovieRequestStatus` thunks
-  - [~] 35.7 Implement `fetchContactSubmissions` thunk
-  - [~] 35.8 Wire all pending/rejected cases: `loading: true` / `loading: false, error: action.payload`
+- [x] 35. Admin Redux slice (`adminSlice.js`)
+  - [x] 35.1 Define initial state: `stats: null, recentActivity: [], books: [], movies: [], products: [], movieRequests: [], contactSubmissions: [], loading: false, error: null`
+  - [x] 35.2 Implement `fetchAdminStats` and `fetchRecentActivity` thunks
+  - [x] 35.3 Implement book thunks: `fetchAdminBooks`, `createBook`, `updateBook`, `deleteBook`; on fulfilled `createBook` push to `state.books`; on fulfilled `updateBook` replace the item; on fulfilled `deleteBook` filter out
+  - [x] 35.4 Implement movie thunks: `fetchAdminMovies`, `createMovie`, `updateMovie`, `deleteMovie` — same fulfilled patterns
+  - [x] 35.5 Implement product thunks: `fetchAdminProducts`, `createProduct`, `updateProduct`, `deleteProduct` — same fulfilled patterns
+  - [x] 35.6 Implement `fetchMovieRequests` and `updateMovieRequestStatus` thunks
+  - [x] 35.7 Implement `fetchContactSubmissions` thunk
+  - [x] 35.8 Wire all pending/rejected cases: `loading: true` / `loading: false, error: action.payload`
 
-- [ ] 36. Admin page wiring
-  - [~] 36.1 `AdminDashboardPage.jsx` — dispatch `fetchAdminStats` and `fetchRecentActivity` concurrently on mount; replace hardcoded stats and recent additions with `admin.stats` and `admin.recentActivity`; show loading/error states
-  - [~] 36.2 `AdminManageBooksPage.jsx` — dispatch `fetchAdminBooks` on mount; replace hardcoded book list with `admin.books`; on create dispatch `createBook`; on edit dispatch `updateBook`; on delete dispatch `deleteBook`; on any failure display server error and retain previous list
-  - [~] 36.3 `AdminManageMoviesPage.jsx` — same pattern as books, using movie thunks and `admin.movies`
-  - [~] 36.4 `AdminManageElectronicsPage.jsx` — same pattern as books, using product thunks and `admin.products`
+- [x] 36. Admin page wiring
+  - [x] 36.1 `AdminDashboardPage.jsx` — dispatch `fetchAdminStats` and `fetchRecentActivity` concurrently on mount; replace hardcoded stats and recent additions with `admin.stats` and `admin.recentActivity`; show loading/error states
+  - [x] 36.2 `AdminManageBooksPage.jsx` — dispatch `fetchAdminBooks` on mount; replace hardcoded book list with `admin.books`; on create dispatch `createBook`; on edit dispatch `updateBook`; on delete dispatch `deleteBook`; on any failure display server error and retain previous list
+  - [x] 36.3 `AdminManageMoviesPage.jsx` — same pattern as books, using movie thunks and `admin.movies`
+  - [x] 36.4 `AdminManageElectronicsPage.jsx` — same pattern as books, using product thunks and `admin.products`
 
-- [ ] 37. Property-based tests — Auth slice (Properties 2, 3, 4, 5, 6)
-  - [~] 37.1 Write property test for Property 2: loginThunk sets token and user in Redux state
-  - [~] 37.2 Write property test for Property 3: loginThunk persists token to localStorage
-  - [~] 37.3 Write property test for Property 4: registerThunk sets token and user
-  - [~] 37.4 Write property test for Property 5: logoutAction clears all auth state
-  - [~] 37.5 Write property test for Property 6: failed auth thunk sets auth.error to the rejection string
+- [x] 37. Property-based tests — Auth slice (Properties 2, 3, 4, 5, 6)
+  - [x] 37.1 Write property test for Property 2: loginThunk sets token and user in Redux state
+  - [x] 37.2 Write property test for Property 3: loginThunk persists token to localStorage
+  - [x] 37.3 Write property test for Property 4: registerThunk sets token and user
+  - [x] 37.4 Write property test for Property 5: logoutAction clears all auth state
+  - [x] 37.5 Write property test for Property 6: failed auth thunk sets auth.error to the rejection string
 
-- [ ] 38. Property-based tests — API interceptors (Properties 1, 13, 14)
-  - [~] 38.1 Write property test for Property 1: auth request interceptor attaches Bearer token
-  - [~] 38.2 Write property test for Property 13: response interceptor extracts error string
-  - [~] 38.3 Write property test for Property 14: 401 response triggers logout and state reset
+- [x] 38. Property-based tests — API interceptors (Properties 1, 13, 14)
+  - [x] 38.1 Write property test for Property 1: auth request interceptor attaches Bearer token
+  - [x] 38.2 Write property test for Property 13: response interceptor extracts error string
+  - [x] 38.3 Write property test for Property 14: 401 response triggers logout and state reset
 
-- [ ] 39. Property-based tests — Pagination and slices (Properties 7, 8, 9, 10, 11, 12)
-  - [~] 39.1 Write property test for Property 7: pagination invariant for book, movie, and product slices
-  - [~] 39.2 Write property test for Property 8: search results pagination invariant
-  - [~] 39.3 Write property test for Property 9: wishlist optimistic rollback on rejected add
-  - [~] 39.4 Write property test for Property 10: notificationSlice unreadCount derivation
-  - [~] 39.5 Write property test for Property 11: markAllRead sets all notifications to read
-  - [~] 39.6 Write property test for Property 12: clearAll empties notifications
+- [x] 39. Property-based tests — Pagination and slices (Properties 7, 8, 9, 10, 11, 12)
+  - [x] 39.1 Write property test for Property 7: pagination invariant for book, movie, and product slices
+  - [x] 39.2 Write property test for Property 8: search results pagination invariant
+  - [x] 39.3 Write property test for Property 9: wishlist optimistic rollback on rejected add
+  - [x] 39.4 Write property test for Property 10: notificationSlice unreadCount derivation
+  - [x] 39.5 Write property test for Property 11: markAllRead sets all notifications to read
+  - [x] 39.6 Write property test for Property 12: clearAll empties notifications
 
 
 ## Task Dependency Graph

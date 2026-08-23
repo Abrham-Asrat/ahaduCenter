@@ -1,6 +1,8 @@
 // src/components/book/BookCard.jsx
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { addWishlistItem, removeWishlistItem } from '../../redux/slices/wishlistSlice';
 
 /**
  * BookCard Component
@@ -11,7 +13,15 @@ import { Link } from 'react-router-dom';
  * - book: Object { id, title, author, coverUrl, availability, price, waitlist, type }
  * - onQuickAction: Callback function
  */
-const BookCard = ({ book, onQuickAction }) => {
+const BookCard = ({ book, onQuickAction, isWishlisted: initialWishlisted = false }) => {
+  const dispatch = useDispatch();
+  const wishlistItems = useSelector((s) => s.wishlist?.items ?? []);
+  
+  const bookId = book.id || book._id;
+  const isWishlisted = wishlistItems.some(
+    (item) => item.id === bookId || item.itemId === bookId
+  ) || initialWishlisted;
+
   // Badge styles based on availability type
   const badgeStyles = {
     Borrow: 'bg-primary/20 border border-primary/50 text-primary',
@@ -46,9 +56,27 @@ const BookCard = ({ book, onQuickAction }) => {
     if (onQuickAction) onQuickAction(book);
   };
 
+  const handleBookmarkClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (isWishlisted) {
+      dispatch(removeWishlistItem(bookId));
+    } else {
+      dispatch(
+        addWishlistItem({
+          itemId: bookId,
+          itemType: 'Book',
+          title: book.title,
+          imageUrl: book.coverUrl,
+          category: book.category ?? book.author,
+        })
+      );
+    }
+  };
+
   return (
-    <Link to={`/books/${book.id}`} className="block h-full group">
-      <div className="glass-panel rounded-xl overflow-hidden flex flex-col group glow-hover transition-all duration-300 hover:-translate-y-1 h-full border border-white/10 shadow-lg">
+    <Link to={`/books/${bookId}`} className="block h-full group">
+      <div className="glass-panel rounded-xl overflow-hidden flex flex-col group glow-hover transition-all duration-300 hover:-translate-y-1 h-full border border-white/10 shadow-lg relative">
         {/* Book cover container */}
         <div className="relative aspect-[2/3] w-full overflow-hidden bg-surface-container-low">
           <img
@@ -63,6 +91,24 @@ const BookCard = ({ book, onQuickAction }) => {
               {book.availability}
             </span>
           </div>
+
+          {/* Bookmark floating button */}
+          <button
+            onClick={handleBookmarkClick}
+            title={isWishlisted ? "Remove from Wishlist" : "Save to Wishlist"}
+            className={`absolute top-2 left-2 z-10 w-8 h-8 rounded-full glass-panel flex items-center justify-center transition-all ${
+              isWishlisted
+                ? 'text-secondary border-secondary bg-secondary/20 shadow-[0_0_15px_rgba(233,195,73,0.5)]'
+                : 'text-on-surface hover:text-secondary hover:border-secondary'
+            }`}
+          >
+            <span
+              className="material-symbols-outlined text-base"
+              style={{ fontVariationSettings: isWishlisted ? "'FILL' 1" : "'FILL' 0" }}
+            >
+              {isWishlisted ? 'bookmark' : 'bookmark_add'}
+            </span>
+          </button>
         </div>
 
         {/* Book info */}
