@@ -52,8 +52,12 @@ beforeAll(async () => {
 }, 90000);
 
 afterAll(async () => {
-  await mongoose.disconnect();
-  await mongod.stop();
+  if (mongoose.connection.readyState !== 0) {
+    await mongoose.disconnect();
+  }
+  if (mongod) {
+    await mongod.stop(true);
+  }
 });
 
 // Clear all relevant collections between tests

@@ -36,6 +36,7 @@ let mongod;
 
 beforeAll(async () => {
   mongod = await MongoMemoryServer.create({
+    binary: { version: '6.0.4' },
     instance: { startupTimeout: 60000 },
   });
   const uri = mongod.getUri();
@@ -43,8 +44,12 @@ beforeAll(async () => {
 }, 90000); // extend Jest's beforeAll timeout to 90 s
 
 afterAll(async () => {
-  await mongoose.disconnect();
-  await mongod.stop();
+  if (mongoose.connection.readyState !== 0) {
+    await mongoose.disconnect();
+  }
+  if (mongod) {
+    await mongod.stop(true);
+  }
 });
 
 // Clear users between each test
