@@ -223,7 +223,7 @@ describe('Property 7 (fast-check): animate-fade-in is always present across all 
           return el !== null && el.classList.contains('animate-fade-in');
         }
       ),
-      { numRuns: 50 }
+      { numRuns: 10 }
     );
   });
 

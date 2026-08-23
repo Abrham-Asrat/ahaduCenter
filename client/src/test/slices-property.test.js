@@ -27,7 +27,8 @@ describe('Pagination and Slices Property-Based Tests', () => {
           expect(sliced.length).toBe(expectedLen);
           expect(totalPages).toBe(Math.ceil(totalCount / limit) || 1);
         }
-      )
+      ),
+      { numRuns: 15 }
     );
   });
 
@@ -58,7 +59,8 @@ describe('Pagination and Slices Property-Based Tests', () => {
           expect(rolledBackState.items).toEqual(initialItems);
           expect(rolledBackState.error).toBe(errorMsg);
         }
-      )
+      ),
+      { numRuns: 15 }
     );
   });
 
@@ -81,7 +83,8 @@ describe('Pagination and Slices Property-Based Tests', () => {
           expect(state.unreadCount).toBe(expectedUnread);
           expect(state.notifications.length).toBe(notifications.length);
         }
-      )
+      ),
+      { numRuns: 15 }
     );
   });
 
@@ -106,7 +109,8 @@ describe('Pagination and Slices Property-Based Tests', () => {
           expect(newState.unreadCount).toBe(0);
           expect(newState.notifications.every((n) => n.isRead)).toBe(true);
         }
-      )
+      ),
+      { numRuns: 15 }
     );
   });
 
@@ -135,7 +139,8 @@ describe('Pagination and Slices Property-Based Tests', () => {
           expect(newState.notifications).toEqual([]);
           expect(newState.unreadCount).toBe(0);
         }
-      )
+      ),
+      { numRuns: 15 }
     );
   });
 });

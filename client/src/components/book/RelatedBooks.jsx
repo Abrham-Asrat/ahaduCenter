@@ -32,7 +32,7 @@ const RelatedBooks = ({ books }) => {
             </div>
 
             {/* Horizontal scrollable carousel */}
-            <div className="flex gap-4 overflow-x-auto hide-scrollbar pb-4 snap-x">
+            <div ref={scrollRef} className="flex gap-4 overflow-x-auto hide-scrollbar pb-4 snap-x">
                 {books.map((book) => (
                     <div
                         key={book.id}

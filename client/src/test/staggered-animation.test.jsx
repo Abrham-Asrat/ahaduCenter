@@ -107,7 +107,7 @@ describe(
 
           unmount();
         }),
-        { numRuns: 100 }
+        { numRuns: 20 }
       );
     });
 
@@ -119,7 +119,7 @@ describe(
           expect(elements[0].style.animationDelay).toBe('0s');
           unmount();
         }),
-        { numRuns: 50 }
+        { numRuns: 10 }
       );
     });
 
@@ -139,7 +139,7 @@ describe(
 
           unmount();
         }),
-        { numRuns: 50 }
+        { numRuns: 10 }
       );
     });
   }

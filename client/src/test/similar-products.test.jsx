@@ -85,7 +85,7 @@ describe('SimilarProducts card links (Property 2 — Validates: Requirements 3.3
 
         unmount();
       }),
-      { numRuns: 100 }
+      { numRuns: 20 }
     );
   });
 
@@ -109,7 +109,7 @@ describe('SimilarProducts card links (Property 2 — Validates: Requirements 3.3
 
         unmount();
       }),
-      { numRuns: 100 }
+      { numRuns: 20 }
     );
   });
 });

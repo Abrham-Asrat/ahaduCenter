@@ -21,7 +21,7 @@ These tasks wire the AhaduCenter React frontend to the existing Express/MongoDB 
   - [x] 3.2 Add the request interceptor: read `localStorage.getItem('token')` and attach `Authorization: Bearer <token>` when a token is present
   - [x] 3.3 Add the response interceptor: on non-2xx responses extract `data.error || data.message || fallback` and re-throw as a plain string; on 401 additionally dispatch `logoutAction` and redirect to `/login`
 
-- [ ] 4. Database seed script
+- [x] 4. Database seed script
   - [x] 4.1 Create `server/src/seed.js` that imports `mongoose`, `bcryptjs`, `dotenv`, and the `User`, `Book`, `Movie`, `Product` models
   - [x] 4.2 Implement idempotent user seeding: check by email; if admin `admin@ahaducenter.com` or regular user `user@ahaducenter.com` does not exist, create them with bcrypt-hashed passwords (`admin123` / `user123`) and the correct `role` field
   - [x] 4.3 Implement idempotent book seeding: if `Book.countDocuments()` is 0, insert at least 8 book documents covering at least 3 distinct categories, 2 distinct languages, and all 3 availability states (`available`, `borrowed`, `reserved`)

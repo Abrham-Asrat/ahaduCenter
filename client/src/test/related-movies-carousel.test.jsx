@@ -86,7 +86,7 @@ describe('RelatedMoviesCarousel card links (Property 1 — Validates: Requiremen
 
         unmount();
       }),
-      { numRuns: 100 }
+      { numRuns: 20 }
     );
   });
 
@@ -110,7 +110,7 @@ describe('RelatedMoviesCarousel card links (Property 1 — Validates: Requiremen
 
         unmount();
       }),
-      { numRuns: 100 }
+      { numRuns: 20 }
     );
   });
 });

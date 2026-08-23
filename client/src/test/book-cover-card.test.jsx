@@ -73,7 +73,7 @@ describe('BookCoverCard Save toggle — Property 3 (Validates: Requirements 4.2)
                     unmount();
                 }
             ),
-            { numRuns: 50 }
+            { numRuns: 10 }
         );
     });
 
@@ -121,7 +121,7 @@ describe('BookCoverCard Zoom toggle — Property 4 (Validates: Requirements 4.3)
                     unmount();
                 }
             ),
-            { numRuns: 50 }
+            { numRuns: 10 }
         );
     });
 

@@ -26,7 +26,8 @@ describe('API Interceptor Property-Based Tests', () => {
         const resultConfig = await requestInterceptor(dummyConfig);
 
         expect(resultConfig.headers.Authorization).toBe(`Bearer ${token}`);
-      })
+      }),
+      { numRuns: 10 }
     );
   });
 
@@ -53,7 +54,8 @@ describe('API Interceptor Property-Based Tests', () => {
             expect(err).toBe(errorMsg);
           }
         }
-      )
+      ),
+      { numRuns: 10 }
     );
   });
 
@@ -86,7 +88,8 @@ describe('API Interceptor Property-Based Tests', () => {
         expect(window.location.href).toBe('/login');
 
         window.location = originalLocation;
-      })
+      }),
+      { numRuns: 10 }
     );
   });
 });

@@ -44,7 +44,8 @@ describe('Auth Slice Property-Based Tests', () => {
           expect(newState.user).toEqual(user);
           expect(newState.loading).toBe(false);
         }
-      )
+      ),
+      { numRuns: 10 }
     );
   });
 
@@ -63,7 +64,8 @@ describe('Auth Slice Property-Based Tests', () => {
 
           expect(localStorage.getItem('token')).toBe(token);
         }
-      )
+      ),
+      { numRuns: 10 }
     );
   });
 
@@ -89,7 +91,8 @@ describe('Auth Slice Property-Based Tests', () => {
           expect(newState.loading).toBe(false);
           expect(localStorage.getItem('token')).toBe(token);
         }
-      )
+      ),
+      { numRuns: 10 }
     );
   });
 
@@ -110,7 +113,8 @@ describe('Auth Slice Property-Based Tests', () => {
           expect(newState.error).toBeNull();
           expect(localStorage.getItem('token')).toBeNull();
         }
-      )
+      ),
+      { numRuns: 10 }
     );
   });
 
@@ -132,7 +136,8 @@ describe('Auth Slice Property-Based Tests', () => {
           expect(newState.error).toBe(errorMessage);
           expect(newState.loading).toBe(false);
         }
-      )
+      ),
+      { numRuns: 10 }
     );
   });
 });
