@@ -36,6 +36,6 @@ const BookSchema = new Schema({
   reviewCount:     { type: Number, default: 0 },
 }, { timestamps: true });
 
-BookSchema.index({ title: 'text', author: 'text', isbn: 'text' });
+BookSchema.index({ title: 'text', author: 'text', isbn: 'text' }, { language_override: 'dummy_language_override' });
 
 module.exports = mongoose.models.Book || mongoose.model('Book', BookSchema);

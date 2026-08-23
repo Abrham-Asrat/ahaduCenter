@@ -485,6 +485,19 @@ async function seed() {
     await mongoose.connect(process.env.MONGO_URI);
     console.log('[seed] Connected to MongoDB');
 
+    // Drop old indexes if present and sync new schema text indexes
+    try {
+      await mongoose.connection.collection('books').dropIndexes();
+      await mongoose.connection.collection('movies').dropIndexes();
+      await mongoose.connection.collection('products').dropIndexes();
+    } catch {}
+
+    await Promise.all([
+      Book.syncIndexes().catch(() => {}),
+      Movie.syncIndexes().catch(() => {}),
+      Product.syncIndexes().catch(() => {}),
+    ]);
+
     const results = {};
 
     // ------ Users ------

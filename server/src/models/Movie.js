@@ -50,6 +50,6 @@ const MovieSchema = new Schema({
 }, { timestamps: true });
 
 // Text index for full-text search on title and director (Requirement 6.2)
-MovieSchema.index({ title: 'text', director: 'text' });
+MovieSchema.index({ title: 'text', director: 'text' }, { language_override: 'dummy_language_override' });
 
 module.exports = mongoose.models.Movie || mongoose.model('Movie', MovieSchema);
