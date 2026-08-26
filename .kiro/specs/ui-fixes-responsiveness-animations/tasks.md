@@ -29,7 +29,7 @@ Each task touches 1–5 files and can be executed independently. Tasks are order
     - Render `ProductComparisonPage`, click checkout button, assert `navigate` called with `/order-confirmation`.
     - _Requirements: 1.4, 1.5_
 
-- [-] 3. Fix CSS: add `animate-fadeIn` alias, `skeleton-shimmer`, and `@keyframes shimmer` to `index.css`
+- [x] 3. Fix CSS: add `animate-fadeIn` alias, `skeleton-shimmer`, and `@keyframes shimmer` to `index.css`
   - After the existing `.animate-slide-up` rule in `src/index.css`, add:
     - `.animate-fadeIn { animation: fadeIn 0.4s ease-out forwards; }` (alias for legacy camelCase references)
     - `@keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }`
@@ -87,7 +87,7 @@ Each task touches 1–5 files and can be executed independently. Tasks are order
     - Assert "Help Center" link has `href="/contact"`.
     - _Requirements: 6.1, 6.2, 7.1, 8.3_
 
-- [-] 8. Fix `RelatedBooks.jsx`: implement prev/next carousel scroll
+- [x] 8. Fix `RelatedBooks.jsx`: implement prev/next carousel scroll
   - Import `useRef` from React.
   - Add `const scrollRef = useRef(null)` and attach to the scrollable container div.
   - Implement `const scroll = (dir) => { scrollRef.current?.scrollBy({ left: dir === 'next' ? 220 : -220, behavior: 'smooth' }); }`.
@@ -135,7 +135,7 @@ Each task touches 1–5 files and can be executed independently. Tasks are order
     - Click QR button; assert toast "QR Code coming soon" is rendered.
     - _Requirements: 4.1, 4.4_
 
-- [-] 12. Fix `WishlistPage.jsx`: wire ADD ITEMS button and add entrance animation
+- [x] 12. Fix `WishlistPage.jsx`: wire ADD ITEMS button and add entrance animation
   - Wire "ADD ITEMS" button: `onClick={() => navigate('/books')}` (import `useNavigate` if not already present — it is).
   - Add `animate-fade-in` to the outermost `<div className="min-h-screen ...">`.
   - _Requirements: 5.1, 11.1_
@@ -157,7 +157,7 @@ Each task touches 1–5 files and can be executed independently. Tasks are order
     - Using fast-check: generate integer N in range [1, 20]; render `PurchaseHistoryPage`; set `currentPage` to N via interaction; click next; assert `currentPage` is N + 1.
     - **Validates: Requirements 5.6**
 
-- [-] 14. Fix `NotificationsPage.jsx`: wire Load More button and add entrance animation
+- [x] 14. Fix `NotificationsPage.jsx`: wire Load More button and add entrance animation
   - Wire "Load More" button: `onClick={() => showToast('No more notifications')}`. Add `toastMessage` state and `showToast` helper (or reuse existing pattern in the file).
   - Add `animate-fade-in` to outermost `<div>`.
   - _Requirements: 5.7, 11.1_
@@ -242,7 +242,7 @@ Each task touches 1–5 files and can be executed independently. Tasks are order
     - `src/pages/ProductComparisonPage.jsx`
     - `src/pages/admin/AdminDashboardPage.jsx`
   - _Requirements: 11.1_
-  - [~] 22.1 Write property test for page entrance animation class
+  - [x] 22.1 Write property test for page entrance animation class
     - **Property 7: Page entrance animation class is always present**
     - For each of the 15 pages listed in Requirement 11.1, render the page component (wrapping in MemoryRouter where needed), query the outermost `<div>`, assert it has CSS class `animate-fade-in`.
     - **Validates: Requirements 11.1**

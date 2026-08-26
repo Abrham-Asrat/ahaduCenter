@@ -8,6 +8,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from '../redux/store';
+import { configureStore } from '@reduxjs/toolkit';
 
 // Use vi.hoisted so mockNavigate is available when vi.mock factory runs
 const { mockNavigate } = vi.hoisted(() => ({
@@ -29,9 +30,22 @@ import ElectronicsPage from '../pages/ElectronicsPage';
  * Helper: renders App inside MemoryRouter at a given initial route,
  * wrapped in Redux Provider.
  */
+const mockAuthStore = configureStore({
+  reducer: {
+    auth: () => ({
+      user: { _id: '1', name: 'Test User', email: 'test@example.com', role: 'user' },
+      token: 'fake-token',
+      initialized: true,
+    }),
+    notification: () => ({ notifications: [], unreadCount: 0, loading: false }),
+    wishlist: () => ({ items: [] }),
+    product: () => ({ products: [], loading: false }),
+  },
+});
+
 function renderApp(initialEntry = '/') {
   return render(
-    <Provider store={store}>
+    <Provider store={mockAuthStore}>
       <MemoryRouter initialEntries={[initialEntry]}>
         <App />
       </MemoryRouter>
@@ -68,6 +82,20 @@ describe('Route /order-confirmation (Requirement 1.2)', () => {
 // ─────────────────────────────────────────────────────────────────────────────
 // Requirement 1.3 — ElectronicsPage handleCompare navigates to /compare
 // ─────────────────────────────────────────────────────────────────────────────
+
+const mockStore = configureStore({
+  reducer: {
+    product: () => ({
+      products: [{ _id: '1', id: '1', name: 'Product 1', brand: 'Brand A', price: 100, condition: 'New' }],
+      loading: false,
+      error: null,
+      pagination: { totalPages: 1 },
+    }),
+    auth: () => ({ user: null }),
+    wishlist: () => ({ items: [] }),
+  },
+});
+
 describe('ElectronicsPage compare navigation (Requirement 1.3)', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -75,7 +103,7 @@ describe('ElectronicsPage compare navigation (Requirement 1.3)', () => {
 
   it('calls navigate with /compare (not /electronics/compare) when compare is triggered', async () => {
     render(
-      <Provider store={store}>
+      <Provider store={mockStore}>
         <MemoryRouter>
           <ElectronicsPage />
         </MemoryRouter>

@@ -14,7 +14,7 @@
  */
 
 import React from 'react';
-import { describe, it } from 'vitest';
+import { describe, it, vi } from 'vitest';
 import { render, screen, fireEvent, cleanup, act } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -22,6 +22,17 @@ import * as fc from 'fast-check';
 
 import { store } from '../redux/store';
 import PurchaseHistoryPage from '../pages/PurchaseHistoryPage';
+
+vi.mock('../services/orderService', () => ({
+  orderService: {
+    getOrderHistory: vi.fn().mockResolvedValue({
+      data: [{ _id: '1', status: 'Delivered', totalPrice: 10, createdAt: new Date().toISOString(), items: [] }],
+      page: 1,
+      totalPages: 10,
+      totalCount: 10,
+    }),
+  },
+}));
 
 /** Render PurchaseHistoryPage with all required providers. */
 function renderPage() {
@@ -58,8 +69,8 @@ describe('PurchaseHistoryPage pagination — Property 5 (Validates: Requirements
             }
           });
 
-          // The page indicator should now read "(n+1) OF 3"
-          const expectedText = `${n + 1} OF 3`;
+          // The page indicator should now read "(n+1) OF 10"
+          const expectedText = `${n + 1} OF 10`;
           const pageIndicator = screen.getByText(expectedText);
           expect(pageIndicator).toBeInTheDocument();
 
@@ -91,11 +102,11 @@ describe('PurchaseHistoryPage pagination — Property 5 (Validates: Requirements
           }
 
           // Confirm we are on page n
-          expect(screen.getByText(`${n} OF 3`)).toBeInTheDocument();
+          expect(screen.getByText(`${n} OF 10`)).toBeInTheDocument();
 
           // One more click → should display page n+1
           act(() => { fireEvent.click(nextButton); });
-          expect(screen.getByText(`${n + 1} OF 3`)).toBeInTheDocument();
+          expect(screen.getByText(`${n + 1} OF 10`)).toBeInTheDocument();
 
           cleanup();
         }

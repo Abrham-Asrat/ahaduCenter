@@ -16,15 +16,29 @@ import { MemoryRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import * as fc from 'fast-check';
 
-import { store } from '../redux/store';
+import { configureStore } from '@reduxjs/toolkit';
 import ElectronicsPage from '../pages/ElectronicsPage';
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Helper: render a page inside the required providers
-// ─────────────────────────────────────────────────────────────────────────────
+const mockProducts = Array.from({ length: 8 }, (_, i) => ({
+  _id: `prod-${i}`,
+  id: `prod-${i}`,
+  title: `Product ${i}`,
+  name: `Product ${i}`,
+  price: 100,
+  category: 'Laptops',
+  images: ['https://example.com/img.jpg'],
+}));
+
 function renderPage(PageComponent, route = '/') {
+  const mockStore = configureStore({
+    reducer: {
+      product: () => ({ products: mockProducts, loading: false, error: null, pagination: { totalPages: 1 } }),
+      auth: () => ({ user: null }),
+      wishlist: () => ({ items: [] }),
+    },
+  });
   const { container } = render(
-    <Provider store={store}>
+    <Provider store={mockStore}>
       <MemoryRouter initialEntries={[route]}>
         <PageComponent />
       </MemoryRouter>

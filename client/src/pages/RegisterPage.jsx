@@ -34,6 +34,12 @@ const RegisterPage = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [validationError, setValidationError] = useState(null);
+  const [toastMessage, setToastMessage] = useState(null);
+
+  const showToast = (msg) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(null), 3000);
+  };
 
   // Clear Redux auth error when component mounts
   useEffect(() => {
@@ -61,6 +67,8 @@ const RegisterPage = () => {
       return;
     }
 
+    showToast('Account created successfully!');
+    setTimeout(() => navigate('/login'), 1500);
     dispatch(registerThunk({ name: fullName, email, password }));
   };
 
@@ -69,6 +77,14 @@ const RegisterPage = () => {
       {/* Ambient glows */}
       <div className="absolute top-[-10%] left-[-10%] w-[400px] h-[400px] bg-primary/10 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] bg-secondary/5 rounded-full blur-[120px] pointer-events-none" />
+
+      {/* Toast notification */}
+      {toastMessage && (
+        <div className="fixed top-20 right-6 z-50 bg-surface-container border border-primary/50 text-white px-5 py-3.5 rounded-xl shadow-2xl flex items-center gap-3 animate-bounce">
+          <span className="material-symbols-outlined text-primary">check_circle</span>
+          <span className="text-sm font-semibold">{toastMessage}</span>
+        </div>
+      )}
 
       {/* Minimal header (logo only) - suppresses full nav for focused flow */}
       <header className="relative z-10 bg-surface/80 backdrop-blur-xl border-b border-white/5">

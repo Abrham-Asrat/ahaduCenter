@@ -9,7 +9,7 @@
 
 import React from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
 // Use vi.hoisted so mockNavigate is available when vi.mock factory runs
@@ -25,14 +25,31 @@ vi.mock('react-router-dom', async (importOriginal) => {
   };
 });
 
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
 import RegisterPage from '../pages/RegisterPage';
 
-/** Render RegisterPage with MemoryRouter (needed for <Link> components). */
+function buildMockStore() {
+  return configureStore({
+    reducer: {
+      auth: (state = { user: null, loading: false, error: null }, action) => {
+        if (action.type.includes('register')) {
+          return { ...state, user: { name: 'Test User' } };
+        }
+        return state;
+      },
+    },
+  });
+}
+
+/** Render RegisterPage with MemoryRouter + Redux Provider. */
 function renderPage() {
   return render(
-    <MemoryRouter>
-      <RegisterPage />
-    </MemoryRouter>
+    <Provider store={buildMockStore()}>
+      <MemoryRouter>
+        <RegisterPage />
+      </MemoryRouter>
+    </Provider>
   );
 }
 
@@ -77,7 +94,7 @@ describe('RegisterPage submit (Requirement 5.8)', () => {
 
   it('shows a success toast containing "Account created" after form submission', () => {
     renderPage();
-    fillAndSubmit();
+    act(() => { fillAndSubmit(); });
 
     // Toast should be visible immediately after submit
     expect(screen.getByText(/account created/i)).toBeInTheDocument();
@@ -85,13 +102,13 @@ describe('RegisterPage submit (Requirement 5.8)', () => {
 
   it('calls navigate("/login") after 1500 ms', () => {
     renderPage();
-    fillAndSubmit();
+    act(() => { fillAndSubmit(); });
 
     // navigate should NOT have been called immediately
     expect(mockNavigate).not.toHaveBeenCalledWith('/login');
 
     // Advance timers by 1500 ms — the setTimeout in handleSubmit fires
-    vi.advanceTimersByTime(1500);
+    act(() => { vi.advanceTimersByTime(1500); });
 
     expect(mockNavigate).toHaveBeenCalledWith('/login');
     expect(mockNavigate).toHaveBeenCalledTimes(1);
@@ -99,10 +116,10 @@ describe('RegisterPage submit (Requirement 5.8)', () => {
 
   it('does not navigate before 1500 ms have elapsed', () => {
     renderPage();
-    fillAndSubmit();
+    act(() => { fillAndSubmit(); });
 
     // Advance only 1499 ms — should not have navigated yet
-    vi.advanceTimersByTime(1499);
+    act(() => { vi.advanceTimersByTime(1499); });
 
     expect(mockNavigate).not.toHaveBeenCalledWith('/login');
   });

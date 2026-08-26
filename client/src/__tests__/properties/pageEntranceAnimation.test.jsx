@@ -78,6 +78,13 @@ vi.mock('../../services/userService', () => ({
     renewBorrowing: vi.fn(),
     updateProfile: vi.fn(),
     uploadAvatar: vi.fn(),
+    getWishlist: vi.fn().mockResolvedValue([]),
+    addToWishlist: vi.fn().mockResolvedValue({}),
+    removeFromWishlist: vi.fn().mockResolvedValue({}),
+    getNotifications: vi.fn().mockResolvedValue([]),
+    markNotificationRead: vi.fn().mockResolvedValue({}),
+    markAllNotificationsRead: vi.fn().mockResolvedValue({}),
+    deleteAllNotifications: vi.fn().mockResolvedValue({}),
   },
 }));
 
