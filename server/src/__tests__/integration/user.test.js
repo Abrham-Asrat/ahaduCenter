@@ -36,7 +36,6 @@ let mongod;
 
 beforeAll(async () => {
   mongod = await MongoMemoryServer.create({
-    binary: { version: '6.0.4' },
     instance: { startupTimeout: 60000 },
   });
   const uri = mongod.getUri();
