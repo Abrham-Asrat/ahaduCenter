@@ -25,15 +25,40 @@ vi.mock('react-router-dom', async (importOriginal) => {
 
 import Navbar from '../components/common/Navbar';
 import { Provider } from 'react-redux';
-import { store } from '../redux/store';
+import { configureStore } from '@reduxjs/toolkit';
 
 /**
- * Helper: renders Navbar inside MemoryRouter + Redux Provider (required because
- * Navbar uses Link/useLocation from react-router-dom and useDispatch from redux).
+ * Build a minimal Redux store that simulates a logged-in user.
+ * Navbar renders the avatar button when auth.token is truthy.
+ */
+function buildLoggedInStore() {
+  return configureStore({
+    reducer: {
+      auth: (
+        state = {
+          user: { name: 'Alex Mercer', email: 'alex@example.com', role: 'user' },
+          token: 'fake-token',
+          loading: false,
+          error: null,
+          initialized: true,
+        },
+        _action
+      ) => state,
+      notification: (
+        state = { notifications: [], unreadCount: 0, loading: false, error: null },
+        _action
+      ) => state,
+    },
+  });
+}
+
+/**
+ * Helper: renders Navbar inside MemoryRouter + Redux Provider.
+ * The store simulates a logged-in user so the avatar button appears.
  */
 function renderNavbar() {
   return render(
-    <Provider store={store}>
+    <Provider store={buildLoggedInStore()}>
       <MemoryRouter>
         <Navbar />
       </MemoryRouter>
@@ -46,8 +71,6 @@ function renderNavbar() {
 // ─────────────────────────────────────────────────────────────────────────────
 describe('Navbar profile dropdown animation class (Requirement 10.1)', () => {
   beforeEach(() => {
-    // Ensure the component believes user is logged in so the avatar button renders
-    localStorage.setItem('ahadu_logged_in', 'true');
   });
 
   it('dropdown container has class animate-fade-in after opening', () => {

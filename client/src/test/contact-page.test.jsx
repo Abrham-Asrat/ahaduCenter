@@ -10,7 +10,7 @@
 
 import React from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from '../redux/store';
@@ -30,8 +30,10 @@ function renderPage() {
 
 /**
  * Fill all required fields (name, email, subject, message) and submit the form.
+ * Returns a promise that resolves once the async submit handler completes
+ * (i.e. the success state is visible).
  */
-function fillAndSubmit() {
+async function fillAndSubmit() {
   fireEvent.change(screen.getByPlaceholderText(/enter your name/i), {
     target: { name: 'name', value: 'John Doe' },
   });
@@ -46,7 +48,9 @@ function fillAndSubmit() {
     target: { name: 'message', value: 'Hello, I have a question.' },
   });
 
-  fireEvent.click(screen.getByRole('button', { name: /send message/i }));
+  await act(async () => {
+    fireEvent.click(screen.getByRole('button', { name: /send message/i }));
+  });
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -65,37 +69,46 @@ describe('ContactPage submit (Requirement 5.9)', () => {
     alertSpy.mockRestore();
   });
 
-  it('shows success message "Message sent successfully!" after form submission', () => {
+  it('shows success message "Message sent successfully!" after form submission', async () => {
     renderPage();
-    fillAndSubmit();
+    await fillAndSubmit();
 
-    expect(screen.getByText(/message sent successfully!/i)).toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.getByText(/message sent successfully!/i)).toBeInTheDocument()
+    );
   });
 
-  it('hides the form (submit button is gone) after successful submission', () => {
+  it('hides the form (submit button is gone) after successful submission', async () => {
     renderPage();
-    fillAndSubmit();
+    await fillAndSubmit();
 
     // The "Send Message" submit button should no longer be in the document
-    expect(screen.queryByRole('button', { name: /send message/i })).not.toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.queryByRole('button', { name: /send message/i })).not.toBeInTheDocument()
+    );
   });
 
-  it('does NOT call window.alert() on form submission', () => {
+  it('does NOT call window.alert() on form submission', async () => {
     renderPage();
-    fillAndSubmit();
+    await fillAndSubmit();
 
     expect(alertSpy).not.toHaveBeenCalled();
   });
 
-  it('re-renders the form when "Send Another" button is clicked', () => {
+  it('re-renders the form when "Send Another" button is clicked', async () => {
     renderPage();
-    fillAndSubmit();
+    await fillAndSubmit();
+
+    // Wait for the success state to appear
+    const sendAnotherBtn = await screen.findByRole('button', { name: /send another/i });
 
     // Click the reset button
-    fireEvent.click(screen.getByRole('button', { name: /send another/i }));
+    fireEvent.click(sendAnotherBtn);
 
     // Form should be back
-    expect(screen.getByRole('button', { name: /send message/i })).toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: /send message/i })).toBeInTheDocument()
+    );
     // Success message should be gone
     expect(screen.queryByText(/message sent successfully!/i)).not.toBeInTheDocument();
   });
