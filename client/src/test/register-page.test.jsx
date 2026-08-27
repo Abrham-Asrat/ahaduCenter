@@ -33,9 +33,6 @@ function buildMockStore() {
   return configureStore({
     reducer: {
       auth: (state = { user: null, loading: false, error: null }, action) => {
-        if (action.type.includes('register')) {
-          return { ...state, user: { name: 'Test User' } };
-        }
         return state;
       },
     },

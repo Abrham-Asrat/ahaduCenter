@@ -10,7 +10,7 @@
  */
 import React from 'react';
 import { describe, it, expect, vi, beforeAll } from 'vitest';
-import { render } from '@testing-library/react';
+import { render, act } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from '../redux/store';
@@ -40,13 +40,17 @@ import AdminDashboardPage from '../pages/admin/AdminDashboardPage';
  * Returns the `container` from React Testing Library.
  */
 function renderPage(PageComponent, initialEntry = '/') {
-  const { container } = render(
-    <Provider store={store}>
-      <MemoryRouter initialEntries={[initialEntry]}>
-        <PageComponent />
-      </MemoryRouter>
-    </Provider>
-  );
+  let container;
+  act(() => {
+    const res = render(
+      <Provider store={store}>
+        <MemoryRouter initialEntries={[initialEntry]}>
+          <PageComponent />
+        </MemoryRouter>
+      </Provider>
+    );
+    container = res.container;
+  });
   return container;
 }
 

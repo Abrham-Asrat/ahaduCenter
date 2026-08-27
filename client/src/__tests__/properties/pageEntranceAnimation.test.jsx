@@ -11,7 +11,7 @@
  */
 import React from 'react';
 import { describe, it, expect, vi, beforeAll, afterAll } from 'vitest';
-import { render } from '@testing-library/react';
+import { render, act } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
@@ -145,13 +145,17 @@ function buildMockStore() {
  */
 function renderPage(PageComponent, initialEntry = '/') {
   const mockStore = buildMockStore();
-  const { container } = render(
-    <Provider store={mockStore}>
-      <MemoryRouter initialEntries={[initialEntry]}>
-        <PageComponent />
-      </MemoryRouter>
-    </Provider>
-  );
+  let container;
+  act(() => {
+    const res = render(
+      <Provider store={mockStore}>
+        <MemoryRouter initialEntries={[initialEntry]}>
+          <PageComponent />
+        </MemoryRouter>
+      </Provider>
+    );
+    container = res.container;
+  });
   return container;
 }
 
