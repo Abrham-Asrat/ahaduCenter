@@ -24,16 +24,20 @@ vi.mock('react-router-dom', async (importOriginal) => {
 });
 
 import Navbar from '../components/common/Navbar';
+import { Provider } from 'react-redux';
+import { store } from '../redux/store';
 
 /**
- * Helper: renders Navbar inside MemoryRouter (required because Navbar uses
- * Link and useLocation from react-router-dom).
+ * Helper: renders Navbar inside MemoryRouter + Redux Provider (required because
+ * Navbar uses Link/useLocation from react-router-dom and useDispatch from redux).
  */
 function renderNavbar() {
   return render(
-    <MemoryRouter>
-      <Navbar />
-    </MemoryRouter>
+    <Provider store={store}>
+      <MemoryRouter>
+        <Navbar />
+      </MemoryRouter>
+    </Provider>
   );
 }
 

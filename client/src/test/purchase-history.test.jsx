@@ -15,7 +15,7 @@
 
 import React from 'react';
 import { describe, it, vi } from 'vitest';
-import { render, screen, fireEvent, cleanup, act } from '@testing-library/react';
+import { render, screen, fireEvent, cleanup, act, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import * as fc from 'fast-check';
@@ -35,14 +35,20 @@ vi.mock('../services/orderService', () => ({
 }));
 
 /** Render PurchaseHistoryPage with all required providers. */
-function renderPage() {
-  return render(
-    <Provider store={store}>
-      <MemoryRouter>
-        <PurchaseHistoryPage />
-      </MemoryRouter>
-    </Provider>
-  );
+async function renderPage() {
+  let result;
+  await act(async () => {
+    result = render(
+      <Provider store={store}>
+        <MemoryRouter>
+          <PurchaseHistoryPage />
+        </MemoryRouter>
+      </Provider>
+    );
+  });
+  // Wait until loading is done and the "Next page" button appears
+  await waitFor(() => screen.getByRole('button', { name: /next page/i }));
+  return result;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -51,14 +57,14 @@ function renderPage() {
 // ─────────────────────────────────────────────────────────────────────────────
 
 describe('PurchaseHistoryPage pagination — Property 5 (Validates: Requirements 5.6)', () => {
-  it('clicking next N times results in page N+1 being displayed', () => {
-    fc.assert(
-      fc.property(
+  it('clicking next N times results in page N+1 being displayed', async () => {
+    await fc.assert(
+      fc.asyncProperty(
         // Generate N in [1, 5]: click next N times starting from page 1
         // to arrive at page N+1.
         fc.integer({ min: 1, max: 5 }),
-        (n) => {
-          act(() => { renderPage(); });
+        async (n) => {
+          await renderPage();
 
           const nextButton = screen.getByRole('button', { name: /next page/i });
 
@@ -71,8 +77,7 @@ describe('PurchaseHistoryPage pagination — Property 5 (Validates: Requirements
 
           // The page indicator should now read "(n+1) OF 10"
           const expectedText = `${n + 1} OF 10`;
-          const pageIndicator = screen.getByText(expectedText);
-          expect(pageIndicator).toBeInTheDocument();
+          await waitFor(() => screen.getByText(expectedText));
 
           cleanup();
         }
@@ -83,12 +88,12 @@ describe('PurchaseHistoryPage pagination — Property 5 (Validates: Requirements
     );
   }, 30000);
 
-  it('each individual next click increments the displayed page by exactly one', () => {
-    fc.assert(
-      fc.property(
+  it('each individual next click increments the displayed page by exactly one', async () => {
+    await fc.assert(
+      fc.asyncProperty(
         fc.integer({ min: 1, max: 5 }),
-        (n) => {
-          act(() => { renderPage(); });
+        async (n) => {
+          await renderPage();
 
           const nextButton = screen.getByRole('button', { name: /next page/i });
 
@@ -99,14 +104,15 @@ describe('PurchaseHistoryPage pagination — Property 5 (Validates: Requirements
                 fireEvent.click(nextButton);
               }
             });
+            await waitFor(() => screen.getByText(`${n} OF 10`));
           }
 
           // Confirm we are on page n
-          expect(screen.getByText(`${n} OF 10`)).toBeInTheDocument();
+          await waitFor(() => screen.getByText(`${n} OF 10`));
 
           // One more click → should display page n+1
           act(() => { fireEvent.click(nextButton); });
-          expect(screen.getByText(`${n + 1} OF 10`)).toBeInTheDocument();
+          await waitFor(() => screen.getByText(`${n + 1} OF 10`));
 
           cleanup();
         }

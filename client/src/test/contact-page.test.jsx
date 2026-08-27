@@ -12,15 +12,19 @@ import React from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { store } from '../redux/store';
 
 import ContactPage from '../pages/ContactPage';
 
-/** Render ContactPage inside a MemoryRouter (needed for Navbar/Footer Links). */
+/** Render ContactPage inside a MemoryRouter + Redux Provider (needed for Navbar). */
 function renderPage() {
   return render(
-    <MemoryRouter>
-      <ContactPage />
-    </MemoryRouter>
+    <Provider store={store}>
+      <MemoryRouter>
+        <ContactPage />
+      </MemoryRouter>
+    </Provider>
   );
 }
 
