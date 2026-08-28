@@ -11,9 +11,16 @@ if (missing.length > 0) {
 }
 
 const app = require('./src/app');
+const connectDB = require('./config/db');
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+connectDB()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  })
+  .catch(() => {
+    process.exit(1);
+  });
