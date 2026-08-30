@@ -23,6 +23,9 @@ logs/
 server/uploads/*
 !server/uploads/.gitkeep
 
+# mongodb-memory-server download cache
+server/.mongodb-binaries/
+
 # IDE & System
 .vscode/
 .idea/
