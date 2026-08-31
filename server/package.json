@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js",
-    "test": "jest --runInBand --testTimeout=60000",
+    "test": "jest --runInBand",
     "seed": "node src/seed.js"
   },
   "dependencies": {
@@ -24,6 +24,7 @@
     "uuid": "9.0.1"
   },
   "devDependencies": {
+    "async-mutex": "^0.5.0",
     "fast-check": "3.19.0",
     "jest": "29.7.0",
     "mongodb-memory-server": "10.1.2",

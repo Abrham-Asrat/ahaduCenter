@@ -46,14 +46,15 @@ let mongod;
 
 beforeAll(async () => {
   mongod = await MongoMemoryServer.create({
-    instance: { startupTimeout: 60000 },
+    instance: { startupTimeout: 120000 },
+    binary: { downloadDir: './.mongodb-binaries' },
   });
   const uri = mongod.getUri();
   await mongoose.connect(uri);
   // Ensure the text index on (title, author, isbn) is created before any
   // $text queries run — MongoMemoryServer does not auto-create indexes.
   await Book.createIndexes();
-}, 90000);
+}, 150000);
 
 afterAll(async () => {
   if (mongoose.connection.readyState !== 0) {

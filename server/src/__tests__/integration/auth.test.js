@@ -34,11 +34,12 @@ let mongod;
 
 beforeAll(async () => {
   mongod = await MongoMemoryServer.create({
-    instance: { startupTimeout: 60000 },
+    instance: { startupTimeout: 120000 },
+    binary: { downloadDir: './.mongodb-binaries' },
   });
   const uri = mongod.getUri();
   await mongoose.connect(uri);
-}, 120000);
+}, 150000);
 
 afterAll(async () => {
   if (mongoose.connection.readyState !== 0) {
