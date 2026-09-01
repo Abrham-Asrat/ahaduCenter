@@ -4,8 +4,8 @@ const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 
-const User = require('../../models/User');
-const { sign } = require('../../utils/jwt');
+const User = require('../models/User.js');
+const { sign } = require('../../utils/jwt.js');
 
 // ── Nodemailer transporter (lazy-created so env vars are available at runtime)
 let _transporter = null;

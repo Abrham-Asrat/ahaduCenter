@@ -15,8 +15,8 @@
  *   8.7 — 404 on missing product      (getProduct)
  */
 
-const Product    = require('../../models/Product');
-const { paginate } = require('../../utils/paginate');
+const Product    = require('../models/Product.js');
+const { paginate } = require('../../utils/paginate.js');
 
 // ── GET /api/products ──────────────────────────────────────────────────────────
 // Requirements 8.1, 8.2, 8.3, 8.4, 8.5

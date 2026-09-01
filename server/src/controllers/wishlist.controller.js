@@ -15,14 +15,14 @@
  */
 
 const mongoose    = require('mongoose');
-const WishlistItem = require('../../models/WishlistItem');
-const Book         = require('../../models/Book');
-const Product      = require('../../models/Product');
+const WishlistItem = require('../models/WishlistItem.js');
+const Book         = require('../models/Book.js');
+const Product      = require('../models/Product.js');
 
 // Lazy-load Movie to avoid potential circular dep issues (mirrors review.controller.js pattern)
 function getMovieModel() {
   // eslint-disable-next-line global-require
-  return require('../../models/Movie');
+  return require('../models/Movie.js');
 }
 
 /** Valid item types accepted by the Wishlist service */

@@ -17,12 +17,12 @@
  *   12.8 — createNotification side-effect on borrow (borrowBook)
  */
 
-const Book      = require('../../models/Book');
-const Borrowing = require('../../models/Borrowing');
-const { calculateOverdueFee } = require('../../utils/overdue');
+const Book      = require('../models/Book.js');
+const Borrowing = require('../models/Borrowing.js');
+const { calculateOverdueFee } = require('../../utils/overdue.js');
 
 // Notification service (Requirement 12.8)
-const { createNotification } = require('../services/notification.service');
+const { createNotification } = require('../services/notification.service.js');
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 

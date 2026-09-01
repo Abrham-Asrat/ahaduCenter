@@ -14,8 +14,8 @@
  *   6.6 — 404 on missing movie       (getMovie)
  */
 
-const Movie      = require('../../models/Movie');
-const { paginate } = require('../../utils/paginate');
+const Movie      = require('../models/Movie.js');
+const { paginate } = require('../../utils/paginate.js');
 
 // ── GET /api/movies ─────────────────────────────────────────────────────────
 // Requirements 6.1, 6.2, 6.3, 6.4

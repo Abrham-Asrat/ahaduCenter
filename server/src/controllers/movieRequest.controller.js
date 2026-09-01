@@ -15,7 +15,7 @@
  *   7.7 — 400/422 when title is absent or empty     (submitMovieRequest)
  */
 
-const MovieRequest = require('../../models/MovieRequest');
+const MovieRequest = require('../models/MovieRequest.js');
 
 // ── POST /api/movie-requests ──────────────────────────────────────────────────
 // Requirements 7.1, 7.7

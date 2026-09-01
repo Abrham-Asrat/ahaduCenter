@@ -10,7 +10,7 @@
  *   14.5 — returns public URL for uploaded file
  */
 
-const { getFileUrl } = require('../services/upload.service');
+const { getFileUrl } = require('../services/upload.service.js');
 
 /**
  * POST /api/uploads

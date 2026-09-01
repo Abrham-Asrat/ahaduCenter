@@ -26,15 +26,15 @@
  *   10.10 — 404 for non-existent item  (createReview)
  */
 
-const Review   = require('../../models/Review');
-const Book     = require('../../models/Book');
-const { paginate } = require('../../utils/paginate');
+const Review   = require('../models/Review.js');
+const Book     = require('../models/Book.js');
+const { paginate } = require('../../utils/paginate.js');
 
 // Lazy-load Movie model to avoid circular dependency issues when Movie.js
 // may not yet exist during early development phases.
 function getMovieModel() {
   // eslint-disable-next-line global-require
-  return require('../../models/Movie');
+  return require('../models/Movie.js');
 }
 
 /**

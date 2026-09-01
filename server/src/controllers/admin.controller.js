@@ -10,16 +10,16 @@
  *   - Contact submission listing
  */
 
-const Book              = require('../models/Book');
-const Movie             = require('../models/Movie');
-const Product           = require('../models/Product');
-const User              = require('../models/User');
-const Order             = require('../models/Order');
-const Borrowing         = require('../models/Borrowing');
-const MovieRequest      = require('../models/MovieRequest');
-const ContactSubmission = require('../models/ContactSubmission');
-const { paginate }      = require('../utils/paginate');
-const { createNotification } = require('../services/notification.service');
+const Book              = require('../models/Book.js');
+const Movie             = require('../models/Movie.js');
+const Product           = require('../models/Product.js');
+const User              = require('../models/User.js');
+const Order             = require('../models/Order.js');
+const Borrowing         = require('../models/Borrowing.js');
+const MovieRequest      = require('../models/MovieRequest.js');
+const ContactSubmission = require('../models/ContactSubmission.js');
+const { paginate }      = require('../../utils/paginate.js');
+const { createNotification } = require('../services/notification.service.js');
 
 // ── GET /api/admin/stats ──────────────────────────────────────────────────────
 const getStats = async (req, res, next) => {

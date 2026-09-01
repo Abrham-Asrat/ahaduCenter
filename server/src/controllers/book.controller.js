@@ -16,9 +16,9 @@
  *   5.4 — POST /api/books/:id/reserve (reserveBook)
  */
 
-const Book       = require('../../models/Book');
-const Reservation = require('../../models/Reservation');
-const { paginate } = require('../../utils/paginate');
+const Book       = require('../models/Book.js');
+const Reservation = require('../models/Reservation.js');
+const { paginate } = require('../../utils/paginate.js');
 
 // ── GET /api/books ─────────────────────────────────────────────────────────────
 // Requirements 4.1, 4.2, 4.3, 4.4

@@ -13,12 +13,12 @@
  *   3.6 — GET  /api/users/me/activity (getActivity)
  */
 
-const User         = require('../../models/User');
-const WishlistItem = require('../../models/WishlistItem');
-const Order        = require('../../models/Order');
-const Borrowing    = require('../../models/Borrowing');
-const MovieRequest = require('../../models/MovieRequest');
-const { getFileUrl } = require('../services/upload.service');
+const User         = require('../models/User.js');
+const WishlistItem = require('../models/WishlistItem.js');
+const Order        = require('../models/Order.js');
+const Borrowing    = require('../models/Borrowing.js');
+const MovieRequest = require('../models/MovieRequest.js');
+const { getFileUrl } = require('../services/upload.service.js');
 
 // ── GET /api/users/me ─────────────────────────────────────────────────────────
 // Requirement 3.1

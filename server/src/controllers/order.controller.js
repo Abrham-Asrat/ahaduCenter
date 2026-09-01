@@ -16,9 +16,9 @@
  *   12.7 — createNotification side-effect on order placed (placeOrder)
  */
 
-const Order   = require('../../models/Order');
-const Product = require('../../models/Product');
-const User    = require('../../models/User');
+const Order   = require('../models/Order.js');
+const Product = require('../models/Product.js');
+const User    = require('../models/User.js');
 
 // Notification service — imported with a try/catch guard so that if the
 // service module is not yet implemented, placeOrder still functions correctly.
