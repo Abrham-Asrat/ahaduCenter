@@ -12,6 +12,10 @@ body {
   padding-top: 4.25rem;
 }
 
+html {
+  scroll-padding-top: 5.5rem;
+}
+
 .glass-panel {
   background-color: rgba(21, 27, 40, 0.8);
   backdrop-filter: blur(12px);
@@ -251,6 +255,12 @@ body {
 /* Padding adjustment for mobile bottom navigation */
 @media (max-width: 767px) {
   body {
-    padding-bottom: calc(64px + env(safe-area-inset-bottom));
+    padding-top: 4.25rem;
+    padding-bottom: calc(72px + env(safe-area-inset-bottom));
+  }
+
+  html {
+    scroll-padding-top: 5.5rem;
+    scroll-padding-bottom: calc(72px + env(safe-area-inset-bottom));
   }
 }

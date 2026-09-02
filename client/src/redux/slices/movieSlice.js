@@ -26,9 +26,34 @@ export const fetchMovie = createAsyncThunk(
   }
 );
 
+export const fetchMovieReviews = createAsyncThunk(
+  'movie/fetchMovieReviews',
+  async (movieId, { rejectWithValue }) => {
+    try {
+      const data = await movieService.getMovieReviews(movieId);
+      return data;
+    } catch (err) {
+      return rejectWithValue(typeof err === 'string' ? err : 'Failed to fetch reviews');
+    }
+  }
+);
+
+export const createMovieReview = createAsyncThunk(
+  'movie/createMovieReview',
+  async ({ movieId, review }, { rejectWithValue }) => {
+    try {
+      const data = await movieService.createMovieReview(movieId, review);
+      return data;
+    } catch (err) {
+      return rejectWithValue(typeof err === 'string' ? err : 'Failed to create review');
+    }
+  }
+);
+
 const initialState = {
   movies: [],
   currentMovie: null,
+  reviews: [],
   loading: false,
   error: null,
   pagination: {
@@ -83,6 +108,36 @@ export const movieSlice = createSlice({
         state.currentMovie = action.payload;
       })
       .addCase(fetchMovie.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // Fetch Movie Reviews
+      .addCase(fetchMovieReviews.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchMovieReviews.fulfilled, (state, action) => {
+        state.loading = false;
+        state.reviews = Array.isArray(action.payload) ? action.payload : [];
+      })
+      .addCase(fetchMovieReviews.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // Create Movie Review
+      .addCase(createMovieReview.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(createMovieReview.fulfilled, (state, action) => {
+        state.loading = false;
+        if (state.reviews && Array.isArray(state.reviews)) {
+          state.reviews.push(action.payload);
+        }
+      })
+      .addCase(createMovieReview.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

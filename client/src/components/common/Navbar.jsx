@@ -1,5 +1,5 @@
 // src/components/common/Navbar.jsx
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logoutAction } from '../../redux/slices/authSlice';
@@ -32,9 +32,6 @@ const Navbar = () => {
     const theme = localStorage.getItem('ahadu_theme');
     return theme ? theme === 'dark' : true;
   });
-
-  // Mobile menu drawer
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Sync theme with HTML root class
   useEffect(() => {
@@ -277,18 +274,25 @@ const Navbar = () => {
                 </div>
               </div>
             ) : (
-              /* Logged-Out Actions: Sign In & Sign Up Buttons */
-              <div className="hidden md:flex gap-3">
-                <Link to="/login">
-                  <button className="px-4 py-2 border border-white/20 rounded-xl text-xs uppercase font-extrabold text-white hover:bg-white/10 transition-all cursor-pointer">
-                    Sign In
-                  </button>
+              /* Logged-Out Actions: Sign In & Sign Up Buttons (desktop) + icon (mobile) */
+              <div className="flex items-center gap-3">
+                {/* Mobile: compact login icon */}
+                <Link to="/login" className="flex md:hidden items-center justify-center w-9 h-9 rounded-full border border-white/20 text-white hover:bg-white/10 transition-all">
+                  <span className="material-symbols-outlined text-xl">login</span>
                 </Link>
-                <Link to="/register">
-                  <button className="px-4 py-2 bg-primary text-black rounded-xl text-xs uppercase font-extrabold hover:shadow-[0_0_15px_rgba(16,185,129,0.5)] transition-all cursor-pointer">
-                    Sign Up
-                  </button>
-                </Link>
+                {/* Desktop: full buttons */}
+                <div className="hidden md:flex gap-3">
+                  <Link to="/login">
+                    <button className="px-4 py-2 border border-white/20 rounded-xl text-xs uppercase font-extrabold text-white hover:bg-white/10 transition-all cursor-pointer">
+                      Sign In
+                    </button>
+                  </Link>
+                  <Link to="/register">
+                    <button className="px-4 py-2 bg-primary text-black rounded-xl text-xs uppercase font-extrabold hover:shadow-[0_0_15px_rgba(16,185,129,0.5)] transition-all cursor-pointer">
+                      Sign Up
+                    </button>
+                  </Link>
+                </div>
               </div>
             )}
 

@@ -26,9 +26,58 @@ export const fetchBook = createAsyncThunk(
   }
 );
 
+export const borrowBook = createAsyncThunk(
+  'book/borrowBook',
+  async (bookId, { rejectWithValue }) => {
+    try {
+      const data = await bookService.borrowBook(bookId);
+      return data;
+    } catch (err) {
+      return rejectWithValue(typeof err === 'string' ? err : 'Failed to borrow book');
+    }
+  }
+);
+
+export const reserveBook = createAsyncThunk(
+  'book/reserveBook',
+  async (bookId, { rejectWithValue }) => {
+    try {
+      const data = await bookService.reserveBook(bookId);
+      return data;
+    } catch (err) {
+      return rejectWithValue(typeof err === 'string' ? err : 'Failed to reserve book');
+    }
+  }
+);
+
+export const fetchBookReviews = createAsyncThunk(
+  'book/fetchBookReviews',
+  async (bookId, { rejectWithValue }) => {
+    try {
+      const data = await bookService.getBookReviews(bookId);
+      return data;
+    } catch (err) {
+      return rejectWithValue(typeof err === 'string' ? err : 'Failed to fetch reviews');
+    }
+  }
+);
+
+export const createBookReview = createAsyncThunk(
+  'book/createBookReview',
+  async ({ bookId, review }, { rejectWithValue }) => {
+    try {
+      const data = await bookService.createBookReview(bookId, review);
+      return data;
+    } catch (err) {
+      return rejectWithValue(typeof err === 'string' ? err : 'Failed to create review');
+    }
+  }
+);
+
 const initialState = {
   books: [],
   currentBook: null,
+  reviews: [],
   loading: false,
   error: null,
   pagination: {
@@ -83,6 +132,62 @@ export const bookSlice = createSlice({
         state.currentBook = action.payload;
       })
       .addCase(fetchBook.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // Borrow Book
+      .addCase(borrowBook.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(borrowBook.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(borrowBook.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // Reserve Book
+      .addCase(reserveBook.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(reserveBook.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(reserveBook.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // Fetch Book Reviews
+      .addCase(fetchBookReviews.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchBookReviews.fulfilled, (state, action) => {
+        state.loading = false;
+        state.reviews = Array.isArray(action.payload) ? action.payload : [];
+      })
+      .addCase(fetchBookReviews.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // Create Book Review
+      .addCase(createBookReview.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(createBookReview.fulfilled, (state, action) => {
+        state.loading = false;
+        if (state.reviews && Array.isArray(state.reviews)) {
+          state.reviews.push(action.payload);
+        }
+      })
+      .addCase(createBookReview.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

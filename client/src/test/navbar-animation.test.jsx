@@ -102,4 +102,19 @@ describe('Navbar profile dropdown animation class (Requirement 10.1)', () => {
 
     expect(dropdown).not.toHaveClass('animate-fadeIn');
   });
+
+  it('uses a top-fixed desktop nav and a bottom-fixed mobile nav', () => {
+    const { container } = renderNavbar();
+    const navs = container.querySelectorAll('nav');
+
+    expect(navs.length).toBeGreaterThanOrEqual(2);
+
+    const desktopNav = Array.from(navs).find((nav) => nav.className.includes('top-0'));
+    const mobileNav = Array.from(navs).find((nav) => nav.className.includes('bottom-0'));
+
+    expect(desktopNav).toBeTruthy();
+    expect(mobileNav).toBeTruthy();
+    expect(desktopNav?.className).toContain('md:block');
+    expect(mobileNav?.className).toContain('md:hidden');
+  });
 });
