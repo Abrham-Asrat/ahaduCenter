@@ -110,8 +110,9 @@ const NotificationsPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background text-on-background flex flex-col animate-fade-in">
+    <>
       <Navbar />
+    <div className="min-h-screen bg-background text-on-background flex flex-col animate-fade-in">
 
       {/* Toast notification */}
       {toastMessage && (
@@ -121,7 +122,7 @@ const NotificationsPage = () => {
         </div>
       )}
 
-      <main className="flex-grow pt-24 pb-12 max-w-7xl mx-auto px-4 md:px-8 w-full flex flex-col gap-6">
+      <main className="flex-grow max-w-7xl mx-auto px-4 md:px-8 w-full flex flex-col gap-6">
         {/* Header */}
         <section className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
           <div>
@@ -261,6 +262,7 @@ const NotificationsPage = () => {
 
       <Footer />
     </div>
+    </>
   );
 };
 

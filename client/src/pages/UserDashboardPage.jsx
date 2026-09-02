@@ -289,10 +289,11 @@ const UserDashboardPage = () => {
 
   // ── Render ─────────────────────────────────────────────────────────────────
   return (
-    <div className="min-h-screen bg-background text-on-background flex flex-col animate-fade-in">
+    <>
       <Navbar />
+    <div className="min-h-screen bg-background text-on-background flex flex-col animate-fade-in">
 
-      <main className="flex-grow pt-24 pb-12 max-w-7xl mx-auto w-full px-4 md:px-8">
+      <main className="flex-grow max-w-7xl mx-auto w-full px-4 md:px-8">
 
         {/* ── Error Banner ── */}
         {error && (
@@ -616,6 +617,7 @@ const UserDashboardPage = () => {
 
       <Footer />
     </div>
+    </>
   );
 };
 

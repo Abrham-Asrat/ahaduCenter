@@ -175,8 +175,9 @@ const BorrowingHistoryPage = () => {
   };
 
   return (
+    <>
+      <Navbar /> 
     <div className="min-h-screen bg-background text-on-surface flex flex-col relative animate-fade-in">
-      <Navbar />
 
       {/* Toast Notification */}
       {toastMessage && (
@@ -186,7 +187,7 @@ const BorrowingHistoryPage = () => {
         </div>
       )}
 
-      <main className="flex-grow pt-24 pb-12 max-w-7xl mx-auto px-4 md:px-8 w-full">
+      <main className="flex-grow max-w-7xl mx-auto px-4 md:px-8 w-full">
         {/* Header */}
         <header className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
@@ -397,6 +398,7 @@ const BorrowingHistoryPage = () => {
       </main>
       <Footer />
     </div>
+    </>
   );
 };
 

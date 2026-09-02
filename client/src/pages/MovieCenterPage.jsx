@@ -116,8 +116,9 @@ const MovieCenterPage = () => {
   );
 
   return (
-    <div className="min-h-screen bg-background text-on-surface flex flex-col relative animate-fade-in">
+    <>
       <Navbar />
+    <div className="min-h-screen bg-background text-on-surface flex flex-col relative animate-fade-in">
 
       {/* Toast Notification */}
       {toastMessage && (
@@ -156,7 +157,7 @@ const MovieCenterPage = () => {
         </div>
       )}
 
-      <main className="flex-grow pt-[80px] pb-20 md:pb-0">
+      <main className="flex-grow md:pb-0">
         <MovieHero />
         <SubNav onTabChange={handleTabChange} />
 
@@ -286,6 +287,7 @@ const MovieCenterPage = () => {
 
       <Footer />
     </div>
+    </>
   );
 };
 

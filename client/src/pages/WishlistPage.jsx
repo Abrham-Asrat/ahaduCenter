@@ -70,8 +70,9 @@ const WishlistPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background text-on-background flex flex-col animate-fade-in">
+    <>
       <Navbar />
+    <div className="min-h-screen bg-background text-on-background flex flex-col animate-fade-in">
 
       {/* Toast notification */}
       {toastMessage && (
@@ -81,7 +82,7 @@ const WishlistPage = () => {
         </div>
       )}
 
-      <main className="flex-grow pt-24 pb-12 px-4 md:px-8 max-w-7xl mx-auto w-full">
+      <main className="flex-grow pt-2 px-4 md:px-8 max-w-7xl mx-auto w-full">
         {/* Page header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
           <div>
@@ -242,6 +243,7 @@ const WishlistPage = () => {
 
       <Footer />
     </div>
+    </>
   );
 };
 

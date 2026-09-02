@@ -171,8 +171,9 @@ const ProductDetailPage = () => {
   );
 
   return (
-    <div className="min-h-screen bg-background text-on-background flex flex-col relative animate-fade-in">
+    <>
       <Navbar />
+    <div className="min-h-screen bg-background text-on-background flex flex-col relative animate-fade-in">
 
       {/* Toast Notification */}
       {toastMessage && (
@@ -182,7 +183,7 @@ const ProductDetailPage = () => {
         </div>
       )}
 
-      <main className="flex-grow pt-24 pb-12">
+      <main className="flex-grow">
         {loading && !selectedProduct && renderSkeleton()}
         {!loading && error && renderError()}
 
@@ -272,6 +273,7 @@ const ProductDetailPage = () => {
 
       <Footer />
     </div>
+    </>
   );
 };
 

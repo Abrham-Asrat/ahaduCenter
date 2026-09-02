@@ -167,8 +167,9 @@ const MovieRequestPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background text-on-surface flex flex-col relative animate-fade-in">
+    <>
       <Navbar />
+    <div className="min-h-screen bg-background text-on-surface flex flex-col relative animate-fade-in">
 
       {/* Toast Notification */}
       {toastMessage && (
@@ -242,7 +243,7 @@ const MovieRequestPage = () => {
         </div>
       )}
 
-      <main className="flex-grow pt-24 pb-12 max-w-7xl mx-auto px-4 md:px-8 w-full">
+      <main className="flex-grow  max-w-7xl mx-auto px-4 md:px-8 w-full">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-8">
           <div>
@@ -514,6 +515,7 @@ const MovieRequestPage = () => {
 
       <Footer />
     </div>
+    </>
   );
 };
 

@@ -177,8 +177,9 @@ const MovieDetailPage = () => {
   );
 
   return (
-    <div className="min-h-screen bg-background text-on-background flex flex-col relative animate-fade-in">
+    <>
       <Navbar />
+    <div className="min-h-screen bg-background text-on-background flex flex-col relative animate-fade-in">
 
       {/* Toast Notification */}
       {toastMessage && (
@@ -323,6 +324,7 @@ const MovieDetailPage = () => {
       {/* Footer */}
       <Footer />
     </div>
+    </>
   );
 };
 

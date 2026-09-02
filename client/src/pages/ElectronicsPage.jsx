@@ -142,8 +142,9 @@ const ElectronicsPage = () => {
   );
 
   return (
-    <div className="min-h-screen bg-background text-on-background flex flex-col relative animate-fade-in">
+    <>
       <Navbar />
+    <div className="min-h-screen bg-background text-on-background flex flex-col relative animate-fade-in">
 
       {/* Toast Notification */}
       {toastMessage && (
@@ -153,7 +154,7 @@ const ElectronicsPage = () => {
         </div>
       )}
 
-      <main className="flex-grow pt-24 pb-16">
+      <main className="flex-grow">
         {/* Hero banner */}
         <ElectronicsHero />
 
@@ -313,6 +314,7 @@ const ElectronicsPage = () => {
 
       <Footer />
     </div>
+    </>
   );
 };
 

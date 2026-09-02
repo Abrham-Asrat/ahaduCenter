@@ -19,10 +19,11 @@ import Footer from '../components/common/Footer';
  */
 const DesignSystemPage = () => {
   return (
+      <>
+      <Navbar/> 
     <div className="min-h-screen bg-background text-on-surface flex flex-col">
-      <Navbar />
 
-      <main className="flex-grow pt-24 pb-12 max-w-7xl mx-auto px-4 md:px-8 w-full">
+      <main className="flex-grow  max-w-7xl mx-auto px-4 md:px-8 w-full">
         {/* Header */}
         <header className="mb-12 border-b border-white/10 pb-8">
           <h1 className="text-5xl font-bold text-white mb-4">Ahadu Center Design System</h1>
@@ -233,6 +234,7 @@ const DesignSystemPage = () => {
 
       <Footer />
     </div>
+    </>
   );
 };
 
@@ -277,6 +279,7 @@ const ToggleExample = () => {
           }`}
       />
     </button>
+
   );
 };
 

@@ -119,8 +119,9 @@ const BookCenterPage = () => {
   );
 
   return (
-    <div className="min-h-screen bg-background text-on-background flex flex-col relative animate-fade-in">
+    <>
       <Navbar />
+    <div className="min-h-screen bg-background text-on-background flex flex-col relative animate-fade-in">
 
       {/* Toast Notification */}
       {toastMessage && (
@@ -131,7 +132,7 @@ const BookCenterPage = () => {
       )}
 
       {/* Sub-navigation for categories */}
-      <div className="pt-20">
+      <div>
         <SubNav
           tabs={categories}
           onTabChange={handleCategoryChange}
@@ -294,6 +295,7 @@ const BookCenterPage = () => {
 
       <Footer />
     </div>
+    </>
   );
 };
 

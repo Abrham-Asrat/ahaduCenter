@@ -165,8 +165,9 @@ const BookDetailPage = () => {
   );
 
   return (
-    <div className="min-h-screen bg-background text-on-background flex flex-col relative animate-fade-in">
+    <>
       <Navbar />
+    <div className="min-h-screen bg-background text-on-background flex flex-col relative animate-fade-in">
 
       {/* Toast Notification */}
       {toastMessage && (
@@ -176,7 +177,7 @@ const BookDetailPage = () => {
         </div>
       )}
 
-      <main className="flex-grow pt-24 pb-12 px-6 max-w-7xl mx-auto w-full">
+      <main className="flex-grow  pb-12 px-6 max-w-7xl mx-auto w-full">
         {/* Breadcrumbs */}
         <div className="hidden md:flex items-center gap-2 text-sm text-on-surface-variant mb-6 font-medium">
           <a href="/books" className="hover:text-primary transition-colors">Books</a>
@@ -280,6 +281,7 @@ const BookDetailPage = () => {
 
       <Footer />
     </div>
+    </>
   );
 };
 

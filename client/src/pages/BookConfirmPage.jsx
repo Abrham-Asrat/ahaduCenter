@@ -148,8 +148,9 @@ const BookConfirmPage = () => {
       null;
 
     return (
-      <div className="min-h-screen bg-background text-on-surface flex flex-col animate-fade-in">
+      <>
         <Navbar />
+      <div className="min-h-screen bg-background text-on-surface flex flex-col animate-fade-in">
         <main className="flex-grow flex items-center justify-center px-4 py-12">
           <div className="w-full max-w-md">
             <div className="glass-panel rounded-xl p-8 flex flex-col items-center text-center">
@@ -224,12 +225,14 @@ const BookConfirmPage = () => {
         </main>
         <Footer />
       </div>
+      </>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background text-on-surface flex flex-col animate-fade-in">
+  <>
       <Navbar />
+    <div className="min-h-screen bg-background text-on-surface flex flex-col animate-fade-in">
 
       <main className="flex-grow flex items-center justify-center px-4 py-12">
         {/* Show skeleton while the book is being fetched initially */}
@@ -367,6 +370,7 @@ const BookConfirmPage = () => {
 
       <Footer />
     </div>
+    </>
   );
 };
 

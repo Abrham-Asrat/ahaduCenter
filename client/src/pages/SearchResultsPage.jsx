@@ -117,10 +117,11 @@ const SearchResultsPage = () => {
   const genres = ['Sci-Fi', 'Action', 'Drama'];
 
   return (
-    <div className="min-h-screen bg-background text-on-surface flex flex-col animate-fade-in">
+    <>
       <Navbar />
+    <div className="min-h-screen bg-background text-on-surface flex flex-col animate-fade-in">
 
-      <main className="flex-grow pt-24 pb-16 max-w-7xl mx-auto px-4 md:px-8 w-full flex flex-col gap-6">
+      <main className="flex-grow  pb-4 max-w-7xl mx-auto px-4 md:px-8 w-full flex flex-col gap-6">
         {/* Search Context Bar */}
         <header className="glass-panel p-4 md:p-6 rounded-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
@@ -390,6 +391,7 @@ const SearchResultsPage = () => {
       <Footer />
 
     </div>
+    </>
   );
 };
 

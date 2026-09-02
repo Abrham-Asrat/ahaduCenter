@@ -75,10 +75,11 @@ const ContactPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background text-on-surface flex flex-col animate-fade-in">
+    <>
       <Navbar />
+    <div className="min-h-screen bg-background text-on-surface flex flex-col animate-fade-in">
 
-      <main className="flex-grow pt-24 pb-12 max-w-7xl mx-auto px-4 md:px-8 w-full flex flex-col gap-8">
+      <main className="flex-grow max-w-7xl mx-auto px-4 md:px-8 w-full flex flex-col gap-8">
         {/* Header */}
         <header className="text-center md:text-left">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-3">Contact &amp; About</h1>
@@ -340,6 +341,7 @@ const ContactPage = () => {
 
       <Footer />
     </div>
+    </>
   );
 };
 
