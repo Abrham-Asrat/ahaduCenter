@@ -10,9 +10,6 @@ const LoginPage = ({ onClose }) => {
   const { loading, error } = useSelector((s) => s.auth);
 
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [rememberMe, setRememberMe] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
 
   const handleClose = () => {
     if (onClose) {
@@ -24,7 +21,8 @@ const LoginPage = ({ onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const result = await dispatch(loginThunk({ email, password }));
+    // Email-only login - can be integrated with magic link or OAuth
+    const result = await dispatch(loginThunk({ email, password: '' }));
     if (loginThunk.fulfilled.match(result)) {
       const role = result.payload?.role ?? result.payload?.user?.role;
       if (onClose) {
@@ -70,7 +68,7 @@ const LoginPage = ({ onClose }) => {
                 </span>
                 <input
                   id="email"
-                  type="text"
+                  type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full rounded-xl border border-white/10 bg-[#0B0F19] py-3 pl-10 pr-4 text-sm font-medium text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
@@ -78,53 +76,6 @@ const LoginPage = ({ onClose }) => {
                   required
                 />
               </div>
-            </div>
-
-            <div>
-              <div className="mb-2 flex items-center justify-between">
-                <label htmlFor="password" className="text-xs font-bold uppercase tracking-wider text-on-surface-variant">
-                  Password
-                </label>
-                <Link to="/forgot-password" className="text-xs font-semibold text-secondary hover:underline">
-                  Forgot Password?
-                </Link>
-              </div>
-              <div className="relative">
-                <span className="material-symbols-outlined pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-on-surface-variant">
-                  lock
-                </span>
-                <input
-                  id="password"
-                  type={showPassword ? 'text' : 'password'}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full rounded-xl border border-white/10 bg-[#0B0F19] py-3 pl-10 pr-12 text-sm font-medium text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                  placeholder="••••••••"
-                  required
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-on-surface-variant transition hover:text-primary"
-                >
-                  <span className="material-symbols-outlined text-[20px]">
-                    {showPassword ? 'visibility_off' : 'visibility'}
-                  </span>
-                </button>
-              </div>
-            </div>
-
-            <div className="flex items-center">
-              <input
-                id="remember-me"
-                type="checkbox"
-                checked={rememberMe}
-                onChange={(e) => setRememberMe(e.target.checked)}
-                className="h-4 w-4 cursor-pointer rounded border-white/10 bg-[#0B0F19] text-primary focus:ring-primary"
-              />
-              <label htmlFor="remember-me" className="ml-2 cursor-pointer text-xs font-medium text-on-surface-variant">
-                Remember me for 30 days
-              </label>
             </div>
 
             <button
@@ -135,9 +86,23 @@ const LoginPage = ({ onClose }) => {
               {loading && (
                 <span className="material-symbols-outlined animate-spin text-[18px]">progress_activity</span>
               )}
-              {loading ? 'Signing In...' : 'Sign In'}
+              {loading ? 'Sending Link...' : 'Send Magic Link'}
             </button>
           </form>
+
+          <div className="my-6 flex items-center gap-3">
+            <div className="h-[1px] flex-grow bg-white/10" />
+            <span className="text-xs uppercase text-on-surface-variant">Or continue with</span>
+            <div className="h-[1px] flex-grow bg-white/10" />
+          </div>
+
+          <button
+            type="button"
+            className="w-full rounded-lg border border-white/10 bg-white/5 py-3 font-semibold text-white transition hover:bg-white/10 hover:border-primary flex items-center justify-center gap-2"
+          >
+            <span className="text-xl">🔍</span>
+            Continue with Google
+          </button>
 
           <div className="mt-6 text-center">
             <p className="text-xs text-on-surface-variant">
