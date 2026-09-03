@@ -83,14 +83,20 @@ export const movieSlice = createSlice({
           state.movies = payload;
         } else if (payload.data && Array.isArray(payload.data)) {
           state.movies = payload.data;
-          if (payload.pagination) {
-            state.pagination = payload.pagination;
-          }
+          state.pagination = payload.pagination || {
+            page: payload.page ?? 1,
+            limit: payload.limit ?? state.pagination.limit,
+            total: payload.totalCount ?? 0,
+            totalPages: payload.totalPages ?? 0,
+          };
         } else if (payload.movies && Array.isArray(payload.movies)) {
           state.movies = payload.movies;
-          if (payload.pagination) {
-            state.pagination = payload.pagination;
-          }
+          state.pagination = payload.pagination || {
+            page: payload.page ?? 1,
+            limit: payload.limit ?? state.pagination.limit,
+            total: payload.totalCount ?? 0,
+            totalPages: payload.totalPages ?? 0,
+          };
         }
       })
       .addCase(fetchMovies.rejected, (state, action) => {

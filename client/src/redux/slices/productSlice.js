@@ -58,14 +58,20 @@ export const productSlice = createSlice({
           state.products = payload;
         } else if (payload.data && Array.isArray(payload.data)) {
           state.products = payload.data;
-          if (payload.pagination) {
-            state.pagination = payload.pagination;
-          }
+          state.pagination = payload.pagination || {
+            page: payload.page ?? 1,
+            limit: payload.limit ?? state.pagination.limit,
+            total: payload.totalCount ?? 0,
+            totalPages: payload.totalPages ?? 0,
+          };
         } else if (payload.products && Array.isArray(payload.products)) {
           state.products = payload.products;
-          if (payload.pagination) {
-            state.pagination = payload.pagination;
-          }
+          state.pagination = payload.pagination || {
+            page: payload.page ?? 1,
+            limit: payload.limit ?? state.pagination.limit,
+            total: payload.totalCount ?? 0,
+            totalPages: payload.totalPages ?? 0,
+          };
         }
       })
       .addCase(fetchProducts.rejected, (state, action) => {

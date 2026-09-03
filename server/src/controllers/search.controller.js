@@ -149,7 +149,7 @@ const search = async (req, res, next) => {
       rating:      p.rating,
       category:    p.category || null,
       price:       p.price,
-      link:        `/products/${p._id}`,
+      link:        `/electronics/${p._id}`,
       createdAt:   p.createdAt,
     }));
 

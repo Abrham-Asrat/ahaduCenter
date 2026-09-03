@@ -26,7 +26,7 @@ export const adminService = {
   // ── Movie Requests ──
   getMovieRequests: () => API.get('/admin/movie-requests').then((r) => r.data),
   updateMovieRequestStatus: (id, status) =>
-    API.patch(`/admin/movie-requests/${id}`, { status }).then((r) => r.data),
+    API.patch(`/admin/movie-requests/${id}/status`, { status }).then((r) => r.data),
 
   // ── Contact Submissions ──
   getContactSubmissions: () => API.get('/admin/contacts').then((r) => r.data),
