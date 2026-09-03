@@ -295,7 +295,7 @@ const PurchaseHistoryPage = () => {
 
                     {/* Right: actions */}
                     <div className="flex md:flex-col justify-end gap-3 md:w-48 shrink-0 relative z-10">
-                      {order.status === 'Processing' || order.status === 'Shipped' ? (
+                      {order.status === 'Processing' || order.status === 'Ready' ? (
                         <button
                           onClick={() => showToast('Tracking coming soon')}
                           className="flex-1 md:flex-none border border-secondary text-secondary px-4 py-2 rounded-lg hover:bg-secondary/10 transition-all text-xs uppercase flex items-center justify-center gap-2"

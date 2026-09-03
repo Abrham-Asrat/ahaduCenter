@@ -229,7 +229,6 @@ const MovieModal = ({ movie, onClose, onSave }) => {
         trailerUrl: movie?.trailerUrl || '',
     });
 
-    const [photos, setPhotos] = useState([]);
     const [photoPreviews, setPhotoPreviews] = useState(movie?.posterUrl ? [movie.posterUrl] : []);
     const fileInputRef = useRef(null);
 

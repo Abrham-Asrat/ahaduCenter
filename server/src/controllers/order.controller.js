@@ -127,14 +127,27 @@ const placeOrder = async (req, res, next) => {
     const totalPayableAtStore = subtotal + RESERVATION_FEE;
 
     // Create the Order record with status "Processing" (Requirement 9.1)
-    const order = await Order.create({
-      userId,
-      items:               enrichedItems,
-      subtotal,
-      reservationFee:      RESERVATION_FEE,
-      totalPayableAtStore,
-      status:              'Processing',
-    });
+    let order;
+    try {
+      order = await Order.create({
+        userId,
+        items:               enrichedItems,
+        subtotal,
+        reservationFee:      RESERVATION_FEE,
+        totalPayableAtStore,
+        status:              'Processing',
+      });
+    } catch (orderErr) {
+      await Promise.all(
+        reservedProducts.map(({ productId, quantity }) =>
+          Product.findByIdAndUpdate(productId, {
+            $inc: { stockQuantity: quantity },
+            $set: { inStock: true },
+          })
+        )
+      );
+      throw orderErr;
+    }
 
     // Fire-and-forget notification — failure MUST NOT roll back the order
     // (Requirements 12.7, 12.9)
