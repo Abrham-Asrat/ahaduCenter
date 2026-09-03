@@ -21,6 +21,64 @@ const ContactSubmission = require('../models/ContactSubmission.js');
 const { paginate }      = require('../../utils/paginate.js');
 const { createNotification } = require('../services/notification.service.js');
 
+const escapeRegex = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+const getAdminBooks = async (req, res, next) => {
+  try {
+    const filter = {};
+    if (req.query.q?.trim()) filter.$text = { $search: req.query.q.trim() };
+    if (req.query.language?.trim()) {
+      filter.language = new RegExp(`^${escapeRegex(req.query.language.trim())}$`, 'i');
+    }
+    return res.status(200).json(await paginate(Book, filter, {
+      page: req.query.page,
+      limit: req.query.limit,
+      sort: { createdAt: -1 },
+    }));
+  } catch (err) {
+    next(err);
+  }
+};
+
+const getAdminMovies = async (req, res, next) => {
+  try {
+    const filter = {};
+    if (req.query.q?.trim()) filter.$text = { $search: req.query.q.trim() };
+    if (req.query.genre?.trim()) {
+      filter.genres = { $elemMatch: { $regex: new RegExp(`^${escapeRegex(req.query.genre.trim())}$`, 'i') } };
+    }
+    return res.status(200).json(await paginate(Movie, filter, {
+      page: req.query.page,
+      limit: req.query.limit,
+      sort: { createdAt: -1 },
+    }));
+  } catch (err) {
+    next(err);
+  }
+};
+
+const getAdminProducts = async (req, res, next) => {
+  try {
+    const filter = {};
+    if (req.query.q?.trim()) filter.$text = { $search: req.query.q.trim() };
+    if (req.query.category?.trim()) {
+      filter.category = new RegExp(`^${escapeRegex(req.query.category.trim())}$`, 'i');
+    }
+    if (req.query.minPrice !== undefined || req.query.maxPrice !== undefined) {
+      filter.price = {};
+      if (req.query.minPrice !== undefined) filter.price.$gte = Number(req.query.minPrice);
+      if (req.query.maxPrice !== undefined) filter.price.$lte = Number(req.query.maxPrice);
+    }
+    return res.status(200).json(await paginate(Product, filter, {
+      page: req.query.page,
+      limit: req.query.limit,
+      sort: { createdAt: -1 },
+    }));
+  } catch (err) {
+    next(err);
+  }
+};
+
 // ── GET /api/admin/stats ──────────────────────────────────────────────────────
 const getStats = async (req, res, next) => {
   try {
@@ -258,6 +316,9 @@ const getContactSubmissions = async (req, res, next) => {
 module.exports = {
   getStats,
   getRecent,
+  getAdminBooks,
+  getAdminMovies,
+  getAdminProducts,
   createBook,
   updateBook,
   deleteBook,

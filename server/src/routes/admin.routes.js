@@ -26,6 +26,9 @@ const { productBodyRules }               = require('../validators/product.valida
 const {
   getStats,
   getRecent,
+  getAdminBooks,
+  getAdminMovies,
+  getAdminProducts,
   createBook,
   updateBook,
   deleteBook,
@@ -48,16 +51,19 @@ router.get('/stats',  getStats);
 router.get('/recent', getRecent);
 
 // ── Books ─────────────────────────────────────────────────────────────────────
+router.get(   '/books',     paginationRules,                        validate, getAdminBooks);
 router.post(  '/books',     bookBodyRules,                          validate, createBook);
 router.put(   '/books/:id', objectIdParam('id'), bookBodyRules,     validate, updateBook);
 router.delete('/books/:id', objectIdParam('id'),                    validate, deleteBook);
 
 // ── Movies ────────────────────────────────────────────────────────────────────
+router.get(   '/movies',     paginationRules,                        validate, getAdminMovies);
 router.post(  '/movies',     movieBodyRules,                        validate, createMovie);
 router.put(   '/movies/:id', objectIdParam('id'), movieBodyRules,   validate, updateMovie);
 router.delete('/movies/:id', objectIdParam('id'),                   validate, deleteMovie);
 
 // ── Products ──────────────────────────────────────────────────────────────────
+router.get(   '/products',     paginationRules,                        validate, getAdminProducts);
 router.post(  '/products',     productBodyRules,                      validate, createProduct);
 router.put(   '/products/:id', objectIdParam('id'), productBodyRules, validate, updateProduct);
 router.delete('/products/:id', objectIdParam('id'),                   validate, deleteProduct);
