@@ -101,7 +101,7 @@ const BookInfoSection = ({ book, onShowToast, onBorrow, onReserve }) => {
                         className="bg-surface-container-high text-white px-8 py-3.5 rounded-xl hover:bg-surface-container-highest transition-all border border-white/10 flex-none flex justify-center items-center gap-2 font-bold cursor-pointer"
                     >
                         <span className="material-symbols-outlined">shopping_cart</span>
-                        Buy ${book.price}
+                        Buy ETB {book.price}
                     </button>
                 </div>
             </div>

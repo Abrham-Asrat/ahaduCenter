@@ -78,7 +78,7 @@ const ProductSpecs = ({ specifications, description }) => {
                 {activeTab === 'shipping' && (
                     <div className="glass-panel p-8 rounded-xl">
                         <p className="text-on-surface-variant leading-relaxed">
-                            Free shipping on orders over $500. 30-day return policy. Items ship within 24 hours.
+                            Free shipping on orders over ETB 500. 30-day return policy. Items ship within 24 hours.
                         </p>
                     </div>
                 )}

@@ -216,7 +216,7 @@ const WishlistPage = () => {
                     {/* Price if available */}
                     {item.price != null && (
                       <div className="mt-auto pt-3 border-t border-white/5 font-bold text-white">
-                        {typeof item.price === 'number' ? `$${item.price.toFixed(2)}` : item.price}
+                        {typeof item.price === 'number' ? `ETB ${item.price.toFixed(2)}` : item.price}
                       </div>
                     )}
                   </div>

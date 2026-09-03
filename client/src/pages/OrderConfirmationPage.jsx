@@ -206,7 +206,7 @@ const OrderConfirmationPage = () => {
                       <p className="text-xs text-on-surface-variant">Quantity: {quantity}</p>
                     </div>
                     <div className="text-lg font-bold text-white">
-                      ${Number(price).toFixed(2)}
+                      ETB {Number(price).toFixed(2)}
                     </div>
                   </div>
                 );
