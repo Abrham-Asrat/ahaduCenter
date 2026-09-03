@@ -197,7 +197,7 @@ const DesignSystemPage = () => {
               <div className="p-4">
                 <div className="flex justify-between items-start mb-2">
                   <h3 className="text-lg font-semibold text-white">Quantum Drive X1</h3>
-                  <span className="text-lg font-bold text-secondary">$299</span>
+                  <span className="text-lg font-bold text-secondary">ETB 299</span>
                 </div>
                 <p className="text-sm text-on-surface-variant">
                   Next-generation storage with instantaneous transfer rates.

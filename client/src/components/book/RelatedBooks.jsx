@@ -50,7 +50,7 @@ const RelatedBooks = ({ books }) => {
                         </h3>
                         <p className="text-sm text-on-surface-variant truncate">{book.author}</p>
                         {book.price && (
-                            <p className="text-primary font-semibold mt-1">${book.price}</p>
+                            <p className="text-primary font-semibold mt-1">ETB {book.price}</p>
                         )}
                     </div>
                 ))}

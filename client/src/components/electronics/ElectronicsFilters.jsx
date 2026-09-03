@@ -154,7 +154,7 @@ const ElectronicsFilters = ({ onFilterChange }) => {
             <div>
                 <div className="flex justify-between items-center mb-2">
                     <h3 className="text-xs uppercase tracking-wider text-on-surface-variant font-semibold">Max Price</h3>
-                    <span className="text-sm font-bold text-primary">${maxPrice.toLocaleString()}</span>
+                    <span className="text-sm font-bold text-primary">ETB {maxPrice.toLocaleString()}</span>
                 </div>
                 <input
                     type="range"

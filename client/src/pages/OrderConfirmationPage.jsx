@@ -160,7 +160,7 @@ const OrderConfirmationPage = () => {
                   Total Payable at Store:
                 </span>
                 <span className="text-2xl font-black text-secondary">
-                  ${Number(total).toFixed(2)}
+                  ETB {Number(total).toFixed(2)}
                 </span>
               </div>
             </div>

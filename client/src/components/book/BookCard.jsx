@@ -122,7 +122,7 @@ const BookCard = ({ book, onQuickAction, isWishlisted: initialWishlisted = false
           <div className="mt-auto flex justify-between items-center pt-2 border-t border-white/5">
             {/* Display availability status or price */}
             {book.availability === 'Buy' ? (
-              <span className="text-sm font-extrabold text-white">${book.price}</span>
+              <span className="text-sm font-extrabold text-white">ETB {book.price}</span>
             ) : book.availability === 'Reserve' ? (
               <span className="text-xs text-secondary font-bold">Waitlist: {book.waitlist || 0}</span>
             ) : (

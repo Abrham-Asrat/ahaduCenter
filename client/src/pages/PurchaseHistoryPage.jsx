@@ -122,7 +122,7 @@ const PurchaseHistoryPage = () => {
       _id: raw._id ?? raw.id,
       date,
       status: displayStatus,
-      total: `$${Number(total).toFixed(2)}`,
+      total: `ETB ${Number(total).toFixed(2)}`,
       items: thumbnails,
       itemCount: rawItems.length,
     };

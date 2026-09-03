@@ -314,7 +314,7 @@ const BookConfirmPage = () => {
                         <div>
                           <p className="text-sm text-on-surface-variant">Renewal Policy</p>
                           <p className="text-sm text-on-surface-variant/75 mt-1">
-                            May be renewed once if no pending reservations. Late fees apply at $0.50 per day.
+                            May be renewed once if no pending reservations. Late fees apply at ETB 0.50 per day.
                           </p>
                         </div>
                       </div>

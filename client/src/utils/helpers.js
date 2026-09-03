@@ -1,1 +1,1 @@
-export const formatCurrency = (amount) => `$${amount.toFixed(2)}`;
+export const formatCurrency = (amount) => `ETB ${amount.toFixed(2)}`;

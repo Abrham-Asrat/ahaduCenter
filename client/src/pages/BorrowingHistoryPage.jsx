@@ -74,7 +74,7 @@ const BorrowingHistoryPage = () => {
 
   const totalFees = borrowings.reduce((sum, b) => {
     if (b.fee) {
-      const numericFee = typeof b.fee === 'number' ? b.fee : parseFloat(String(b.fee).replace('$', '')) || 0;
+      const numericFee = typeof b.fee === 'number' ? b.fee : parseFloat(String(b.fee).replace('ETB', '')) || 0;
       return sum + numericFee;
     }
     return sum;
@@ -228,7 +228,7 @@ const BorrowingHistoryPage = () => {
               </div>
             </div>
             <div className="flex items-center gap-6">
-              <span className="text-3xl font-extrabold text-error">${totalFees.toFixed(2)}</span>
+              <span className="text-3xl font-extrabold text-error">ETB {totalFees.toFixed(2)}</span>
               <button
                 onClick={handlePayFees}
                 className="bg-primary text-black px-6 py-3 rounded-xl font-bold hover:shadow-[0_0_20px_rgba(16,185,129,0.5)] transition-all cursor-pointer"

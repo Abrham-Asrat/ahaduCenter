@@ -225,7 +225,7 @@ const SearchResultsPage = () => {
                 <div className="flex items-center gap-2">
                   <input
                     type="number"
-                    placeholder="Min ($)"
+                    placeholder="Min (ETB)"
                     value={priceMin}
                     onChange={(e) => setPriceMin(e.target.value)}
                     className="w-full bg-surface-container border border-white/10 rounded px-2 py-1 text-sm text-white focus:border-primary outline-none"
@@ -233,7 +233,7 @@ const SearchResultsPage = () => {
                   <span className="text-on-surface-variant">-</span>
                   <input
                     type="number"
-                    placeholder="Max ($)"
+                    placeholder="Max (ETB)"
                     value={priceMax}
                     onChange={(e) => setPriceMax(e.target.value)}
                     className="w-full bg-surface-container border border-white/10 rounded px-2 py-1 text-sm text-white focus:border-primary outline-none"

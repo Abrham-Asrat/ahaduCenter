@@ -111,10 +111,10 @@ const ProductCard = ({ product, onAddToCart, onCompare, onToggleWishlist, isWish
           <div className="mt-3 pt-3 border-t border-white/5 flex flex-col gap-3">
             <div className="flex items-center justify-between">
               <div>
-                <span className="text-primary font-extrabold text-xl">${product.price?.toLocaleString()}</span>
+                <span className="text-primary font-extrabold text-xl">ETB {product.price?.toLocaleString()}</span>
                 {product.originalPrice && (
                   <span className="text-on-surface-variant line-through text-xs ml-2">
-                    ${product.originalPrice.toLocaleString()}
+                    ETB {product.originalPrice.toLocaleString()}
                   </span>
                 )}
               </div>

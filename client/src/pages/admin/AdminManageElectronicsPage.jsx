@@ -155,8 +155,8 @@ const AdminManageElectronicsPage = () => {
                                         <span className={`px-2 py-1 rounded text-xs border ${getConditionBadge(product.condition)}`}>{product.condition}</span>
                                     </td>
                                     <td className="py-3 px-4 text-right">
-                                        <div className="text-primary font-semibold">${product.price.toLocaleString()}</div>
-                                        {product.originalPrice && <div className="text-secondary text-xs line-through">${product.originalPrice.toLocaleString()}</div>}
+                                        <div className="text-primary font-semibold">ETB {product.price.toLocaleString()}</div>
+                                        {product.originalPrice && <div className="text-secondary text-xs line-through">ETB {product.originalPrice.toLocaleString()}</div>}
                                     </td>
                                     <td className="py-3 px-4 text-center">
                                         <div className="flex items-center justify-center gap-1.5">
@@ -197,7 +197,7 @@ const AdminManageElectronicsPage = () => {
                         <div className="p-4">
                             <div className="flex justify-between items-start mb-1 min-w-0">
                                 <span className="text-xs uppercase text-on-surface-variant truncate">{product.category}</span>
-                                <span className="text-base font-bold text-secondary shrink-0 ml-2">${product.price.toLocaleString()}</span>
+                                <span className="text-base font-bold text-secondary shrink-0 ml-2">ETB {product.price.toLocaleString()}</span>
                             </div>
                             <h3 className="text-base font-semibold text-white mb-2 truncate">{product.name}</h3>
                             <div className="flex items-center justify-between border-t border-white/10 pt-3 min-w-0">
