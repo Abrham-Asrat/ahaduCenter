@@ -77,7 +77,6 @@ vi.mock('../../services/userService', () => ({
     returnBook: vi.fn(),
     renewBorrowing: vi.fn(),
     updateProfile: vi.fn(),
-    uploadAvatar: vi.fn(),
     getWishlist: vi.fn().mockResolvedValue([]),
     addToWishlist: vi.fn().mockResolvedValue({}),
     removeFromWishlist: vi.fn().mockResolvedValue({}),

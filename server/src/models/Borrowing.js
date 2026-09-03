@@ -21,4 +21,9 @@ const BorrowingSchema = new Schema({
   fee:          { type: Number, default: 0 },
 }, { timestamps: true });
 
+BorrowingSchema.index(
+  { userId: 1, bookId: 1 },
+  { unique: true, partialFilterExpression: { status: { $in: ['Active', 'Overdue'] } } }
+);
+
 module.exports = mongoose.models.Borrowing || mongoose.model('Borrowing', BorrowingSchema);

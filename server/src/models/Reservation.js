@@ -17,4 +17,6 @@ const ReservationSchema = new Schema({
   reservationDate: { type: Date, default: Date.now },
 }, { timestamps: true });
 
+ReservationSchema.index({ userId: 1, bookId: 1, status: 1 }, { unique: true, partialFilterExpression: { status: 'Reserved' } });
+
 module.exports = mongoose.models.Reservation || mongoose.model('Reservation', ReservationSchema);

@@ -137,12 +137,12 @@ const AdminManageElectronicsPage = () => {
                         </thead>
                         <tbody>
                             {filteredProducts.map((product) => (
-                                <tr key={product.id} className="border-b border-white/5 hover:bg-white/5 transition-colors group">
+                                <tr key={product._id} className="border-b border-white/5 hover:bg-white/5 transition-colors group">
                                     <td className="py-3 px-4"><input type="checkbox" className="rounded" /></td>
                                     <td className="py-3 px-4">
                                         <div className="flex items-center gap-3">
                                             <div className="w-12 h-12 rounded bg-surface border border-white/10 overflow-hidden shrink-0">
-                                                <img src={product.imageUrl} alt={product.name} className="w-full h-full object-cover" />
+                                                <img src={product.images?.[0]} alt={product.name} className="w-full h-full object-cover" />
                                             </div>
                                             <div>
                                                 <div className="font-semibold text-white group-hover:text-primary transition-colors">{product.name}</div>
@@ -160,19 +160,19 @@ const AdminManageElectronicsPage = () => {
                                     </td>
                                     <td className="py-3 px-4 text-center">
                                         <div className="flex items-center justify-center gap-1.5">
-                                            <div className={`w-2 h-2 rounded-full ${product.status === 'In Stock' ? 'bg-primary' : product.status === 'Low Stock' ? 'bg-secondary' : 'bg-error'}`} />
-                                            <span>{product.stock}</span>
+                                            <div className={`w-2 h-2 rounded-full ${product.stockQuantity > 10 ? 'bg-primary' : product.stockQuantity > 0 ? 'bg-secondary' : 'bg-error'}`} />
+                                            <span>{product.stockQuantity ?? (product.inStock ? 1 : 0)}</span>
                                         </div>
                                     </td>
                                     <td className="py-3 px-4 text-center">
-                                        <span className={`px-2 py-1 rounded text-xs border ${getStatusBadge(product.status)}`}>{product.status}</span>
+                                        <span className={`px-2 py-1 rounded text-xs border ${getStatusBadge((product.stockQuantity ?? (product.inStock ? 1 : 0)) > 0 ? 'In Stock' : 'Out of Stock')}`}>{(product.stockQuantity ?? (product.inStock ? 1 : 0)) > 0 ? 'In Stock' : 'Out of Stock'}</span>
                                     </td>
                                     <td className="py-3 px-4 text-right">
                                         <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                             <button onClick={() => handleEdit(product)} className="p-1.5 text-on-surface-variant hover:text-primary rounded hover:bg-primary/10">
                                                 <span className="material-symbols-outlined text-sm">edit</span>
                                             </button>
-                                            <button onClick={() => handleDelete(product.id)} className="p-1.5 text-on-surface-variant hover:text-error rounded hover:bg-error/10">
+                                            <button onClick={() => handleDelete(product._id)} className="p-1.5 text-on-surface-variant hover:text-error rounded hover:bg-error/10">
                                                 <span className="material-symbols-outlined text-sm">delete</span>
                                             </button>
                                         </div>
@@ -187,11 +187,11 @@ const AdminManageElectronicsPage = () => {
             {/* Mobile cards */}
             <div className="md:hidden grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
                 {filteredProducts.map((product) => (
-                    <div key={product.id} className="glass-panel rounded-xl overflow-hidden">
+                    <div key={product._id} className="glass-panel rounded-xl overflow-hidden">
                         <div className="h-40 relative overflow-hidden bg-background">
-                            <img src={product.imageUrl} alt={product.name} className="w-full h-full object-cover" />
+                            <img src={product.images?.[0]} alt={product.name} className="w-full h-full object-cover" />
                             <div className="absolute top-2 right-2">
-                                <span className={`px-2 py-1 rounded text-xs border ${getStatusBadge(product.status)}`}>{product.status}</span>
+                                <span className={`px-2 py-1 rounded text-xs border ${getStatusBadge((product.stockQuantity ?? (product.inStock ? 1 : 0)) > 0 ? 'In Stock' : 'Out of Stock')}`}>{(product.stockQuantity ?? (product.inStock ? 1 : 0)) > 0 ? 'In Stock' : 'Out of Stock'}</span>
                             </div>
                         </div>
                         <div className="p-4">
@@ -206,7 +206,7 @@ const AdminManageElectronicsPage = () => {
                                     <button onClick={() => handleEdit(product)} className="p-1 text-on-surface-variant hover:text-primary">
                                         <span className="material-symbols-outlined">edit</span>
                                     </button>
-                                    <button onClick={() => handleDelete(product.id)} className="p-1 text-on-surface-variant hover:text-error">
+                                    <button onClick={() => handleDelete(product._id)} className="p-1 text-on-surface-variant hover:text-error">
                                         <span className="material-symbols-outlined">delete</span>
                                     </button>
                                 </div>
@@ -248,11 +248,11 @@ const ProductModal = ({ product, onClose, onSave }) => {
         specifications: product?.specifications || '',
         price: product?.price || '',
         originalPrice: product?.originalPrice || '',
-        stock: product?.stock || 0,
+        stockQuantity: product?.stockQuantity ?? (product?.inStock ? 1 : 0),
         warrantyMonths: product?.warrantyMonths || '',
     });
 
-    const [photoPreviews, setPhotoPreviews] = useState(product?.imageUrl ? [product.imageUrl] : []);
+    const [photoPreviews, setPhotoPreviews] = useState(product?.images || []);
     const fileInputRef = useRef(null);
 
     const handleChange = (e) => {
@@ -271,16 +271,14 @@ const ProductModal = ({ product, onClose, onSave }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const stock = Number(formData.stock);
-        const newStatus = stock > 10 ? 'In Stock' : stock > 0 ? 'Low Stock' : 'Out of Stock';
+        const stockQuantity = Number(formData.stockQuantity);
         onSave({
             ...formData,
             price: Number(formData.price),
             originalPrice: formData.originalPrice ? Number(formData.originalPrice) : null,
-            stock,
-            status: newStatus,
-            imageUrl: photoPreviews[0] || product?.imageUrl || '',
-            photos: photoPreviews,
+            stockQuantity,
+            inStock: stockQuantity > 0,
+            images: photoPreviews,
         });
     };
 
@@ -386,7 +384,7 @@ const ProductModal = ({ product, onClose, onSave }) => {
                         </div>
                         <div>
                             <label className={labelCls}>Stock Qty <span className="text-error">*</span></label>
-                            <input type="number" name="stock" value={formData.stock} onChange={handleChange} min="0" className={inputCls} required />
+                            <input type="number" name="stockQuantity" value={formData.stockQuantity} onChange={handleChange} min="0" className={inputCls} required />
                         </div>
                     </div>
 

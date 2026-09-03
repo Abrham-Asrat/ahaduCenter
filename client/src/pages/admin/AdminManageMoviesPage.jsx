@@ -29,10 +29,10 @@ const AdminManageMoviesPage = () => {
     const filteredMovies = movies.filter((m) => {
         const title = m.title || '';
         const matchesSearch = title.toLowerCase().includes(searchQuery.toLowerCase());
-        const genreStr = Array.isArray(m.genres) ? m.genres[0] : (m.genre || '');
+        const genreStr = Array.isArray(m.genres) ? m.genres[0] : '';
         const matchesGenre = selectedGenre === 'All Genres' || genreStr === selectedGenre;
         const matchesCountry = selectedCountry === 'All Countries' || (m.country || 'USA') === selectedCountry;
-        const matchesStatus = selectedStatus === 'All Status' || (m.status || 'Available') === selectedStatus;
+        const matchesStatus = selectedStatus === 'All Status' || (m.releaseDate ? 'Available' : 'Coming Soon') === selectedStatus;
         return matchesSearch && matchesGenre && matchesCountry && matchesStatus;
     });
 
@@ -121,7 +121,7 @@ const AdminManageMoviesPage = () => {
                         </thead>
                         <tbody>
                             {filteredMovies.map((movie) => (
-                                <tr key={movie.id} className="border-b border-white/5 hover:bg-white/5 transition-colors group">
+                                <tr key={movie._id} className="border-b border-white/5 hover:bg-white/5 transition-colors group">
                                     <td className="py-3 px-4"><input type="checkbox" className="rounded" /></td>
                                     <td className="py-3 px-4">
                                         <img src={movie.posterUrl} alt={movie.title} className="w-10 h-14 object-cover rounded border border-white/10" />
@@ -131,12 +131,12 @@ const AdminManageMoviesPage = () => {
                                         <div className="text-xs text-on-surface-variant">{movie.director || '—'}</div>
                                     </td>
                                     <td className="py-3 px-4">
-                                        <span className="px-2 py-1 bg-secondary/10 border border-secondary/30 rounded text-xs uppercase text-secondary">{movie.genre}</span>
+                                        <span className="px-2 py-1 bg-secondary/10 border border-secondary/30 rounded text-xs uppercase text-secondary">{movie.genres?.[0] || '—'}</span>
                                     </td>
                                     <td className="py-3 px-4 text-sm text-on-surface-variant">{movie.country}</td>
                                     <td className="py-3 px-4 text-sm text-on-surface-variant">{movie.year}</td>
                                     <td className="py-3 px-4">
-                                        {movie.status === 'Available' ? (
+                                        {movie.releaseDate ? (
                                             <span className="px-2 py-1 bg-primary/10 border border-primary/30 rounded-full text-xs uppercase text-primary flex items-center gap-1 w-fit">
                                                 <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" /> Available
                                             </span>
@@ -151,7 +151,7 @@ const AdminManageMoviesPage = () => {
                                             <button onClick={() => handleEdit(movie)} className="p-1.5 text-on-surface-variant hover:text-primary" title="Edit">
                                                 <span className="material-symbols-outlined text-lg">edit</span>
                                             </button>
-                                            <button onClick={() => handleDelete(movie.id)} className="p-1.5 text-on-surface-variant hover:text-error" title="Delete">
+                                            <button onClick={() => handleDelete(movie._id)} className="p-1.5 text-on-surface-variant hover:text-error" title="Delete">
                                                 <span className="material-symbols-outlined text-lg">delete</span>
                                             </button>
                                         </div>
@@ -166,25 +166,25 @@ const AdminManageMoviesPage = () => {
             {/* Mobile cards */}
             <div className="md:hidden grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
                 {filteredMovies.map((movie) => (
-                    <div key={movie.id} className="glass-panel rounded-xl overflow-hidden">
+                    <div key={movie._id} className="glass-panel rounded-xl overflow-hidden">
                         <div className="aspect-[2/3] w-full relative">
                             <img src={movie.posterUrl} alt={movie.title} className="w-full h-full object-cover" />
                             <div className="absolute top-2 right-2">
-                                {movie.status === 'Available'
+                                {movie.releaseDate
                                     ? <span className="px-2 py-1 bg-primary/20 text-primary rounded text-xs border border-primary/30">ACTIVE</span>
                                     : <span className="px-2 py-1 bg-secondary/20 text-secondary rounded text-xs border border-secondary/30">SOON</span>}
                             </div>
                         </div>
                         <div className="p-4 min-w-0">
                             <h3 className="text-base font-semibold text-white truncate">{movie.title}</h3>
-                            <p className="text-sm text-on-surface-variant mt-1 truncate">{movie.genre} • {movie.year}</p>
+                            <p className="text-sm text-on-surface-variant mt-1 truncate">{movie.genres?.[0] || '—'} • {movie.year}</p>
                             <div className="flex justify-between items-center mt-3 min-w-0">
                                 <span className="text-sm text-secondary">{movie.rating ? `★ ${movie.rating}` : '—'}</span>
                                 <div className="flex gap-2">
                                     <button onClick={() => handleEdit(movie)} className="p-1 text-on-surface-variant hover:text-primary">
                                         <span className="material-symbols-outlined">edit</span>
                                     </button>
-                                    <button onClick={() => handleDelete(movie.id)} className="p-1 text-on-surface-variant hover:text-error">
+                                    <button onClick={() => handleDelete(movie._id)} className="p-1 text-on-surface-variant hover:text-error">
                                         <span className="material-symbols-outlined">delete</span>
                                     </button>
                                 </div>
@@ -219,15 +219,13 @@ const MovieModal = ({ movie, onClose, onSave }) => {
     const [formData, setFormData] = useState({
         title: movie?.title || '',
         director: movie?.director || '',
-        cast: movie?.cast || '',
+        cast: movie?.cast || [],
         description: movie?.description || '',
-        genre: movie?.genre || 'Action',
+        genres: movie?.genres || ['Action'],
         country: movie?.country || 'Ethiopia',
         year: movie?.year || new Date().getFullYear(),
-        duration: movie?.duration || '',
-        type: movie?.type || 'Feature Film',
+        runtime: movie?.runtime || '',
         rating: movie?.rating || '',
-        status: movie?.status || 'Available',
         trailerUrl: movie?.trailerUrl || '',
     });
 
@@ -251,7 +249,13 @@ const MovieModal = ({ movie, onClose, onSave }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        onSave({ ...formData, posterUrl: photoPreviews[0] || movie?.posterUrl || '', photos: photoPreviews });
+        onSave({
+            ...formData,
+            genres: Array.isArray(formData.genres) ? formData.genres : [formData.genres],
+            cast: typeof formData.cast === 'string' ? formData.cast.split(',').map((name) => ({ name: name.trim() })).filter((member) => member.name) : formData.cast,
+            posterUrl: photoPreviews[0] || movie?.posterUrl || '',
+            screenshots: photoPreviews.slice(1),
+        });
     };
 
     const inputCls = "w-full bg-background border border-white/10 rounded-lg px-3 py-2.5 text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all duration-200 placeholder-gray-500";
@@ -313,7 +317,7 @@ const MovieModal = ({ movie, onClose, onSave }) => {
                     {/* Cast */}
                     <div>
                         <label className={labelCls}>Cast</label>
-                        <input type="text" name="cast" value={formData.cast} onChange={handleChange} className={inputCls} placeholder="e.g. Actor A, Actor B, Actor C" />
+                            <input type="text" name="cast" value={Array.isArray(formData.cast) ? formData.cast.map((member) => member.name).join(', ') : formData.cast} onChange={handleChange} className={inputCls} placeholder="e.g. Actor A, Actor B, Actor C" />
                     </div>
 
                     {/* Description */}
@@ -326,7 +330,7 @@ const MovieModal = ({ movie, onClose, onSave }) => {
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                         <div>
                             <label className={labelCls}>Genre</label>
-                            <select name="genre" value={formData.genre} onChange={handleChange} className={inputCls}>
+                            <select name="genres" value={formData.genres[0] || ''} onChange={(e) => setFormData((prev) => ({ ...prev, genres: [e.target.value] }))} className={inputCls}>
                                 <option>Action</option><option>Drama</option><option>Sci-Fi</option><option>Thriller</option><option>Comedy</option><option>Horror</option><option>Romance</option>
                             </select>
                         </div>
@@ -342,7 +346,7 @@ const MovieModal = ({ movie, onClose, onSave }) => {
                         </div>
                         <div>
                             <label className={labelCls}>Duration (min)</label>
-                            <input type="number" name="duration" value={formData.duration} onChange={handleChange} className={inputCls} placeholder="120" />
+                            <input type="text" name="runtime" value={formData.runtime} onChange={handleChange} className={inputCls} placeholder="2h 15m" />
                         </div>
                     </div>
 
@@ -350,9 +354,7 @@ const MovieModal = ({ movie, onClose, onSave }) => {
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
                             <label className={labelCls}>Type</label>
-                            <select name="type" value={formData.type} onChange={handleChange} className={inputCls}>
-                                <option>Feature Film</option><option>Short Film</option><option>Documentary</option><option>TV Series</option><option>Animation</option>
-                            </select>
+                            <input type="text" value="Movie" readOnly className={inputCls} />
                         </div>
                         <div>
                             <label className={labelCls}>Rating (0–10)</label>
@@ -360,9 +362,7 @@ const MovieModal = ({ movie, onClose, onSave }) => {
                         </div>
                         <div>
                             <label className={labelCls}>Status</label>
-                            <select name="status" value={formData.status} onChange={handleChange} className={inputCls}>
-                                <option>Available</option><option>Coming Soon</option>
-                            </select>
+                            <input type="text" name="releaseDate" value={formData.releaseDate || ''} onChange={handleChange} className={inputCls} placeholder="YYYY-MM-DD" />
                         </div>
                     </div>
 

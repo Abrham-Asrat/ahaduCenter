@@ -55,8 +55,7 @@ const movieQueryRules = [
 const movieBodyRules = [
   // --- Required fields ---
   body('title')
-    .exists({ checkFalsy: true })
-    .withMessage('Title is required')
+    .optional()
     .trim()
     .notEmpty()
     .withMessage('Title must not be empty'),
@@ -240,4 +239,9 @@ module.exports = {
   movieQueryRules,
   movieBodyRules,
   movieRequestRules,
+  movieCreateRules: [
+    body('title').exists({ checkFalsy: true }).withMessage('Title is required'),
+    ...movieBodyRules,
+  ],
+  movieUpdateRules: movieBodyRules,
 };

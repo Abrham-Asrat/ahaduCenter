@@ -50,17 +50,6 @@ const borrowBook = async (req, res, next) => {
     const bookId = req.params.id;
     const userId = req.user.id;
 
-    // Fetch the book
-    const book = await Book.findById(bookId);
-    if (!book) {
-      return res.status(404).json({ error: 'Book not found' });
-    }
-
-    // Requirement 5.2 — no copies available
-    if (book.availableCopies <= 0) {
-      return res.status(409).json({ error: 'No copies are currently available for borrowing' });
-    }
-
     // Requirement 5.10 — user already has an active borrowing for this book
     const existing = await Borrowing.findOne({
       userId,
@@ -71,24 +60,43 @@ const borrowBook = async (req, res, next) => {
       return res.status(409).json({ error: 'You already have an active borrowing for this book' });
     }
 
+    // Reserve a copy atomically so concurrent requests cannot oversubscribe.
+    const book = await Book.findOneAndUpdate(
+      { _id: bookId, availableCopies: { $gt: 0 } },
+      { $inc: { availableCopies: -1 } },
+      { new: true }
+    );
+    if (!book) {
+      const exists = await Book.exists({ _id: bookId });
+      return res.status(exists ? 409 : 404).json({
+        error: exists ? 'No copies are currently available for borrowing' : 'Book not found',
+      });
+    }
+
     // Calculate due date: today + 14 days (Requirement 5.1)
     const borrowDate = new Date();
     const dueDate    = new Date(borrowDate);
     dueDate.setDate(dueDate.getDate() + 14);
 
     // Create the Borrowing record (Requirement 5.1)
-    const borrowing = await Borrowing.create({
-      userId,
-      bookId,
-      borrowDate,
-      dueDate,
-      status:       'Active',
-      renewalsLeft: 2,
-      fee:          0,
-    });
-
-    // Decrement availableCopies atomically (Requirement 5.1)
-    await Book.findByIdAndUpdate(bookId, { $inc: { availableCopies: -1 } });
+    let borrowing;
+    try {
+      borrowing = await Borrowing.create({
+        userId,
+        bookId,
+        borrowDate,
+        dueDate,
+        status:       'Active',
+        renewalsLeft: 2,
+        fee:          0,
+      });
+    } catch (createErr) {
+      await Book.findByIdAndUpdate(bookId, { $inc: { availableCopies: 1 } });
+      if (createErr.code === 11000) {
+        return res.status(409).json({ error: 'You already have an active borrowing for this book' });
+      }
+      throw createErr;
+    }
 
     // Fire-and-forget notification — failure MUST NOT roll back the borrow
     // (Requirements 12.8, 12.9)
@@ -116,28 +124,28 @@ const returnBook = async (req, res, next) => {
     const borrowingId = req.params.id;
     const userId      = req.user.id;
 
-    const borrowing = await Borrowing.findById(borrowingId);
+    const borrowing = await Borrowing.findOneAndUpdate(
+      {
+        _id: borrowingId,
+        userId,
+        status: { $in: ['Active', 'Overdue'] },
+      },
+      { $set: { status: 'Returned', returnDate: new Date() } },
+      { new: true }
+    );
 
     if (!borrowing) {
-      return res.status(404).json({ error: 'Borrowing record not found' });
+      const owned = await Borrowing.exists({ _id: borrowingId, userId });
+      const exists = await Borrowing.exists({ _id: borrowingId });
+      return res.status(exists && !owned ? 403 : exists ? 400 : 404).json({
+        error: exists && !owned ? 'Forbidden' : exists ? 'Only active or overdue borrowings can be returned' : 'Borrowing record not found',
+      });
     }
 
-    // Ensure the borrowing belongs to the requesting user
-    if (borrowing.userId.toString() !== userId) {
-      return res.status(403).json({ error: 'Forbidden' });
+    if (borrowing.dueDate < new Date()) {
+      borrowing.fee = calculateOverdueFee(borrowing.dueDate);
+      await borrowing.save();
     }
-
-    // Only Active or Overdue borrowings can be returned (Requirement 5.7)
-    if (borrowing.status !== 'Active' && borrowing.status !== 'Overdue') {
-      return res.status(400).json({ error: 'Only active or overdue borrowings can be returned' });
-    }
-
-    // Resolve overdue before marking returned (keeps fee accurate)
-    await resolveOverdue(borrowing);
-
-    borrowing.status     = 'Returned';
-    borrowing.returnDate = new Date();
-    await borrowing.save();
 
     // Increment availableCopies atomically (Requirement 5.7)
     await Book.findByIdAndUpdate(borrowing.bookId, { $inc: { availableCopies: 1 } });

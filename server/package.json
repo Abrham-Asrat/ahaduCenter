@@ -6,7 +6,9 @@
     "start": "node server.js",
     "dev": "node --watch server.js",
     "test": "jest --runInBand",
-    "seed": "node src/seed.js"
+    "seed": "node src/seed.js",
+    "migrate:stock": "node src/migrations/20260903-add-stock-quantity.js",
+    "migrate:indexes": "node src/migrations/20260903-fix-typed-unique-indexes.js"
   },
   "dependencies": {
     "bcryptjs": "2.4.3",

@@ -101,6 +101,11 @@ const reserveBook = async (req, res, next) => {
       return res.status(404).json({ error: 'Book not found' });
     }
 
+    const existing = await Reservation.findOne({ userId, bookId, status: 'Reserved' });
+    if (existing) {
+      return res.status(409).json({ error: 'You already have an active reservation for this book' });
+    }
+
     const reservation = await Reservation.create({
       userId,
       bookId,

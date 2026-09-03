@@ -15,7 +15,6 @@ vi.mock('../services/userService', () => ({
   userService: {
     getProfile: vi.fn().mockResolvedValue({ user: { name: 'Test User', email: 'test@example.com' } }),
     updateProfile: vi.fn().mockResolvedValue({ user: { name: 'Test User', email: 'test@example.com' } }),
-    uploadAvatar: vi.fn().mockResolvedValue({ avatarUrl: 'https://example.com/avatar.jpg' }),
     getUserStats: vi.fn().mockResolvedValue({ favorites: 0, purchases: 0, borrowed: 0, requests: 0 }),
     getUserActivity: vi.fn().mockResolvedValue([]),
     getBorrowingHistory: vi.fn().mockResolvedValue([]),

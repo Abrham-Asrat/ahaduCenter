@@ -57,15 +57,13 @@ const bookQueryRules = [
 const bookBodyRules = [
   // --- Required fields ---
   body('title')
-    .exists({ checkFalsy: true })
-    .withMessage('Title is required')
+    .optional()
     .trim()
     .notEmpty()
     .withMessage('Title must not be empty'),
 
   body('author')
-    .exists({ checkFalsy: true })
-    .withMessage('Author is required')
+    .optional()
     .trim()
     .notEmpty()
     .withMessage('Author must not be empty'),
@@ -182,4 +180,10 @@ const bookBodyRules = [
 module.exports = {
   bookQueryRules,
   bookBodyRules,
+  bookCreateRules: [
+    body('title').exists({ checkFalsy: true }).withMessage('Title is required'),
+    body('author').exists({ checkFalsy: true }).withMessage('Author is required'),
+    ...bookBodyRules,
+  ],
+  bookUpdateRules: bookBodyRules,
 };

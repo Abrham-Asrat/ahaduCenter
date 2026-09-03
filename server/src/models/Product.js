@@ -23,6 +23,7 @@ const ProductSchema = new Schema(
     highlights:     [{ type: String }],
     specifications: { type: Map, of: String }, // key-value map
     price:          { type: Number, required: true, min: 0 },
+    stockQuantity:  { type: Number, default: null, min: 0 },
     originalPrice:  { type: Number },
     discount:       { type: Number, default: 0, min: 0, max: 100 },
     rating:         { type: Number, default: 0, min: 0, max: 5 },

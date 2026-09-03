@@ -10,6 +10,6 @@ export const orderService = {
     API.get(`/orders/${id}`).then((r) => r.data),
 
   // GET /api/users/me/orders  (auth required)
-  getOrderHistory: () =>
-    API.get('/users/me/orders').then((r) => r.data),
+  getOrderHistory: (params) =>
+    API.get('/users/me/orders', { params }).then((r) => r.data),
 };

@@ -24,6 +24,7 @@ const router = express.Router();
 // ── Middleware ────────────────────────────────────────────────────────────────
 const authenticate   = require('../../middleware/authenticate');
 const validate       = require('../../middleware/validate');
+const { paginationRules } = require('../validators/common.validators');
 
 // ── Validators ────────────────────────────────────────────────────────────────
 const { updateProfileRules } = require('../validators/user.validators');
@@ -82,7 +83,7 @@ router.get('/me/borrowings', getBorrowingHistory);
 
 // ── Order history (task 7.4) ──────────────────────────────────────────────────
 // GET /api/users/me/orders — Requirement 9.3
-router.get('/me/orders', getOrderHistory);
+router.get('/me/orders', paginationRules, validate, getOrderHistory);
 
 // ── Movie requests (task 6.3) ─────────────────────────────────────────────────
 // GET /api/users/me/movie-requests — Requirement 7.2

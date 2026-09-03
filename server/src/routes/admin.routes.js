@@ -18,9 +18,9 @@ const validate      = require('../../middleware/validate');
 
 // ── Validators ────────────────────────────────────────────────────────────────
 const { objectIdParam, paginationRules } = require('../validators/common.validators');
-const { bookBodyRules }                  = require('../validators/book.validators');
-const { movieBodyRules }                 = require('../validators/movie.validators');
-const { productBodyRules }               = require('../validators/product.validators');
+const { bookCreateRules, bookUpdateRules }       = require('../validators/book.validators');
+const { movieCreateRules, movieUpdateRules }     = require('../validators/movie.validators');
+const { productCreateRules, productUpdateRules } = require('../validators/product.validators');
 
 // ── Controller ────────────────────────────────────────────────────────────────
 const {
@@ -52,20 +52,20 @@ router.get('/recent', getRecent);
 
 // ── Books ─────────────────────────────────────────────────────────────────────
 router.get(   '/books',     paginationRules,                        validate, getAdminBooks);
-router.post(  '/books',     bookBodyRules,                          validate, createBook);
-router.put(   '/books/:id', objectIdParam('id'), bookBodyRules,     validate, updateBook);
+router.post(  '/books',     bookCreateRules,                         validate, createBook);
+router.put(   '/books/:id', objectIdParam('id'), bookUpdateRules,     validate, updateBook);
 router.delete('/books/:id', objectIdParam('id'),                    validate, deleteBook);
 
 // ── Movies ────────────────────────────────────────────────────────────────────
 router.get(   '/movies',     paginationRules,                        validate, getAdminMovies);
-router.post(  '/movies',     movieBodyRules,                        validate, createMovie);
-router.put(   '/movies/:id', objectIdParam('id'), movieBodyRules,   validate, updateMovie);
+router.post(  '/movies',     movieCreateRules,                       validate, createMovie);
+router.put(   '/movies/:id', objectIdParam('id'), movieUpdateRules,   validate, updateMovie);
 router.delete('/movies/:id', objectIdParam('id'),                   validate, deleteMovie);
 
 // ── Products ──────────────────────────────────────────────────────────────────
 router.get(   '/products',     paginationRules,                        validate, getAdminProducts);
-router.post(  '/products',     productBodyRules,                      validate, createProduct);
-router.put(   '/products/:id', objectIdParam('id'), productBodyRules, validate, updateProduct);
+router.post(  '/products',     productCreateRules,                    validate, createProduct);
+router.put(   '/products/:id', objectIdParam('id'), productUpdateRules, validate, updateProduct);
 router.delete('/products/:id', objectIdParam('id'),                   validate, deleteProduct);
 
 // ── Movie Requests ────────────────────────────────────────────────────────────

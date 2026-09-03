@@ -46,7 +46,7 @@ const PurchaseHistoryPage = () => {
     setLoading(true);
     setError(null);
     try {
-      const data = await orderService.getOrderHistory();
+      const data = await orderService.getOrderHistory({ page: pagination.currentPage, limit: 10 });
       // The API may return a paginated envelope { data, totalCount, page, totalPages, limit }
       // or a plain array. Handle both shapes gracefully.
       if (Array.isArray(data)) {
@@ -70,7 +70,7 @@ const PurchaseHistoryPage = () => {
   // Fetch on mount
   useEffect(() => {
     fetchOrderHistory();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [pagination.currentPage]);
 
   /** Show a transient toast that auto-dismisses after 3 seconds. */
   const showToast = (msg) => {
@@ -79,7 +79,7 @@ const PurchaseHistoryPage = () => {
   };
 
   // Filter tabs
-  const filters = ['All Orders', 'Processing', 'Shipped', 'Delivered', 'Cancelled'];
+  const filters = ['All Orders', 'Processing', 'Ready', 'Completed', 'Cancelled'];
 
   /**
    * Normalise a raw API order object into the shape this component renders.
@@ -89,7 +89,7 @@ const PurchaseHistoryPage = () => {
     const rawItems = raw.items ?? [];
     // Collect up to 3 thumbnail image URLs from the order items.
     const thumbnails = rawItems
-      .map((i) => i?.product?.images?.[0] ?? null)
+      .map((i) => i?.productImage ?? null)
       .filter(Boolean)
       .slice(0, 3);
 
@@ -97,9 +97,8 @@ const PurchaseHistoryPage = () => {
     const statusMap = {
       pending: 'Processing',
       processing: 'Processing',
-      shipped: 'Shipped',
-      delivered: 'Delivered',
-      completed: 'Delivered',
+      ready: 'Ready',
+      completed: 'Completed',
       cancelled: 'Cancelled',
       canceled: 'Cancelled',
     };
@@ -141,10 +140,9 @@ const PurchaseHistoryPage = () => {
   const getStatusBadge = (status) => {
     switch (status) {
       case 'Completed':
-      case 'Delivered':
         return 'bg-primary/15 text-primary border-primary/20';
       case 'Processing':
-      case 'Shipped':
+      case 'Ready':
         return 'bg-secondary/15 text-secondary border-secondary/20';
       case 'Cancelled':
         return 'bg-error/15 text-error border-error/20';

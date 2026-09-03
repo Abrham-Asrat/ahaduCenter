@@ -37,7 +37,8 @@ const AdminManageBooksPage = () => {
             author.toLowerCase().includes(searchQuery.toLowerCase());
         const matchesCategory = categoryFilter === 'All Categories' || book.category === categoryFilter;
         const matchesLanguage = languageFilter === 'All Languages' || book.language === languageFilter;
-        const matchesAvailability = availabilityFilter === 'All Availability' || (book.status || 'Available') === availabilityFilter;
+        const status = book.availableCopies === 0 ? 'Out of Stock' : book.availableCopies < book.totalCopies ? 'Limited' : 'Available';
+        const matchesAvailability = availabilityFilter === 'All Availability' || status === availabilityFilter;
         return matchesSearch && matchesCategory && matchesLanguage && matchesAvailability;
     });
 
@@ -191,7 +192,7 @@ const AdminManageBooksPage = () => {
                                 </thead>
                                 <tbody>
                                     {filteredBooks.map((book) => (
-                                        <tr key={book.id} className="border-b border-white/5 hover:bg-white/5 transition-colors group">
+                                        <tr key={book._id} className="border-b border-white/5 hover:bg-white/5 transition-colors group">
                                             <td className="p-3"><input type="checkbox" className="rounded" /></td>
                                             <td className="p-3">
                                                 <div className="w-10 h-14 rounded overflow-hidden bg-surface-variant border border-white/10">
@@ -212,14 +213,14 @@ const AdminManageBooksPage = () => {
                                             <td className="p-3 text-on-surface-variant">{book.language}</td>
                                             <td className="p-3 text-right">{book.totalCopies} / <span className="text-primary font-bold">{book.availableCopies}</span></td>
                                             <td className="p-3 text-center">
-                                                <span className={`inline-block px-2 py-1 rounded text-xs uppercase border ${getStatusBadge(book.status)}`}>{book.status}</span>
+                                                <span className={`inline-block px-2 py-1 rounded text-xs uppercase border ${getStatusBadge(book.availableCopies === 0 ? 'Out of Stock' : book.availableCopies < book.totalCopies ? 'Limited' : 'Available')}`}>{book.availableCopies === 0 ? 'Out of Stock' : book.availableCopies < book.totalCopies ? 'Limited' : 'Available'}</span>
                                             </td>
                                             <td className="p-3 text-right">
                                                 <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                                     <button onClick={() => handleEdit(book)} className="p-1.5 text-on-surface-variant hover:text-primary" title="Edit">
                                                         <span className="material-symbols-outlined text-lg">edit</span>
                                                     </button>
-                                                    <button onClick={() => handleDelete(book.id)} className="p-1.5 text-on-surface-variant hover:text-error" title="Delete">
+                                                    <button onClick={() => handleDelete(book._id)} className="p-1.5 text-on-surface-variant hover:text-error" title="Delete">
                                                         <span className="material-symbols-outlined text-lg">delete</span>
                                                     </button>
                                                 </div>
@@ -233,7 +234,7 @@ const AdminManageBooksPage = () => {
                         {/* Mobile cards */}
                         <div className="md:hidden grid grid-cols-1 gap-4">
                             {filteredBooks.map((book) => (
-                                <div key={book.id} className="glass-panel rounded-xl p-4 flex gap-4 items-start">
+                                <div key={book._id} className="glass-panel rounded-xl p-4 flex gap-4 items-start">
                                     <div className="w-16 h-24 rounded overflow-hidden bg-surface-container border border-white/5 flex-shrink-0">
                                         {book.coverUrl ? (
                                             <img src={book.coverUrl} alt={book.title} className="w-full h-full object-cover" />
@@ -246,7 +247,7 @@ const AdminManageBooksPage = () => {
                                     <div className="flex-grow min-w-0">
                                         <div className="flex justify-between items-start mb-1">
                                             <h3 className="text-white font-semibold truncate pr-2">{book.title}</h3>
-                                            <span className={`px-2 py-1 rounded text-xs uppercase border flex-shrink-0 ${getStatusBadge(book.status)}`}>{book.status}</span>
+                                            <span className={`px-2 py-1 rounded text-xs uppercase border flex-shrink-0 ${getStatusBadge(book.availableCopies === 0 ? 'Out of Stock' : book.availableCopies < book.totalCopies ? 'Limited' : 'Available')}`}>{book.availableCopies === 0 ? 'Out of Stock' : book.availableCopies < book.totalCopies ? 'Limited' : 'Available'}</span>
                                         </div>
                                         <p className="text-sm text-on-surface-variant mb-2 truncate">{book.author}</p>
                                         <div className="flex items-center justify-between">
@@ -255,7 +256,7 @@ const AdminManageBooksPage = () => {
                                                 <button onClick={() => handleEdit(book)} className="p-1 text-on-surface-variant hover:text-primary">
                                                     <span className="material-symbols-outlined">edit</span>
                                                 </button>
-                                                <button onClick={() => handleDelete(book.id)} className="p-1 text-on-surface-variant hover:text-error">
+                                                <button onClick={() => handleDelete(book._id)} className="p-1 text-on-surface-variant hover:text-error">
                                                     <span className="material-symbols-outlined">delete</span>
                                                 </button>
                                             </div>
@@ -337,7 +338,6 @@ const BookModal = ({ book, onClose, onSave }) => {
         location: book?.location || '',
     });
 
-    const [photos, setPhotos] = useState(book?.coverUrl ? [book.coverUrl] : []);
     const [photoPreviews, setPhotoPreviews] = useState(book?.coverUrl ? [book.coverUrl] : []);
     const fileInputRef = useRef(null);
 
@@ -351,12 +351,10 @@ const BookModal = ({ book, onClose, onSave }) => {
         if (!files.length) return;
         const newPreviews = files.map((f) => URL.createObjectURL(f));
         setPhotoPreviews((prev) => [...prev, ...newPreviews]);
-        setPhotos((prev) => [...prev, ...newPreviews]);
     };
 
     const removePhoto = (idx) => {
         setPhotoPreviews((prev) => prev.filter((_, i) => i !== idx));
-        setPhotos((prev) => prev.filter((_, i) => i !== idx));
     };
 
     const handleSubmit = (e) => {
@@ -370,7 +368,6 @@ const BookModal = ({ book, onClose, onSave }) => {
             availableCopies: copies,
             status,
             coverUrl: photoPreviews[0] || book?.coverUrl || '',
-            photos: photoPreviews,
         });
     };
 

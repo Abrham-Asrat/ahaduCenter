@@ -40,13 +40,57 @@ const placeOrder = async (req, res, next) => {
     const userId = req.user.id;
     const { items } = req.body;
 
+    const requestedQuantities = new Map();
+    items.forEach(({ productId, quantity }) => {
+      requestedQuantities.set(productId, (requestedQuantities.get(productId) || 0) + quantity);
+    });
+
+    // Reserve inventory before creating the order. Each conditional update
+    // succeeds only when the requested quantity is still available.
+    const reservedProducts = [];
+    try {
+      for (const [productId, quantity] of requestedQuantities) {
+        const numericProduct = await Product.findOneAndUpdate(
+          { _id: productId, stockQuantity: { $gte: quantity } },
+          { $inc: { stockQuantity: -quantity } },
+          { new: true }
+        );
+        const product = numericProduct || (quantity === 1
+          ? await Product.findOneAndUpdate(
+              { _id: productId, stockQuantity: null, inStock: true },
+              { $set: { stockQuantity: 0, inStock: false } },
+              { new: true }
+            )
+          : null);
+        if (!product) {
+          const err = new Error(`Insufficient stock: ${productId}`);
+          err.status = 409;
+          throw err;
+        }
+        if (product.stockQuantity > 0 && !product.inStock) {
+          await Product.findByIdAndUpdate(productId, { $set: { inStock: true } });
+        }
+        reservedProducts.push({ productId, quantity, product });
+      }
+    } catch (stockErr) {
+      await Promise.all(
+        reservedProducts.map(({ productId, quantity }) =>
+          Product.findByIdAndUpdate(productId, { $inc: { stockQuantity: quantity } })
+        )
+      );
+      if (stockErr.status === 409) {
+        return res.status(409).json({ error: stockErr.message });
+      }
+      throw stockErr;
+    }
+
     // Enrich each item with a product snapshot (price, name, first image)
     // and validate that every productId exists (Requirement 9.2)
     let enrichedItems;
     try {
       enrichedItems = await Promise.all(
         items.map(async ({ productId, quantity }) => {
-          const product = await Product.findById(productId);
+          const product = reservedProducts.find((entry) => entry.productId === productId)?.product;
           if (!product) {
             const err = new Error(`Product not found: ${productId}`);
             err.status = 404;
@@ -62,6 +106,11 @@ const placeOrder = async (req, res, next) => {
         })
       );
     } catch (enrichErr) {
+      await Promise.all(
+        reservedProducts.map(({ productId, quantity }) =>
+          Product.findByIdAndUpdate(productId, { $inc: { stockQuantity: quantity } })
+        )
+      );
       if (enrichErr.status === 404) {
         return res.status(404).json({ error: enrichErr.message });
       }
@@ -150,11 +199,18 @@ const getOrder = async (req, res, next) => {
 const getOrderHistory = async (req, res, next) => {
   try {
     const userId = req.user.id;
+    const page = Math.max(1, Number.parseInt(req.query.page, 10) || 1);
+    const limit = Math.min(100, Math.max(1, Number.parseInt(req.query.limit, 10) || 20));
+    const skip = (page - 1) * limit;
 
-    // Fetch all orders for this user, newest first (Requirement 9.3)
-    const orders = await Order.find({ userId })
-      .sort({ createdAt: -1 })
-      .lean();
+    const [orders, totalCount] = await Promise.all([
+      Order.find({ userId })
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+      Order.countDocuments({ userId }),
+    ]);
 
     // Map to the shape required by Requirement 9.3:
     // id, date, status, items (with product name and image), itemCount, total
@@ -173,7 +229,13 @@ const getOrderHistory = async (req, res, next) => {
       total:     order.totalPayableAtStore,
     }));
 
-    return res.status(200).json(data);
+    return res.status(200).json({
+      data,
+      page,
+      limit,
+      totalCount,
+      totalPages: totalCount === 0 ? 0 : Math.ceil(totalCount / limit),
+    });
   } catch (err) {
     next(err);
   }

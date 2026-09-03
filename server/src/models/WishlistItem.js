@@ -12,6 +12,6 @@ const WishlistItemSchema = new Schema(
 );
 
 // Prevents the same item from being added to a user's wishlist more than once
-WishlistItemSchema.index({ userId: 1, itemId: 1 }, { unique: true });
+WishlistItemSchema.index({ userId: 1, itemId: 1, itemType: 1 }, { unique: true });
 
 module.exports = mongoose.models.WishlistItem || mongoose.model('WishlistItem', WishlistItemSchema);

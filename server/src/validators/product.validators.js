@@ -61,15 +61,13 @@ const productQueryRules = [
 const productBodyRules = [
   // --- Required fields ---
   body('name')
-    .exists({ checkFalsy: true })
-    .withMessage('Name is required')
+    .optional()
     .trim()
     .notEmpty()
     .withMessage('Name must not be empty'),
 
   body('price')
-    .exists({ checkNull: true })
-    .withMessage('Price is required')
+    .optional()
     .isFloat({ min: 0 })
     .withMessage('Price must be a non-negative number')
     .toFloat(),
@@ -126,6 +124,12 @@ const productBodyRules = [
     .withMessage('Discount must be a number between 0 and 100')
     .toFloat(),
 
+  body('stockQuantity')
+    .optional()
+    .isInt({ min: 0 })
+    .withMessage('Stock quantity must be a non-negative integer')
+    .toInt(),
+
   // --- Optional enum field ---
   body('condition')
     .optional()
@@ -143,4 +147,10 @@ const productBodyRules = [
 module.exports = {
   productQueryRules,
   productBodyRules,
+  productCreateRules: [
+    body('name').exists({ checkFalsy: true }).withMessage('Name is required'),
+    body('price').exists({ checkNull: true }).withMessage('Price is required'),
+    ...productBodyRules,
+  ],
+  productUpdateRules: productBodyRules,
 };
