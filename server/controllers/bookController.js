@@ -1,2 +1,0 @@
-// bookController
-module.exports = {};

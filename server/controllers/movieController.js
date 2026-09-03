@@ -1,2 +1,0 @@
-// movieController
-module.exports = {};

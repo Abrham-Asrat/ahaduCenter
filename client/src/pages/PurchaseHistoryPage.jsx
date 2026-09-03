@@ -23,7 +23,7 @@ import { orderService } from '../services/orderService';
  * - orders: Array of order objects from the API
  * - loading: true while the API call is in-flight
  * - error: error string from the API, or null
- * - pagination: { currentPage, totalPages, totalItems } from the server
+ * - pagination: { totalPages, totalItems } from the server
  * - activeFilter: Currently selected filter (client-side)
  * - toastMessage: Temporary notification text or null
  */
@@ -35,30 +35,30 @@ const PurchaseHistoryPage = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
   const [pagination, setPagination] = useState({
-    currentPage: 1,
     totalPages: 1,
     totalItems: 0,
   });
 
   /** Fetch order history from the API. */
-  const fetchOrderHistory = async () => {
+  const fetchOrderHistory = async (page = currentPage) => {
     setLoading(true);
     setError(null);
     try {
-      const data = await orderService.getOrderHistory({ page: pagination.currentPage, limit: 10 });
+      const data = await orderService.getOrderHistory({ page, limit: 10 });
       // The API may return a paginated envelope { data, totalCount, page, totalPages, limit }
       // or a plain array. Handle both shapes gracefully.
       if (Array.isArray(data)) {
         setOrders(data);
-        setPagination({ currentPage: 1, totalPages: 1, totalItems: data.length });
+        setPagination({ totalPages: 1, totalItems: data.length });
       } else {
         setOrders(data.data ?? data.orders ?? []);
-        setPagination({
-          currentPage: data.page ?? 1,
+        setPagination((current) => ({
+          ...current,
           totalPages: data.totalPages ?? 1,
           totalItems: data.totalCount ?? data.total ?? 0,
-        });
+        }));
       }
     } catch (err) {
       setError(typeof err === 'string' ? err : 'Failed to load purchase history.');
@@ -69,8 +69,8 @@ const PurchaseHistoryPage = () => {
 
   // Fetch on mount
   useEffect(() => {
-    fetchOrderHistory();
-  }, [pagination.currentPage]);
+    fetchOrderHistory(currentPage);
+  }, [currentPage]);
 
   /** Show a transient toast that auto-dismisses after 3 seconds. */
   const showToast = (msg) => {
@@ -330,25 +330,20 @@ const PurchaseHistoryPage = () => {
               <div className="flex justify-center items-center gap-3 mt-8">
                 <button
                   aria-label="Previous page"
-                  disabled={pagination.currentPage <= 1}
-                  onClick={() =>
-                    setPagination((p) => ({ ...p, currentPage: Math.max(1, p.currentPage - 1) }))
-                  }
+                  disabled={currentPage <= 1}
+                  onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
                   className="w-10 h-10 rounded-lg glass-panel flex items-center justify-center text-on-surface-variant hover:text-primary disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   <span className="material-symbols-outlined">chevron_left</span>
                 </button>
                 <span className="text-sm text-white" aria-live="polite">
-                  {pagination.currentPage} OF {pagination.totalPages}
+                  {currentPage} OF {pagination.totalPages}
                 </span>
                 <button
                   aria-label="Next page"
-                  disabled={pagination.currentPage >= pagination.totalPages}
+                  disabled={currentPage >= pagination.totalPages}
                   onClick={() =>
-                    setPagination((p) => ({
-                      ...p,
-                      currentPage: Math.min(p.totalPages, p.currentPage + 1),
-                    }))
+                    setCurrentPage((page) => page + 1)
                   }
                   className="w-10 h-10 rounded-lg glass-panel flex items-center justify-center text-on-surface-variant hover:text-primary disabled:opacity-40 disabled:cursor-not-allowed"
                 >

@@ -1,2 +1,0 @@
-// orderController
-module.exports = {};

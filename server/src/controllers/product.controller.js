@@ -56,7 +56,7 @@ const listProducts = async (req, res, next) => {
       page:   page  || 1,
       limit:  limit || 20,
       sort:   { createdAt: -1 },
-      select: 'name brand category condition images price originalPrice discount rating reviewCount inStock',
+      select: 'name brand category condition images price originalPrice discount rating reviewCount stockQuantity inStock',
     };
 
     const result = await paginate(Product, filter, opts);
@@ -86,7 +86,7 @@ const getProduct = async (req, res, next) => {
         _id:      { $ne: product._id },
       })
         .limit(10)
-        .select('name brand category images price originalPrice discount rating reviewCount inStock')
+        .select('name brand category images price originalPrice discount rating reviewCount stockQuantity inStock')
         .lean();
     }
 

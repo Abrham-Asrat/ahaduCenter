@@ -14,7 +14,7 @@
  */
 
 import React from 'react';
-import { describe, it, vi } from 'vitest';
+import { afterEach, describe, it, vi } from 'vitest';
 import { render, screen, fireEvent, cleanup, act, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -22,6 +22,10 @@ import * as fc from 'fast-check';
 
 import { store } from '../redux/store';
 import PurchaseHistoryPage from '../pages/PurchaseHistoryPage';
+
+afterEach(() => {
+  cleanup();
+});
 
 vi.mock('../services/orderService', () => ({
   orderService: {
@@ -36,6 +40,7 @@ vi.mock('../services/orderService', () => ({
 
 /** Render PurchaseHistoryPage with all required providers. */
 async function renderPage() {
+  cleanup();
   let result;
   await act(async () => {
     result = render(
@@ -66,14 +71,14 @@ describe('PurchaseHistoryPage pagination — Property 5 (Validates: Requirements
         async (n) => {
           await renderPage();
 
-          const nextButton = screen.getByRole('button', { name: /next page/i });
-
           // Click next N times — page advances from 1 to n+1
-          act(() => {
-            for (let i = 0; i < n; i++) {
+          for (let i = 0; i < n; i++) {
+            const nextButton = screen.getByRole('button', { name: /next page/i });
+            act(() => {
               fireEvent.click(nextButton);
-            }
-          });
+            });
+            await waitFor(() => screen.getByText(`${i + 2} OF 10`));
+          }
 
           // The page indicator should now read "(n+1) OF 10"
           const expectedText = `${n + 1} OF 10`;
@@ -95,22 +100,22 @@ describe('PurchaseHistoryPage pagination — Property 5 (Validates: Requirements
         async (n) => {
           await renderPage();
 
-          const nextButton = screen.getByRole('button', { name: /next page/i });
-
           // Advance to page n first (click n-1 times)
           if (n > 1) {
-            act(() => {
-              for (let i = 0; i < n - 1; i++) {
+            for (let i = 0; i < n - 1; i++) {
+              const nextButton = screen.getByRole('button', { name: /next page/i });
+              act(() => {
                 fireEvent.click(nextButton);
-              }
-            });
-            await waitFor(() => screen.getByText(`${n} OF 10`));
+              });
+              await waitFor(() => screen.getByText(`${i + 2} OF 10`));
+            }
           }
 
           // Confirm we are on page n
           await waitFor(() => screen.getByText(`${n} OF 10`));
 
           // One more click → should display page n+1
+          const nextButton = screen.getByRole('button', { name: /next page/i });
           act(() => { fireEvent.click(nextButton); });
           await waitFor(() => screen.getByText(`${n + 1} OF 10`));
 

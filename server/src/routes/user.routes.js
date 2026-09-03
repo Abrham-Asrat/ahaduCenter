@@ -8,7 +8,6 @@
  * Fully implemented handlers:
  *   GET    /me               → getProfile
  *   PUT    /me               → updateProfileRules, validate, updateProfile
- *   POST   /me/avatar        → uploadSingle('avatar'), uploadAvatar
  *   GET    /me/stats         → getStats
  *   GET    /me/activity      → getActivity
  *

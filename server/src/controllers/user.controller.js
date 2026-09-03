@@ -8,7 +8,6 @@
  * Requirements covered:
  *   3.1 — GET  /api/users/me         (getProfile)
  *   3.2, 3.3, 3.9 — PUT  /api/users/me  (updateProfile)
- *   3.4, 3.8 — POST /api/users/me/avatar (uploadAvatar)
  *   3.5 — GET  /api/users/me/stats   (getStats)
  *   3.6 — GET  /api/users/me/activity (getActivity)
  */

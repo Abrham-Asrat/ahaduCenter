@@ -1,2 +1,0 @@
-// authController
-module.exports = {};

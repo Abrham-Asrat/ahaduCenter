@@ -1,2 +1,0 @@
-// notificationController
-module.exports = {};
