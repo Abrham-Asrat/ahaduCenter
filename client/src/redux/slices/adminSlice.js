@@ -19,7 +19,14 @@ export const fetchRecentActivity = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const data = await adminService.getRecentActivity();
-      return Array.isArray(data) ? data : (data?.activities ?? []);
+      if (Array.isArray(data)) return data;
+      if (Array.isArray(data?.activities)) return data.activities;
+
+      return [
+        ...(data?.recentMovies ?? []).map((item) => ({ ...item, type: 'Movie' })),
+        ...(data?.recentBooks ?? []).map((item) => ({ ...item, type: 'Book' })),
+        ...(data?.recentProducts ?? []).map((item) => ({ ...item, type: 'Product' })),
+      ];
     } catch (err) {
       return rejectWithValue(typeof err === 'string' ? err : 'Failed to fetch recent activity');
     }

@@ -175,7 +175,9 @@ export const bookSlice = createSlice({
       })
       .addCase(fetchBookReviews.fulfilled, (state, action) => {
         state.loading = false;
-        state.reviews = Array.isArray(action.payload) ? action.payload : [];
+        state.reviews = Array.isArray(action.payload)
+          ? action.payload
+          : (action.payload?.data ?? []);
       })
       .addCase(fetchBookReviews.rejected, (state, action) => {
         state.loading = false;

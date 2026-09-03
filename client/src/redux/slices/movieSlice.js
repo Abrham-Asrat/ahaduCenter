@@ -125,7 +125,9 @@ export const movieSlice = createSlice({
       })
       .addCase(fetchMovieReviews.fulfilled, (state, action) => {
         state.loading = false;
-        state.reviews = Array.isArray(action.payload) ? action.payload : [];
+        state.reviews = Array.isArray(action.payload)
+          ? action.payload
+          : (action.payload?.data ?? []);
       })
       .addCase(fetchMovieReviews.rejected, (state, action) => {
         state.loading = false;
