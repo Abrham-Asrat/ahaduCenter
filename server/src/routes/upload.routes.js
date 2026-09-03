@@ -9,9 +9,9 @@
  */
 
 const { Router } = require('express');
-const authenticate        = require('../../middleware/authenticate');
-const requireRole         = require('../../middleware/requireRole');
-const { uploadSingle }    = require('../../middleware/upload');
+const authenticate        = require('../middleware/authenticate');
+const requireRole         = require('../middleware/requireRole');
+const { uploadSingle }    = require('../middleware/upload');
 const { uploadFile }      = require('../controllers/upload.controller');
 
 const router = Router();

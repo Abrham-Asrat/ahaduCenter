@@ -1,4 +1,4 @@
-const { verify } = require('../utils/jwt');
+const { verify } = require('../../utils/jwt');
 
 /**
  * Authenticate middleware.

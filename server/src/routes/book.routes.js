@@ -18,8 +18,8 @@ const express = require('express');
 const router = express.Router();
 
 // ── Middleware ────────────────────────────────────────────────────────────────
-const authenticate = require('../../middleware/authenticate');
-const validate     = require('../../middleware/validate');
+const authenticate = require('../middleware/authenticate');
+const validate     = require('../middleware/validate');
 
 // ── Validators ────────────────────────────────────────────────────────────────
 const { bookQueryRules } = require('../validators/book.validators');

@@ -14,7 +14,7 @@ const express = require('express');
 const router  = express.Router();
 
 // ── Middleware ────────────────────────────────────────────────────────────────
-const validate = require('../../middleware/validate');
+const validate = require('../middleware/validate');
 
 // ── Validators ────────────────────────────────────────────────────────────────
 const { productQueryRules } = require('../validators/product.validators');

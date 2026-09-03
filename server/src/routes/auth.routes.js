@@ -12,7 +12,7 @@ const {
   verifyEmailRules,
   resendVerificationRules,
 } = require('../validators/auth.validators');
-const validate = require('../../middleware/validate');
+const validate = require('../middleware/validate');
 const {
   register,
   googleLogin,

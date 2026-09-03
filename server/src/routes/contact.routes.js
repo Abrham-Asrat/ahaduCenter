@@ -19,7 +19,7 @@ const router  = express.Router();
 const { contactRules } = require('../validators/contact.validators');
 
 // ── Middleware ────────────────────────────────────────────────────────────────
-const validate = require('../../middleware/validate');
+const validate = require('../middleware/validate');
 
 // ── Controllers ───────────────────────────────────────────────────────────────
 const { submitContact } = require('../controllers/contact.controller');

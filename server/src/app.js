@@ -78,7 +78,7 @@ const adminRouter = require('./routes/admin.routes');
 app.use('/api/admin', adminRouter);
 
 // ── Global error handler (mounted last) ──────────────────────────────────────
-const errorHandler = require('../middleware/errorHandler');
+const errorHandler = require('./middleware/errorHandler');
 app.use(errorHandler);
 
 module.exports = app;

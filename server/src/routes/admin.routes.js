@@ -12,9 +12,9 @@ const express = require('express');
 const router  = express.Router();
 
 // ── Middleware ────────────────────────────────────────────────────────────────
-const authenticate  = require('../../middleware/authenticate');
-const requireRole   = require('../../middleware/requireRole');
-const validate      = require('../../middleware/validate');
+const authenticate  = require('../middleware/authenticate');
+const requireRole   = require('../middleware/requireRole');
+const validate      = require('../middleware/validate');
 
 // ── Validators ────────────────────────────────────────────────────────────────
 const { objectIdParam, paginationRules } = require('../validators/common.validators');

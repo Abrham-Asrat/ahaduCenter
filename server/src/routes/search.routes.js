@@ -10,7 +10,7 @@
 
 const { Router } = require('express');
 const { searchQueryRules } = require('../validators/search.validators');
-const validate             = require('../../middleware/validate');
+const validate             = require('../middleware/validate');
 const { search }           = require('../controllers/search.controller');
 
 const router = Router();

@@ -63,7 +63,7 @@ function makeToken(payload, opts = {}) {
 // ═══════════════════════════════════════════════════════════════════════════
 
 describe('authenticate middleware', () => {
-  const authenticate = require('../../../middleware/authenticate');
+  const authenticate = require('../../middleware/authenticate');
 
   it('returns 401 when Authorization header is absent', () => {
     const { req, res, next } = makeMocks();
@@ -150,7 +150,7 @@ describe('authenticate middleware', () => {
 // ═══════════════════════════════════════════════════════════════════════════
 
 describe('requireRole middleware', () => {
-  const requireRole = require('../../../middleware/requireRole');
+  const requireRole = require('../../middleware/requireRole');
 
   it('returns 403 when req.user is not set', () => {
     const { req, res, next } = makeMocks(); // no user attached
@@ -206,7 +206,7 @@ describe('validate middleware', () => {
   // `express-validator` is mocked at the top of this file (module scope).
   // Here we simply require the already-mocked version.
   const { validationResult } = require('express-validator');
-  const validate = require('../../../middleware/validate');
+  const validate = require('../../middleware/validate');
 
   afterEach(() => {
     jest.clearAllMocks();
@@ -281,7 +281,7 @@ describe('validate middleware', () => {
 // ═══════════════════════════════════════════════════════════════════════════
 
 describe('errorHandler middleware', () => {
-  const errorHandler = require('../../../middleware/errorHandler');
+  const errorHandler = require('../../middleware/errorHandler');
 
   // Suppress console.error output during tests
   beforeAll(() => jest.spyOn(console, 'error').mockImplementation(() => {}));
