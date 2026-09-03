@@ -51,7 +51,9 @@ const ProductDetailPage = () => {
     setOrderLoading(true);
     setOrderError(null);
     try {
-      const orderData = await orderService.placeOrder({ productId: product.id, quantity });
+      const orderData = await orderService.placeOrder({
+        items: [{ productId: product.id, quantity }],
+      });
       navigate('/order-confirmation', { state: { order: orderData } });
     } catch (err) {
       setOrderError(typeof err === 'string' ? err : (err?.message || 'Failed to place order. Please try again.'));
