@@ -71,7 +71,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="fixed inset-x-0 top-0 z-50 w-full bg-surface-container/80 backdrop-blur-xl border-b border-white/10 shadow-xl transition-colors animate-nav-drop">
+      <nav className="fixed inset-x-0 top-0 z-50 w-full bg-surface-container/80 backdrop-blur-xl border-b border-white/10 shadow-xl transition-colors animate-nav-drop md:block">
         <div className="grid grid-cols-[1fr_auto_1fr] items-center px-4 sm:px-6 md:px-8 py-3 max-w-7xl mx-auto min-h-[4.25rem]">
           {/* Brand Logo */}
           <Link to="/" className="justify-self-start font-heading text-2xl font-black text-primary flex items-center gap-2 tracking-wide">

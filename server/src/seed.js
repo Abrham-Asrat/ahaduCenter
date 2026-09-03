@@ -16,14 +16,11 @@ const usersData = [
     email: 'admin@ahaducenter.com',
     plainPassword: 'admin123',
     role: 'admin',
-    phone: '+251911000001',
   },
   {
     name: 'Regular User',
     email: 'user@ahaducenter.com',
-    plainPassword: 'user123',
     role: 'user',
-    phone: '+251911000002',
   },
 ];
 
@@ -505,14 +502,15 @@ async function seed() {
     for (const u of usersData) {
       const exists = await User.findOne({ email: u.email });
       if (!exists) {
-        const passwordHash = await bcrypt.hash(u.plainPassword, 10);
-        await User.create({
+        const userData = {
           name: u.name,
           email: u.email,
-          passwordHash,
           role: u.role,
-          phone: u.phone,
-        });
+        };
+        if (u.role === 'admin') {
+          userData.passwordHash = await bcrypt.hash(u.plainPassword, 10);
+        }
+        await User.create(userData);
         usersCreated++;
       }
     }

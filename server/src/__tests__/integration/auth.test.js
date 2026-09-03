@@ -1,280 +1,145 @@
 'use strict';
 
-/**
- * Integration Property-Based Tests: Auth Round Trip (Properties 1, 2, 3)
- *
- * **Validates: Requirements 2.1, 2.3, 2.6, 2.9**
- *
- * Uses mongodb-memory-server + supertest + fast-check.
- */
-
-// ── Mock nodemailer before any require of the controller ───────────────────────
 jest.mock('nodemailer', () => {
-  const sendMail = jest.fn().mockResolvedValue({ messageId: 'test-msg-id' });
-  const createTransport = jest.fn().mockReturnValue({ sendMail });
-  return { createTransport, __sendMail: sendMail };
+  const sendMail = jest.fn().mockResolvedValue({ messageId: 'test-message' });
+  return { createTransport: jest.fn().mockReturnValue({ sendMail }), __sendMail: sendMail };
 });
 
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const mongoose = require('mongoose');
-const supertest = require('supertest');
-const fc = require('fast-check');
+const bcrypt = require('bcryptjs');
+const request = require('supertest');
 
-// Set env vars BEFORE requiring the app (JWT_SECRET is needed at load time)
 process.env.JWT_SECRET = 'test-secret';
+process.env.GOOGLE_CLIENT_ID = 'test-google-client-id';
 
 const app = require('../../app');
-// Get User model from the mongoose registry (already compiled by app.js)
 const User = mongoose.model('User');
-const request = supertest(app);
-
-// ── MongoMemoryServer lifecycle ────────────────────────────────────────────────
+const mailer = require('nodemailer');
 
 let mongod;
+let verificationToken;
 
 beforeAll(async () => {
   mongod = await MongoMemoryServer.create({
     instance: { startupTimeout: 120000 },
     binary: { downloadDir: './.mongodb-binaries' },
   });
-  const uri = mongod.getUri();
-  await mongoose.connect(uri);
-}, 150000);
+  await mongoose.connect(mongod.getUri());
+});
 
 afterAll(async () => {
-  if (mongoose.connection.readyState !== 0) {
-    await mongoose.disconnect();
-  }
-  if (mongod) {
-    await mongod.stop(true);
-  }
+  await mongoose.disconnect();
+  await mongod?.stop(true);
 });
 
-// Clear users between each property run
 beforeEach(async () => {
   await User.deleteMany({});
-});
-
-// ── Arbitraries ────────────────────────────────────────────────────────────────
-
-/**
- * Generates a valid email address.
- * express-validator's normalizeEmail() lowercases the local part and domain.
- * We use fc.emailAddress() which produces RFC-valid emails.
- */
-const validEmail = fc.emailAddress();
-
-/**
- * Generates a valid password (8–128 printable ASCII chars, no spaces at
- * boundaries that could confuse trimming, guaranteed non-empty after trim).
- */
-const validPassword = fc.string({
-  minLength: 8,
-  maxLength: 128,
-  unit: fc.char({ min: '!', max: '~' }), // printable ASCII, no whitespace
-});
-
-/**
- * Generates a valid name (1–100 non-whitespace-only, trimmed length 1-100).
- */
-const validName = fc.string({ minLength: 1, maxLength: 100 }).filter(
-  (s) => s.trim().length >= 1 && s.trim().length <= 100
-);
-
-/**
- * Generates arbitrary non-empty strings to use as email in forgot-password.
- * The validator only requires the field exists (checkFalsy: true).
- */
-const arbitraryEmailString = fc
-  .string({ minLength: 1, maxLength: 254 })
-  .filter((s) => s.trim().length >= 1); // must not be falsy after trim
-
-// ── Property 1: Valid register → login → HTTP 200 + JWT + correct user fields ──
-
-describe(
-  'Property 1: register then login returns 200, JWT, and correct user fields',
-  () => {
-    /**
-     * For any valid (email, password, name):
-     * 1. POST /api/auth/register succeeds (2xx)
-     * 2. POST /api/auth/login with same credentials returns 200
-     * 3. Response contains: token (string), name, email (normalised), role "user"
-     *
-     * **Validates: Requirements 2.1, 2.3**
-     */
-    it('Property 1: register + login round trip', async () => {
-      await fc.assert(
-        fc.asyncProperty(validEmail, validPassword, validName, async (email, password, name) => {
-          // Clear DB between runs inside the property (numRuns > 1 per test)
-          await User.deleteMany({});
-
-          // Step 1 – Register
-          const registerRes = await request
-            .post('/api/auth/register')
-            .send({ email, password, name });
-
-          // Registration must succeed
-          if (registerRes.status !== 201) {
-            // Unexpected failure — re-throw so fast-check treats it as a violation
-            throw new Error(
-              `Register failed with ${registerRes.status}: ${JSON.stringify(registerRes.body)}`
-            );
-          }
-
-          // Step 2 – Login with the same credentials
-          const loginRes = await request
-            .post('/api/auth/login')
-            .send({ email, password });
-
-          // HTTP 200
-          if (loginRes.status !== 200) {
-            throw new Error(
-              `Login failed with ${loginRes.status}: ${JSON.stringify(loginRes.body)}`
-            );
-          }
-
-          const body = loginRes.body;
-
-          // JWT is present and is a non-empty string
-          if (typeof body.token !== 'string' || body.token.length === 0) {
-            throw new Error(`token missing or empty: ${JSON.stringify(body)}`);
-          }
-
-          // role must be "user"
-          if (body.role !== 'user') {
-            throw new Error(`Expected role "user", got "${body.role}"`);
-          }
-
-          // email in response must be the normalised (lowercase) version
-          const expectedEmail = email.toLowerCase().trim();
-          if (body.email !== expectedEmail) {
-            throw new Error(
-              `Expected email "${expectedEmail}", got "${body.email}"`
-            );
-          }
-
-          // name must be present and non-empty
-          if (typeof body.name !== 'string' || body.name.trim().length === 0) {
-            throw new Error(`name missing or empty: ${JSON.stringify(body)}`);
-          }
-
-          return true;
-        }),
-        { numRuns: 5 } // keep integration runs reasonable
-      );
-    });
-  }
-);
-
-// ── Property 2: passwordHash stored in DB ≠ plaintext password ─────────────────
-
-describe('Property 2: password is stored hashed, not as plaintext', () => {
-  /**
-   * For any valid (email, password, name):
-   * After register, User.findOne({ email }).passwordHash !== plaintext password.
-   *
-   * **Validates: Requirements 2.9**
-   */
-  it('Property 2: DB passwordHash differs from plaintext password', async () => {
-    await fc.assert(
-      fc.asyncProperty(validEmail, validPassword, validName, async (email, password, name) => {
-        await User.deleteMany({});
-
-        const registerRes = await request
-          .post('/api/auth/register')
-          .send({ email, password, name });
-
-        if (registerRes.status !== 201) {
-          throw new Error(
-            `Register failed with ${registerRes.status}: ${JSON.stringify(registerRes.body)}`
-          );
-        }
-
-        // Fetch raw DB document
-        const normalised = email.toLowerCase().trim();
-        const user = await User.findOne({ email: normalised });
-
-        if (!user) {
-          throw new Error('User not found in DB after register');
-        }
-
-        // passwordHash must not equal the plaintext password
-        if (user.passwordHash === password) {
-          throw new Error(
-            `passwordHash equals plaintext password! hash="${user.passwordHash}"`
-          );
-        }
-
-        // passwordHash must be a bcrypt hash (starts with $2)
-        if (!user.passwordHash.startsWith('$2')) {
-          throw new Error(
-            `passwordHash does not look like a bcrypt hash: "${user.passwordHash}"`
-          );
-        }
-
-        return true;
-      }),
-      { numRuns: 5 }
-    );
+  mailer.__sendMail.mockClear();
+  global.fetch = jest.fn().mockResolvedValue({
+    ok: true,
+    json: async () => ({
+      aud: process.env.GOOGLE_CLIENT_ID,
+      iss: 'https://accounts.google.com',
+      email: 'member@example.com',
+      email_verified: 'true',
+      name: 'Member User',
+    }),
   });
 });
 
-// ── Property 3: forgot-password always returns 200 { message: "Reset instructions sent" } ──
+afterEach(() => {
+  delete global.fetch;
+});
 
-describe(
-  'Property 3: forgot-password returns 200 with constant message for any email string',
-  () => {
-    /**
-     * For any non-empty email string (registered or not):
-     * POST /api/auth/forgot-password → HTTP 200, body { message: "Reset instructions sent" }
-     * The response must not vary based on whether the email exists.
-     *
-     * **Validates: Requirements 2.6**
-     */
-    it('Property 3: forgot-password constant response regardless of email', async () => {
-      await fc.assert(
-        fc.asyncProperty(arbitraryEmailString, async (emailStr) => {
-          const res = await request
-            .post('/api/auth/forgot-password')
-            .send({ email: emailStr });
+const registerUser = async (email = 'member@example.com') =>
+  request(app).post('/api/auth/register').send({ name: 'Member User', email });
 
-          if (res.status !== 200) {
-            throw new Error(
-              `Expected 200, got ${res.status}: ${JSON.stringify(res.body)}`
-            );
-          }
+describe('passwordless registration and email verification', () => {
+  it('registers with only name and email and sends a verification link', async () => {
+    const response = await registerUser();
 
-          if (
-            !res.body ||
-            res.body.message !== 'Reset instructions sent'
-          ) {
-            throw new Error(
-              `Expected { message: "Reset instructions sent" }, got ${JSON.stringify(res.body)}`
-            );
-          }
+    expect(response.status).toBe(201);
+    expect(response.body).toMatchObject({ verificationRequired: true });
+    expect(response.body.token).toBeUndefined();
+    expect(response.body.user).toMatchObject({ name: 'Member User', email: 'member@example.com' });
 
-          return true;
-        }),
-        { numRuns: 5 }
-      );
-    });
+    const user = await User.findOne({ email: 'member@example.com' }).lean();
+    expect(user.emailVerified).toBe(false);
+    expect(user.passwordHash).toBeNull();
+    expect(user.verificationTokenHash).toMatch(/^[a-f0-9]{64}$/);
+    expect(mailer.__sendMail).toHaveBeenCalledWith(expect.objectContaining({
+      to: 'member@example.com',
+      text: expect.stringContaining('/verify-email?token='),
+    }));
 
-    it('Property 3: forgot-password constant response for a registered email', async () => {
-      // Also test with an actually registered email to confirm no differentiation
-      const email = 'registered@example.com';
-      const password = 'Password123!';
-      const name = 'Test User';
+    verificationToken = mailer.__sendMail.mock.calls[0][0].text.match(/token=([^\n]+)/)[1];
+  });
 
-      await request
-        .post('/api/auth/register')
-        .send({ email, password, name });
+  it('verifies a valid link once and rejects it when reused', async () => {
+    await registerUser();
+    verificationToken = mailer.__sendMail.mock.calls[0][0].text.match(/token=([^\n]+)/)[1];
 
-      const res = await request
-        .post('/api/auth/forgot-password')
-        .send({ email });
+    const verified = await request(app).get(`/api/auth/verify-email?token=${verificationToken}`);
+    expect(verified.status).toBe(200);
+    expect(verified.body.message).toMatch(/verified/i);
 
-      expect(res.status).toBe(200);
-      expect(res.body).toEqual({ message: 'Reset instructions sent' });
-    });
-  }
-);
+    const user = await User.findOne({ email: 'member@example.com' }).lean();
+    expect(user.emailVerified).toBe(true);
+    expect(user.verificationTokenHash).toBeNull();
+
+    const reused = await request(app).get(`/api/auth/verify-email?token=${verificationToken}`);
+    expect(reused.status).toBe(400);
+  });
+
+  it('resends a rotated token with a generic response', async () => {
+    await registerUser();
+    const firstHash = (await User.findOne({ email: 'member@example.com' }).lean()).verificationTokenHash;
+
+    const response = await request(app)
+      .post('/api/auth/resend-verification')
+      .send({ email: 'member@example.com' });
+
+    expect(response.status).toBe(200);
+    expect(response.body.message).toMatch(/if an account requires verification/i);
+    const user = await User.findOne({ email: 'member@example.com' }).lean();
+    expect(user.verificationTokenHash).not.toBe(firstHash);
+  });
+});
+
+describe('Google login', () => {
+  it('rejects a registered user until email verification is complete', async () => {
+    await registerUser();
+
+    const response = await request(app)
+      .post('/api/auth/google')
+      .send({ credential: 'google-credential' });
+
+    expect(response.status).toBe(403);
+    expect(response.body.code).toBe('EMAIL_NOT_VERIFIED');
+  });
+
+  it('returns a JWT and nested user after Google login', async () => {
+    await User.create({ name: 'Member User', email: 'member@example.com', emailVerified: true });
+
+    const response = await request(app)
+      .post('/api/auth/google')
+      .send({ credential: 'google-credential' });
+
+    expect(response.status).toBe(200);
+    expect(response.body.token).toEqual(expect.any(String));
+    expect(response.body.user).toMatchObject({ email: 'member@example.com', role: 'user' });
+  });
+
+  it('allows password login only for admins', async () => {
+    const passwordHash = await bcrypt.hash('admin-password', 10);
+    await User.create({ name: 'Admin', email: 'admin@example.com', role: 'admin', passwordHash });
+
+    const response = await request(app)
+      .post('/api/auth/admin-login')
+      .send({ email: 'admin@example.com', password: 'admin-password' });
+
+    expect(response.status).toBe(200);
+    expect(response.body.user.role).toBe('admin');
+  });
+});

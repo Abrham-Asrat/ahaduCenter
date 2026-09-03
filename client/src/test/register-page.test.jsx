@@ -1,123 +1,56 @@
-/**
- * Tests for RegisterPage — Task 15.1
- * Validates: Requirements 5.8
- *
- * Verifies that:
- * 1. Submitting the registration form shows a success toast with "Account created".
- * 2. After 1500 ms, navigate('/login') is called (verified with fake timers).
- */
-
 import React from 'react';
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, fireEvent, act } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-
-// Use vi.hoisted so mockNavigate is available when vi.mock factory runs
-const { mockNavigate } = vi.hoisted(() => ({
-  mockNavigate: vi.fn(),
-}));
-
-vi.mock('react-router-dom', async (importOriginal) => {
-  const actual = await importOriginal();
-  return {
-    ...actual,
-    useNavigate: () => mockNavigate,
-  };
-});
-
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import RegisterPage from '../pages/RegisterPage';
+import authReducer from '../redux/slices/authSlice';
+import { authService } from '../services/authService';
 
-function buildMockStore() {
-  return configureStore({
-    reducer: {
-      auth: (state = { user: null, loading: false, error: null }, action) => {
-        return state;
-      },
-    },
-  });
-}
+vi.mock('../services/authService', () => ({
+  authService: {
+    register: vi.fn(),
+  },
+}));
 
-/** Render RegisterPage with MemoryRouter + Redux Provider. */
-function renderPage() {
+const renderPage = () => {
+  const store = configureStore({ reducer: { auth: authReducer } });
   return render(
-    <Provider store={buildMockStore()}>
+    <Provider store={store}>
       <MemoryRouter>
         <RegisterPage />
       </MemoryRouter>
     </Provider>
   );
-}
+};
 
-/**
- * Fill all required form fields and check the terms checkbox,
- * then submit the form.
- */
-function fillAndSubmit() {
-  fireEvent.change(screen.getByLabelText(/full name/i), {
-    target: { value: 'Test User' },
-  });
-  fireEvent.change(screen.getByLabelText(/email address/i), {
-    target: { value: 'test@example.com' },
-  });
-  fireEvent.change(screen.getByLabelText(/^password$/i), {
-    target: { value: 'password123' },
-  });
-  fireEvent.change(screen.getByLabelText(/confirm password/i), {
-    target: { value: 'password123' },
-  });
-
-  // Check the terms checkbox
-  fireEvent.click(screen.getByLabelText(/i agree to the/i));
-
-  // Submit the form
-  fireEvent.click(screen.getByRole('button', { name: /create account/i }));
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Requirement 5.8 — RegisterPage form submit: toast + navigate
-// ─────────────────────────────────────────────────────────────────────────────
-
-describe('RegisterPage submit (Requirement 5.8)', () => {
+describe('RegisterPage passwordless registration', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.useFakeTimers();
+    authService.register.mockResolvedValue({
+      verificationRequired: true,
+      user: { name: 'Test User', email: 'test@example.com' },
+    });
   });
 
-  afterEach(() => {
-    vi.useRealTimers();
-  });
-
-  it('shows a success toast containing "Account created" after form submission', () => {
+  it('submits only full name and email', async () => {
     renderPage();
-    act(() => { fillAndSubmit(); });
+    fireEvent.change(screen.getByLabelText(/full name/i), { target: { value: 'Test User' } });
+    fireEvent.change(screen.getByLabelText(/email address/i), { target: { value: 'test@example.com' } });
+    fireEvent.click(screen.getByRole('button', { name: /create account/i }));
 
-    // Toast should be visible immediately after submit
-    expect(screen.getByText(/account created/i)).toBeInTheDocument();
+    await waitFor(() => expect(authService.register).toHaveBeenCalledWith('Test User', 'test@example.com'));
+    expect(screen.queryByLabelText(/^password$/i)).not.toBeInTheDocument();
   });
 
-  it('calls navigate("/login") after 1500 ms', () => {
+  it('shows server errors', async () => {
+    authService.register.mockRejectedValueOnce('Email is already registered');
     renderPage();
-    act(() => { fillAndSubmit(); });
+    fireEvent.change(screen.getByLabelText(/full name/i), { target: { value: 'Test User' } });
+    fireEvent.change(screen.getByLabelText(/email address/i), { target: { value: 'test@example.com' } });
+    fireEvent.click(screen.getByRole('button', { name: /create account/i }));
 
-    // navigate should NOT have been called immediately
-    expect(mockNavigate).not.toHaveBeenCalledWith('/login');
-
-    // Advance timers by 1500 ms — the setTimeout in handleSubmit fires
-    act(() => { vi.advanceTimersByTime(1500); });
-
-    expect(mockNavigate).toHaveBeenCalledWith('/login');
-    expect(mockNavigate).toHaveBeenCalledTimes(1);
-  });
-
-  it('does not navigate before 1500 ms have elapsed', () => {
-    renderPage();
-    act(() => { fillAndSubmit(); });
-
-    // Advance only 1499 ms — should not have navigated yet
-    act(() => { vi.advanceTimersByTime(1499); });
-
-    expect(mockNavigate).not.toHaveBeenCalledWith('/login');
+    expect(await screen.findByText('Email is already registered')).toBeInTheDocument();
   });
 });

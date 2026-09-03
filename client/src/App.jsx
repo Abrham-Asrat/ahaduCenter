@@ -28,11 +28,21 @@ import BookConfirmPage from './pages/BookConfirmPage';
 import NotificationsPage from './pages/NotificationsPage';
 import OrderConfirmationPage from './pages/OrderConfirmationPage';
 import NotFoundPage from './pages/NotFoundPage';
+import VerifyEmailPage from './pages/VerifyEmailPage';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { bootstrapAuthThunk } from './redux/slices/authSlice';
 import ScrollToTop from './components/common/ScrollToTop';
 import ProtectedRoute from './components/common/ProtectedRoute';
 import AdminRoute from './components/common/AdminRoute';
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(bootstrapAuthThunk());
+  }, [dispatch]);
+
   return (
     <>
       <ScrollToTop />
@@ -46,6 +56,7 @@ function App() {
         <Route path="/books/:id" element={<BookDetailPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/verify-email" element={<VerifyEmailPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/search" element={<SearchResultsPage />} />
         <Route path="/contact" element={<ContactPage />} />

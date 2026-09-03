@@ -23,11 +23,50 @@ function getTransporter() {
   return _transporter;
 }
 
+const hashToken = (token) => crypto.createHash('sha256').update(token).digest('hex');
+
+const sendVerificationEmail = async (user, token) => {
+  const clientUrl = process.env.CLIENT_URL || process.env.CLIENT_ORIGIN || 'http://localhost:5173';
+  const verificationUrl = `${clientUrl.replace(/\/$/, '')}/verify-email?token=${encodeURIComponent(token)}`;
+  const transporter = getTransporter();
+
+  await transporter.sendMail({
+    from: process.env.EMAIL_USER,
+    to: user.email,
+    subject: 'AhaduCenter — Verify your email',
+    text: [
+      `Hello ${user.name},`,
+      '',
+      'Please verify your AhaduCenter email address by opening this link:',
+      verificationUrl,
+      '',
+      'This link expires in 24 hours and can only be used once.',
+    ].join('\n'),
+  });
+};
+
+const createVerificationToken = () => crypto.randomBytes(32).toString('hex');
+
+const applyVerificationToken = (user) => {
+  const token = createVerificationToken();
+  user.verificationTokenHash = hashToken(token);
+  user.verificationTokenExpiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
+  return token;
+};
+
+const verifyGoogleCredential = async (credential) => {
+  const response = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(credential)}`);
+  if (!response.ok) return null;
+  const payload = await response.json();
+  if (payload.aud !== process.env.GOOGLE_CLIENT_ID || payload.iss !== 'https://accounts.google.com') return null;
+  return payload;
+};
+
 // ── POST /api/auth/register ────────────────────────────────────────────────────
 // Requirement 2.1, 2.2, 2.9, 2.10
 const register = async (req, res, next) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email } = req.body;
 
     // Check for duplicate email (Requirement 2.2)
     const existing = await User.findOne({ email: email.toLowerCase().trim() });
@@ -35,53 +74,90 @@ const register = async (req, res, next) => {
       return res.status(409).json({ error: 'Email is already registered' });
     }
 
-    // Hash password — never store plaintext (Requirement 2.9)
-    const passwordHash = await bcrypt.hash(password, 12);
-
     // Create user with default role "user"
     const user = await User.create({
       name: name.trim(),
       email: email.toLowerCase().trim(),
-      passwordHash,
+      emailVerified: false,
     });
 
-    // Sign JWT with { id, role }, 24h expiry (Requirement 2.10)
-    const token = sign({ id: user._id.toString(), role: user.role });
+    const verificationToken = applyVerificationToken(user);
+    await user.save();
 
-    return res.status(201).json({ token });
+    try {
+      await sendVerificationEmail(user, verificationToken);
+    } catch (mailErr) {
+      console.error('[register] Verification email send failed:', mailErr.message);
+    }
+
+    return res.status(201).json({
+      message: 'Registration successful. Please verify your email before logging in.',
+      verificationRequired: true,
+      user: { id: user._id.toString(), name: user.name, email: user.email },
+    });
   } catch (err) {
     next(err);
   }
 };
 
-// ── POST /api/auth/login ───────────────────────────────────────────────────────
-// Requirement 2.3, 2.4
-const login = async (req, res, next) => {
+// ── POST /api/auth/google ─────────────────────────────────────────────────────
+const googleLogin = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
+    const payload = await verifyGoogleCredential(req.body.credential);
+    const email = payload?.email?.toLowerCase().trim();
 
-    // Find user by email
-    const user = await User.findOne({ email: email.toLowerCase().trim() });
+    if (!email || !payload.email_verified) {
+      return res.status(401).json({ error: 'Google account email is not verified' });
+    }
+
+    const user = await User.findOne({ email });
     if (!user) {
-      return res.status(401).json({ error: 'Invalid credentials' });
+      return res.status(404).json({ error: 'Please register your email before signing in with Google' });
+    }
+    if (user.emailVerified === false) {
+      return res.status(403).json({
+        error: 'Please verify your email before logging in',
+        code: 'EMAIL_NOT_VERIFIED',
+        email: user.email,
+      });
     }
 
-    // Compare password hash
-    const isMatch = await bcrypt.compare(password, user.passwordHash);
-    if (!isMatch) {
-      return res.status(401).json({ error: 'Invalid credentials' });
-    }
-
-    // Sign JWT (Requirement 2.10)
     const token = sign({ id: user._id.toString(), role: user.role });
-
-    // Respond with token + user fields (Requirement 2.3)
     return res.status(200).json({
       token,
-      id: user._id.toString(),
-      name: user.name,
-      email: user.email,
-      role: user.role,
+      user: {
+        id: user._id.toString(),
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// ── POST /api/auth/admin-login ───────────────────────────────────────────────
+const adminLogin = async (req, res, next) => {
+  try {
+    const user = await User.findOne({
+      email: req.body.email.toLowerCase().trim(),
+      role: 'admin',
+    });
+
+    if (!user || !user.passwordHash || !(await bcrypt.compare(req.body.password, user.passwordHash))) {
+      return res.status(401).json({ error: 'Invalid admin credentials' });
+    }
+
+    const token = sign({ id: user._id.toString(), role: user.role });
+    return res.status(200).json({
+      token,
+      user: {
+        id: user._id.toString(),
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
     });
   } catch (err) {
     next(err);
@@ -148,6 +224,7 @@ const resetPassword = async (req, res, next) => {
     // Find user whose resetToken matches and has not expired (Requirement 2.7)
     const user = await User.findOne({
       resetToken: token,
+      role: 'admin',
       resetTokenExpiresAt: { $gt: new Date() },
     });
 
@@ -173,4 +250,62 @@ const resetPassword = async (req, res, next) => {
   }
 };
 
-module.exports = { register, login, forgotPassword, resetPassword };
+// ── GET /api/auth/verify-email ───────────────────────────────────────────────
+const verifyEmail = async (req, res, next) => {
+  try {
+    const { token } = req.query;
+    const user = await User.findOne({
+      verificationTokenHash: hashToken(token),
+      verificationTokenExpiresAt: { $gt: new Date() },
+    });
+
+    if (!user) {
+      return res.status(400).json({ error: 'Verification token is invalid or has expired' });
+    }
+
+    user.emailVerified = true;
+    user.emailVerifiedAt = new Date();
+    user.verificationTokenHash = null;
+    user.verificationTokenExpiresAt = null;
+    await user.save();
+
+    return res.status(200).json({ message: 'Email verified successfully' });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// ── POST /api/auth/resend-verification ───────────────────────────────────────
+const resendVerification = async (req, res, next) => {
+  const response = { message: 'If an account requires verification, a new email has been sent.' };
+
+  try {
+    const user = await User.findOne({ email: req.body.email.toLowerCase().trim() });
+    if (!user || user.emailVerified !== false) {
+      return res.status(200).json(response);
+    }
+
+    const verificationToken = applyVerificationToken(user);
+    await user.save();
+
+    try {
+      await sendVerificationEmail(user, verificationToken);
+    } catch (mailErr) {
+      console.error('[resendVerification] Verification email send failed:', mailErr.message);
+    }
+
+    return res.status(200).json(response);
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = {
+  register,
+  googleLogin,
+  adminLogin,
+  forgotPassword,
+  resetPassword,
+  verifyEmail,
+  resendVerification,
+};

@@ -1,15 +1,24 @@
 import API from './api';
 
 export const authService = {
-  // POST /api/auth/login  { email, password }
-  // Returns: { token, user: { name, email, role } }
-  login: (email, password) =>
-    API.post('/auth/login', { email, password }).then((r) => r.data),
+  // POST /api/auth/google  { credential }
+  loginWithGoogle: (credential) =>
+    API.post('/auth/google', { credential }).then((r) => r.data),
 
-  // POST /api/auth/register  { name, email, password }
-  // Returns: { token, user: { name, email, role } }
-  register: (name, email, password) =>
-    API.post('/auth/register', { name, email, password }).then((r) => r.data),
+  // POST /api/auth/admin-login  { email, password }
+  adminLogin: (email, password) =>
+    API.post('/auth/admin-login', { email, password }).then((r) => r.data),
+
+  // POST /api/auth/register  { name, email }
+  // Returns: { verificationRequired, user: { name, email } }
+  register: (name, email) =>
+    API.post('/auth/register', { name, email }).then((r) => r.data),
+
+  verifyEmail: (token) =>
+    API.get('/auth/verify-email', { params: { token } }).then((r) => r.data),
+
+  resendVerification: (email) =>
+    API.post('/auth/resend-verification', { email }).then((r) => r.data),
 
   // POST /api/auth/forgot-password  { email }
   // Returns: { message: '...' }

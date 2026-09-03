@@ -29,16 +29,19 @@ const { MongoMemoryServer } = require('mongodb-memory-server');
 const mongoose = require('mongoose');
 const supertest = require('supertest');
 const fc = require('fast-check');
+const { registerAndLoginWithGoogle } = require('../helpers/auth');
 
 // Set env vars BEFORE requiring the app (JWT_SECRET is needed at load time)
 process.env.JWT_SECRET = 'test-secret-book';
 process.env.OVERDUE_FEE_PER_DAY = '1';
+process.env.GOOGLE_CLIENT_ID = 'test-google-client-id';
 
 const app = require('../../app');
 const Book = mongoose.model('Book');
 const User = mongoose.model('User');
 const Borrowing = mongoose.model('Borrowing');
 const request = supertest(app);
+const mailer = require('nodemailer');
 
 // ── MongoMemoryServer lifecycle ────────────────────────────────────────────────
 
@@ -79,22 +82,14 @@ beforeEach(async () => {
  */
 async function registerAndLogin(seedSuffix) {
   const email = `booktest.${seedSuffix}@example.com`;
-  const password = 'Password123!';
   const name = 'Book Test User';
-
-  await request.post('/api/auth/register').send({ email, password, name });
-
-  const loginRes = await request
-    .post('/api/auth/login')
-    .send({ email, password });
-
-  if (loginRes.status !== 200) {
-    throw new Error(
-      `Login failed with ${loginRes.status}: ${JSON.stringify(loginRes.body)}`
-    );
-  }
-
-  return loginRes.body.token;
+  return registerAndLoginWithGoogle({
+    request,
+    User,
+    sendMail: mailer.__sendMail,
+    email,
+    name,
+  });
 }
 
 /**

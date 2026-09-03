@@ -69,7 +69,8 @@ function getAnimatedElement(container, isAdminPage = false) {
     // The animate-fade-in class is on the first <div> inside that <main>.
     return container.querySelector('.animate-fade-in');
   }
-  return container.firstChild;
+  return Array.from(container.children).find((child) => child.classList.contains('animate-fade-in'))
+    || container.querySelector('.animate-fade-in');
 }
 
 // ─── Individual page tests ─────────────────────────────────────────────────────

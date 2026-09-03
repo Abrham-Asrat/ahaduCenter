@@ -7,7 +7,7 @@
  *
  * Uses mongodb-memory-server + supertest + fast-check.
  *
- * Property 4: for any valid { name, email, phone } payload →
+ * Property 4: for any valid { name, email } payload →
  *   PUT /api/users/me → GET /api/users/me → returned fields match sent fields
  */
 
@@ -22,13 +22,16 @@ const { MongoMemoryServer } = require('mongodb-memory-server');
 const mongoose = require('mongoose');
 const supertest = require('supertest');
 const fc = require('fast-check');
+const { registerAndLoginWithGoogle } = require('../helpers/auth');
 
 // Set env vars BEFORE requiring the app (JWT_SECRET is needed at load time)
 process.env.JWT_SECRET = 'test-secret-user';
+process.env.GOOGLE_CLIENT_ID = 'test-google-client-id';
 
 const app = require('../../app');
 const User = mongoose.model('User');
 const request = supertest(app);
+const mailer = require('nodemailer');
 
 // ── MongoMemoryServer lifecycle ────────────────────────────────────────────────
 
@@ -64,24 +67,14 @@ beforeEach(async () => {
  */
 async function registerAndLogin(seedSuffix) {
   const email = `seed.user.${seedSuffix}@example.com`;
-  const password = 'Password123!';
   const name = 'Seed User';
-
-  await request
-    .post('/api/auth/register')
-    .send({ email, password, name });
-
-  const loginRes = await request
-    .post('/api/auth/login')
-    .send({ email, password });
-
-  if (loginRes.status !== 200) {
-    throw new Error(
-      `Login failed with ${loginRes.status}: ${JSON.stringify(loginRes.body)}`
-    );
-  }
-
-  return loginRes.body.token;
+  return registerAndLoginWithGoogle({
+    request,
+    User,
+    sendMail: mailer.__sendMail,
+    email,
+    name,
+  });
 }
 
 // ── Arbitraries ────────────────────────────────────────────────────────────────
@@ -113,31 +106,24 @@ const validEmail = fc
   )
   .map(([local, domain, tld]) => `${local}@${domain}.${tld}`);
 
-/**
- * Valid phone: optional trimmed string (no format constraint per validators).
- * We use simple numeric strings that are obviously phone-like.
- */
-const validPhone = fc.stringMatching(/^[0-9]{0,15}$/);
-
 // ── Property 4: PUT /api/users/me → GET /api/users/me → fields match ──────────
 
 describe('Property 4: user profile update round trip', () => {
   /**
-   * For any valid { name, email, phone } payload:
+  * For any valid { name, email } payload:
    * 1. Register + login to get a fresh JWT
    * 2. PUT /api/users/me with the payload → HTTP 200
    * 3. GET /api/users/me with the same JWT → HTTP 200
-   * 4. Returned name, email, phone match the values that were sent
+  * 4. Returned name and email match the values that were sent
    *
    * **Validates: Requirements 3.2**
    */
-  it('Property 4: put then get returns the updated name, email, and phone', async () => {
+  it('Property 4: put then get returns the updated name and email', async () => {
     await fc.assert(
       fc.asyncProperty(
         validName,
         validEmail,
-        validPhone,
-        async (name, newEmail, phone) => {
+        async (name, newEmail) => {
           // Each run registers a fresh user to avoid email-uniqueness conflicts
           // between the seed user and the new email being set.
           await User.deleteMany({});
@@ -145,7 +131,7 @@ describe('Property 4: user profile update round trip', () => {
           const token = await registerAndLogin('prop4');
 
           // Build the update payload
-          const payload = { name, email: newEmail, phone };
+          const payload = { name, email: newEmail };
 
           // Step 1 — PUT /api/users/me
           const putRes = await request
@@ -164,7 +150,6 @@ describe('Property 4: user profile update round trip', () => {
 
           const expectedName  = name.trim();
           const expectedEmail = newEmail.toLowerCase().trim();
-          const expectedPhone = phone.trim();
 
           if (putBody.name !== expectedName) {
             throw new Error(
@@ -174,11 +159,6 @@ describe('Property 4: user profile update round trip', () => {
           if (putBody.email !== expectedEmail) {
             throw new Error(
               `PUT response: expected email "${expectedEmail}", got "${putBody.email}"`
-            );
-          }
-          if (putBody.phone !== expectedPhone) {
-            throw new Error(
-              `PUT response: expected phone "${expectedPhone}", got "${putBody.phone}"`
             );
           }
 
@@ -203,11 +183,6 @@ describe('Property 4: user profile update round trip', () => {
           if (getBody.email !== expectedEmail) {
             throw new Error(
               `GET response: expected email "${expectedEmail}", got "${getBody.email}"`
-            );
-          }
-          if (getBody.phone !== expectedPhone) {
-            throw new Error(
-              `GET response: expected phone "${expectedPhone}", got "${getBody.phone}"`
             );
           }
 
@@ -240,7 +215,7 @@ describe('Property 4: user profile update round trip', () => {
     expect(getRes.body.name).toBe('Updated Name Only');
   });
 
-  it('PUT with only phone updates phone', async () => {
+  it('PUT with only phone is rejected', async () => {
     const token = await registerAndLogin('phoneonly');
 
     const putRes = await request
@@ -248,15 +223,7 @@ describe('Property 4: user profile update round trip', () => {
       .set('Authorization', `Bearer ${token}`)
       .send({ phone: '0911234567' });
 
-    expect(putRes.status).toBe(200);
-    expect(putRes.body.phone).toBe('0911234567');
-
-    const getRes = await request
-      .get('/api/users/me')
-      .set('Authorization', `Bearer ${token}`);
-
-    expect(getRes.status).toBe(200);
-    expect(getRes.body.phone).toBe('0911234567');
+    expect(putRes.status).toBe(422);
   });
 
   it('PUT with only email updates email', async () => {
@@ -307,7 +274,7 @@ describe('Property 4: user profile update round trip', () => {
     const putRes = await request
       .put('/api/users/me')
       .set('Authorization', `Bearer ${token}`)
-      .send({ name: 'Field Check User', phone: '123456789' });
+      .send({ name: 'Field Check User' });
 
     expect(putRes.status).toBe(200);
 
@@ -315,7 +282,6 @@ describe('Property 4: user profile update round trip', () => {
     expect(putRes.body).toHaveProperty('id');
     expect(putRes.body).toHaveProperty('name');
     expect(putRes.body).toHaveProperty('email');
-    expect(putRes.body).toHaveProperty('phone');
     expect(putRes.body).toHaveProperty('role');
     expect(putRes.body).toHaveProperty('memberSince');
   });

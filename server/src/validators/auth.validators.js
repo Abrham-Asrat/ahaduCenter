@@ -1,9 +1,8 @@
-const { body } = require('express-validator');
+const { body, query } = require('express-validator');
 
 /**
  * Validation rules for POST /api/auth/register
  * - email: valid format, normalised to lowercase
- * - password: 8–128 characters
  * - name: 1–100 characters, trimmed
  * All fields are required.
  */
@@ -15,12 +14,6 @@ const registerRules = [
     .withMessage('Must be a valid email address')
     .normalizeEmail(),
 
-  body('password')
-    .exists({ checkFalsy: true })
-    .withMessage('Password is required')
-    .isLength({ min: 8, max: 128 })
-    .withMessage('Password must be between 8 and 128 characters'),
-
   body('name')
     .exists({ checkFalsy: true })
     .withMessage('Name is required')
@@ -30,18 +23,29 @@ const registerRules = [
 ];
 
 /**
- * Validation rules for POST /api/auth/login
- * - email: presence check only
- * - password: presence check only
+ * Validation rules for POST /api/auth/google
+ * - credential: Google ID token
  */
-const loginRules = [
+const googleLoginRules = [
+  body('credential')
+    .exists({ checkFalsy: true })
+    .withMessage('Google credential is required')
+    .isString()
+    .withMessage('Google credential must be a string'),
+];
+
+const adminLoginRules = [
   body('email')
     .exists({ checkFalsy: true })
-    .withMessage('Email is required'),
-
+    .withMessage('Email is required')
+    .isEmail()
+    .withMessage('Must be a valid email address')
+    .normalizeEmail(),
   body('password')
     .exists({ checkFalsy: true })
-    .withMessage('Password is required'),
+    .withMessage('Password is required')
+    .isString()
+    .withMessage('Password must be a string'),
 ];
 
 /**
@@ -75,9 +79,31 @@ const resetPasswordRules = [
     .withMessage('New password must be between 8 and 128 characters'),
 ];
 
+const verifyEmailRules = [
+  query('token')
+    .exists({ checkFalsy: true })
+    .withMessage('Verification token is required')
+    .isString()
+    .withMessage('Verification token must be a string')
+    .notEmpty()
+    .withMessage('Verification token must not be empty'),
+];
+
+const resendVerificationRules = [
+  body('email')
+    .exists({ checkFalsy: true })
+    .withMessage('Email is required')
+    .isEmail()
+    .withMessage('Must be a valid email address')
+    .normalizeEmail(),
+];
+
 module.exports = {
   registerRules,
-  loginRules,
+  googleLoginRules,
+  adminLoginRules,
   forgotPasswordRules,
   resetPasswordRules,
+  verifyEmailRules,
+  resendVerificationRules,
 };

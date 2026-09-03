@@ -1,15 +1,40 @@
 // src/pages/LoginPage.jsx
-import React, { useState } from 'react';
+import React, { useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { loginThunk } from '../redux/slices/authSlice';
+import { adminLoginThunk, loginThunk, resendVerificationThunk } from '../redux/slices/authSlice';
+import GoogleSignInButton from '../components/common/GoogleSignInButton';
+import { useState } from 'react';
 
 const LoginPage = ({ onClose }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, error } = useSelector((s) => s.auth);
+  const [adminMode, setAdminMode] = useState(false);
+  const [adminEmail, setAdminEmail] = useState('');
+  const [adminPassword, setAdminPassword] = useState('');
+  const [verificationEmail, setVerificationEmail] = useState('');
 
-  const [email, setEmail] = useState('');
+  const handleCredential = useCallback(async (response) => {
+    const result = await dispatch(loginThunk({ credential: response.credential }));
+    if (loginThunk.fulfilled.match(result)) {
+      onClose?.();
+      navigate(result.payload.user?.role === 'admin' ? '/admin' : '/');
+    }
+  }, [dispatch, navigate, onClose]);
+
+  const handleResend = async () => {
+    if (verificationEmail) await dispatch(resendVerificationThunk(verificationEmail));
+  };
+
+  const handleAdminSubmit = async (event) => {
+    event.preventDefault();
+    const result = await dispatch(adminLoginThunk({ email: adminEmail, password: adminPassword }));
+    if (adminLoginThunk.fulfilled.match(result)) {
+      onClose?.();
+      navigate('/admin');
+    }
+  };
 
   const handleClose = () => {
     if (onClose) {
@@ -19,21 +44,8 @@ const LoginPage = ({ onClose }) => {
     navigate('/');
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    // Email-only login - can be integrated with magic link or OAuth
-    const result = await dispatch(loginThunk({ email, password: '' }));
-    if (loginThunk.fulfilled.match(result)) {
-      const role = result.payload?.role ?? result.payload?.user?.role;
-      if (onClose) {
-        onClose();
-      }
-      navigate(role === 'admin' ? '/admin' : '/');
-    }
-  };
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm px-4 py-8">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm px-4 py-8 animate-fade-in">
       <div className="relative w-full max-w-md">
         <button
           type="button"
@@ -45,9 +57,9 @@ const LoginPage = ({ onClose }) => {
         </button>
 
         <div className="glass-panel rounded-2xl border border-white/10 p-6 shadow-2xl md:p-8">
-          <div className="mb-6 text-center">
+          <div className="mb-8 text-center">
             <h1 className="mb-2 text-3xl font-extrabold text-white">Welcome Back</h1>
-            <p className="text-sm text-on-surface-variant">Sign in to access your Ahadu Center portal</p>
+            <p className="text-sm text-on-surface-variant">Sign in securely with your Google account</p>
           </div>
 
           {error && (
@@ -57,52 +69,39 @@ const LoginPage = ({ onClose }) => {
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div>
-              <label htmlFor="email" className="mb-2 block text-xs font-bold uppercase tracking-wider text-on-surface-variant">
-                Email Address
-              </label>
-              <div className="relative">
-                <span className="material-symbols-outlined pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-on-surface-variant">
-                  mail
-                </span>
-                <input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full rounded-xl border border-white/10 bg-[#0B0F19] py-3 pl-10 pr-4 text-sm font-medium text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                  placeholder="Enter your email"
-                  required
-                />
-              </div>
-            </div>
+          {adminMode ? (
+            <form onSubmit={handleAdminSubmit} className="space-y-4">
+              <input aria-label="Admin email" type="email" value={adminEmail} onChange={(event) => setAdminEmail(event.target.value)} required placeholder="Admin email" className="w-full rounded-xl border border-white/10 bg-[#0B0F19] px-4 py-3 text-sm text-white focus:border-primary focus:outline-none" />
+              <input aria-label="Admin password" type="password" value={adminPassword} onChange={(event) => setAdminPassword(event.target.value)} required placeholder="Admin password" className="w-full rounded-xl border border-white/10 bg-[#0B0F19] px-4 py-3 text-sm text-white focus:border-primary focus:outline-none" />
+              <button type="submit" disabled={loading} className="w-full rounded-xl bg-primary py-3 text-sm font-bold uppercase tracking-wider text-black disabled:opacity-60">{loading ? 'Signing in...' : 'Admin sign in'}</button>
+            </form>
+          ) : <GoogleSignInButton onCredential={handleCredential} />}
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-3.5 text-xs font-extrabold uppercase tracking-wider text-black transition hover:shadow-[0_0_20px_rgba(16,185,129,0.5)] disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {loading && (
-                <span className="material-symbols-outlined animate-spin text-[18px]">progress_activity</span>
-              )}
-              {loading ? 'Sending Link...' : 'Send Magic Link'}
-            </button>
-          </form>
+          {error?.includes('verify') && (
+            <div className="mt-5 space-y-3">
+              <input
+                aria-label="Verification email"
+                type="email"
+                value={verificationEmail}
+                onChange={(event) => setVerificationEmail(event.target.value)}
+                placeholder="Enter your registered email"
+                className="w-full rounded-xl border border-white/10 bg-[#0B0F19] px-4 py-3 text-sm text-white focus:border-primary focus:outline-none"
+              />
+              <button type="button" onClick={handleResend} disabled={loading || !verificationEmail} className="w-full text-sm font-semibold text-primary disabled:opacity-60">
+                {loading ? 'Sending...' : 'Resend verification email'}
+              </button>
+            </div>
+          )}
+
+          <button type="button" onClick={() => setAdminMode((value) => !value)} className="mt-6 w-full text-center text-xs font-semibold uppercase tracking-wider text-on-surface-variant hover:text-primary">
+            {adminMode ? 'Use Google sign-in' : 'Admin sign-in'}
+          </button>
 
           <div className="my-6 flex items-center gap-3">
             <div className="h-[1px] flex-grow bg-white/10" />
             <span className="text-xs uppercase text-on-surface-variant">Or continue with</span>
             <div className="h-[1px] flex-grow bg-white/10" />
           </div>
-
-          <button
-            type="button"
-            className="w-full rounded-lg border border-white/10 bg-white/5 py-3 font-semibold text-white transition hover:bg-white/10 hover:border-primary flex items-center justify-center gap-2"
-          >
-            <span className="text-xl">🔍</span>
-            Continue with Google
-          </button>
 
           <div className="mt-6 text-center">
             <p className="text-xs text-on-surface-variant">

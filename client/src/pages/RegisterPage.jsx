@@ -22,7 +22,7 @@ import { registerThunk, clearAuthError } from '../redux/slices/authSlice';
 const RegisterPage = ({ onClose }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { loading, error, user } = useSelector((s) => s.auth);
+  const { loading, error } = useSelector((s) => s.auth);
 
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
@@ -40,19 +40,6 @@ const RegisterPage = ({ onClose }) => {
     dispatch(clearAuthError());
   }, [dispatch]);
 
-  useEffect(() => {
-    if (user) {
-      if (onClose) {
-        onClose();
-      }
-      if (user.role === 'admin') {
-        navigate('/admin');
-      } else {
-        navigate('/');
-      }
-    }
-  }, [user, navigate, onClose]);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setValidationError(null);
@@ -60,22 +47,16 @@ const RegisterPage = ({ onClose }) => {
     const result = await dispatch(registerThunk({
       name: fullName || email.split('@')[0],
       email,
-      password: ''
     }));
 
     if (registerThunk.fulfilled.match(result)) {
-      if (onClose) {
-        setTimeout(() => onClose(), 1000);
-      }
-      setTimeout(() => {
-        const role = result.payload?.role ?? result.payload?.user?.role;
-        navigate(role === 'admin' ? '/admin' : '/');
-      }, 1000);
+      if (onClose) onClose();
+      navigate(`/verify-email?email=${encodeURIComponent(email)}`);
     }
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm px-4 py-8">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm px-4 py-8 animate-fade-in">
       <div className="relative w-full max-w-md">
         <button
           type="button"
@@ -150,7 +131,7 @@ const RegisterPage = ({ onClose }) => {
               {loading && (
                 <span className="material-symbols-outlined animate-spin text-[18px]">progress_activity</span>
               )}
-              {loading ? 'Sending Link...' : 'Send Magic Link'}
+              {loading ? 'Creating Account...' : 'Create Account'}
             </button>
           </form>
 

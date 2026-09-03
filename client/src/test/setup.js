@@ -75,8 +75,11 @@ vi.mock('../services/bookService', () => ({
 
 vi.mock('../services/authService', () => ({
   authService: {
-    login: vi.fn().mockResolvedValue({ token: 'fake-token', user: { name: 'Test', email: 'test@example.com', role: 'user' } }),
-    register: vi.fn().mockResolvedValue({ token: 'fake-token', user: { name: 'Test', email: 'test@example.com', role: 'user' } }),
+    loginWithGoogle: vi.fn().mockResolvedValue({ token: 'fake-token', user: { name: 'Test', email: 'test@example.com', role: 'user' } }),
+    adminLogin: vi.fn().mockResolvedValue({ token: 'admin-token', user: { name: 'Admin', email: 'admin@example.com', role: 'admin' } }),
+    register: vi.fn().mockResolvedValue({ verificationRequired: true, user: { name: 'Test', email: 'test@example.com' } }),
+    verifyEmail: vi.fn().mockResolvedValue({ message: 'Email verified successfully' }),
+    resendVerification: vi.fn().mockResolvedValue({ message: 'If an account requires verification, a new email has been sent.' }),
     forgotPassword: vi.fn().mockResolvedValue({ message: 'ok' }),
     resetPassword: vi.fn().mockResolvedValue({ message: 'ok' }),
   },

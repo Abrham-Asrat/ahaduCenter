@@ -24,7 +24,6 @@ const router = express.Router();
 // ── Middleware ────────────────────────────────────────────────────────────────
 const authenticate   = require('../../middleware/authenticate');
 const validate       = require('../../middleware/validate');
-const { uploadSingle } = require('../../middleware/upload');
 
 // ── Validators ────────────────────────────────────────────────────────────────
 const { updateProfileRules } = require('../validators/user.validators');
@@ -33,7 +32,6 @@ const { updateProfileRules } = require('../validators/user.validators');
 const {
   getProfile,
   updateProfile,
-  uploadAvatar,
   getStats,
   getActivity,
 } = require('../controllers/user.controller');
@@ -71,9 +69,6 @@ router.get('/me', getProfile);
 
 // PUT /api/users/me — Requirements 3.2, 3.3, 3.9
 router.put('/me', updateProfileRules, validate, updateProfile);
-
-// POST /api/users/me/avatar — Requirements 3.4, 3.8
-router.post('/me/avatar', uploadSingle('avatar'), uploadAvatar);
 
 // GET /api/users/me/stats — Requirement 3.5
 router.get('/me/stats', getStats);

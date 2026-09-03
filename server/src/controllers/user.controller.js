@@ -18,15 +18,12 @@ const WishlistItem = require('../models/WishlistItem.js');
 const Order        = require('../models/Order.js');
 const Borrowing    = require('../models/Borrowing.js');
 const MovieRequest = require('../models/MovieRequest.js');
-const { getFileUrl } = require('../services/upload.service.js');
 
 // ── GET /api/users/me ─────────────────────────────────────────────────────────
 // Requirement 3.1
 const getProfile = async (req, res, next) => {
   try {
-    const user = await User.findById(req.user.id).select(
-      'name email phone avatarUrl role createdAt'
-    );
+    const user = await User.findById(req.user.id).select('name email role createdAt');
 
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
@@ -36,8 +33,6 @@ const getProfile = async (req, res, next) => {
       id:          user._id.toString(),
       name:        user.name,
       email:       user.email,
-      phone:       user.phone,
-      avatarUrl:   user.avatarUrl,
       memberSince: user.createdAt,
       role:        user.role,
     });
@@ -50,19 +45,18 @@ const getProfile = async (req, res, next) => {
 // Requirements 3.2, 3.3, 3.9
 const updateProfile = async (req, res, next) => {
   try {
-    const { name, email, phone } = req.body;
+    const { name, email } = req.body;
 
     // Build only the fields that were provided
     const updates = {};
     if (name  !== undefined) updates.name  = name.trim();
-    if (phone !== undefined) updates.phone = phone.trim();
     if (email !== undefined) updates.email = email.toLowerCase().trim();
 
     // Guard: if no valid fields remain after processing, respond 422
     if (Object.keys(updates).length === 0) {
       return res.status(422).json({
         error: 'No valid fields provided',
-        errors: [{ field: 'body', message: 'At least one of name, email, or phone must be provided' }],
+        errors: [{ field: 'body', message: 'At least one of name or email must be provided' }],
       });
     }
 
@@ -80,7 +74,7 @@ const updateProfile = async (req, res, next) => {
     const updated = await User.findByIdAndUpdate(
       req.user.id,
       { $set: updates },
-      { new: true, runValidators: true, select: 'name email phone avatarUrl role createdAt' }
+      { new: true, runValidators: true, select: 'name email role createdAt' }
     );
 
     if (!updated) {
@@ -91,44 +85,9 @@ const updateProfile = async (req, res, next) => {
       id:          updated._id.toString(),
       name:        updated.name,
       email:       updated.email,
-      phone:       updated.phone,
-      avatarUrl:   updated.avatarUrl,
       memberSince: updated.createdAt,
       role:        updated.role,
     });
-  } catch (err) {
-    next(err);
-  }
-};
-
-// ── POST /api/users/me/avatar ─────────────────────────────────────────────────
-// Requirements 3.4, 3.8
-const uploadAvatar = async (req, res, next) => {
-  try {
-    // Multer places the uploaded file on req.file
-    if (!req.file) {
-      return res.status(400).json({ error: 'No image file was provided' });
-    }
-
-    let avatarUrl;
-    try {
-      avatarUrl = getFileUrl(req.file.filename);
-    } catch (uploadErr) {
-      // Upload service failure → 502 (Requirement 3.8)
-      return res.status(502).json({ error: 'Upload failed. Please try again.' });
-    }
-
-    const updated = await User.findByIdAndUpdate(
-      req.user.id,
-      { $set: { avatarUrl } },
-      { new: true, select: 'avatarUrl' }
-    );
-
-    if (!updated) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-
-    return res.status(200).json({ avatarUrl: updated.avatarUrl });
   } catch (err) {
     next(err);
   }
@@ -284,7 +243,6 @@ function buildOrderTitle(order) {
 module.exports = {
   getProfile,
   updateProfile,
-  uploadAvatar,
   getStats,
   getActivity,
 };
