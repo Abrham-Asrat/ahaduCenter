@@ -81,7 +81,7 @@ client/
 │   ├── pages/               # Route-level page components
 │   │   ├── admin/           # Admin dashboard pages
 │   │   └── *.jsx            # User-facing pages
-│   ├── redux/               # Redux store and slices
+│   ├── redux/               # Production Redux store and slices
 │   │   ├── store.js
 │   │   └── slices/          # auth, book, movie, product, wishlist, etc.
 │   ├── services/            # Axios API service modules

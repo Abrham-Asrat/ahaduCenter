@@ -25,7 +25,7 @@ Axios-based API service modules. Each file handles all HTTP calls for one domain
 All service functions return Axios response data directly (the `.data` field). Redux thunks in `src/redux/slices/` call these functions and handle loading/error state.
 
 ```js
-import { listBooks } from '../services/bookService';
+import { bookService } from '../services/bookService';
 
-const books = await listBooks({ q: 'Dune', page: 1 });
+const books = await bookService.getBooks({ q: 'Dune', page: 1 });
 ```

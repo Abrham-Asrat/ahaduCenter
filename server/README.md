@@ -54,7 +54,7 @@ CLIENT_ORIGIN=http://localhost:5173
 ### Run
 
 ```bash
-npm run dev     # development (nodemon)
+npm run dev     # development (Node watch mode)
 npm start       # production
 ```
 
