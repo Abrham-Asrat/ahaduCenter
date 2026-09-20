@@ -32,7 +32,8 @@ npm install
 Create a `.env` file in `client/`:
 
 ```env
-VITE_API_URL=http://localhost:5000/api
+VITE_API_BASE_URL=http://localhost:5000/api
+VITE_GOOGLE_CLIENT_ID=your_google_client_id.apps.googleusercontent.com
 ```
 
 ### Development server
@@ -143,7 +144,7 @@ One file per route. Admin pages are nested under `pages/admin/`.
 
 ### `src/services/`
 
-Axios service modules — one per API domain. All requests are routed through `services/api.js` which sets the base URL and attaches the JWT `Authorization` header automatically.
+Axios service modules — one per API domain. All requests are routed through `services/api.js`, which reads `VITE_API_BASE_URL` and attaches the JWT `Authorization` header automatically.
 
 ---
 
