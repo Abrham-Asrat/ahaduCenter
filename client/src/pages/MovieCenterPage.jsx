@@ -158,7 +158,7 @@ const MovieCenterPage = () => {
       )}
 
       <main className="flex-grow md:pb-0">
-        <MovieHero />
+        {/* <MovieHero /> */}
         <SubNav onTabChange={handleTabChange} />
 
         <div id="movie-catalog" className="max-w-7xl mx-auto px-4 md:px-8 py-8">
