@@ -132,31 +132,16 @@ const BookCenterPage = () => {
       )}
 
       {/* Sub-navigation for categories */}
-      <div>
-        <SubNav
-          tabs={categories}
-          onTabChange={handleCategoryChange}
-        />
-      </div>
+     
+    
 
       <main className="flex-grow max-w-7xl mx-auto pt-8 md:pb-8">
         {/* Hero banner compact */}
-        <div className="relative w-full rounded-2xl overflow-hidden glass-panel border border-white/10 flex items-center justify-between min-h-[160px] mb-8 shadow-xl">
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-secondary/5 opacity-50" />
-          <div className="absolute -right-20 -top-20 w-64 h-64 bg-primary/20 blur-[80px] rounded-full" />
-          <div className="relative z-10 max-w-md">
-            <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
-              Book Center <span className="text-primary border-b-2 border-secondary pb-1 inline-block">Collection</span>
-            </h1>
-            <p className="text-on-surface-variant text-sm">
-              Explore thousands of premium titles across technical, educational, and creative disciplines.
-            </p>
-          </div>
-          <div className="relative z-10 hidden lg:block">
-            <span className="material-symbols-outlined text-6xl text-white/10">auto_stories</span>
-          </div>
-        </div>
-
+        <SubNav
+          tabs={categories}
+          onTabChange={handleCategoryChange}
+          />
+       
         {/* Main content: sidebar + grid */}
         <div className="flex flex-col md:flex-row gap-8">
           {/* Sidebar filters (desktop) */}
