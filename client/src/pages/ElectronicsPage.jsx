@@ -154,9 +154,6 @@ const ElectronicsPage = () => {
       )}
 
       <main className="flex-grow">
-        {/* Hero banner */}
-        {/* <ElectronicsHero /> */}
-
         {/* Catalog Section Header */}
         
           <SubNav tabs={categories} onTabChange={handleCategoryChange} />
