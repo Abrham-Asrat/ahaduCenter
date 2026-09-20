@@ -61,11 +61,6 @@ app.use('/api/notifications', notificationRouter);
 const searchRouter = require('./routes/search.routes');
 app.use('/api/search', searchRouter);
 
-// ── Route stubs (return 501 until routes are implemented) ────────────────────
-// These will be replaced by real routers as each task is implemented.
-const stub = (name) => (_req, res) =>
-  res.status(501).json({ error: `${name} not yet implemented` });
-
 // ── Upload routes ─────────────────────────────────────────────────────────────
 const uploadRouter = require('./routes/upload.routes');
 app.use('/api/uploads', uploadRouter);
