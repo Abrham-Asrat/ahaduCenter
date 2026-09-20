@@ -1,14 +1,12 @@
 // src/pages/ElectronicsPage.jsx
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchProducts } from '../__tests__/redux/slices/productSlice';
+import { fetchProducts } from '../redux/slices/productSlice';
 import Navbar from '../components/common/Navbar';
 import SubNav from '../components/common/SubNav';
-import ElectronicsHero from '../components/electronics/ElectronicsHero';
 import ElectronicsFilters from '../components/electronics/ElectronicsFilters';
 import ProductCard from '../components/electronics/ProductCard';
 import Pagination from '../components/common/Pagination';
-// import Footer from '../components/common/Footer';
 import { useNavigate } from 'react-router-dom';
 
 /**

@@ -7,7 +7,7 @@ import {
   fetchMovies,
   fetchMovieReviews,
   createMovieReview,
-} from '../__tests__/redux/slices/movieSlice';
+} from '../redux/slices/movieSlice';
 import Navbar from '../components/common/Navbar';
 import MovieDetailHero from '../components/movie/MovieDetailHero';
 import CastSection from '../components/movie/CastSection';

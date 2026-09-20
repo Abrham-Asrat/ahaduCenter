@@ -1,7 +1,7 @@
 // client/src/services/api.js
 import axios from 'axios';
-import { store } from '../__tests__/redux/store';
-import { logoutAction } from '../__tests__/redux/slices/authSlice';
+import { store } from '../redux/store';
+import { logoutAction } from '../redux/slices/authSlice';
 
 const API = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api',

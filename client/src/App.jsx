@@ -31,7 +31,7 @@ import NotFoundPage from './pages/NotFoundPage';
 import VerifyEmailPage from './pages/VerifyEmailPage';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { bootstrapAuthThunk } from './__tests__/redux/slices/authSlice';
+import { bootstrapAuthThunk } from './redux/slices/authSlice';
 import ScrollToTop from './components/common/ScrollToTop';
 import ProtectedRoute from './components/common/ProtectedRoute';
 import AdminRoute from './components/common/AdminRoute';

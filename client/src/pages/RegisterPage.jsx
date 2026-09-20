@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { registerThunk, googleRegisterThunk, clearAuthError } from '../__tests__/redux/slices/authSlice';
+import { registerThunk, googleRegisterThunk, clearAuthError } from '../redux/slices/authSlice';
 import GoogleSignInButton from '../components/common/GoogleSignInButton';
 
 /**

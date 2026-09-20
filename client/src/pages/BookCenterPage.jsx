@@ -1,7 +1,7 @@
 // src/pages/BookCenterPage.jsx
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchBooks } from '../__tests__/redux/slices/bookSlice';
+import { fetchBooks } from '../redux/slices/bookSlice';
 import Navbar from '../components/common/Navbar';
 import SubNav from '../components/common/SubNav';
 import BookFilters from '../components/book/BookFilters';

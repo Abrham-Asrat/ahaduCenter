@@ -5,7 +5,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import RegisterPage from '../pages/RegisterPage';
-import authReducer from '../__tests__/redux/slices/authSlice';
+import authReducer from '../redux/slices/authSlice';
 import { authService } from '../services/authService';
 
 vi.mock('../services/authService', () => ({

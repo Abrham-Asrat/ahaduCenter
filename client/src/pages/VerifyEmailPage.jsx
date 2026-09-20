@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { resendVerificationThunk, verifyEmailThunk } from '../__tests__/redux/slices/authSlice';
+import { resendVerificationThunk, verifyEmailThunk } from '../redux/slices/authSlice';
 
 const VerifyEmailPage = () => {
   const dispatch = useDispatch();

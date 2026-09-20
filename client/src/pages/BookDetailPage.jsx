@@ -8,7 +8,7 @@ import {
   reserveBook,
   fetchBookReviews,
   createBookReview,
-} from '../__tests__/redux/slices/bookSlice';
+} from '../redux/slices/bookSlice';
 import Navbar from '../components/common/Navbar';
 import BookCoverCard from '../components/book/BookCoverCard';
 import BookInfoSection from '../components/book/BookInfoSection';

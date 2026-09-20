@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { logoutAction } from '../../__tests__/redux/slices/authSlice';
+import { logoutAction } from '../../redux/slices/authSlice';
 
 /**
  * Navbar Component

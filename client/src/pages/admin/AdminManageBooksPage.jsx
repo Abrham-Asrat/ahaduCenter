@@ -7,7 +7,7 @@ import {
   createBook,
   updateBook,
   deleteBook,
-} from '../../__tests__/redux/slices/adminSlice';
+} from '../../redux/slices/adminSlice';
 
 const AdminManageBooksPage = () => {
     const dispatch = useDispatch();

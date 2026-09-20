@@ -1,14 +1,12 @@
 // src/pages/MovieCenterPage.jsx
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchMovies } from '../__tests__/redux/slices/movieSlice';
+import { fetchMovies } from '../redux/slices/movieSlice';
 import Navbar from '../components/common/Navbar';
-import MovieHero from '../components/movie/MovieHero';
 import SubNav from '../components/common/SubNav';
 import MovieFilters from '../components/movie/MovieFilters';
 import MovieCard from '../components/movie/MovieCard';
 import Pagination from '../components/common/Pagination';
-// import Footer from '../components/common/Footer';
 
 /**
  * MovieCenterPage Component
