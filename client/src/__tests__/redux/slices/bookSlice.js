@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { bookService } from '../../services/bookService';
+import { bookService } from '../../../services/bookService';
 
 // ── Book Thunks ──
 export const fetchBooks = createAsyncThunk(

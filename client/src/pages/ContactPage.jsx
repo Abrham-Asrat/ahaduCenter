@@ -82,7 +82,6 @@ const ContactPage = () => {
       <main className="flex-grow max-w-7xl mx-auto px-4 md:px-8 w-full flex flex-col gap-8">
         {/* Header */}
         <header className="text-center md:text-left">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-3">Contact &amp; About</h1>
           <p className="text-lg text-on-surface-variant max-w-2xl">
             Connect with the Ahadu Center. Whether you have an inquiry about our cinematic library, high-end electronics, or literary collection, our team is ready to assist.
           </p>

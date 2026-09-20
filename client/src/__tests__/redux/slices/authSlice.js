@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { authService } from '../../services/authService';
-import { userService } from '../../services/userService';
+import { authService } from '../../../services/authService';
+import { userService } from '../../../services/userService';
 
 // ── Auth Thunks ──
 export const loginThunk = createAsyncThunk(
@@ -14,6 +14,21 @@ export const loginThunk = createAsyncThunk(
       return data;
     } catch (err) {
       return rejectWithValue(typeof err === 'string' ? err : 'Failed to login');
+    }
+  }
+);
+
+export const googleRegisterThunk = createAsyncThunk(
+  'auth/googleRegister',
+  async ({ credential }, { rejectWithValue }) => {
+    try {
+      const data = await authService.registerWithGoogle(credential);
+      if (data.token) {
+        localStorage.setItem('token', data.token);
+      }
+      return data;
+    } catch (err) {
+      return rejectWithValue(typeof err === 'string' ? err : 'Failed to register with Google');
     }
   }
 );
@@ -114,6 +129,21 @@ export const authSlice = createSlice({
         state.initialized = true;
       })
       .addCase(loginThunk.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        state.initialized = true;
+      })
+      .addCase(googleRegisterThunk.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(googleRegisterThunk.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload.user;
+        state.token = action.payload.token;
+        state.initialized = true;
+      })
+      .addCase(googleRegisterThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
         state.initialized = true;

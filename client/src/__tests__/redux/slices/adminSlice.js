@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { adminService } from '../../services/adminService';
+import { adminService } from '../../../services/adminService';
 
 // ── Dashboard Thunks ──
 export const fetchAdminStats = createAsyncThunk(

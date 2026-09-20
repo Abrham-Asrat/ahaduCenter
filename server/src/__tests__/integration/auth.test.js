@@ -131,6 +131,17 @@ describe('Google login', () => {
     expect(response.body.user).toMatchObject({ email: 'member@example.com', role: 'user' });
   });
 
+  it('registers a new verified user with Google', async () => {
+    const response = await request(app)
+      .post('/api/auth/google/register')
+      .send({ credential: 'google-credential' });
+
+    expect(response.status).toBe(201);
+    expect(response.body.token).toEqual(expect.any(String));
+    expect(response.body.user).toMatchObject({ email: 'member@example.com', name: 'Member User' });
+    await expect(User.findOne({ email: 'member@example.com', emailVerified: true })).resolves.not.toBeNull();
+  });
+
   it('allows password login only for admins', async () => {
     const passwordHash = await bcrypt.hash('admin-password', 10);
     await User.create({ name: 'Admin', email: 'admin@example.com', role: 'admin', passwordHash });

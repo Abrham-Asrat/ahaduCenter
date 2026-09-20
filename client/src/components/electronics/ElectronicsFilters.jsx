@@ -15,7 +15,7 @@ const ElectronicsFilters = ({ onFilterChange }) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [maxPrice, setMaxPrice] = useState(3000);
 
-    const brands = ['AhaduTech', 'SonicAura', 'NexusGlobal', 'Auraline', 'Visionary Tech'];
+    const brands = ['Dell', 'Apple', 'Sony', 'JBL', 'Logitech', 'Lenovo', 'Anker', 'Samsung', 'TP-Link'];
 
     const triggerChange = (updated) => {
         if (onFilterChange) {

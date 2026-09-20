@@ -1,7 +1,7 @@
 // src/pages/BookCenterPage.jsx
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchBooks } from '../redux/slices/bookSlice';
+import { fetchBooks } from '../__tests__/redux/slices/bookSlice';
 import Navbar from '../components/common/Navbar';
 import SubNav from '../components/common/SubNav';
 import BookFilters from '../components/book/BookFilters';
@@ -55,10 +55,10 @@ const BookCenterPage = () => {
     const params = { page: currentPage, limit: 12 };
 
     if (activeCategory !== 'All Categories') params.category = activeCategory;
-    if (filterState.searchQuery) params.search = filterState.searchQuery;
-    if (filterState.availability.length === 1) params.availability = filterState.availability[0].toLowerCase();
+    if (filterState.searchQuery) params.q = filterState.searchQuery;
+    if (filterState.availability.length > 0) params.availability = filterState.availability.join(',');
     if (filterState.language !== 'All Languages') params.language = filterState.language;
-    if (filterState.format.length === 1) params.format = filterState.format[0];
+    if (filterState.format.length > 0) params.format = filterState.format.join(',');
 
     // Map UI sort labels to API sort values
     if (sortOption === 'Highest Rated') params.sort = 'rating';
@@ -139,9 +139,9 @@ const BookCenterPage = () => {
         />
       </div>
 
-      <main className="flex-grow max-w-7xl mx-auto px-6 pt-8 pb-20 md:pb-8">
+      <main className="flex-grow max-w-7xl mx-auto pt-8 md:pb-8">
         {/* Hero banner compact */}
-        <div className="relative w-full rounded-2xl overflow-hidden glass-panel p-8 border border-white/10 flex items-center justify-between min-h-[160px] mb-8 shadow-xl">
+        <div className="relative w-full rounded-2xl overflow-hidden glass-panel border border-white/10 flex items-center justify-between min-h-[160px] mb-8 shadow-xl">
           <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-secondary/5 opacity-50" />
           <div className="absolute -right-20 -top-20 w-64 h-64 bg-primary/20 blur-[80px] rounded-full" />
           <div className="relative z-10 max-w-md">
@@ -265,7 +265,7 @@ const BookCenterPage = () => {
 
       {/* Mobile floating filter button */}
       <button
-        className="md:hidden fixed bottom-6 right-6 z-40 p-4 rounded-full bg-primary text-black font-bold shadow-2xl flex items-center justify-center gap-2 border border-primary/50"
+        className="md:hidden fixed bottom-6 right-6 z-40 p-4 rounded-full bg-primary text-black font-bold shadow-2xl flex items-center justify-center gap-2 border border-primary/50 transition-transform hover:scale-105"
         onClick={() => setShowMobileFilters(true)}
       >
         <span className="material-symbols-outlined">tune</span>
@@ -274,8 +274,11 @@ const BookCenterPage = () => {
 
       {/* Mobile filter modal */}
       {showMobileFilters && (
-        <div className="md:hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-end">
-          <div className="bg-background w-full rounded-t-2xl p-6 border-t border-white/10 max-h-[85vh] overflow-y-auto">
+        <div className="md:hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-end animate-filter-backdrop" onClick={() => setShowMobileFilters(false)}>
+            <div
+              className="bg-background w-full rounded-t-2xl p-6 border-t border-white/10 max-h-[85vh] overflow-y-auto animate-filter-sheet"
+              onClick={(event) => event.stopPropagation()}
+            >
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-xl font-bold text-white">Filter Books</h3>
               <button onClick={() => setShowMobileFilters(false)} className="text-on-surface-variant hover:text-white">
@@ -293,8 +296,8 @@ const BookCenterPage = () => {
         </div>
       )}
 
-      <Footer />
     </div>
+   
     </>
   );
 };

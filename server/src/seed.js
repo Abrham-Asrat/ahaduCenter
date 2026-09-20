@@ -169,6 +169,40 @@ const booksData = [
     publisher: 'Oxford University Press',
     pages: 360,
   },
+  {
+    title: 'The Alchemist',
+    author: 'Paulo Coelho',
+    isbn: '978-0-06-112241-5',
+    category: 'Fiction',
+    language: 'English',
+    coverUrl: 'https://covers.openlibrary.org/b/id/8231856-L.jpg',
+    description: 'A young shepherd follows a recurring dream on a journey of self-discovery and purpose.',
+    availability: 'Available',
+    availableCopies: 2,
+    totalCopies: 2,
+    format: 'Paperback',
+    year: 1988,
+    rating: 4.4,
+    publisher: 'HarperOne',
+    pages: 208,
+  },
+  {
+    title: 'The Innovators',
+    author: 'Walter Isaacson',
+    isbn: '978-1-4767-0869-0',
+    category: 'Technology',
+    language: 'English',
+    coverUrl: 'https://covers.openlibrary.org/b/id/8235089-L.jpg',
+    description: 'A history of the people and teams whose collaboration shaped the digital revolution.',
+    availability: 'Available',
+    availableCopies: 3,
+    totalCopies: 3,
+    format: 'Hardcover',
+    year: 2014,
+    rating: 4.5,
+    publisher: 'Simon & Schuster',
+    pages: 560,
+  },
 ];
 
 const moviesData = [
@@ -299,6 +333,36 @@ const moviesData = [
       'Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.',
     posterUrl: 'https://via.placeholder.com/300x450/264653/ffffff?text=Shawshank',
     studio: 'Castle Rock Entertainment',
+  },
+  {
+    title: 'The Boy Who Harnessed the Wind',
+    year: 2019,
+    country: 'Malawi',
+    runtime: '1h 53m',
+    quality: 'HD',
+    language: 'English',
+    genres: ['Drama', 'Biography'],
+    rating: 4.5,
+    reviewCount: 8700,
+    director: 'Chiwetel Ejiofor',
+    description: 'A determined student builds a wind turbine to save his village from famine.',
+    posterUrl: 'https://via.placeholder.com/300x450/588157/ffffff?text=Wind',
+    studio: 'BBC Films',
+  },
+  {
+    title: 'The Martian',
+    year: 2015,
+    country: 'USA',
+    runtime: '2h 24m',
+    quality: '4K',
+    language: 'English',
+    genres: ['Science Fiction', 'Adventure'],
+    rating: 4.7,
+    reviewCount: 36000,
+    director: 'Ridley Scott',
+    description: 'An astronaut stranded on Mars uses science and ingenuity to survive until rescue arrives.',
+    posterUrl: 'https://via.placeholder.com/300x450/f4a261/ffffff?text=The+Martian',
+    studio: '20th Century Fox',
   },
 ];
 
@@ -471,6 +535,51 @@ const productsData = [
     reviewCount: 3200,
     inStock: true,
   },
+  {
+    name: 'Samsung 55-inch QLED Smart TV',
+    brand: 'Samsung',
+    category: 'Televisions',
+    condition: 'New',
+    price: 899.99,
+    originalPrice: 999.99,
+    discount: 10,
+    description: 'A vivid QLED 4K smart television with rich color, smooth motion, and built-in streaming apps.',
+    highlights: ['55-inch 4K QLED display', 'Quantum HDR', 'Smart TV streaming apps', 'Voice assistant support', 'HDMI 2.1 connectivity'],
+    images: ['https://via.placeholder.com/600x400/8338ec/ffffff?text=Samsung+QLED+TV'],
+    rating: 4.6,
+    reviewCount: 740,
+    inStock: true,
+  },
+  {
+    name: 'Apple iPad Air',
+    brand: 'Apple',
+    category: 'Tablets',
+    condition: 'New',
+    price: 599.99,
+    originalPrice: 599.99,
+    discount: 0,
+    description: 'A lightweight tablet with a bright display and fast performance for work, study, and entertainment.',
+    highlights: ['10.9-inch Liquid Retina display', 'M2 chip', '256GB storage', 'USB-C connectivity', 'All-day battery life'],
+    images: ['https://via.placeholder.com/600x400/ff006e/ffffff?text=iPad+Air'],
+    rating: 4.8,
+    reviewCount: 1120,
+    inStock: true,
+  },
+  {
+    name: 'TP-Link Wi-Fi 6 Router',
+    brand: 'TP-Link',
+    category: 'Networking',
+    condition: 'New',
+    price: 89.99,
+    originalPrice: 109.99,
+    discount: 18,
+    description: 'A reliable dual-band Wi-Fi 6 router for fast, stable coverage across a modern home or office.',
+    highlights: ['AX1800 Wi-Fi 6 speed', 'Dual-band coverage', 'Four gigabit ports', 'Parental controls', 'Easy mobile setup'],
+    images: ['https://via.placeholder.com/600x400/06d6a0/ffffff?text=TP-Link+Router'],
+    rating: 4.4,
+    reviewCount: 560,
+    inStock: true,
+  },
 ];
 
 // ---------------------------------------------------------------------------
@@ -517,31 +626,22 @@ async function seed() {
     results.users = usersCreated > 0 ? `created ${usersCreated}` : 'already exist, skipped';
 
     // ------ Books ------
-    const bookCount = await Book.countDocuments();
-    if (bookCount === 0) {
-      await Book.insertMany(booksData);
-      results.books = `created ${booksData.length}`;
-    } else {
-      results.books = `already exist (${bookCount} docs), skipped`;
-    }
+    const existingBookTitles = new Set((await Book.find({}, { title: 1, _id: 0 }).lean()).map((book) => book.title));
+    const booksToInsert = booksData.filter((book) => !existingBookTitles.has(book.title)).slice(0, Math.max(0, 10 - existingBookTitles.size));
+    if (booksToInsert.length) await Book.insertMany(booksToInsert);
+    results.books = `created ${booksToInsert.length}; total ${existingBookTitles.size + booksToInsert.length}`;
 
     // ------ Movies ------
-    const movieCount = await Movie.countDocuments();
-    if (movieCount === 0) {
-      await Movie.insertMany(moviesData);
-      results.movies = `created ${moviesData.length}`;
-    } else {
-      results.movies = `already exist (${movieCount} docs), skipped`;
-    }
+    const existingMovieTitles = new Set((await Movie.find({}, { title: 1, _id: 0 }).lean()).map((movie) => movie.title));
+    const moviesToInsert = moviesData.filter((movie) => !existingMovieTitles.has(movie.title)).slice(0, Math.max(0, 10 - existingMovieTitles.size));
+    if (moviesToInsert.length) await Movie.insertMany(moviesToInsert);
+    results.movies = `created ${moviesToInsert.length}; total ${existingMovieTitles.size + moviesToInsert.length}`;
 
     // ------ Products ------
-    const productCount = await Product.countDocuments();
-    if (productCount === 0) {
-      await Product.insertMany(productsData);
-      results.products = `created ${productsData.length}`;
-    } else {
-      results.products = `already exist (${productCount} docs), skipped`;
-    }
+    const existingProductNames = new Set((await Product.find({}, { name: 1, _id: 0 }).lean()).map((product) => product.name));
+    const productsToInsert = productsData.filter((product) => !existingProductNames.has(product.name)).slice(0, Math.max(0, 10 - existingProductNames.size));
+    if (productsToInsert.length) await Product.insertMany(productsToInsert);
+    results.products = `created ${productsToInsert.length}; total ${existingProductNames.size + productsToInsert.length}`;
 
     console.log('[seed] Summary:', results);
 

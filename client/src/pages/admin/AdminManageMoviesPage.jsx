@@ -7,7 +7,7 @@ import {
   createMovie,
   updateMovie,
   deleteMovie,
-} from '../../redux/slices/adminSlice';
+} from '../../__tests__/redux/slices/adminSlice';
 
 const AdminManageMoviesPage = () => {
     const dispatch = useDispatch();

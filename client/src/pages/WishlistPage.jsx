@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
-import { fetchWishlist, removeWishlistItem } from '../redux/slices/wishlistSlice';
+import { fetchWishlist, removeWishlistItem } from '../__tests__/redux/slices/wishlistSlice';
 
 /**
  * WishlistPage Component

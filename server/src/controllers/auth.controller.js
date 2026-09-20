@@ -31,7 +31,7 @@ const sendVerificationEmail = async (user, token) => {
   const transporter = getTransporter();
 
   await transporter.sendMail({
-    from: process.env.EMAIL_USER,
+    from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
     to: user.email,
     subject: 'AhaduCenter — Verify your email',
     text: [
@@ -88,6 +88,11 @@ const register = async (req, res, next) => {
       await sendVerificationEmail(user, verificationToken);
     } catch (mailErr) {
       console.error('[register] Verification email send failed:', mailErr.message);
+      return res.status(503).json({
+        error: 'Your account was created, but the verification email could not be sent. Please try resending it.',
+        code: 'EMAIL_DELIVERY_FAILED',
+        user: { id: user._id.toString(), name: user.name, email: user.email },
+      });
     }
 
     return res.status(201).json({
@@ -124,6 +129,42 @@ const googleLogin = async (req, res, next) => {
 
     const token = sign({ id: user._id.toString(), role: user.role });
     return res.status(200).json({
+      token,
+      user: {
+        id: user._id.toString(),
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const googleRegister = async (req, res, next) => {
+  try {
+    const payload = await verifyGoogleCredential(req.body.credential);
+    const email = payload?.email?.toLowerCase().trim();
+
+    if (!email || !payload.email_verified) {
+      return res.status(401).json({ error: 'Google account email is not verified' });
+    }
+
+    const existing = await User.findOne({ email });
+    if (existing) {
+      return res.status(409).json({ error: 'Email is already registered. Please sign in with Google' });
+    }
+
+    const user = await User.create({
+      name: payload.name?.trim() || email.split('@')[0],
+      email,
+      emailVerified: true,
+      emailVerifiedAt: new Date(),
+    });
+    const token = sign({ id: user._id.toString(), role: user.role });
+
+    return res.status(201).json({
       token,
       user: {
         id: user._id.toString(),
@@ -292,6 +333,10 @@ const resendVerification = async (req, res, next) => {
       await sendVerificationEmail(user, verificationToken);
     } catch (mailErr) {
       console.error('[resendVerification] Verification email send failed:', mailErr.message);
+      return res.status(503).json({
+        error: 'The verification email could not be sent. Check the email service configuration and try again.',
+        code: 'EMAIL_DELIVERY_FAILED',
+      });
     }
 
     return res.status(200).json(response);
@@ -303,6 +348,7 @@ const resendVerification = async (req, res, next) => {
 module.exports = {
   register,
   googleLogin,
+  googleRegister,
   adminLogin,
   forgotPassword,
   resetPassword,

@@ -8,7 +8,7 @@ import {
   reserveBook,
   fetchBookReviews,
   createBookReview,
-} from '../redux/slices/bookSlice';
+} from '../__tests__/redux/slices/bookSlice';
 import Navbar from '../components/common/Navbar';
 import BookCoverCard from '../components/book/BookCoverCard';
 import BookInfoSection from '../components/book/BookInfoSection';
@@ -279,7 +279,7 @@ const BookDetailPage = () => {
       {/* Add bottom padding for mobile so content isn't hidden */}
       <div className="md:hidden h-28" />
 
-      <Footer />
+      {/* <Footer /> */}
     </div>
     </>
   );

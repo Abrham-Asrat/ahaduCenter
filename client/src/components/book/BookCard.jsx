@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { addWishlistItem, removeWishlistItem } from '../../redux/slices/wishlistSlice';
+import { addWishlistItem, removeWishlistItem } from '../../__tests__/redux/slices/wishlistSlice';
 
 /**
  * BookCard Component

@@ -90,7 +90,7 @@ const BookFilters = ({ onFilterChange }) => {
       <div>
         <h4 className="text-xs uppercase tracking-wider text-on-surface-variant mb-3 font-semibold">Availability</h4>
         <div className="flex flex-col gap-2">
-          {['Borrow', 'Reserve', 'Buy'].map((option) => (
+          {['Available', 'Borrowed', 'Reserved'].map((option) => (
             <label key={option} className="flex items-center gap-3 text-sm text-white cursor-pointer group select-none">
               <input
                 type="checkbox"
@@ -108,7 +108,7 @@ const BookFilters = ({ onFilterChange }) => {
       <div>
         <h4 className="text-xs uppercase tracking-wider text-on-surface-variant mb-3 font-semibold">Format</h4>
         <div className="flex flex-col gap-2">
-          {['Hardcover', 'Paperback', 'Digital (eBook)'].map((option) => (
+          {['Hardcover', 'Paperback'].map((option) => (
             <label key={option} className="flex items-center gap-3 text-sm text-white cursor-pointer group select-none">
               <input
                 type="checkbox"

@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchBook } from '../redux/slices/bookSlice';
+import { fetchBook } from '../__tests__/redux/slices/bookSlice';
 import { bookService } from '../services/bookService';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
@@ -222,8 +222,8 @@ const BookConfirmPage = () => {
               </div>
             </div>
           </div>
-        </main>
         <Footer />
+        </main>
       </div>
       </>
     );

@@ -8,7 +8,7 @@ import {
   markOneRead,
   markAllRead,
   clearAll,
-} from '../redux/slices/notificationSlice';
+} from '../__tests__/redux/slices/notificationSlice';
 
 /**
  * NotificationsPage Component

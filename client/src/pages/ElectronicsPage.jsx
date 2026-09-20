@@ -1,14 +1,14 @@
 // src/pages/ElectronicsPage.jsx
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchProducts } from '../redux/slices/productSlice';
+import { fetchProducts } from '../__tests__/redux/slices/productSlice';
 import Navbar from '../components/common/Navbar';
 import ElectronicsHero from '../components/electronics/ElectronicsHero';
 import CategoryPills from '../components/electronics/CategoryPills';
 import ElectronicsFilters from '../components/electronics/ElectronicsFilters';
 import ProductCard from '../components/electronics/ProductCard';
 import Pagination from '../components/common/Pagination';
-import Footer from '../components/common/Footer';
+// import Footer from '../components/common/Footer';
 import { useNavigate } from 'react-router-dom';
 
 /**
@@ -51,11 +51,12 @@ const ElectronicsPage = () => {
     const params = { page: currentPage, limit: 12 };
 
     if (activeCategory && activeCategory !== 'All') params.category = activeCategory;
-    if (filterState.searchQuery) params.search = filterState.searchQuery;
+      if (filterState.searchQuery) params.q = filterState.searchQuery;
     if (filterState.conditions && filterState.conditions.length > 0)
       params.condition = filterState.conditions.join(',');
     if (filterState.brands && filterState.brands.length > 0)
       params.brand = filterState.brands.join(',');
+        params.brand = filterState.brands.join(',');
     if (filterState.maxPrice && filterState.maxPrice < 3000)
       params.maxPrice = filterState.maxPrice;
 
@@ -288,8 +289,8 @@ const ElectronicsPage = () => {
 
       {/* Mobile Filters Drawer Modal */}
       {isMobileFiltersOpen && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex justify-end md:hidden">
-          <div className="w-full max-w-xs bg-background h-full p-6 overflow-y-auto border-l border-white/10 flex flex-col justify-between">
+          <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex justify-end md:hidden animate-filter-backdrop" onClick={() => setIsMobileFiltersOpen(false)}>
+            <div className="w-full max-w-xs bg-background h-full p-6 overflow-y-auto border-l border-white/10 flex flex-col justify-between animate-filter-drawer" onClick={(event) => event.stopPropagation()}>
             <div>
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-bold text-white">Filter Tech</h3>
@@ -312,7 +313,7 @@ const ElectronicsPage = () => {
         </div>
       )}
 
-      <Footer />
+      {/* <Footer /> */}
     </div>
     </>
   );

@@ -117,16 +117,37 @@ html {
 }
 
 .animate-fade-in {
-  animation: fadeIn 0.4s ease-out forwards;
+  opacity: 1;
+  transform: none;
 }
 
 .animate-slide-up {
   animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+@keyframes filterBackdrop {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes filterSheetUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes filterDrawerIn {
+  from { opacity: 0; transform: translateX(24px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.animate-filter-backdrop { animation: filterBackdrop 180ms ease-out both; }
+.animate-filter-sheet { animation: filterSheetUp 220ms ease-out both; }
+.animate-filter-drawer { animation: filterDrawerIn 220ms ease-out both; }
+
 /* Legacy camelCase alias for fadeIn */
 .animate-fadeIn {
-  animation: fadeIn 0.4s ease-out forwards;
+  opacity: 1;
+  transform: none;
 }
 
 .footer-reveal {

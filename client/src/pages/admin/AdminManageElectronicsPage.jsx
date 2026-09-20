@@ -7,7 +7,7 @@ import {
   createProduct,
   updateProduct,
   deleteProduct,
-} from '../../redux/slices/adminSlice';
+} from '../../__tests__/redux/slices/adminSlice';
 
 const AdminManageElectronicsPage = () => {
     const dispatch = useDispatch();

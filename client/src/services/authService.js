@@ -5,6 +5,9 @@ export const authService = {
   loginWithGoogle: (credential) =>
     API.post('/auth/google', { credential }).then((r) => r.data),
 
+  registerWithGoogle: (credential) =>
+    API.post('/auth/google/register', { credential }).then((r) => r.data),
+
   // POST /api/auth/admin-login  { email, password }
   adminLogin: (email, password) =>
     API.post('/auth/admin-login', { email, password }).then((r) => r.data),

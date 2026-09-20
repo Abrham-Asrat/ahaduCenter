@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { registerThunk, clearAuthError } from '../redux/slices/authSlice';
+import { registerThunk, googleRegisterThunk, clearAuthError } from '../__tests__/redux/slices/authSlice';
+import GoogleSignInButton from '../components/common/GoogleSignInButton';
 
 /**
  * RegisterPage Component
@@ -52,6 +53,14 @@ const RegisterPage = ({ onClose }) => {
     if (registerThunk.fulfilled.match(result)) {
       if (onClose) onClose();
       navigate(`/verify-email?email=${encodeURIComponent(email)}`);
+    }
+  };
+
+  const handleGoogleCredential = async (response) => {
+    const result = await dispatch(googleRegisterThunk({ credential: response.credential }));
+    if (googleRegisterThunk.fulfilled.match(result)) {
+      if (onClose) onClose();
+      navigate('/');
     }
   };
 
@@ -141,13 +150,7 @@ const RegisterPage = ({ onClose }) => {
             <div className="h-[1px] flex-grow bg-white/10" />
           </div>
 
-          <button
-            type="button"
-            className="w-full rounded-lg border border-white/10 bg-white/5 py-3 font-semibold text-white transition hover:bg-white/10 hover:border-primary flex items-center justify-center gap-2"
-          >
-            <span className="text-xl">🔍</span>
-            Continue with Google
-          </button>
+          <GoogleSignInButton onCredential={handleGoogleCredential} />
 
           <p className="mt-6 text-center text-sm text-on-surface-variant">
             Already have an account?{' '}

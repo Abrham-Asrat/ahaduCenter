@@ -8,7 +8,7 @@ import ProductInfo from '../components/electronics/ProductInfo';
 import ProductSpecs from '../components/electronics/ProductSpecs';
 import SimilarProducts from '../components/electronics/SimilarProducts';
 import Footer from '../components/common/Footer';
-import { fetchProduct, fetchProducts } from '../redux/slices/productSlice';
+import { fetchProduct, fetchProducts } from '../__tests__/redux/slices/productSlice';
 import { orderService } from '../services/orderService';
 
 /**

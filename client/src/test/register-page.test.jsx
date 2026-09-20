@@ -5,12 +5,13 @@ import { MemoryRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import RegisterPage from '../pages/RegisterPage';
-import authReducer from '../redux/slices/authSlice';
+import authReducer from '../__tests__/redux/slices/authSlice';
 import { authService } from '../services/authService';
 
 vi.mock('../services/authService', () => ({
   authService: {
     register: vi.fn(),
+    registerWithGoogle: vi.fn(),
   },
 }));
 
@@ -52,5 +53,11 @@ describe('RegisterPage passwordless registration', () => {
     fireEvent.click(screen.getByRole('button', { name: /create account/i }));
 
     expect(await screen.findByText('Email is already registered')).toBeInTheDocument();
+  });
+
+  it('uses the shared Google sign-up control', () => {
+    const { container } = renderPage();
+    expect(container.querySelector('.min-h-10')).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /continue with google/i })).not.toBeInTheDocument();
   });
 });

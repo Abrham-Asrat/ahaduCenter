@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import AdminLayout from '../../components/admin/AdminLayout';
-import { fetchAdminStats, fetchRecentActivity } from '../../redux/slices/adminSlice';
+import { fetchAdminStats, fetchRecentActivity } from '../../__tests__/redux/slices/adminSlice';
 
 /**
  * AdminDashboardPage Component

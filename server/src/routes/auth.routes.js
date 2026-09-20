@@ -16,6 +16,7 @@ const validate = require('../middleware/validate');
 const {
   register,
   googleLogin,
+  googleRegister,
   adminLogin,
   forgotPassword,
   resetPassword,
@@ -29,6 +30,9 @@ router.post('/register', registerRules, validate, register);
 
 // POST /api/auth/google
 router.post('/google', googleLoginRules, validate, googleLogin);
+
+// POST /api/auth/google/register
+router.post('/google/register', googleLoginRules, validate, googleRegister);
 
 // POST /api/auth/admin-login
 router.post('/admin-login', adminLoginRules, validate, adminLogin);

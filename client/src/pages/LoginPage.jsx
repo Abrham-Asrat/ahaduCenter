@@ -2,7 +2,7 @@
 import React, { useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { adminLoginThunk, loginThunk, resendVerificationThunk } from '../redux/slices/authSlice';
+import { adminLoginThunk, loginThunk, resendVerificationThunk } from '../__tests__/redux/slices/authSlice';
 import GoogleSignInButton from '../components/common/GoogleSignInButton';
 import { useState } from 'react';
 
@@ -75,22 +75,31 @@ const LoginPage = ({ onClose }) => {
               <input aria-label="Admin password" type="password" value={adminPassword} onChange={(event) => setAdminPassword(event.target.value)} required placeholder="Admin password" className="w-full rounded-xl border border-white/10 bg-[#0B0F19] px-4 py-3 text-sm text-white focus:border-primary focus:outline-none" />
               <button type="submit" disabled={loading} className="w-full rounded-xl bg-primary py-3 text-sm font-bold uppercase tracking-wider text-black disabled:opacity-60">{loading ? 'Signing in...' : 'Admin sign in'}</button>
             </form>
-          ) : <GoogleSignInButton onCredential={handleCredential} />}
-
-          {error?.includes('verify') && (
-            <div className="mt-5 space-y-3">
-              <input
-                aria-label="Verification email"
-                type="email"
-                value={verificationEmail}
-                onChange={(event) => setVerificationEmail(event.target.value)}
-                placeholder="Enter your registered email"
-                className="w-full rounded-xl border border-white/10 bg-[#0B0F19] px-4 py-3 text-sm text-white focus:border-primary focus:outline-none"
-              />
-              <button type="button" onClick={handleResend} disabled={loading || !verificationEmail} className="w-full text-sm font-semibold text-primary disabled:opacity-60">
-                {loading ? 'Sending...' : 'Resend verification email'}
-              </button>
-            </div>
+          ) : (
+            <>
+              <div className="mb-5">
+                <label htmlFor="login-email" className="mb-2 block text-xs font-bold uppercase tracking-wider text-on-surface-variant">
+                  Registered Email Address
+                </label>
+                <input
+                  id="login-email"
+                  type="email"
+                  value={verificationEmail}
+                  onChange={(event) => setVerificationEmail(event.target.value)}
+                  placeholder="you@example.com"
+                  className="w-full rounded-xl border border-white/10 bg-[#0B0F19] px-4 py-3 text-sm text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                />
+                <button
+                  type="button"
+                  onClick={handleResend}
+                  disabled={loading || !verificationEmail}
+                  className="mt-2 text-xs font-semibold text-primary disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {loading ? 'Sending verification email...' : 'Resend verification email'}
+                </button>
+              </div>
+              <GoogleSignInButton onCredential={handleCredential} />
+            </>
           )}
 
           <button type="button" onClick={() => setAdminMode((value) => !value)} className="mt-6 w-full text-center text-xs font-semibold uppercase tracking-wider text-on-surface-variant hover:text-primary">

@@ -24,7 +24,7 @@ const { paginate } = require('../../utils/paginate.js');
 // Requirements 4.1, 4.2, 4.3, 4.4
 const listBooks = async (req, res, next) => {
   try {
-    const { q, language, page, limit } = req.query;
+    const { q, category, availability, format, language, page, limit } = req.query;
 
     // Build filter
     const filter = {};
@@ -33,6 +33,10 @@ const listBooks = async (req, res, next) => {
       // MongoDB text search on the compound text index (title, author, isbn)
       filter.$text = { $search: q.trim() };
     }
+
+    if (category && category.trim()) filter.category = { $in: splitValues(category) };
+    if (availability && availability.trim()) filter.availability = { $in: splitValues(availability) };
+    if (format && format.trim()) filter.format = { $in: splitValues(format) };
 
     if (language && language.trim()) {
       // Case-insensitive language match (Requirement 4.3)
@@ -130,6 +134,10 @@ const reserveBook = async (req, res, next) => {
  */
 function escapeRegex(str) {
   return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function splitValues(value) {
+  return value.split(',').map((item) => new RegExp(`^${escapeRegex(item.trim())}$`, 'i'));
 }
 
 module.exports = { listBooks, getBook, reserveBook };
