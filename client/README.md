@@ -107,7 +107,7 @@ Domain-scoped UI components. Each sub-folder maps to a service domain:
 |--------|---------|
 | `common/` | Navbar, Footer, HeroSection, Pagination, SubNav, ScrollToTop, etc. |
 | `book/` | BookCard, BookFilters, BookDetailTabs, RelatedBooks, etc. |
-| `movie/` | MovieCard, MovieHero, CastSection, TrailerSection, etc. |
+| `movie/` | MovieCard, CastSection, TrailerSection, and movie detail components |
 | `electronics/` | ProductCard, ProductGallery, ProductSpecs, SimilarProducts, etc. |
 | `admin/` | AdminLayout wrapper |
 
