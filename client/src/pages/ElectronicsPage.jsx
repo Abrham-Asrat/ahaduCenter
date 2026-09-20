@@ -3,8 +3,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProducts } from '../__tests__/redux/slices/productSlice';
 import Navbar from '../components/common/Navbar';
+import SubNav from '../components/common/SubNav';
 import ElectronicsHero from '../components/electronics/ElectronicsHero';
-import CategoryPills from '../components/electronics/CategoryPills';
 import ElectronicsFilters from '../components/electronics/ElectronicsFilters';
 import ProductCard from '../components/electronics/ProductCard';
 import Pagination from '../components/common/Pagination';
@@ -157,12 +157,12 @@ const ElectronicsPage = () => {
 
       <main className="flex-grow">
         {/* Hero banner */}
-        <ElectronicsHero />
+        {/* <ElectronicsHero /> */}
 
         {/* Catalog Section Header */}
-        <div id="electronics-catalog" className="max-w-7xl mx-auto px-6 mb-6">
-          <CategoryPills categories={categories} onCategoryChange={handleCategoryChange} />
-        </div>
+        
+          <SubNav tabs={categories} onTabChange={handleCategoryChange} />
+        
 
         {/* Main content: sidebar + grid */}
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row gap-8">
