@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Ahadu Center favicon">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#58f2b4"/>
+      <stop offset="100%" stop-color="#10b981"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="28" fill="#091018"/>
+  <rect x="10" y="10" width="108" height="108" rx="22" fill="url(#g)" opacity="0.12"/>
+  <path d="M31 94L52 34h14l21 60h-13l-4.3-13H48.3L44 94H31zm20.5-22h11.4l-5.5-17-5.9 17z" fill="#eafff6"/>
+  <path d="M72 34h20l-9 20H60l12-20z" fill="#a7f3d0" opacity="0.9"/>
+</svg>
