@@ -13,7 +13,7 @@ const ElectronicsFilters = ({ onFilterChange }) => {
     const [selectedConditions, setSelectedConditions] = useState([]);
     const [selectedBrands, setSelectedBrands] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
-    const [maxPrice, setMaxPrice] = useState(3000);
+    const [maxPrice, setMaxPrice] = useState(150000);
 
     const brands = ['Dell', 'Apple', 'Sony', 'JBL', 'Logitech', 'Lenovo', 'Anker', 'Samsung', 'TP-Link'];
 
@@ -61,16 +61,16 @@ const ElectronicsFilters = ({ onFilterChange }) => {
         setSelectedConditions([]);
         setSelectedBrands([]);
         setSearchQuery('');
-        setMaxPrice(3000);
+        setMaxPrice(150000);
         triggerChange({
             conditions: [],
             brands: [],
             searchQuery: '',
-            maxPrice: 3000,
+            maxPrice: 150000,
         });
     };
 
-    const hasActiveFilters = selectedConditions.length > 0 || selectedBrands.length > 0 || searchQuery !== '' || maxPrice < 3000;
+    const hasActiveFilters = selectedConditions.length > 0 || selectedBrands.length > 0 || searchQuery !== '' || maxPrice < 150000;
 
     return (
         <div className="glass-panel p-6 rounded-2xl sticky top-28 space-y-6 shadow-xl border border-white/10">
@@ -159,8 +159,8 @@ const ElectronicsFilters = ({ onFilterChange }) => {
                 <input
                     type="range"
                     min="100"
-                    max="3000"
-                    step="100"
+                    max="150000"
+                    step="1000"
                     value={maxPrice}
                     onChange={handlePriceChange}
                     className="w-full accent-primary cursor-pointer"

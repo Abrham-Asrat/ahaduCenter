@@ -2,7 +2,7 @@
 import API from './api';
 
 export const bookService = {
-  // GET /api/books?search=&category=&availability=&format=&language=&sort=&page=&limit=
+  // GET /api/books?q=&category=&availability=&format=&language=&page=&limit=
   getBooks: (params = {}) =>
     API.get('/books', { params }).then((r) => r.data),
 

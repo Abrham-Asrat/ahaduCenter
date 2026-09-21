@@ -29,7 +29,7 @@ const ElectronicsPage = () => {
     conditions: [],
     brands: [],
     searchQuery: '',
-    maxPrice: 3000,
+    maxPrice: 150000,
   });
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -42,7 +42,7 @@ const ElectronicsPage = () => {
     setTimeout(() => setToastMessage(null), 3000);
   };
 
-  const categories = ['All', 'Laptops', 'Smartphones', 'Audio', 'Accessories'];
+  const categories = ['All', 'Laptops', 'Phones', 'Audio', 'Accessories'];
 
   // ── Build query params from local filter/sort/page state ─────────────────────
   const buildParams = useCallback(() => {
@@ -54,8 +54,7 @@ const ElectronicsPage = () => {
       params.condition = filterState.conditions.join(',');
     if (filterState.brands && filterState.brands.length > 0)
       params.brand = filterState.brands.join(',');
-        params.brand = filterState.brands.join(',');
-    if (filterState.maxPrice && filterState.maxPrice < 3000)
+    if (filterState.maxPrice && filterState.maxPrice < 150000)
       params.maxPrice = filterState.maxPrice;
 
     // Sort param mapping

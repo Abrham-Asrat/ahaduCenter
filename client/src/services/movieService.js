@@ -2,7 +2,7 @@
 import API from './api';
 
 export const movieService = {
-  // GET /api/movies?search=&genres=&country=&type=&sort=&page=&limit=
+  // GET /api/movies?q=&genre=&country=&page=&limit=
   getMovies: (params = {}) =>
     API.get('/movies', { params }).then((r) => r.data),
 

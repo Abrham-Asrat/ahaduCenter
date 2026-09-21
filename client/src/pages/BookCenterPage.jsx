@@ -43,11 +43,13 @@ const BookCenterPage = () => {
 
   const categories = [
     'All Categories',
-    'Education',
+    'Fiction',
+    'History',
+    'Biography',
     'Technology',
     'Business',
     'Science',
-    'Arts & Humanities',
+    'Language',
   ];
 
   // ── Build query params from local filter/sort state ──────────────────────────

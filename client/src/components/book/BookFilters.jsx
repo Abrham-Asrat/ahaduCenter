@@ -135,8 +135,8 @@ const BookFilters = ({ onFilterChange }) => {
           className="w-full bg-surface-container border border-white/10 rounded-lg py-2 px-3 text-sm text-white focus:border-primary outline-none cursor-pointer"
         >
           <option>All Languages</option>
-          <option>English</option>
-          <option>Amharic</option>
+          <option value="en">English</option>
+          <option value="am">Amharic</option>
           <option>Spanish</option>
           <option>French</option>
         </select>

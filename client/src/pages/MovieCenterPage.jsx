@@ -50,10 +50,9 @@ const MovieCenterPage = () => {
     else if (activeTab === 'Featured')  params.featured = true;
     else if (activeTab === 'Recently Added') params.sort = 'newest';
 
-    if (filters.searchQuery)                         params.search = filters.searchQuery;
+    if (filters.searchQuery)                         params.q = filters.searchQuery;
     if (filters.country && filters.country !== 'All') params.country = filters.country;
-    if (filters.contentType && filters.contentType !== 'All') params.type = filters.contentType;
-    if (filters.genres && filters.genres.length > 0) params.genres = filters.genres.join(',');
+    if (filters.genres && filters.genres.length > 0) params.genre = filters.genres.join(',');
 
     return params;
   }, [activeTab, filters, currentPage]);
