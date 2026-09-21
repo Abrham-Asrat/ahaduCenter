@@ -32,7 +32,7 @@ const SubNav = ({ tabs, onTabChange }: SubNavProps) => {
   const [activeTab, setActiveTab] = useState(navTabs[0]);
 
   // Handle tab click
-  const handleTabClick = (tab) => {
+  const handleTabClick = (tab: string) => {
     setActiveTab(tab);
     if (onTabChange) {
       onTabChange(tab);
