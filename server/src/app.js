@@ -1,3 +1,4 @@
+// Express application assembly; server.js owns configuration and startup.
 const express = require('express');
 const cors = require('cors');
 const path = require('path');

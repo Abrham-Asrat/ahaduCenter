@@ -1,3 +1,4 @@
+// Production entrypoint: load configuration, connect to MongoDB, then listen.
 require('dotenv').config();
 
 const REQUIRED_VARS = [

@@ -1,3 +1,4 @@
+/** Opens the application's shared Mongoose connection. */
 const mongoose = require('mongoose');
 
 const connectDB = async () => {
