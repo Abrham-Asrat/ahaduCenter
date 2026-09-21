@@ -91,8 +91,9 @@ const MovieCenterPage = () => {
   };
 
   const handleToggleBookmark = (movie: Movie, isSaved: boolean) => {
+    const movieId = movie.id || movie._id || '';
     setBookmarkedIds((prev) =>
-      isSaved ? [...prev, movie.id || movie._id] : prev.filter((id) => id !== (movie.id || movie._id))
+      isSaved ? [...prev, movieId] : prev.filter((id) => id !== movieId)
     );
     showToast(
       isSaved

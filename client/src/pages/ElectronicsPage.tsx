@@ -116,7 +116,7 @@ const ElectronicsPage = () => {
   };
 
   const handleToggleWishlist = (product: Product, isSaved: boolean) => {
-    const productId = product._id || product.id;
+    const productId = product._id || product.id || '';
     if (isSaved) {
       setWishlistIds((prev) => [...prev, productId]);
       showToast(`"${product.name}" saved to wishlist!`);
