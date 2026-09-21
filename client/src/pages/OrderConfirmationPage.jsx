@@ -76,8 +76,6 @@ const OrderConfirmationPage = () => {
   // ── Derive display values from the real order object ─────────────────────────
   const orderId = order?._id ? `#AHADU-${order._id.toString().slice(-6).toUpperCase()}` : '—';
   const items = order?.items ?? [];
-  const total = order?.totalPrice ?? order?.totalPayableAtStore ?? 0;
-
   const storeLocation =
     'Ahadu Center Hub, Bole Road (Next to Friendship HyperMarket), Addis Ababa, Ethiopia';
   const operatingHours =
@@ -102,7 +100,7 @@ const OrderConfirmationPage = () => {
           </h1>
           <p className="text-lg text-on-surface-variant max-w-lg">
             Your items have been reserved at our physical store. Show your Pick-Up Pass
-            to the cashier to pay and collect.
+            when you arrive to collect them.
           </p>
         </header>
 
@@ -147,22 +145,13 @@ const OrderConfirmationPage = () => {
               </p>
             </div>
 
-            <div className="bg-background/60 p-4 rounded-2xl border border-white/10 flex flex-col justify-between">
-              <span className="text-xs uppercase text-on-surface-variant font-bold mb-1">
-                Payment Instructions
+            <div className="bg-background/60 p-4 rounded-2xl border border-white/10 flex flex-col justify-center">
+              <span className="text-xs uppercase text-on-surface-variant font-bold mb-2">
+                Pickup Status
               </span>
-              <p className="text-xs text-white leading-relaxed">
-                Pay in person when you inspect your items at our cashier. Cash, Telebirr,
-                or CBE Mobile Transfer are accepted.
+              <p className="text-sm text-white leading-relaxed">
+                Your reservation is ready for pickup during the operating hours shown here.
               </p>
-              <div className="mt-3 flex justify-between items-baseline pt-2 border-t border-white/10">
-                <span className="text-xs text-on-surface-variant font-bold">
-                  Total Payable at Store:
-                </span>
-                <span className="text-2xl font-black text-secondary">
-                  ETB {Number(total).toFixed(2)}
-                </span>
-              </div>
             </div>
           </div>
         </div>
@@ -187,8 +176,6 @@ const OrderConfirmationPage = () => {
                   item?.imageUrl ??
                   'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=600&q=80';
                 const quantity = item?.quantity ?? 1;
-                const price = item?.price ?? item?.product?.price ?? 0;
-
                 return (
                   <div
                     key={item?._id ?? item?.id ?? index}
@@ -204,9 +191,6 @@ const OrderConfirmationPage = () => {
                     <div className="flex-grow">
                       <h3 className="text-white font-bold">{productName}</h3>
                       <p className="text-xs text-on-surface-variant">Quantity: {quantity}</p>
-                    </div>
-                    <div className="text-lg font-bold text-white">
-                      ETB {Number(price).toFixed(2)}
                     </div>
                   </div>
                 );

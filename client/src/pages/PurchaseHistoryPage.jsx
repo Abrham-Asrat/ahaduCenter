@@ -11,7 +11,7 @@ import { orderService } from '../services/orderService';
  *
  * Features:
  * - Filter tabs: All Orders, Processing, Shipped, Delivered, Cancelled
- * - Order cards with order ID, date, status, items, total
+ * - Order cards with order ID, date, status, and items
  * - Action buttons: Buy Again, Track Order, View Details
  * - Export History button
  * - Pagination driven by server response (totalPages)
@@ -83,7 +83,7 @@ const PurchaseHistoryPage = () => {
 
   /**
    * Normalise a raw API order object into the shape this component renders.
-   * The API order has: _id, status, totalPrice, createdAt, items[{ product, quantity, price }]
+  * The API order has: _id, status, createdAt, and items[{ productName, quantity }]
    */
   const normaliseOrder = (raw) => {
     const rawItems = raw.items ?? [];
@@ -114,14 +114,11 @@ const PurchaseHistoryPage = () => {
         })
       : '—';
 
-    const total = raw.totalPrice ?? raw.totalPayableAtStore ?? 0;
-
     return {
       id: raw._id ? `#AC-${raw._id.toString().slice(-8).toUpperCase()}` : raw.id ?? '—',
       _id: raw._id ?? raw.id,
       date,
       status: displayStatus,
-      total: `ETB ${Number(total).toFixed(2)}`,
       items: thumbnails,
       itemCount: rawItems.length,
     };
@@ -262,7 +259,7 @@ const PurchaseHistoryPage = () => {
                         </span>
                       </div>
                       <div className="text-sm text-on-surface-variant">
-                        Placed on {order.date} • Total: {order.total}
+                        Placed on {order.date}
                       </div>
 
                       {/* Item thumbnails */}
