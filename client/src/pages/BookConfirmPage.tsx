@@ -378,7 +378,14 @@ const BookConfirmPage = () => {
 /**
  * DetailRow — label/value row with optional icon and bold value.
  */
-const DetailRow = ({ label, value, bold, icon }) => (
+interface DetailRowProps {
+  label: string;
+  value: string;
+  bold?: boolean;
+  icon?: string;
+}
+
+const DetailRow = ({ label, value, bold = false, icon }: DetailRowProps) => (
   <div className="flex justify-between items-center py-3 border-b border-white/5">
     <span className="text-on-surface-variant">{label}</span>
     <div className="flex items-center gap-2 text-right">

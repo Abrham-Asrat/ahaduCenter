@@ -27,7 +27,12 @@ const BookCenterPage = () => {
   // ── Local UI state ───────────────────────────────────────────────────────────
   const [activeCategory, setActiveCategory] = useState('All Categories');
   const [sortOption, setSortOption] = useState('Newest Arrivals');
-  const [filterState, setFilterState] = useState({
+  const [filterState, setFilterState] = useState<{
+    searchQuery: string;
+    availability: string[];
+    format: string[];
+    language: string;
+  }>({
     searchQuery: '',
     availability: [],
     format: [],
@@ -36,11 +41,6 @@ const BookCenterPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [toastMessage, setToastMessage] = useState(null);
-
-  const showToast = (msg) => {
-    setToastMessage(msg);
-    setTimeout(() => setToastMessage(null), 3000);
-  };
 
   const categories = [
     'All Categories',

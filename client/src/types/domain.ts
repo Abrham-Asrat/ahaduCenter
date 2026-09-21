@@ -125,6 +125,7 @@ export interface BookQuery {
 export interface BookActionResult {
   dueDate?: string;
   expiryDate?: string;
+  expiresAt?: string;
   pickupLocation?: string;
   _id?: string;
   data?: BookActionResult;
