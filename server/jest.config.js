@@ -1,3 +1,4 @@
+// Jest configuration for the backend unit and MongoMemoryServer integration tests.
 module.exports = {
   testEnvironment: 'node',
   testMatch: ['**/__tests__/**/*.test.js'],
