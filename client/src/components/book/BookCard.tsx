@@ -1,4 +1,3 @@
-// @ts-nocheck
 // src/components/book/BookCard.jsx
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';

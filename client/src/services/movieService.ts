@@ -1,4 +1,3 @@
-// @ts-nocheck
 // API operations for movies, reviews, and movie requests.
 import API from './api';
 

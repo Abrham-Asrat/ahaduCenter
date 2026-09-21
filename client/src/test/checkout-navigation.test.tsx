@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Tests for checkout navigation fixes (Task 2.1)
  * Validates: Requirements 1.4, 1.5

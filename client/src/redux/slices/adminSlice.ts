@@ -1,4 +1,3 @@
-// @ts-nocheck
 // Stores administrator dashboard data and content-management request state.
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { adminService } from '../../services/adminService';

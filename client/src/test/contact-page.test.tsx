@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Tests for ContactPage — Task 16.1
  * Validates: Requirements 5.9

@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Tests for UserDashboardPage — Task 17.1
  *

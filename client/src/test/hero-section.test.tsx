@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Tests for HeroSection responsive padding and button navigation (Task 5.1)
  * Validates: Requirements 2.1, 2.2, 8.1

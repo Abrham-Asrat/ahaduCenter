@@ -1,4 +1,3 @@
-// @ts-nocheck
 // src/components/movie/MovieInfoSidebar.jsx
 import React from 'react';
 

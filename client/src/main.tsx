@@ -1,4 +1,3 @@
-// @ts-nocheck
 // Mounts the React application with its Redux and browser-router providers.
 import React from 'react';
 import ReactDOM from 'react-dom/client';

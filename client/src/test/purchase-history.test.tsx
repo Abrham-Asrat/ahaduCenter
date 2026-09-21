@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Tests for PurchaseHistoryPage — Task 13.1
  *

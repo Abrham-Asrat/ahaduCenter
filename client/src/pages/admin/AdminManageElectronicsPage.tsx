@@ -1,4 +1,3 @@
-// @ts-nocheck
 // src/pages/admin/AdminManageElectronicsPage.jsx
 import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';

@@ -1,4 +1,3 @@
-// @ts-nocheck
 // src/pages/BookConfirmPage.jsx
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';

@@ -1,4 +1,3 @@
-// @ts-nocheck
 // src/components/common/Navbar.jsx
 import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';

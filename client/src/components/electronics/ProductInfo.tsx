@@ -1,4 +1,3 @@
-// @ts-nocheck
 // src/components/electronics/ProductInfo.jsx
 import React, { useState } from 'react';
 

@@ -1,4 +1,3 @@
-// @ts-nocheck
 // src/components/movie/MovieDetailHero.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';

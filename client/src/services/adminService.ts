@@ -1,4 +1,3 @@
-// @ts-nocheck
 // API operations for administrator dashboards and content management.
 import API from './api';
 

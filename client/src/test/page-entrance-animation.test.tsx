@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Property test: Page entrance animation class is always present
  * 

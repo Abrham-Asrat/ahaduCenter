@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useEffect, useRef, useState } from 'react';
 
 const GOOGLE_SCRIPT = 'https://accounts.google.com/gsi/client';

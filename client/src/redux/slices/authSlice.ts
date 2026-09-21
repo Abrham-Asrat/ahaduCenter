@@ -1,4 +1,3 @@
-// @ts-nocheck
 // Stores the authenticated user, token lifecycle, and auth request state.
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { authService } from '../../services/authService';

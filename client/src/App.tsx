@@ -1,6 +1,4 @@
-// @ts-nocheck
-// Defines the client route tree and restores persisted authentication on mount.
-import React from 'react';
+import { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import MovieCenterPage from './pages/MovieCenterPage';
@@ -20,7 +18,6 @@ import ContactPage from './pages/ContactPage';
 import AdminManageMoviesPage from './pages/admin/AdminManageMoviesPage';
 import AdminManageElectronicsPage from './pages/admin/AdminManageElectronicsPage';
 import AdminManageBooksPage from './pages/admin/AdminManageBooksPage';
-
 import DesignSystemPage from './pages/DesignSystemPage';
 import ProductComparisonPage from './pages/ProductComparisonPage';
 import MovieRequestPage from './pages/MovieRequestPage';
@@ -31,15 +28,14 @@ import NotificationsPage from './pages/NotificationsPage';
 import OrderConfirmationPage from './pages/OrderConfirmationPage';
 import NotFoundPage from './pages/NotFoundPage';
 import VerifyEmailPage from './pages/VerifyEmailPage';
-import { useDispatch } from 'react-redux';
-import { useEffect } from 'react';
 import { bootstrapAuthThunk } from './redux/slices/authSlice';
 import ScrollToTop from './components/common/ScrollToTop';
 import ProtectedRoute from './components/common/ProtectedRoute';
 import AdminRoute from './components/common/AdminRoute';
+import { useAppDispatch } from './redux/hooks';
 
 function App() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(bootstrapAuthThunk());

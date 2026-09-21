@@ -1,4 +1,3 @@
-// @ts-nocheck
 // src/components/common/ShaderHero.jsx
 import { useEffect, useRef } from 'react';
 

@@ -1,4 +1,3 @@
-// @ts-nocheck
 // src/components/book/RelatedBooks.jsx
 import React, { useRef } from 'react';
 

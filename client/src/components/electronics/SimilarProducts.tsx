@@ -1,4 +1,3 @@
-// @ts-nocheck
 // src/components/electronics/SimilarProducts.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';

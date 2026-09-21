@@ -1,4 +1,3 @@
-// @ts-nocheck
 // src/components/book/BookFilters.jsx
 import React, { useState } from 'react';
 

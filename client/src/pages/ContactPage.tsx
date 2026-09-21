@@ -1,4 +1,3 @@
-// @ts-nocheck
 // src/pages/ContactPage.jsx
 import React, { useState } from 'react';
 import Navbar from '../components/common/Navbar';

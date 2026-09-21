@@ -1,4 +1,3 @@
-// @ts-nocheck
 // src/components/common/ReviewsCommentsSection.jsx
 import React, { useState } from 'react';
 

@@ -1,4 +1,3 @@
-// @ts-nocheck
 // src/pages/BookCenterPage.jsx
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
