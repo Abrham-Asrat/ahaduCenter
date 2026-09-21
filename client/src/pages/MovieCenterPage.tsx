@@ -7,7 +7,6 @@ import SubNav from '../components/common/SubNav';
 import MovieFilters from '../components/movie/MovieFilters';
 import MovieCard from '../components/movie/MovieCard';
 import Pagination from '../components/common/Pagination';
-import type { ChangeEvent } from 'react';
 import type { Movie, MovieQuery } from '../types';
 
 /**
@@ -23,7 +22,7 @@ const MovieCenterPage = () => {
   const { movies, loading, error, pagination } = useAppSelector((s) => s.movie);
 
   // ── Local UI state ───────────────────────────────────────────────────────────
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<{ genres: string[]; contentType: string; searchQuery: string; country: string }>({
     genres: [],
     contentType: 'All',
     searchQuery: '',
@@ -32,11 +31,11 @@ const MovieCenterPage = () => {
   const [activeTab, setActiveTab] = useState('All');
   const [currentPage, setCurrentPage] = useState(1);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
-  const [activeTrailer, setActiveTrailer] = useState(null);
-  const [toastMessage, setToastMessage] = useState(null);
-  const [bookmarkedIds, setBookmarkedIds] = useState([]);
+  const [activeTrailer, setActiveTrailer] = useState<Movie | null>(null);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [bookmarkedIds, setBookmarkedIds] = useState<string[]>([]);
 
-  const showToast = (msg) => {
+  const showToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 3000);
   };

@@ -27,7 +27,12 @@ const ElectronicsPage = () => {
   // ── Local UI state ───────────────────────────────────────────────────────────
   const [activeCategory, setActiveCategory] = useState('All');
   const [sortOption, setSortOption] = useState('Featured');
-  const [filterState, setFilterState] = useState({
+  const [filterState, setFilterState] = useState<{
+    conditions: string[];
+    brands: string[];
+    searchQuery: string;
+    maxPrice: number;
+  }>({
     conditions: [],
     brands: [],
     searchQuery: '',
@@ -35,11 +40,11 @@ const ElectronicsPage = () => {
   });
   const [currentPage, setCurrentPage] = useState(1);
 
-  const [toastMessage, setToastMessage] = useState(null);
-  const [wishlistIds, setWishlistIds] = useState([]);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [wishlistIds, setWishlistIds] = useState<string[]>([]);
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
 
-  const showToast = (msg) => {
+  const showToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 3000);
   };
