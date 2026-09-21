@@ -12,7 +12,6 @@ Pure utility helpers shared across the application.
 sign(payload)   // Signs with JWT_SECRET, expires in 24 h
 verify(token)   // Verifies and decodes; throws on invalid/expired
 ```
-
 Payload shape: `{ id: string, role: "user" | "admin" }`.
 
 ---
