@@ -1,9 +1,9 @@
-import React from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import type { RootState } from '../../redux/store';
 
 const AdminRoute = () => {
-  const { token, user, initialized } = useSelector((s) => s.auth);
+  const { token, user, initialized } = useSelector((state: RootState) => state.auth);
 
   if (!initialized) {
     // Defensive loading spinner (in normal use, initialized is always true

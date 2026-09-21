@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logoutAction } from '../../redux/slices/authSlice';
+import type { RootState } from '../../redux/store';
 
 /**
  * Navbar Component
@@ -18,11 +19,11 @@ const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const dropdownRef = useRef(null);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   // Auth state from Redux store
-  const { token, user } = useSelector((s) => s.auth);
-  const { unreadCount } = useSelector((s) => s.notification) ?? {};
+  const { token, user } = useSelector((state: RootState) => state.auth);
+  const { unreadCount } = useSelector((state: RootState) => state.notification) ?? {};
 
   // Profile menu dropdown toggle
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -46,8 +47,8 @@ const Navbar = () => {
 
   // Close dropdown on outside click
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsProfileOpen(false);
       }
     };
@@ -65,7 +66,7 @@ const Navbar = () => {
     navigate('/');
   };
 
-  const isActive = (path) => {
+  const isActive = (path: string) => {
     return location.pathname === path;
   };
 

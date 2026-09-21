@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type CSSProperties } from 'react';
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
@@ -16,7 +16,7 @@ const Footer = () => {
           <div className="text-2xl font-bold text-on-surface mb-4 transition-colors duration-300 hover:text-primary">Ahadu Center</div>
           <p className="max-w-xs text-sm leading-6 text-on-surface-variant">© 2024 Ahadu Center. All rights reserved.</p>
         </div>
-        <div className="footer-reveal flex flex-col gap-2" style={{ '--footer-delay': '100ms' }}>
+        <div className="footer-reveal flex flex-col gap-2" style={{ '--footer-delay': '100ms' } as CSSProperties}>
           <h4 className="font-bold text-white mb-3">Legal</h4>
           <Link to="/contact" className="footer-link text-sm text-on-surface-variant hover:text-secondary transition-all opacity-80 hover:opacity-100">
             Privacy Policy
@@ -25,7 +25,7 @@ const Footer = () => {
             Terms of Service
           </Link>
         </div>
-        <div className="footer-reveal flex flex-col gap-2" style={{ '--footer-delay': '200ms' }}>
+        <div className="footer-reveal flex flex-col gap-2" style={{ '--footer-delay': '200ms' } as CSSProperties}>
           <h4 className="font-bold text-white mb-3">Support</h4>
           <Link to="/contact" className="footer-link text-sm text-on-surface-variant hover:text-secondary transition-all opacity-80 hover:opacity-100">
             Help Center
@@ -34,7 +34,7 @@ const Footer = () => {
             Contact Us
           </Link>
         </div>
-        <div className="footer-reveal flex flex-col gap-2" style={{ '--footer-delay': '300ms' }}>
+        <div className="footer-reveal flex flex-col gap-2" style={{ '--footer-delay': '300ms' } as CSSProperties}>
           <h4 className="font-bold text-white mb-3">Stay Updated</h4>
           <a href="#newsletter" className="text-sm text-on-surface-variant hover:text-secondary transition-all opacity-80 hover:opacity-100">
             Newsletter

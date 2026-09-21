@@ -1,9 +1,14 @@
 // src/pages/RegisterPage.jsx
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { registerThunk, googleRegisterThunk, clearAuthError } from '../redux/slices/authSlice';
 import GoogleSignInButton from '../components/common/GoogleSignInButton';
+import type { RootState } from '../redux/store';
+
+type RegisterPageProps = {
+  onClose?: () => void;
+};
 
 /**
  * RegisterPage Component
@@ -20,10 +25,10 @@ import GoogleSignInButton from '../components/common/GoogleSignInButton';
  * - Ambient background glows
  * - Responsive layout
  */
-const RegisterPage = ({ onClose }) => {
+const RegisterPage = ({ onClose }: RegisterPageProps) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { loading, error } = useSelector((s) => s.auth);
+  const { loading, error } = useSelector((state: RootState) => state.auth);
 
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
@@ -41,7 +46,7 @@ const RegisterPage = ({ onClose }) => {
     dispatch(clearAuthError());
   }, [dispatch]);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setValidationError(null);
 
@@ -56,7 +61,7 @@ const RegisterPage = ({ onClose }) => {
     }
   };
 
-  const handleGoogleCredential = async (response) => {
+  const handleGoogleCredential = async (response: GoogleCredentialResponse) => {
     const result = await dispatch(googleRegisterThunk({ credential: response.credential }));
     if (googleRegisterThunk.fulfilled.match(result)) {
       if (onClose) onClose();

@@ -1,5 +1,14 @@
 // src/components/electronics/ElectronicsFilters.jsx
-import React, { useState } from 'react';
+import { useState } from 'react';
+
+type ElectronicsFiltersProps = {
+    onFilterChange?: (filters: {
+        conditions: string[];
+        brands: string[];
+        searchQuery: string;
+        maxPrice: number;
+    }) => void;
+};
 
 /**
  * ElectronicsFilters Component
@@ -9,15 +18,15 @@ import React, { useState } from 'react';
  * Props:
  * - onFilterChange: Callback when filters change
  */
-const ElectronicsFilters = ({ onFilterChange }) => {
-    const [selectedConditions, setSelectedConditions] = useState([]);
-    const [selectedBrands, setSelectedBrands] = useState([]);
+const ElectronicsFilters = ({ onFilterChange }: ElectronicsFiltersProps) => {
+    const [selectedConditions, setSelectedConditions] = useState<string[]>([]);
+    const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [maxPrice, setMaxPrice] = useState(150000);
 
     const brands = ['Dell', 'Apple', 'Sony', 'JBL', 'Logitech', 'Lenovo', 'Anker', 'Samsung', 'TP-Link'];
 
-    const triggerChange = (updated) => {
+    const triggerChange = (updated: Partial<{ conditions: string[]; brands: string[]; searchQuery: string; maxPrice: number }>) => {
         if (onFilterChange) {
             onFilterChange({
                 conditions: selectedConditions,
@@ -29,13 +38,13 @@ const ElectronicsFilters = ({ onFilterChange }) => {
         }
     };
 
-    const handleSearchChange = (e) => {
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const val = e.target.value;
         setSearchQuery(val);
         triggerChange({ searchQuery: val });
     };
 
-    const handleConditionChange = (condition) => {
+    const handleConditionChange = (condition: string) => {
         const updated = selectedConditions.includes(condition)
             ? selectedConditions.filter((c) => c !== condition)
             : [...selectedConditions, condition];
@@ -43,7 +52,7 @@ const ElectronicsFilters = ({ onFilterChange }) => {
         triggerChange({ conditions: updated });
     };
 
-    const handleBrandChange = (brand) => {
+    const handleBrandChange = (brand: string) => {
         const updated = selectedBrands.includes(brand)
             ? selectedBrands.filter((b) => b !== brand)
             : [...selectedBrands, brand];
@@ -51,7 +60,7 @@ const ElectronicsFilters = ({ onFilterChange }) => {
         triggerChange({ brands: updated });
     };
 
-    const handlePriceChange = (e) => {
+    const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const val = Number(e.target.value);
         setMaxPrice(val);
         triggerChange({ maxPrice: val });

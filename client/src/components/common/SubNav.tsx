@@ -1,5 +1,10 @@
 // src/components/common/SubNav.jsx
-import React, { useState } from 'react';
+import { useState } from 'react';
+
+type SubNavProps = {
+  tabs?: string[];
+  onTabChange?: (tab: string) => void;
+};
 
 /**
  * SubNav Component
@@ -18,7 +23,7 @@ import React, { useState } from 'react';
  * - Horizontal scrolling on mobile
  * - Active tab highlighted with primary color
  */
-const SubNav = ({ tabs, onTabChange }) => {
+const SubNav = ({ tabs, onTabChange }: SubNavProps) => {
   // Default tabs if none provided
   const defaultTabs = ['All', 'Latest', 'Trending', 'Coming Soon', 'Featured', 'Recently Added'];
   const navTabs = tabs || defaultTabs;

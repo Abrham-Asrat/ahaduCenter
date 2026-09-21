@@ -1,5 +1,10 @@
 // src/components/electronics/CategoryPills.jsx
-import React, { useState } from 'react';
+import { useState } from 'react';
+
+type CategoryPillsProps = {
+    categories: string[];
+    onCategoryChange?: (category: string) => void;
+};
 
 /**
  * CategoryPills Component
@@ -13,10 +18,10 @@ import React, { useState } from 'react';
  * State:
  * - activeCategory: Currently selected category
  */
-const CategoryPills = ({ categories, onCategoryChange }) => {
+const CategoryPills = ({ categories, onCategoryChange }: CategoryPillsProps) => {
     const [activeCategory, setActiveCategory] = useState(categories[0] || 'All');
 
-    const handleClick = (category) => {
+    const handleClick = (category: string) => {
         setActiveCategory(category);
         if (onCategoryChange) {
             onCategoryChange(category);

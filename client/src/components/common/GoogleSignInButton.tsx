@@ -1,16 +1,20 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const GOOGLE_SCRIPT = 'https://accounts.google.com/gsi/client';
-let initializedClientId = null;
-let activeCredentialCallback = null;
+let initializedClientId: string | null = null;
+let activeCredentialCallback: ((response: GoogleCredentialResponse) => void) | null = null;
 
-const handleCredential = (response) => {
+const handleCredential = (response: GoogleCredentialResponse) => {
   activeCredentialCallback?.(response);
 };
 
-const GoogleSignInButton = ({ onCredential }) => {
-  const buttonRef = useRef(null);
-  const [available, setAvailable] = useState(null);
+type GoogleSignInButtonProps = {
+  onCredential: (response: GoogleCredentialResponse) => void;
+};
+
+const GoogleSignInButton = ({ onCredential }: GoogleSignInButtonProps) => {
+  const buttonRef = useRef<HTMLDivElement | null>(null);
+  const [available, setAvailable] = useState<boolean | null>(null);
 
   useEffect(() => {
     const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
@@ -46,7 +50,7 @@ const GoogleSignInButton = ({ onCredential }) => {
       return cleanup;
     }
 
-    let script = document.querySelector(`script[src="${GOOGLE_SCRIPT}"]`);
+    let script = document.querySelector<HTMLScriptElement>(`script[src="${GOOGLE_SCRIPT}"]`);
     if (!script) {
       script = document.createElement('script');
       script.src = GOOGLE_SCRIPT;

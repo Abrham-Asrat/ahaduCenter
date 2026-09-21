@@ -1,21 +1,25 @@
 // src/pages/LoginPage.jsx
-import React, { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { adminLoginThunk, loginThunk, resendVerificationThunk } from '../redux/slices/authSlice';
 import GoogleSignInButton from '../components/common/GoogleSignInButton';
-import { useState } from 'react';
+import type { RootState } from '../redux/store';
 
-const LoginPage = ({ onClose }) => {
+type LoginPageProps = {
+  onClose?: () => void;
+};
+
+const LoginPage = ({ onClose }: LoginPageProps) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, error } = useSelector((s) => s.auth);
+  const { loading, error } = useSelector((state: RootState) => state.auth);
   const [adminMode, setAdminMode] = useState(false);
   const [adminEmail, setAdminEmail] = useState('');
   const [adminPassword, setAdminPassword] = useState('');
   const [verificationEmail, setVerificationEmail] = useState('');
 
-  const handleCredential = useCallback(async (response) => {
+  const handleCredential = useCallback(async (response: GoogleCredentialResponse) => {
     const result = await dispatch(loginThunk({ credential: response.credential }));
     if (loginThunk.fulfilled.match(result)) {
       onClose?.();
@@ -27,7 +31,7 @@ const LoginPage = ({ onClose }) => {
     if (verificationEmail) await dispatch(resendVerificationThunk(verificationEmail));
   };
 
-  const handleAdminSubmit = async (event) => {
+  const handleAdminSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const result = await dispatch(adminLoginThunk({ email: adminEmail, password: adminPassword }));
     if (adminLoginThunk.fulfilled.match(result)) {

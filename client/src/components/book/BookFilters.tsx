@@ -1,5 +1,16 @@
 // src/components/book/BookFilters.jsx
-import React, { useState } from 'react';
+import { useState } from 'react';
+
+type BookFilterState = {
+  searchQuery: string;
+  availability: string[];
+  format: string[];
+  language: string;
+};
+
+type BookFiltersProps = {
+  onFilterChange?: (filters: BookFilterState) => void;
+};
 
 /**
  * BookFilters Component
@@ -9,25 +20,25 @@ import React, { useState } from 'react';
  * Props:
  * - onFilterChange: Callback when filters change
  */
-const BookFilters = ({ onFilterChange }) => {
+const BookFilters = ({ onFilterChange }: BookFiltersProps) => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [availability, setAvailability] = useState([]);
-  const [format, setFormat] = useState([]);
+  const [availability, setAvailability] = useState<string[]>([]);
+  const [format, setFormat] = useState<string[]>([]);
   const [language, setLanguage] = useState('All Languages');
 
-  const notifyChange = (query, avail, fmt, lang) => {
+  const notifyChange = (query: string, avail: string[], fmt: string[], lang: string) => {
     if (onFilterChange) {
       onFilterChange({ searchQuery: query, availability: avail, format: fmt, language: lang });
     }
   };
 
-  const handleSearchChange = (e) => {
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setSearchQuery(val);
     notifyChange(val, availability, format, language);
   };
 
-  const toggleAvailability = (value) => {
+  const toggleAvailability = (value: string) => {
     const updated = availability.includes(value)
       ? availability.filter((v) => v !== value)
       : [...availability, value];
@@ -35,7 +46,7 @@ const BookFilters = ({ onFilterChange }) => {
     notifyChange(searchQuery, updated, format, language);
   };
 
-  const toggleFormat = (value) => {
+  const toggleFormat = (value: string) => {
     const updated = format.includes(value)
       ? format.filter((v) => v !== value)
       : [...format, value];
@@ -127,7 +138,7 @@ const BookFilters = ({ onFilterChange }) => {
         <h4 className="text-xs uppercase tracking-wider text-on-surface-variant mb-3 font-semibold">Language</h4>
         <select
           value={language}
-          onChange={(e) => {
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
             const val = e.target.value;
             setLanguage(val);
             notifyChange(searchQuery, availability, format, val);
