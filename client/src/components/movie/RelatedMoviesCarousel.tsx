@@ -1,6 +1,11 @@
 // src/components/movie/RelatedMoviesCarousel.jsx
 
 import { Link } from 'react-router-dom';
+import type { Movie } from '../../types';
+
+interface RelatedMoviesCarouselProps {
+    movies: Movie[];
+}
 
 /**
  * RelatedMoviesCarousel Component
@@ -15,7 +20,7 @@ import { Link } from 'react-router-dom';
  * - Movie cards with poster and info overlay
  * - Hover effects
  */
-const RelatedMoviesCarousel = ({ movies }) => {
+const RelatedMoviesCarousel = ({ movies }: RelatedMoviesCarouselProps) => {
     return (
         <section className="max-w-7xl mx-auto px-4 md:px-8 py-12 border-t border-white/5">
             <h2 className="text-2xl md:text-3xl font-bold text-white mb-8">You Might Also Like</h2>

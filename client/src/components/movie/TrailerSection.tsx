@@ -1,3 +1,7 @@
+interface TrailerSectionProps {
+    thumbnailUrl: string;
+    onPlayTrailer?: () => void;
+}
 // src/components/movie/TrailerSection.jsx
 
 
@@ -10,7 +14,7 @@
  * - thumbnailUrl: Image URL for the trailer thumbnail
  * - onPlayTrailer: Function triggered when play button is clicked
  */
-const TrailerSection = ({ thumbnailUrl, onPlayTrailer }) => {
+const TrailerSection = ({ thumbnailUrl, onPlayTrailer }: TrailerSectionProps) => {
     return (
         <div className="glass-panel p-6 rounded-xl">
             <h2 className="text-2xl font-semibold text-white mb-6 flex items-center gap-2">

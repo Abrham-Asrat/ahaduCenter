@@ -1,3 +1,7 @@
+interface ScreenshotsSectionProps {
+    screenshots: string[];
+    onSelectScreenshot?: (url: string) => void;
+}
 // src/components/movie/ScreenshotsSection.jsx
 
 
@@ -10,7 +14,7 @@
  * - screenshots: Array of image URLs
  * - onSelectScreenshot: Callback function when a screenshot is clicked
  */
-const ScreenshotsSection = ({ screenshots, onSelectScreenshot }) => {
+const ScreenshotsSection = ({ screenshots, onSelectScreenshot }: ScreenshotsSectionProps) => {
     return (
         <div className="glass-panel p-6 rounded-xl">
             <h2 className="text-2xl font-semibold text-white mb-6 flex items-center justify-between">

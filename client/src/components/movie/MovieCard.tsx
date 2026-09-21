@@ -78,11 +78,11 @@ const MovieCard = ({ movie, onPlayTrailer, onToggleBookmark, isBookmarked: initi
 
           {/* Top-right badges (e.g., 4K quality) */}
           <div className="absolute top-2 right-2 flex gap-1 z-10">
-            {movie.quality && (
+              {typeof movie.quality === 'string' && movie.quality && (
               <span className="bg-secondary-container/90 text-secondary-fixed backdrop-blur-sm px-2 py-0.5 rounded text-xs font-semibold shadow-lg border border-secondary/30">
-                {movie.quality}
+                  {movie.quality}
               </span>
-            )}
+              )}
           </div>
 
           {/* Top-left rating badge with star icon */}
