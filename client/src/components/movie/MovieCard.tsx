@@ -1,8 +1,16 @@
 // src/components/movie/MovieCard.jsx
-import { useState } from 'react';
+import type { MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { addWishlistItem, removeWishlistItem } from '../../redux/slices/wishlistSlice';
+import type { Movie } from '../../types';
+
+interface MovieCardProps {
+  movie: Movie;
+  onPlayTrailer?: (movie: Movie) => void;
+  onToggleBookmark?: (movie: Movie, next: boolean) => void;
+  isBookmarked?: boolean;
+}
 
 /**
  * MovieCard Component
@@ -14,16 +22,16 @@ import { addWishlistItem, removeWishlistItem } from '../../redux/slices/wishlist
  * - onPlayTrailer: Optional callback function when play trailer is clicked
  * - onToggleBookmark: Optional callback function when bookmark is clicked
  */
-const MovieCard = ({ movie, onPlayTrailer, onToggleBookmark, isBookmarked: initialBookmarked = false }) => {
+const MovieCard = ({ movie, onPlayTrailer, onToggleBookmark, isBookmarked: initialBookmarked = false }: MovieCardProps) => {
   const dispatch = useAppDispatch();
   const wishlistItems = useAppSelector((s) => s.wishlist?.items ?? []);
 
-  const movieId = movie.id || movie._id;
+  const movieId = movie.id || movie._id || '';
   const isBookmarked = wishlistItems.some(
     (item) => item.id === movieId || item.itemId === movieId
   ) || initialBookmarked;
 
-  const handlePlayTrailer = (e) => {
+  const handlePlayTrailer = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
     if (onPlayTrailer) {
@@ -31,7 +39,7 @@ const MovieCard = ({ movie, onPlayTrailer, onToggleBookmark, isBookmarked: initi
     }
   };
 
-  const handleBookmark = (e) => {
+  const handleBookmark = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
     const newState = !isBookmarked;

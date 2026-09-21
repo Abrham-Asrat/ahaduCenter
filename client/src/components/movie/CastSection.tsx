@@ -1,3 +1,8 @@
+import type { Movie } from '../../types';
+
+interface CastSectionProps {
+    cast: NonNullable<Movie['cast']>;
+}
 // src/components/movie/CastSection.jsx
 
 
@@ -14,7 +19,7 @@
  * - Circular avatars with border
  * - Name and role below each avatar
  */
-const CastSection = ({ cast }) => {
+const CastSection = ({ cast }: CastSectionProps) => {
     return (
         <div className="glass-panel p-6 rounded-xl">
             <h2 className="text-2xl font-semibold text-white mb-6">Cast</h2>

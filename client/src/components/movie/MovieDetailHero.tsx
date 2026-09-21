@@ -1,6 +1,12 @@
 // src/components/movie/MovieDetailHero.jsx
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import type { Movie } from '../../types';
+
+interface MovieDetailHeroProps {
+    movie: Movie;
+    onShowToast?: (message: string) => void;
+}
 
 /**
  * MovieDetailHero Component
@@ -14,7 +20,7 @@ import { useNavigate } from 'react-router-dom';
  * - Genre chips
  * - Action buttons: Request Movie, Save, Share
  */
-const MovieDetailHero = ({ movie, onShowToast }) => {
+const MovieDetailHero = ({ movie, onShowToast }: MovieDetailHeroProps) => {
     const navigate = useNavigate();
     const [isSaved, setIsSaved] = useState(false);
 
@@ -74,7 +80,7 @@ const MovieDetailHero = ({ movie, onShowToast }) => {
                     <div className="flex flex-wrap items-center gap-4 mt-3">
                         {/* Genre chips */}
                         <div className="flex gap-2">
-                            {movie.genres?.map((genre) => (
+                            {movie.genres?.map((genre: string) => (
                                 <span
                                     key={genre}
                                     className="px-3 py-1 rounded bg-secondary/15 text-secondary text-xs font-semibold uppercase tracking-widest border border-secondary/30"

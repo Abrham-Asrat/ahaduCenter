@@ -1,5 +1,16 @@
 // src/components/movie/MovieFilters.jsx
-import { useState } from 'react';
+import { useState, type ChangeEvent } from 'react';
+
+type MovieFilterState = {
+  genres: string[];
+  contentType: string;
+  searchQuery: string;
+  country: string;
+};
+
+interface MovieFiltersProps {
+  onFilterChange?: (filters: MovieFilterState) => void;
+}
 
 /**
  * MovieFilters Component
@@ -9,8 +20,8 @@ import { useState } from 'react';
  * Props:
  * - onFilterChange: Callback function triggered when any filter updates
  */
-const MovieFilters = ({ onFilterChange }) => {
-  const [selectedGenres, setSelectedGenres] = useState([]);
+const MovieFilters = ({ onFilterChange }: MovieFiltersProps) => {
+  const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
   const [contentType, setContentType] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCountry, setSelectedCountry] = useState('All');
@@ -19,7 +30,7 @@ const MovieFilters = ({ onFilterChange }) => {
   const contentTypes = ['All', 'Movie', 'TV Series'];
   const countries = ['All', 'Ethiopia', 'USA', 'UK', 'Korea', 'Japan'];
 
-  const triggerChange = (updated) => {
+  const triggerChange = (updated: Partial<MovieFilterState>) => {
     if (onFilterChange) {
       onFilterChange({
         genres: selectedGenres,
@@ -31,13 +42,13 @@ const MovieFilters = ({ onFilterChange }) => {
     }
   };
 
-  const handleSearchChange = (e) => {
+  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setSearchQuery(val);
     triggerChange({ searchQuery: val });
   };
 
-  const handleGenreChange = (genre) => {
+  const handleGenreChange = (genre: string) => {
     const updated = selectedGenres.includes(genre)
       ? selectedGenres.filter((g) => g !== genre)
       : [...selectedGenres, genre];
@@ -45,12 +56,12 @@ const MovieFilters = ({ onFilterChange }) => {
     triggerChange({ genres: updated });
   };
 
-  const handleContentTypeChange = (type) => {
+  const handleContentTypeChange = (type: string) => {
     setContentType(type);
     triggerChange({ contentType: type });
   };
 
-  const handleCountryChange = (e) => {
+  const handleCountryChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const country = e.target.value;
     setSelectedCountry(country);
     triggerChange({ country });

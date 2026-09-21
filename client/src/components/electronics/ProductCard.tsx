@@ -24,7 +24,7 @@ interface ProductCardProps {
  * - onCompare: Function
  * - onToggleWishlist: Function
  */
-const ProductCard = ({ product, onAddToCart, onCompare, onToggleWishlist, isWishlisted: initialWishlisted = false }: ProductCardProps) => {
+const ProductCard = ({ product, onCompare, onToggleWishlist, isWishlisted: initialWishlisted = false }: ProductCardProps) => {
   const dispatch = useAppDispatch();
   const wishlistItems = useAppSelector((s) => s.wishlist?.items ?? []);
 
@@ -39,13 +39,7 @@ const ProductCard = ({ product, onAddToCart, onCompare, onToggleWishlist, isWish
     Refurbished: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
   };
 
-  const badgeClass = conditionStyles[product.condition ?? 'New' as keyof typeof conditionStyles] || conditionStyles.New;
-
-  const handleCartClick = (e: MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (onAddToCart) onAddToCart(product);
-  };
+  const badgeClass = conditionStyles[(product.condition ?? 'New') as keyof typeof conditionStyles] || conditionStyles.New;
 
   const handleCompareClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();

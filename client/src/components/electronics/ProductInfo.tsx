@@ -82,7 +82,7 @@ const ProductInfo = ({ product, onShowToast, onConfirmPickUp, orderLoading = fal
             {/* Price block */}
             <div className="glass-panel p-6 rounded-xl mb-6 border-l-4 border-l-primary flex flex-col gap-2 shadow-lg">
                 <div className="flex items-baseline gap-3">
-                    <span className="text-3xl text-primary font-extrabold">ETB {product.price.toLocaleString()}</span>
+                    <span className="text-3xl text-primary font-extrabold">ETB {(product.price ?? 0).toLocaleString()}</span>
                     {product.originalPrice && (
                         <span className="text-on-surface-variant line-through font-medium">ETB {product.originalPrice.toLocaleString()}</span>
                     )}

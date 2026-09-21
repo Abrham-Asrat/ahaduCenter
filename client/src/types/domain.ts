@@ -44,6 +44,18 @@ export interface Movie {
   backdropUrl?: string;
   genres?: string[];
   rating?: number;
+  year?: string | number;
+  country?: string;
+  runtime?: string;
+  quality?: string;
+  language?: string;
+  subtitles?: string;
+  bannerUrl?: string;
+  director?: string;
+  writers?: string;
+  studio?: string;
+  releaseDate?: string;
+  cast?: Array<{ id?: string; name: string; role?: string; photoUrl?: string }>;
   [key: string]: unknown;
 }
 

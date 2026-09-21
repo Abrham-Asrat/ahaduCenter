@@ -1,3 +1,8 @@
+import type { Movie } from '../../types';
+
+interface MovieInfoSidebarProps {
+    movie: Movie;
+}
 // src/components/movie/MovieInfoSidebar.jsx
 
 
@@ -14,7 +19,7 @@
  * - Info list: director, writers, studio, release date
  * - Sticky positioning on desktop
  */
-const MovieInfoSidebar = ({ movie }) => {
+const MovieInfoSidebar = ({ movie }: MovieInfoSidebarProps) => {
     return (
         <div className="sticky top-[100px] flex flex-col gap-6">
             {/* Movie Details Card */}
