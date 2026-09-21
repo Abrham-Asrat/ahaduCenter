@@ -132,3 +132,17 @@ export interface BookActionResult {
   borrowing?: BookActionResult;
   reservation?: BookActionResult;
 }
+
+export interface Borrowing {
+  _id?: string;
+  id?: string;
+  bookId?: string | { _id?: string; id?: string; title?: string; author?: string; coverUrl?: string };
+  title?: string;
+  author?: string;
+  coverUrl?: string;
+  status: string;
+  dueDate?: string;
+  borrowDate?: string;
+  returnDate?: string;
+  renewalsLeft: number;
+}

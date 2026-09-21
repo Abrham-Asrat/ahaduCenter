@@ -1,5 +1,6 @@
 // src/pages/BorrowingHistoryPage.jsx
 import { useState, useEffect } from 'react';
+import type { Borrowing } from '../types';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import { useNavigate } from 'react-router-dom';
@@ -13,13 +14,13 @@ import { userService } from '../services/userService';
 const BorrowingHistoryPage = () => {
   const navigate = useNavigate();
   const [activeFilter, setActiveFilter] = useState('All');
-  const [borrowings, setBorrowings] = useState([]);
+  const [borrowings, setBorrowings] = useState<Borrowing[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [actionLoadingId, setActionLoadingId] = useState(null);
-  const [toastMessage, setToastMessage] = useState(null);
+  const [error, setError] = useState<string | null>(null);
+  const [actionLoadingId, setActionLoadingId] = useState<string | null>(null);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-  const showToast = (msg) => {
+  const showToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 3000);
   };
@@ -72,7 +73,7 @@ const BorrowingHistoryPage = () => {
         return b.status === activeFilter;
       });
 
-  const handleReturn = async (id, title) => {
+  const handleReturn = async (id: string, title: string) => {
     setActionLoadingId(id);
     try {
       const updatedRecord = await userService.returnBook(id);
@@ -97,7 +98,7 @@ const BorrowingHistoryPage = () => {
     }
   };
 
-  const handleRenew = async (id, title) => {
+  const handleRenew = async (id: string, title: string) => {
     setActionLoadingId(id);
     try {
       const updatedRecord = await userService.renewBorrowing(id);
@@ -126,7 +127,7 @@ const BorrowingHistoryPage = () => {
     }
   };
 
-  const handleBorrowAgain = (title, bookId) => {
+  const handleBorrowAgain = (title: string, bookId?: string) => {
     if (bookId) {
       navigate(`/books/${bookId}`);
     } else {
@@ -135,7 +136,7 @@ const BorrowingHistoryPage = () => {
     }
   };
 
-  const getStatusBadge = (status) => {
+  const getStatusBadge = (status: string) => {
     switch (status) {
       case 'Active':
         return 'bg-primary/15 text-primary border-primary/20';
@@ -148,7 +149,7 @@ const BorrowingHistoryPage = () => {
     }
   };
 
-  const formatDate = (dateStr) => {
+  const formatDate = (dateStr?: string) => {
     if (!dateStr) return '';
     try {
       return new Date(dateStr).toLocaleDateString('en-US', {
@@ -247,11 +248,12 @@ const BorrowingHistoryPage = () => {
           <div className="overflow-x-auto">
             <div className="flex flex-col gap-6">
               {filteredBorrowings.map((borrowing) => {
-                const id = borrowing._id || borrowing.id;
-                const bookId = borrowing.bookId?._id || borrowing.bookId;
-                const cover = borrowing.coverUrl || borrowing.bookId?.coverUrl || 'https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&w=600&q=80';
-                const title = borrowing.title || borrowing.bookId?.title || 'Untitled Book';
-                const author = borrowing.author || borrowing.bookId?.author || 'Unknown Author';
+                const id = borrowing._id || borrowing.id || '';
+                const relatedBook = typeof borrowing.bookId === 'object' ? borrowing.bookId : undefined;
+                const bookId = relatedBook?._id || relatedBook?.id || (typeof borrowing.bookId === 'string' ? borrowing.bookId : borrowing.id) || '';
+                const cover = borrowing.coverUrl || relatedBook?.coverUrl || 'https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&w=600&q=80';
+                const title = borrowing.title || relatedBook?.title || 'Untitled Book';
+                const author = borrowing.author || relatedBook?.author || 'Unknown Author';
                 const isActionPending = actionLoadingId === id;
 
                 return (
