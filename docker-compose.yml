@@ -8,7 +8,7 @@ services:
         protocol: tcp
         mode: host
     volumes:
-      - ./mongo_data:/data/db
+      - mongo_data:/data/db
     healthcheck:
       test: ["CMD-SHELL", "mongosh --quiet --eval \"db.adminCommand('ping').ok\""]
       interval: 10s
@@ -39,9 +39,13 @@ services:
       context: ./client
       args:
         VITE_API_BASE_URL: /api
-        VITE_GOOGLE_CLIENT_ID: ${VITE_GOOGLE_CLIENT_ID}
+        # Set VITE_GOOGLE_CLIENT_ID in the shell when building with Google login.
+        VITE_GOOGLE_CLIENT_ID: ${VITE_GOOGLE_CLIENT_ID:-}
     restart: unless-stopped
     depends_on:
       - api
     ports:
       - "80:80"
+
+volumes:
+  mongo_data:
