@@ -1,7 +1,7 @@
 // Stores movie catalog, detail, and review request state.
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { movieService } from '../../services/movieService';
-import type { Movie, PaginationState } from '../../types';
+import type { Movie, MovieQuery, PaginationState } from '../../types';
 
 interface MovieState {
   movies: Movie[];
@@ -10,15 +10,6 @@ interface MovieState {
   loading: boolean;
   error: string | null;
   pagination: PaginationState;
-}
-
-interface MovieQuery {
-  page?: number;
-  limit?: number;
-  category?: string;
-  q?: string;
-  genre?: string;
-  sort?: string;
 }
 
 // ── Movie Thunks ──

@@ -7,6 +7,8 @@ import SubNav from '../components/common/SubNav';
 import MovieFilters from '../components/movie/MovieFilters';
 import MovieCard from '../components/movie/MovieCard';
 import Pagination from '../components/common/Pagination';
+import type { ChangeEvent } from 'react';
+import type { Movie, MovieQuery } from '../types';
 
 /**
  * MovieCenterPage Component
@@ -40,8 +42,8 @@ const MovieCenterPage = () => {
   };
 
   // ── Build query params from local filter/tab state ───────────────────────────
-  const buildParams = useCallback(() => {
-    const params = { page: currentPage, limit: 12 };
+  const buildParams = useCallback((): MovieQuery => {
+    const params: MovieQuery = { page: currentPage, limit: 12 };
 
     // Tab → API param mapping
     if (activeTab === 'Latest')         params.sort = 'latest';
@@ -63,17 +65,17 @@ const MovieCenterPage = () => {
   }, [dispatch, buildParams]);
 
   // ── Control change handlers ──────────────────────────────────────────────────
-  const handleFilterChange = (newFilters) => {
+  const handleFilterChange = (newFilters: { genres: string[]; contentType: string; searchQuery: string; country: string }) => {
     setFilters(newFilters);
     setCurrentPage(1);
   };
 
-  const handleTabChange = (tab) => {
+  const handleTabChange = (tab: string) => {
     setActiveTab(tab);
     setCurrentPage(1);
   };
 
-  const handlePageChange = (page) => {
+  const handlePageChange = (page: number) => {
     setCurrentPage(page);
     const catalogEl = document.getElementById('movie-catalog');
     if (catalogEl) {
@@ -85,11 +87,11 @@ const MovieCenterPage = () => {
     dispatch(fetchMovies(buildParams()));
   };
 
-  const handlePlayTrailer = (movie) => {
+  const handlePlayTrailer = (movie: Movie) => {
     setActiveTrailer(movie);
   };
 
-  const handleToggleBookmark = (movie, isSaved) => {
+  const handleToggleBookmark = (movie: Movie, isSaved: boolean) => {
     setBookmarkedIds((prev) =>
       isSaved ? [...prev, movie.id || movie._id] : prev.filter((id) => id !== (movie.id || movie._id))
     );

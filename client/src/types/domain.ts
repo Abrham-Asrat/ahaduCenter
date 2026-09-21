@@ -122,6 +122,28 @@ export interface BookQuery {
   sort?: string;
 }
 
+export interface ProductQuery {
+  page?: number;
+  limit?: number;
+  category?: string;
+  q?: string;
+  condition?: string;
+  brand?: string;
+  maxPrice?: number;
+  sort?: string;
+}
+
+export interface MovieQuery {
+  page?: number;
+  limit?: number;
+  sort?: string;
+  availability?: string;
+  featured?: boolean;
+  q?: string;
+  country?: string;
+  genre?: string;
+}
+
 export interface BookActionResult {
   dueDate?: string;
   expiryDate?: string;

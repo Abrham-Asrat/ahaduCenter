@@ -1,7 +1,7 @@
 // Stores electronics catalog and product detail request state.
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { productService } from '../../services/productService';
-import type { PaginationState, Product } from '../../types';
+import type { PaginationState, Product, ProductQuery } from '../../types';
 
 interface ProductState {
   products: Product[];
@@ -9,14 +9,6 @@ interface ProductState {
   loading: boolean;
   error: string | null;
   pagination: PaginationState;
-}
-
-interface ProductQuery {
-  page?: number;
-  limit?: number;
-  category?: string;
-  q?: string;
-  sort?: string;
 }
 
 // ── Product Thunks ──

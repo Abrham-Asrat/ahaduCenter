@@ -8,6 +8,8 @@ import ElectronicsFilters from '../components/electronics/ElectronicsFilters';
 import ProductCard from '../components/electronics/ProductCard';
 import Pagination from '../components/common/Pagination';
 import { useNavigate } from 'react-router-dom';
+import type { ChangeEvent } from 'react';
+import type { Product, ProductQuery } from '../types';
 
 /**
  * ElectronicsPage Component
@@ -45,8 +47,8 @@ const ElectronicsPage = () => {
   const categories = ['All', 'Laptops', 'Phones', 'Audio', 'Accessories'];
 
   // ── Build query params from local filter/sort/page state ─────────────────────
-  const buildParams = useCallback(() => {
-    const params = { page: currentPage, limit: 12 };
+  const buildParams = useCallback((): ProductQuery => {
+    const params: ProductQuery = { page: currentPage, limit: 12 };
 
     if (activeCategory && activeCategory !== 'All') params.category = activeCategory;
       if (filterState.searchQuery) params.q = filterState.searchQuery;
@@ -72,22 +74,22 @@ const ElectronicsPage = () => {
   }, [dispatch, buildParams]);
 
   // ── Control change handlers ───────────────────────────────────────────────────
-  const handleFilterChange = (newFilters) => {
+  const handleFilterChange = (newFilters: Partial<typeof filterState>) => {
     setFilterState((prev) => ({ ...prev, ...newFilters }));
     setCurrentPage(1);
   };
 
-  const handleCategoryChange = (category) => {
+  const handleCategoryChange = (category: string) => {
     setActiveCategory(category);
     setCurrentPage(1);
   };
 
-  const handleSortChange = (e) => {
+  const handleSortChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setSortOption(e.target.value);
     setCurrentPage(1);
   };
 
-  const handlePageChange = (page) => {
+  const handlePageChange = (page: number) => {
     setCurrentPage(page);
     const catalogEl = document.getElementById('electronics-catalog');
     if (catalogEl) {
@@ -99,16 +101,16 @@ const ElectronicsPage = () => {
     dispatch(fetchProducts(buildParams()));
   };
 
-  const handleAddToCart = (product) => {
+  const handleAddToCart = (product: Product) => {
     showToast(`"${product.name}" reserved for in-store inquiry! Visit our physical location.`);
   };
 
-  const handleCompare = (product) => {
+  const handleCompare = (product: Product) => {
     showToast(`"${product.name}" added to product comparison!`);
     setTimeout(() => navigate('/compare'), 1200);
   };
 
-  const handleToggleWishlist = (product, isSaved) => {
+  const handleToggleWishlist = (product: Product, isSaved: boolean) => {
     const productId = product._id || product.id;
     if (isSaved) {
       setWishlistIds((prev) => [...prev, productId]);
