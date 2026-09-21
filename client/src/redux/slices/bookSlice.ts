@@ -139,7 +139,7 @@ export const bookSlice = createSlice({
       })
       .addCase(fetchBooks.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = typeof action.payload === 'string' ? action.payload : null;
       })
 
       // Fetch Single Book
@@ -154,7 +154,7 @@ export const bookSlice = createSlice({
       })
       .addCase(fetchBook.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = typeof action.payload === 'string' ? action.payload : null;
       })
 
       // Borrow Book
@@ -162,12 +162,12 @@ export const bookSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(borrowBook.fulfilled, (state, action) => {
+      .addCase(borrowBook.fulfilled, (state) => {
         state.loading = false;
       })
       .addCase(borrowBook.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = typeof action.payload === 'string' ? action.payload : null;
       })
 
       // Reserve Book
@@ -175,12 +175,12 @@ export const bookSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(reserveBook.fulfilled, (state, action) => {
+      .addCase(reserveBook.fulfilled, (state) => {
         state.loading = false;
       })
       .addCase(reserveBook.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = typeof action.payload === 'string' ? action.payload : null;
       })
 
       // Fetch Book Reviews
@@ -196,7 +196,7 @@ export const bookSlice = createSlice({
       })
       .addCase(fetchBookReviews.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = typeof action.payload === 'string' ? action.payload : null;
       })
 
       // Create Book Review
@@ -212,7 +212,7 @@ export const bookSlice = createSlice({
       })
       .addCase(createBookReview.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = typeof action.payload === 'string' ? action.payload : null;
       });
   },
 });

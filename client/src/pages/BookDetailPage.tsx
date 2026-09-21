@@ -16,6 +16,7 @@ import BookDetailTabs from '../components/book/BookDetailTabs';
 import RelatedBooks from '../components/book/RelatedBooks';
 import ReviewsCommentsSection from '../components/common/ReviewsCommentsSection';
 import type { Review } from '../types';
+import type { Book } from '../types';
 
 /**
  * BookDetailPage Component
@@ -105,9 +106,8 @@ const BookDetailPage = () => {
 
   // ── Map Redux book to the shape expected by child components ─────────────────
   // The API returns snake_case/camelCase fields; map to what BookInfoSection expects
-  const bookData = book
+  const bookData: Book | null = book
     ? {
-        ...book,
         id: book._id || book.id,
         title: book.title,
         author: book.author,
@@ -115,7 +115,7 @@ const BookDetailPage = () => {
         year: book.publishedYear ? String(book.publishedYear) : typeof book.year === 'string' || typeof book.year === 'number' ? book.year : undefined,
         isbn: book.isbn,
         rating: book.rating || 0,
-        reviews: book.reviewCount || reviews.length || 0,
+        reviews: typeof book.reviewCount === 'number' ? book.reviewCount : reviews.length,
         description: book.description,
         availableCopies: book.availableCopies ?? book.available_copies ?? 0,
         location: book.location || 'Main Branch',
@@ -245,7 +245,7 @@ const BookDetailPage = () => {
             <ReviewsCommentsSection
               title="Reader Reviews & Discussion"
               initialReviews={mappedReviews}
-              onSubmitReview={token ? handleSubmitReview : null}
+              onSubmitReview={token ? handleSubmitReview : undefined}
               isAuthenticated={!!token}
             />
 
