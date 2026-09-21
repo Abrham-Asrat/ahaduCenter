@@ -117,7 +117,7 @@ const Navbar = () => {
                 : 'text-on-surface-variant hover:text-primary'
                 }`}
             >
-              About / Contact Us
+              Contact Us
             </Link>
           </div>
 
