@@ -115,7 +115,7 @@ export const movieSlice = createSlice({
       })
       .addCase(fetchMovies.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+          state.error = typeof action.payload === 'string' ? action.payload : null;
       })
 
       // Fetch Single Movie
@@ -130,7 +130,7 @@ export const movieSlice = createSlice({
       })
       .addCase(fetchMovie.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+          state.error = typeof action.payload === 'string' ? action.payload : null;
       })
 
       // Fetch Movie Reviews
@@ -146,7 +146,7 @@ export const movieSlice = createSlice({
       })
       .addCase(fetchMovieReviews.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+          state.error = typeof action.payload === 'string' ? action.payload : null;
       })
 
       // Create Movie Review
@@ -162,7 +162,7 @@ export const movieSlice = createSlice({
       })
       .addCase(createMovieReview.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+          state.error = typeof action.payload === 'string' ? action.payload : null;
       });
   },
 });

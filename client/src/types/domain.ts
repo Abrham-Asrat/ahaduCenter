@@ -62,7 +62,7 @@ export interface Movie {
   thumbnailUrl?: string;
   writers?: string | string[];
   director?: string;
-  writers?: string;
+ 
   studio?: string;
   releaseDate?: string;
   quality?: string;

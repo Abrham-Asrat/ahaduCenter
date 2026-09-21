@@ -17,7 +17,7 @@ import MovieInfoSidebar from '../components/movie/MovieInfoSidebar';
 import RelatedMoviesCarousel from '../components/movie/RelatedMoviesCarousel';
 import ReviewsCommentsSection from '../components/common/ReviewsCommentsSection';
 import Footer from '../components/common/Footer';
-import type { Movie, Review } from '../types';
+import type { Movie } from '../types';
 
 /**
  * MovieDetailPage Component
@@ -88,7 +88,11 @@ const MovieDetailPage = () => {
           selectedMovie.bannerImage ||
           selectedMovie.bannerUrl ||
           '',
-        year: selectedMovie.year || selectedMovie.releaseYear,
+        year: typeof selectedMovie.year === 'string' || typeof selectedMovie.year === 'number'
+          ? selectedMovie.year
+          : typeof selectedMovie.releaseYear === 'string' || typeof selectedMovie.releaseYear === 'number'
+            ? selectedMovie.releaseYear
+            : undefined,
         country: selectedMovie.country,
         runtime: selectedMovie.runtime,
         quality: selectedMovie.quality || '4K',
@@ -103,7 +107,9 @@ const MovieDetailPage = () => {
         studio: selectedMovie.studio,
         releaseDate: selectedMovie.releaseDate,
         trailerUrl: selectedMovie.trailerUrl,
-        description: selectedMovie.description || selectedMovie.synopsis || '',
+        description: typeof selectedMovie.description === 'string'
+          ? selectedMovie.description
+          : typeof selectedMovie.synopsis === 'string' ? selectedMovie.synopsis : '',
         cast: (selectedMovie.cast || []).map((c, i) => ({
           id: c._id || c.id || i,
           name: c.name,
@@ -114,7 +120,11 @@ const MovieDetailPage = () => {
             c.image ||
             `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(c.name || 'Actor')}`,
         })),
-        screenshots: selectedMovie.screenshots || selectedMovie.images || [],
+        screenshots: Array.isArray(selectedMovie.screenshots)
+          ? selectedMovie.screenshots.filter((item): item is string => typeof item === 'string')
+          : Array.isArray(selectedMovie.images)
+            ? selectedMovie.images.filter((item): item is string => typeof item === 'string')
+            : [],
         trailerThumbnail:
           selectedMovie.trailerThumbnail ||
           selectedMovie.thumbnailUrl ||
@@ -129,16 +139,20 @@ const MovieDetailPage = () => {
     .filter((m) => (m._id || m.id) !== id && (m._id || m.id) !== movieId)
     .slice(0, 8)
     .map((m) => ({
-      id: m._id || m.id,
+      id: m._id || m.id || `movie-${m.title}`,
       title: m.title,
       posterUrl: m.posterImage || m.posterUrl || m.bannerImage || m.bannerUrl || '',
-      year: m.year || m.releaseYear,
+      year: typeof m.year === 'string' || typeof m.year === 'number'
+        ? m.year
+        : typeof m.releaseYear === 'string' || typeof m.releaseYear === 'number'
+          ? m.releaseYear
+          : undefined,
       rating: m.rating || 0,
     }));
 
   // ── Map Redux reviews to ReviewsCommentsSection shape ────────────────────────
   const mappedReviews = reviews.map((r) => ({
-    id: r._id || r.id,
+    id: r._id || r.id || `review-${r.rating}-${r.comment}`,
     name: r.user?.name || r.name || 'Ahadu Member',
     avatar:
       r.user?.avatar ||
@@ -245,7 +259,7 @@ const MovieDetailPage = () => {
             <span className="material-symbols-outlined text-red-400 text-5xl">error</span>
             <p className="text-red-300 text-lg font-medium">{error}</p>
             <button
-              onClick={() => dispatch(fetchMovie(id))}
+              onClick={() => { if (id) dispatch(fetchMovie(id)); }}
               className="px-6 py-2 bg-primary text-black font-bold rounded-xl hover:opacity-90 transition-opacity"
             >
               Retry
@@ -273,7 +287,7 @@ const MovieDetailPage = () => {
                     <span>Storyline</span>
                   </h2>
                   <p className="text-lg text-on-surface-variant leading-relaxed">
-                    {movie.description}
+                    {typeof movie.description === 'string' ? movie.description : ''}
                   </p>
                 </div>
 
