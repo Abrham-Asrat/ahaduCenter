@@ -1,3 +1,4 @@
+// API operations for book catalog, borrowing, reservations, and reviews.
 import API from './api';
 
 export const bookService = {

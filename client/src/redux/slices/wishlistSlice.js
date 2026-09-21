@@ -1,3 +1,4 @@
+// Stores the authenticated user's wishlist and mutation request state.
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { userService } from '../../services/userService';
 

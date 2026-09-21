@@ -1,3 +1,4 @@
+// Stores electronics catalog and product detail request state.
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { productService } from '../../services/productService';
 

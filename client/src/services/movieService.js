@@ -1,3 +1,4 @@
+// API operations for movies, reviews, and movie requests.
 import API from './api';
 
 export const movieService = {

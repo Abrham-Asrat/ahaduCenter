@@ -1,3 +1,4 @@
+// API operations for checkout and purchase history.
 import API from './api';
 
 export const orderService = {

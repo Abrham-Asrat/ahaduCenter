@@ -1,3 +1,4 @@
+// API operations for the electronics catalog and product details.
 import API from './api';
 
 export const productService = {

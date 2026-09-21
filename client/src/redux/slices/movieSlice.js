@@ -1,3 +1,4 @@
+// Stores movie catalog, detail, and review request state.
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { movieService } from '../../services/movieService';
 

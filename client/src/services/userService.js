@@ -1,3 +1,4 @@
+// API operations for profiles, activity, borrowing, wishlist, and notifications.
 import API from './api';
 
 export const userService = {
