@@ -1,11 +1,12 @@
 // src/pages/BookConfirmPage.jsx
-import { useState, useEffect } from 'react';
+import { useState, useEffect, type FormEvent } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { fetchBook } from '../redux/slices/bookSlice';
 import { bookService } from '../services/bookService';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
+import type { BookActionResult } from '../types';
 
 /**
  * BookConfirmPage Component
@@ -31,9 +32,9 @@ const BookConfirmPage = () => {
   const { selectedBook, loading: bookLoading } = useAppSelector((s) => s.book);
 
   // ── Page-level state ─────────────────────────────────────────────────────────
-  const [confirmState, setConfirmState] = useState('idle'); // 'idle' | 'loading' | 'success' | 'error'
-  const [serverResult, setServerResult] = useState(null);   // server response payload
-  const [confirmError, setConfirmError] = useState(null);   // error string
+  const [confirmState, setConfirmState] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [serverResult, setServerResult] = useState<BookActionResult | null>(null);
+  const [confirmError, setConfirmError] = useState<string | null>(null);
 
   // ── Fetch book on mount ───────────────────────────────────────────────────────
   useEffect(() => {
@@ -73,7 +74,7 @@ const BookConfirmPage = () => {
   }[action] || 'Success!';
 
   // ── Handle confirm ───────────────────────────────────────────────────────────
-  const handleConfirm = async (e) => {
+  const handleConfirm = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setConfirmState('loading');
     setConfirmError(null);

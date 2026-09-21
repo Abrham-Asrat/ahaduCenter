@@ -23,6 +23,7 @@ export interface Book {
   isbn?: string;
   rating?: number;
   about?: string;
+  coverImage?: string;
   reviews?: number;
   availableCopies?: number;
   location?: string;
@@ -50,6 +51,7 @@ export interface Movie {
   
   language?: string;
   subtitles?: string;
+  availability?: string;
   bannerUrl?: string;
   director?: string;
   writers?: string;
@@ -106,4 +108,26 @@ export interface PaginationState {
   total: number;
   totalPages: number;
   totalItems?: number;
+  currentPage?: number;
+}
+
+export interface BookQuery {
+  page?: number;
+  limit?: number;
+  category?: string;
+  q?: string;
+  availability?: string;
+  language?: string;
+  format?: string;
+  sort?: string;
+}
+
+export interface BookActionResult {
+  dueDate?: string;
+  expiryDate?: string;
+  pickupLocation?: string;
+  _id?: string;
+  data?: BookActionResult;
+  borrowing?: BookActionResult;
+  reservation?: BookActionResult;
 }

@@ -6,7 +6,7 @@ import type { Movie, PaginationState } from '../../types';
 interface MovieState {
   movies: Movie[];
   currentMovie: Movie | null;
-  reviews: Array<Record<string, unknown>>;
+  reviews: Array<Record<string, string | number | boolean>>;
   loading: boolean;
   error: string | null;
   pagination: PaginationState;

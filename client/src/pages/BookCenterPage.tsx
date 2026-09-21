@@ -7,8 +7,9 @@ import SubNav from '../components/common/SubNav';
 import BookFilters from '../components/book/BookFilters';
 import BookCard from '../components/book/BookCard';
 import Pagination from '../components/common/Pagination';
-import Footer from '../components/common/Footer';
 import { useNavigate } from 'react-router-dom';
+import type { Book, BookQuery } from '../types';
+import type { ChangeEvent } from 'react';
 
 /**
  * BookCenterPage Component
@@ -53,8 +54,8 @@ const BookCenterPage = () => {
   ];
 
   // ── Build query params from local filter/sort state ──────────────────────────
-  const buildParams = useCallback(() => {
-    const params = { page: currentPage, limit: 12 };
+  const buildParams = useCallback((): BookQuery => {
+    const params: BookQuery = { page: currentPage, limit: 12 };
 
     if (activeCategory !== 'All Categories') params.category = activeCategory;
     if (filterState.searchQuery) params.q = filterState.searchQuery;
@@ -76,22 +77,22 @@ const BookCenterPage = () => {
   }, [dispatch, buildParams]);
 
   // Reset to page 1 when filters/sort change (but not when currentPage changes)
-  const handleFilterChange = (newFilters) => {
+  const handleFilterChange = (newFilters: Partial<typeof filterState>) => {
     setFilterState((prev) => ({ ...prev, ...newFilters }));
     setCurrentPage(1);
   };
 
-  const handleCategoryChange = (cat) => {
+  const handleCategoryChange = (cat: string) => {
     setActiveCategory(cat);
     setCurrentPage(1);
   };
 
-  const handleSortChange = (e) => {
+  const handleSortChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setSortOption(e.target.value);
     setCurrentPage(1);
   };
 
-  const handlePageChange = (page) => {
+  const handlePageChange = (page: number) => {
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -100,7 +101,7 @@ const BookCenterPage = () => {
     dispatch(fetchBooks(buildParams()));
   };
 
-  const handleQuickAction = (book) => {
+  const handleQuickAction = (book: Book) => {
     if (book.availability === 'available') {
       navigate(`/book-confirm?action=borrow&id=${book._id || book.id}`);
     } else if (book.availability === 'reserved' || book.availability === 'borrowed') {

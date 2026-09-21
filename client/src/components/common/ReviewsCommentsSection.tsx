@@ -1,5 +1,28 @@
 // src/components/common/ReviewsCommentsSection.jsx
-import React, { useState } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
+
+interface ReviewItem {
+  id: string | number;
+  name: string;
+  avatar: string;
+  rating: number;
+  date: string;
+  comment: string;
+  helpfulCount: number;
+  liked: boolean;
+}
+
+interface ReviewPayload {
+  rating: number;
+  comment: string;
+}
+
+interface ReviewsCommentsSectionProps {
+  title?: string;
+  initialReviews?: ReviewItem[];
+  onSubmitReview?: (payload: ReviewPayload) => Promise<void>;
+  isAuthenticated?: boolean;
+}
 
 /**
  * ReviewsCommentsSection Component
@@ -25,11 +48,11 @@ import React, { useState } from 'react';
 const ReviewsCommentsSection = ({
   title = 'Community Reviews & Comments',
   initialReviews = [],
-  onSubmitReview = null,
+  onSubmitReview,
   isAuthenticated = true,
-}) => {
+}: ReviewsCommentsSectionProps) => {
   // Default mock reviews if none provided and no Redux data injected
-  const [reviews, setReviews] = useState(
+  const [reviews, setReviews] = useState<ReviewItem[]>(
     initialReviews.length > 0
       ? initialReviews
       : [
@@ -57,7 +80,7 @@ const ReviewsCommentsSection = ({
   );
 
   // Sync reviews when initialReviews prop changes (e.g., Redux fetch completes)
-  React.useEffect(() => {
+  useEffect(() => {
     if (initialReviews.length > 0) {
       setReviews(initialReviews);
     }
@@ -68,10 +91,10 @@ const ReviewsCommentsSection = ({
   const [hoverRating, setHoverRating] = useState(0);
   const [userName, setUserName] = useState('');
   const [commentText, setCommentText] = useState('');
-  const [toast, setToast] = useState(null);
+  const [toast, setToast] = useState<string | null>(null);
 
   // Handle helpful toggle
-  const handleLike = (id) => {
+  const handleLike = (id: string | number) => {
     setReviews((prev) =>
       prev.map((item) => {
         if (item.id === id) {
@@ -88,7 +111,7 @@ const ReviewsCommentsSection = ({
   };
 
   // Submit new review
-  const handleSubmitReview = async (e) => {
+  const handleSubmitReview = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!commentText.trim()) return;
 
