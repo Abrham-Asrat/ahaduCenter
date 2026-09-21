@@ -2,7 +2,7 @@ require('dotenv').config();
 
 const REQUIRED_VARS = [
   'PORT', 'MONGO_URI', 'JWT_SECRET',
-  'CLIENT_ORIGIN',
+  'CLIENT_ORIGIN', 'CLIENT_URL',
 ];
 const missing = REQUIRED_VARS.filter((key) => !process.env[key]);
 if (missing.length > 0) {
