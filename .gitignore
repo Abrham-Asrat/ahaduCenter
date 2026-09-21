@@ -13,6 +13,9 @@ dist/
 build/
 dist-extract/
 
+# Docker MongoDB data
+mongo_data/
+
 # Logs
 npm-debug.log*
 yarn-debug.log*

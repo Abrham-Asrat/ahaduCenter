@@ -2,8 +2,13 @@ services:
   mongo:
     image: mongo:7
     restart: unless-stopped
+    ports:
+      - target: 27017
+        published: "27017"
+        protocol: tcp
+        mode: host
     volumes:
-      - mongo_data:/data/db
+      - ./mongo_data:/data/db
     healthcheck:
       test: ["CMD-SHELL", "mongosh --quiet --eval \"db.adminCommand('ping').ok\""]
       interval: 10s
@@ -40,6 +45,3 @@ services:
       - api
     ports:
       - "80:80"
-
-volumes:
-  mongo_data:
