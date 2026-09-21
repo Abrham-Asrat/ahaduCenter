@@ -50,7 +50,14 @@ export const clearAll = createAsyncThunk(
   }
 );
 
-const initialState = {
+interface NotificationState {
+  notifications: Array<{ _id?: string; id?: string; isRead: boolean }>;
+  unreadCount: number;
+  loading: boolean;
+  error: string | null;
+}
+
+const initialState: NotificationState = {
   notifications: [],
   unreadCount: 0,
   loading: false,

@@ -114,7 +114,7 @@ const ShaderHero = () => {
         const uRes = gl.getUniformLocation(prog, 'u_resolution');
 
         // Mouse tracking (ShaderToy style)
-        let mouse = { x: canvas.width / 2, y: canvas.height / 2 };
+        const mouse = { x: canvas.width / 2, y: canvas.height / 2 };
         const handleMouseMove = (event) => {
             const rect = canvas.getBoundingClientRect();
             if (rect.width && rect.height) {

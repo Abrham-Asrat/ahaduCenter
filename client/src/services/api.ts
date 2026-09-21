@@ -27,7 +27,7 @@ api.interceptors.response.use(
       if (error.response.status === 401 && !error.config?.url?.startsWith('/auth/')) {
         store.dispatch(logoutAction());
         window.location.href = '/login';
-        return Promise.reject(new Error('Session expired. Please log in again.'));
+        return Promise.reject('Session expired. Please log in again.');
       }
 
       const message =

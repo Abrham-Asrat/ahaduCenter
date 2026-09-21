@@ -7,13 +7,6 @@ declare module '*.svg';
 
 declare module 'jwt-decode';
 
-declare module 'react-redux' {
-	import type { RootState, AppDispatch } from './redux/store';
-
-	export function useSelector<Selected = unknown>(selector: (state: RootState) => Selected): Selected;
-	export function useDispatch(): AppDispatch;
-}
-
 declare global {
 	interface Window {
 		google?: {
