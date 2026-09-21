@@ -1,3 +1,4 @@
+# Build the static client bundle, then serve it with nginx.
 FROM node:20-alpine AS build
 
 WORKDIR /app

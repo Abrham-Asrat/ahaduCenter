@@ -40,7 +40,7 @@ const OrderConfirmationPage = () => {
     };
 
     fetchOrder();
-  }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [id]);
 
   // ── Loading state ────────────────────────────────────────────────────────────
   if (loading) {

@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+// Shared design tokens and source globs for the client utility classes.
 export default {
   content: [
     "./index.html",

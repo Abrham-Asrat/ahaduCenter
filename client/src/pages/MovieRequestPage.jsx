@@ -13,6 +13,15 @@ const MovieRequestPage = () => {
   const [toastType, setToastType] = useState('success'); // 'success' | 'error'
   const [selectedRequestModal, setSelectedRequestModal] = useState(null);
 
+  // Form state
+  const [formData, setFormData] = useState({
+    title: '',
+    type: 'Movie',
+    year: '',
+    genre: '',
+    details: '',
+  });
+
   const showToast = (msg, type = 'success') => {
     setToastMessage(msg);
     setToastType(type);
@@ -29,15 +38,6 @@ const MovieRequestPage = () => {
       setFormData((prev) => ({ ...prev, title: movieParam }));
     }
   }, [location.search]);
-
-  // Form state
-  const [formData, setFormData] = useState({
-    title: '',
-    type: 'Movie',
-    year: '',
-    genre: '',
-    details: '',
-  });
 
   // Request history state
   const [requests, setRequests] = useState([]);
