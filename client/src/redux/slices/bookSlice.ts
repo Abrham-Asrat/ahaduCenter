@@ -1,13 +1,13 @@
 // Stores book catalog, detail, and borrowing request state.
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { bookService } from '../../services/bookService';
-import type { Book, BookQuery, PaginationState } from '../../types';
+import type { Book, BookQuery, PaginationState, Review } from '../../types';
 
 interface BookState {
   books: Book[];
   currentBook: Book | null;
   selectedBook: Book | null;
-  reviews: Array<Record<string, string | number | boolean>>;
+  reviews: Review[];
   loading: boolean;
   error: string | null;
   pagination: PaginationState;
@@ -76,7 +76,7 @@ export const fetchBookReviews = createAsyncThunk(
 
 export const createBookReview = createAsyncThunk(
   'book/createBookReview',
-  async ({ bookId, review }: { bookId: string; review: Record<string, unknown> }, { rejectWithValue }) => {
+  async ({ bookId, review }: { bookId: string; review: { rating: number; comment: string } }, { rejectWithValue }) => {
     try {
       const data = await bookService.createBookReview(bookId, review);
       return data;

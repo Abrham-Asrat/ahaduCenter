@@ -102,6 +102,19 @@ export interface Notification {
   isRead: boolean;
 }
 
+export interface Review {
+  _id?: string;
+  id?: string | number;
+  user?: { name?: string; avatar?: string };
+  name?: string;
+  avatar?: string;
+  rating: number;
+  comment: string;
+  createdAt?: string;
+  date?: string;
+  helpfulCount?: number;
+}
+
 export interface PaginationState {
   page: number;
   limit: number;

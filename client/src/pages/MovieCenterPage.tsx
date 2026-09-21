@@ -260,7 +260,7 @@ const MovieCenterPage = () => {
                           movie={movie}
                           onPlayTrailer={handlePlayTrailer}
                           onToggleBookmark={handleToggleBookmark}
-                          isBookmarked={bookmarkedIds.includes(movie._id || movie.id)}
+                          isBookmarked={bookmarkedIds.includes(movie._id || movie.id || '')}
                         />
                       </div>
                     ))}

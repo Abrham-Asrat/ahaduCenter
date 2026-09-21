@@ -15,7 +15,7 @@ import BookInfoSection from '../components/book/BookInfoSection';
 import BookDetailTabs from '../components/book/BookDetailTabs';
 import RelatedBooks from '../components/book/RelatedBooks';
 import ReviewsCommentsSection from '../components/common/ReviewsCommentsSection';
-import Footer from '../components/common/Footer';
+import type { Review } from '../types';
 
 /**
  * BookDetailPage Component
@@ -31,14 +31,14 @@ const BookDetailPage = () => {
 
   // ── Redux state ──────────────────────────────────────────────────────────────
   const { selectedBook: book, reviews, loading, error } = useAppSelector((s) => s.book);
-  const { token, user } = useAppSelector((s) => s.auth);
+  const { token } = useAppSelector((s) => s.auth);
 
   // ── Local UI state ───────────────────────────────────────────────────────────
-  const [toastMessage, setToastMessage] = useState(null);
-  const [actionMessage, setActionMessage] = useState(null); // server response after borrow/reserve
-  const [actionError, setActionError] = useState(null);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [actionMessage, setActionMessage] = useState<string | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
 
-  const showToast = (msg) => {
+  const showToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 4000);
   };
@@ -47,7 +47,7 @@ const BookDetailPage = () => {
   useEffect(() => {
     if (id) {
       dispatch(fetchBook(id));
-      dispatch(fetchBookReviews({ id, params: { page: 1, limit: 20 } }));
+      dispatch(fetchBookReviews(id));
     }
   }, [dispatch, id]);
 
@@ -59,6 +59,7 @@ const BookDetailPage = () => {
     }
     setActionError(null);
     try {
+      if (!id) return;
       const result = await dispatch(borrowBook(id)).unwrap();
       const msg =
         result?.message ||
@@ -81,6 +82,7 @@ const BookDetailPage = () => {
     }
     setActionError(null);
     try {
+      if (!id) return;
       const result = await dispatch(reserveBook(id)).unwrap();
       const msg =
         result?.message ||
@@ -96,8 +98,9 @@ const BookDetailPage = () => {
   };
 
   // ── Review submit handler ────────────────────────────────────────────────────
-  const handleSubmitReview = async ({ rating, comment }) => {
-    await dispatch(createBookReview({ id, payload: { rating, comment } })).unwrap();
+  const handleSubmitReview = async ({ rating, comment }: { rating: number; comment: string }) => {
+    if (!id) return;
+    await dispatch(createBookReview({ bookId: id, review: { rating, comment } })).unwrap();
   };
 
   // ── Map Redux book to the shape expected by child components ─────────────────
@@ -109,7 +112,7 @@ const BookDetailPage = () => {
         title: book.title,
         author: book.author,
         publisher: book.publisher || 'Ahadu Press',
-        year: book.publishedYear || book.year,
+        year: book.publishedYear ? String(book.publishedYear) : typeof book.year === 'string' || typeof book.year === 'number' ? book.year : undefined,
         isbn: book.isbn,
         rating: book.rating || 0,
         reviews: book.reviewCount || reviews.length || 0,
@@ -133,8 +136,8 @@ const BookDetailPage = () => {
     : null;
 
   // Map Redux reviews to ReviewsCommentsSection shape
-  const mappedReviews = reviews.map((r) => ({
-    id: r._id || r.id,
+  const mappedReviews = reviews.map((r: Review) => ({
+    id: r._id || r.id || `review-${r.rating}-${r.comment}`,
     name: r.user?.name || r.name || 'Ahadu Member',
     avatar:
       r.user?.avatar ||

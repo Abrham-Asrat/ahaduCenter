@@ -249,13 +249,13 @@ const ElectronicsPage = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {products.map((product, index) => (
                   <div
-                    key={product._id || product.id}
+                    key={product._id || product.id || index}
                     className="animate-fade-in"
                     style={{ animationDelay: `${index * 0.05}s` }}
                   >
                     <ProductCard
                       product={product}
-                      isWishlisted={wishlistIds.includes(product._id || product.id)}
+                      isWishlisted={wishlistIds.includes(product._id || product.id || '')}
                       onAddToCart={handleAddToCart}
                       onCompare={handleCompare}
                       onToggleWishlist={handleToggleWishlist}

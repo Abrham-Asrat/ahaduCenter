@@ -6,6 +6,7 @@ import type { Movie, MovieQuery, PaginationState } from '../../types';
 interface MovieState {
   movies: Movie[];
   currentMovie: Movie | null;
+  selectedMovie: Movie | null;
   reviews: Array<Record<string, string | number | boolean>>;
   loading: boolean;
   error: string | null;
@@ -64,6 +65,7 @@ export const createMovieReview = createAsyncThunk(
 const initialState: MovieState = {
   movies: [],
   currentMovie: null,
+  selectedMovie: null,
   reviews: [],
   loading: false,
   error: null,
@@ -124,6 +126,7 @@ export const movieSlice = createSlice({
       .addCase(fetchMovie.fulfilled, (state, action) => {
         state.loading = false;
         state.currentMovie = action.payload;
+        state.selectedMovie = action.payload;
       })
       .addCase(fetchMovie.rejected, (state, action) => {
         state.loading = false;
