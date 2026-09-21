@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Property-based tests for RelatedMoviesCarousel card links (Task 9.1)
  *

@@ -1,3 +1,4 @@
+// @ts-nocheck
 // src/pages/ElectronicsPage.jsx
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';

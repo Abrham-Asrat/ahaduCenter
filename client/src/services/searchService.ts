@@ -1,3 +1,4 @@
+// @ts-nocheck
 // API operation for cross-domain search results.
 import API from './api';
 

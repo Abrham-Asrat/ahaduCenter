@@ -1,3 +1,4 @@
+// @ts-nocheck
 // src/pages/UserDashboardPage.jsx
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';

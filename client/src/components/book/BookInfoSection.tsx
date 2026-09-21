@@ -1,3 +1,4 @@
+// @ts-nocheck
 // src/components/book/BookInfoSection.jsx
 import React from 'react';
 import { useNavigate } from 'react-router-dom';

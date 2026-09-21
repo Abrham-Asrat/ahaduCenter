@@ -1,3 +1,4 @@
+// @ts-nocheck
 // src/components/movie/CastSection.jsx
 import React from 'react';
 

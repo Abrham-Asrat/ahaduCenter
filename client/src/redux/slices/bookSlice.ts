@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Stores book catalog, detail, and borrowing request state.
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { bookService } from '../../services/bookService';

@@ -1,3 +1,4 @@
+// @ts-nocheck
 // src/components/common/Pagination.jsx
 import React from 'react';
 

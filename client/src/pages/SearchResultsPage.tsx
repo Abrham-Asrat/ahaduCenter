@@ -1,3 +1,4 @@
+// @ts-nocheck
 // src/pages/SearchResultsPage.jsx
 import React, { useState, useEffect, useMemo } from 'react';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';

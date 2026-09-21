@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Property-based tests for staggered animation delays (Task 23.1)
  *

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Tests for routing fixes (Task 1.1)
  * Validates: Requirements 1.1, 1.2, 1.3

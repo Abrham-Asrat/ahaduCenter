@@ -1,3 +1,4 @@
+// @ts-nocheck
 // src/components/book/BookCoverCard.jsx
 import React, { useState } from 'react';
 

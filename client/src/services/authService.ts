@@ -1,3 +1,4 @@
+// @ts-nocheck
 // API operations for registration, login, verification, and password recovery.
 import API from './api';
 

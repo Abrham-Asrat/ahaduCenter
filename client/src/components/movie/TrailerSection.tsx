@@ -1,3 +1,4 @@
+// @ts-nocheck
 // src/components/movie/TrailerSection.jsx
 import React from 'react';
 

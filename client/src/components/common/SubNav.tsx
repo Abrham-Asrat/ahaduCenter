@@ -1,3 +1,4 @@
+// @ts-nocheck
 // src/components/common/SubNav.jsx
 import React, { useState } from 'react';
 

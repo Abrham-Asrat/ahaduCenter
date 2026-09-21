@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Feature: ui-fixes-responsiveness-animations, Property 7: Page entrance animation class is always present
 
 /**

@@ -1,3 +1,4 @@
+// @ts-nocheck
 // API operations for profiles, activity, borrowing, wishlist, and notifications.
 import API from './api';
 

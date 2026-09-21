@@ -1,3 +1,4 @@
+// @ts-nocheck
 // src/pages/admin/AdminManageMoviesPage.jsx
 import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';

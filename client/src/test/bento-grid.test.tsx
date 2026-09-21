@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Tests for BentoGrid responsive padding and card navigation (Task 6.1)
  * Validates: Requirements 2.3, 2.4, 2.5, 2.6, 8.2

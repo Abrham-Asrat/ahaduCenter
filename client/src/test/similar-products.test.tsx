@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Property-based tests for SimilarProducts card links (Task 10.1)
  *

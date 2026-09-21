@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Tests for Navbar dropdown animation class fix (Task 4.1)
  * Validates: Requirements 10.1

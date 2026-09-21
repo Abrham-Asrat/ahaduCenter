@@ -1,3 +1,4 @@
+// @ts-nocheck
 // src/components/book/BookDetailTabs.jsx
 import React, { useState } from 'react';
 

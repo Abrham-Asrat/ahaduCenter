@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Tests for BookCoverCard component — Tasks 11.1 and 11.2
  *

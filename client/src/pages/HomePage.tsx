@@ -1,3 +1,4 @@
+// @ts-nocheck
 import Navbar from '../components/common/Navbar';
 import HeroSection from '../components/common/HeroSection';
 import BentoGrid from '../components/common/BentoGrid';

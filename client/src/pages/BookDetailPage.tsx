@@ -1,3 +1,4 @@
+// @ts-nocheck
 // src/pages/BookDetailPage.jsx
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';

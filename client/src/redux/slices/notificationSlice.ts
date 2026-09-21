@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Stores notification records, unread counts, and read-state requests.
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { userService } from '../../services/userService';

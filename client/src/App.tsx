@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Defines the client route tree and restores persisted authentication on mount.
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';

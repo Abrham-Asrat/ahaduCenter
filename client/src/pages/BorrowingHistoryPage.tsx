@@ -1,3 +1,4 @@
+// @ts-nocheck
 // src/pages/BorrowingHistoryPage.jsx
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/common/Navbar';

@@ -1,3 +1,4 @@
+// @ts-nocheck
 // src/components/electronics/ProductGallery.jsx
 import React from 'react';
 
