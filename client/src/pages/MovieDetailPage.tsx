@@ -17,6 +17,7 @@ import MovieInfoSidebar from '../components/movie/MovieInfoSidebar';
 import RelatedMoviesCarousel from '../components/movie/RelatedMoviesCarousel';
 import ReviewsCommentsSection from '../components/common/ReviewsCommentsSection';
 import Footer from '../components/common/Footer';
+import type { Movie, Review } from '../types';
 
 /**
  * MovieDetailPage Component
@@ -35,14 +36,14 @@ const MovieDetailPage = () => {
   const { token } = useAppSelector((s) => s.auth);
 
   // Derive stable movie ID from selectedMovie (handles both _id and id shapes)
-  const selectedMovieId = selectedMovie?._id || selectedMovie?.id || null;
+  const selectedMovieId = selectedMovie?._id || selectedMovie?.id;
 
   // ── Local UI state ───────────────────────────────────────────────────────────
-  const [toastMessage, setToastMessage] = useState(null);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [isTrailerOpen, setIsTrailerOpen] = useState(false);
-  const [selectedScreenshot, setSelectedScreenshot] = useState(null);
+  const [selectedScreenshot, setSelectedScreenshot] = useState<string | null>(null);
 
-  const showToast = (msg) => {
+  const showToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 3000);
   };
@@ -51,26 +52,27 @@ const MovieDetailPage = () => {
   useEffect(() => {
     if (id) {
       dispatch(fetchMovie(id));
-      dispatch(fetchMovieReviews({ id, params: { page: 1, limit: 20 } }));
+      dispatch(fetchMovieReviews(id));
     }
   }, [dispatch, id]);
 
   // ── Fetch related movies when selectedMovie is available ─────────────────────
   useEffect(() => {
     if (selectedMovie && selectedMovie.genres && selectedMovie.genres.length > 0) {
-      dispatch(fetchMovies({ genres: selectedMovie.genres[0], limit: 10 }));
+      dispatch(fetchMovies({ genre: selectedMovie.genres[0], limit: 10 }));
     }
   }, [dispatch, selectedMovieId]);
 
   // ── Review submit handler ────────────────────────────────────────────────────
-  const handleSubmitReview = async ({ rating, comment }) => {
-    await dispatch(createMovieReview({ id, payload: { rating, comment } })).unwrap();
+  const handleSubmitReview = async ({ rating, comment }: { rating: number; comment: string }) => {
+    if (!id) return;
+    await dispatch(createMovieReview({ movieId: id, review: { rating, comment } })).unwrap();
   };
 
   // ── Map selectedMovie to the shape expected by child components ──────────────
   const movieId = selectedMovieId;
 
-  const movie = selectedMovie
+  const movie: Movie | null = selectedMovie
     ? {
         id: movieId,
         title: selectedMovie.title,
@@ -308,7 +310,7 @@ const MovieDetailPage = () => {
               <ReviewsCommentsSection
                 title="Viewer Reviews & Discussions"
                 initialReviews={mappedReviews}
-                onSubmitReview={token ? handleSubmitReview : null}
+                onSubmitReview={token ? handleSubmitReview : undefined}
                 isAuthenticated={!!token}
               />
             </div>

@@ -20,6 +20,7 @@ export interface Book {
   description?: string;
   publisher?: string;
   year?: string | number;
+  releaseYear?: string | number;
   isbn?: string;
   rating?: number;
   about?: string;
@@ -53,6 +54,13 @@ export interface Movie {
   subtitles?: string;
   availability?: string;
   bannerUrl?: string;
+  bannerImage?: string;
+  posterImage?: string;
+  synopsis?: string;
+  images?: string[];
+  trailerThumbnail?: string;
+  thumbnailUrl?: string;
+  writers?: string | string[];
   director?: string;
   writers?: string;
   studio?: string;
@@ -60,7 +68,7 @@ export interface Movie {
   quality?: string;
   screenshots?: string[];
   trailerUrl?: string;
-  cast?: Array<{ id?: string; name: string; role?: string; photoUrl?: string }>;
+  cast?: Array<{ _id?: string; id?: string; name: string; role?: string; character?: string; photoUrl?: string; photo?: string; image?: string }>;
   [key: string]: unknown;
 }
 
@@ -155,6 +163,7 @@ export interface MovieQuery {
   q?: string;
   country?: string;
   genre?: string;
+  genres?: string;
 }
 
 export interface BookActionResult {

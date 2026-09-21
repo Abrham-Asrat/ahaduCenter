@@ -1,13 +1,13 @@
 // Stores movie catalog, detail, and review request state.
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { movieService } from '../../services/movieService';
-import type { Movie, MovieQuery, PaginationState } from '../../types';
+import type { Movie, MovieQuery, PaginationState, Review } from '../../types';
 
 interface MovieState {
   movies: Movie[];
   currentMovie: Movie | null;
   selectedMovie: Movie | null;
-  reviews: Array<Record<string, string | number | boolean>>;
+  reviews: Review[];
   loading: boolean;
   error: string | null;
   pagination: PaginationState;
@@ -52,7 +52,7 @@ export const fetchMovieReviews = createAsyncThunk(
 
 export const createMovieReview = createAsyncThunk(
   'movie/createMovieReview',
-  async ({ movieId, review }: { movieId: string; review: Record<string, unknown> }, { rejectWithValue }) => {
+  async ({ movieId, review }: { movieId: string; review: { rating: number; comment: string } }, { rejectWithValue }) => {
     try {
       const data = await movieService.createMovieReview(movieId, review);
       return data;
