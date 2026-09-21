@@ -8,7 +8,7 @@ import { userService } from '../services/userService';
 /**
  * BorrowingHistoryPage Component
  * 
- * Displays user's borrowed books with status, due dates, and fees.
+ * Displays user's borrowed books with status, due dates, and return actions.
  */
 const BorrowingHistoryPage = () => {
   const navigate = useNavigate();
@@ -72,14 +72,6 @@ const BorrowingHistoryPage = () => {
         return b.status === activeFilter;
       });
 
-  const totalFees = borrowings.reduce((sum, b) => {
-    if (b.fee) {
-      const numericFee = typeof b.fee === 'number' ? b.fee : parseFloat(String(b.fee).replace('ETB', '')) || 0;
-      return sum + numericFee;
-    }
-    return sum;
-  }, 0);
-
   const handleReturn = async (id, title) => {
     setActionLoadingId(id);
     try {
@@ -132,11 +124,6 @@ const BorrowingHistoryPage = () => {
     } finally {
       setActionLoadingId(null);
     }
-  };
-
-  const handlePayFees = () => {
-    setBorrowings(borrowings.map((b) => ({ ...b, fee: 0 })));
-    showToast('Outstanding fees paid in full!');
   };
 
   const handleBorrowAgain = (title, bookId) => {
@@ -214,28 +201,6 @@ const BorrowingHistoryPage = () => {
             >
               Retry
             </button>
-          </div>
-        )}
-
-        {/* Overdue warning */}
-        {totalFees > 0 && (
-          <div className="glass-panel rounded-2xl p-6 mb-8 border-l-4 border-l-error flex flex-col md:flex-row items-center justify-between gap-4 shadow-2xl">
-            <div className="flex items-center gap-4">
-              <span className="material-symbols-outlined text-4xl text-error">warning</span>
-              <div>
-                <h3 className="text-xl font-bold text-white">Outstanding Fees</h3>
-                <p className="text-on-surface-variant text-sm">You have overdue items with pending library fees.</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-6">
-              <span className="text-3xl font-extrabold text-error">ETB {totalFees.toFixed(2)}</span>
-              <button
-                onClick={handlePayFees}
-                className="bg-primary text-black px-6 py-3 rounded-xl font-bold hover:shadow-[0_0_20px_rgba(16,185,129,0.5)] transition-all cursor-pointer"
-              >
-                Pay Fees
-              </button>
-            </div>
           </div>
         )}
 

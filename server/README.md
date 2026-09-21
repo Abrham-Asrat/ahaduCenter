@@ -42,8 +42,6 @@ Edit `.env`:
 PORT=5000
 MONGO_URI=mongodb://localhost:27017/ahadu_center
 JWT_SECRET=your_strong_secret_here
-OVERDUE_FEE_PER_DAY=1
-RESERVATION_FEE=50
 EMAIL_HOST=smtp.mailtrap.io
 EMAIL_PORT=2525
 EMAIL_USER=your_email_user

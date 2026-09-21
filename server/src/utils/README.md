@@ -39,20 +39,3 @@ Response envelope used consistently across all domains:
   "limit": 20
 }
 ```
-
----
-
-### `overdue.js`
-
-```js
-calculateOverdueFee(dueDate, now = new Date())
-// Returns: number (fee in ETB)
-```
-
-Linear fee formula:
-```
-daysOverdue = max(0, floor((now - dueDate) / 86_400_000))
-fee = daysOverdue × OVERDUE_FEE_PER_DAY   (env var, default: 1)
-```
-
-Returns `0` if `dueDate` is in the future. This is a pure function with no side effects — tested directly with property-based tests in `__tests__/unit/overdue.test.js`.
