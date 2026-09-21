@@ -1,5 +1,5 @@
 // src/components/movie/MovieInfoSidebar.jsx
-import React from 'react';
+
 
 /**
  * MovieInfoSidebar Component

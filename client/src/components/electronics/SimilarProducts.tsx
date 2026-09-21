@@ -1,6 +1,11 @@
 // src/components/electronics/SimilarProducts.jsx
-import React from 'react';
+
 import { Link } from 'react-router-dom';
+import type { Product } from '../../types';
+
+interface SimilarProductsProps {
+    products: Product[];
+}
 
 /**
  * SimilarProducts Component
@@ -10,7 +15,7 @@ import { Link } from 'react-router-dom';
  * Props:
  * - products: Array of product objects { id, name, imageUrl, price }
  */
-const SimilarProducts = ({ products }) => {
+const SimilarProducts = ({ products }: SimilarProductsProps) => {
     return (
         <section className="py-12 border-t border-white/5">
             <h2 className="text-2xl md:text-3xl font-bold text-white mb-6">Similar Products</h2>
@@ -31,7 +36,7 @@ const SimilarProducts = ({ products }) => {
                         <div className="p-4 flex flex-col gap-2">
                             <span className="text-xs text-on-surface-variant">{product.brand}</span>
                             <span className="text-white font-semibold">{product.name}</span>
-                            <span className="text-white font-semibold">ETB {product.price.toLocaleString()}</span>
+                            <span className="text-white font-semibold">ETB {(product.price ?? 0).toLocaleString()}</span>
                         </div>
                     </Link>
                 ))}

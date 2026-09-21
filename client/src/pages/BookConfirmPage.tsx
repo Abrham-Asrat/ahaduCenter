@@ -1,7 +1,7 @@
 // src/pages/BookConfirmPage.jsx
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { fetchBook } from '../redux/slices/bookSlice';
 import { bookService } from '../services/bookService';
 import Navbar from '../components/common/Navbar';
@@ -27,8 +27,8 @@ const BookConfirmPage = () => {
   const action = searchParams.get('action') || 'borrow';
   const bookId = searchParams.get('id') || '';
 
-  const dispatch = useDispatch();
-  const { selectedBook, loading: bookLoading } = useSelector((s) => s.book);
+  const dispatch = useAppDispatch();
+  const { selectedBook, loading: bookLoading } = useAppSelector((s) => s.book);
 
   // ── Page-level state ─────────────────────────────────────────────────────────
   const [confirmState, setConfirmState] = useState('idle'); // 'idle' | 'loading' | 'success' | 'error'

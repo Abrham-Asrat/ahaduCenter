@@ -1,5 +1,5 @@
 // src/pages/ContactPage.jsx
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import { contactService } from '../services/contactService';

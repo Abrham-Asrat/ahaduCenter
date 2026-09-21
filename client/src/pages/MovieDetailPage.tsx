@@ -1,7 +1,7 @@
 // src/pages/MovieDetailPage.jsx
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
   fetchMovie,
   fetchMovies,
@@ -28,11 +28,11 @@ import Footer from '../components/common/Footer';
  */
 const MovieDetailPage = () => {
   const { id } = useParams();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   // ── Redux state ──────────────────────────────────────────────────────────────
-  const { selectedMovie, movies, reviews, loading, error } = useSelector((s) => s.movie);
-  const { token } = useSelector((s) => s.auth);
+  const { selectedMovie, movies, reviews, loading, error } = useAppSelector((s) => s.movie);
+  const { token } = useAppSelector((s) => s.auth);
 
   // Derive stable movie ID from selectedMovie (handles both _id and id shapes)
   const selectedMovieId = selectedMovie?._id || selectedMovie?.id || null;

@@ -1,7 +1,7 @@
 // src/pages/BookDetailPage.jsx
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
   fetchBook,
   borrowBook,
@@ -27,11 +27,11 @@ import Footer from '../components/common/Footer';
 const BookDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   // ── Redux state ──────────────────────────────────────────────────────────────
-  const { selectedBook: book, reviews, loading, error } = useSelector((s) => s.book);
-  const { token, user } = useSelector((s) => s.auth);
+  const { selectedBook: book, reviews, loading, error } = useAppSelector((s) => s.book);
+  const { token, user } = useAppSelector((s) => s.auth);
 
   // ── Local UI state ───────────────────────────────────────────────────────────
   const [toastMessage, setToastMessage] = useState(null);

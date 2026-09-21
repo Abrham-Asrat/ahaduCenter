@@ -1,0 +1,94 @@
+export interface User {
+  _id?: string;
+  id?: string;
+  name: string;
+  email: string;
+  role?: 'user' | 'admin' | string;
+  avatarUrl?: string | null;
+}
+
+export interface Book {
+  _id?: string;
+  id?: string;
+  title: string;
+  author?: string;
+  coverUrl?: string;
+  availability?: string;
+  price?: number;
+  waitlist?: number;
+  category?: string;
+  description?: string;
+  publisher?: string;
+  year?: string | number;
+  isbn?: string;
+  rating?: number;
+  about?: string;
+  reviews?: number;
+  availableCopies?: number;
+  location?: string;
+  format?: string;
+  pages?: number;
+  language?: string;
+  publicationDate?: string;
+  dimensions?: string;
+  authorInfo?: string;
+  borrowingPolicy?: string;
+  [key: string]: unknown;
+}
+
+export interface Movie {
+  _id?: string;
+  id?: string;
+  title: string;
+  posterUrl?: string;
+  backdropUrl?: string;
+  genres?: string[];
+  rating?: number;
+  [key: string]: unknown;
+}
+
+export interface Product {
+  _id?: string;
+  id?: string;
+  title: string;
+  name?: string;
+  imageUrl?: string;
+  images?: string[];
+  category?: string;
+  price?: number;
+  brand?: string;
+  condition?: 'New' | 'Used' | 'Refurbished' | string;
+  originalPrice?: number;
+  rating?: number;
+  reviews?: number;
+  discount?: number;
+  description?: string;
+  highlights?: string[];
+  [key: string]: unknown;
+}
+
+export interface WishlistItem {
+  id?: string;
+  itemId: string;
+  itemType?: string;
+  title?: string;
+  imageUrl?: string | null;
+  category?: string | null;
+  addedAt?: string;
+}
+
+export interface Notification {
+  _id?: string;
+  id?: string;
+  title?: string;
+  message?: string;
+  isRead: boolean;
+}
+
+export interface PaginationState {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+  totalItems?: number;
+}

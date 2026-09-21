@@ -2,7 +2,7 @@
  * Tests for routing fixes (Task 1.1)
  * Validates: Requirements 1.1, 1.2, 1.3
  */
-import React from 'react';
+
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';

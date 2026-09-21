@@ -1,6 +1,6 @@
 // src/pages/MovieCenterPage.jsx
-import React, { useState, useEffect, useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useState, useEffect, useCallback } from 'react';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { fetchMovies } from '../redux/slices/movieSlice';
 import Navbar from '../components/common/Navbar';
 import SubNav from '../components/common/SubNav';
@@ -15,10 +15,10 @@ import Pagination from '../components/common/Pagination';
  * Wired to Redux store — dispatches fetchMovies on mount and on filter/tab/page change.
  */
 const MovieCenterPage = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   // ── Redux state ──────────────────────────────────────────────────────────────
-  const { movies, loading, error, pagination } = useSelector((s) => s.movie);
+  const { movies, loading, error, pagination } = useAppSelector((s) => s.movie);
 
   // ── Local UI state ───────────────────────────────────────────────────────────
   const [filters, setFilters] = useState({

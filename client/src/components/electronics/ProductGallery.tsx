@@ -1,5 +1,10 @@
 // src/components/electronics/ProductGallery.jsx
-import React from 'react';
+import { useState } from 'react';
+import type { Product } from '../../types';
+
+interface ProductGalleryProps {
+    product: Product & { images: string[] };
+}
 
 /**
  * ProductGallery Component
@@ -15,9 +20,9 @@ import React from 'react';
  * - Horizontal thumbnail strip (clickable, changes main image)
  * - Responsive aspect ratio (square on mobile, 4:3 on desktop)
  */
-const ProductGallery = ({ product }) => {
+const ProductGallery = ({ product }: ProductGalleryProps) => {
     // State for selected image index
-    const [selectedImage, setSelectedImage] = React.useState(0);
+    const [selectedImage, setSelectedImage] = useState(0);
 
     return (
         <div className="flex flex-col gap-4">

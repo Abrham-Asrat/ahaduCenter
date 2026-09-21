@@ -1,5 +1,5 @@
 // src/components/admin/AdminLayout.jsx
-import React, { useState } from 'react';
+import { useState, type ChangeEvent, type ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 /**
@@ -11,12 +11,16 @@ import { Link, useLocation } from 'react-router-dom';
  * - Fixed topbar with search, notifications, dark mode, avatar
  * - Full navigation links to all 10 admin management modules
  */
-const AdminLayout = ({ children }) => {
+interface AdminLayoutProps {
+    children: ReactNode;
+}
+
+const AdminLayout = ({ children }: AdminLayoutProps) => {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const location = useLocation();
 
-    const handleSearch = (e) => {
+    const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(e.target.value);
     };
 
@@ -28,7 +32,7 @@ const AdminLayout = ({ children }) => {
         { label: 'Books', icon: 'menu_book', path: '/admin/books' },
     ];
 
-    const isActive = (path) => {
+    const isActive = (path: string) => {
         if (path === '/admin') return location.pathname === '/admin';
         return location.pathname.startsWith(path);
     };

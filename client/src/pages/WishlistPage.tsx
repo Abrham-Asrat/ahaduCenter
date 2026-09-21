@@ -1,7 +1,7 @@
 // src/pages/WishlistPage.jsx
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import { fetchWishlist, removeWishlistItem } from '../redux/slices/wishlistSlice';
@@ -13,9 +13,9 @@ import { fetchWishlist, removeWishlistItem } from '../redux/slices/wishlistSlice
  */
 const WishlistPage = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  const { items: wishlistItems, loading, error } = useSelector((s) => s.wishlist);
+  const { items: wishlistItems, loading, error } = useAppSelector((s) => s.wishlist);
   const [activeTab, setActiveTab] = useState('all');
   const [toastMessage, setToastMessage] = useState(null);
 

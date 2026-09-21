@@ -1,7 +1,7 @@
 // src/components/common/Navbar.jsx
 import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useAppSelector, useAppDispatch } from '../../redux/hooks';
 import { logoutAction } from '../../redux/slices/authSlice';
 import type { RootState } from '../../redux/store';
 
@@ -18,12 +18,12 @@ import type { RootState } from '../../redux/store';
 const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   // Auth state from Redux store
-  const { token, user } = useSelector((state: RootState) => state.auth);
-  const { unreadCount } = useSelector((state: RootState) => state.notification) ?? {};
+  const { token, user } = useAppSelector((state: RootState) => state.auth);
+  const { unreadCount } = useAppSelector((state: RootState) => state.notification) ?? {};
 
   // Profile menu dropdown toggle
   const [isProfileOpen, setIsProfileOpen] = useState(false);

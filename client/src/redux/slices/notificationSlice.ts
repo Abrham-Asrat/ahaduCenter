@@ -1,6 +1,7 @@
 // Stores notification records, unread counts, and read-state requests.
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { userService } from '../../services/userService';
+import type { Notification } from '../../types';
 
 export const fetchNotifications = createAsyncThunk(
   'notification/fetchNotifications',
@@ -51,7 +52,7 @@ export const clearAll = createAsyncThunk(
 );
 
 interface NotificationState {
-  notifications: Array<{ _id?: string; id?: string; isRead: boolean }>;
+  notifications: Notification[];
   unreadCount: number;
   loading: boolean;
   error: string | null;

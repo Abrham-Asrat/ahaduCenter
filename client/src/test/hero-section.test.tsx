@@ -2,7 +2,7 @@
  * Tests for HeroSection responsive padding and button navigation (Task 5.1)
  * Validates: Requirements 2.1, 2.2, 8.1
  */
-import React from 'react';
+
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';

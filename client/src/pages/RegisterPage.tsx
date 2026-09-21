@@ -1,7 +1,7 @@
 // src/pages/RegisterPage.jsx
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { registerThunk, googleRegisterThunk, clearAuthError } from '../redux/slices/authSlice';
 import GoogleSignInButton from '../components/common/GoogleSignInButton';
 import type { RootState } from '../redux/store';
@@ -27,8 +27,8 @@ type RegisterPageProps = {
  */
 const RegisterPage = ({ onClose }: RegisterPageProps) => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const { loading, error } = useSelector((state: RootState) => state.auth);
+  const dispatch = useAppDispatch();
+  const { loading, error } = useAppSelector((state: RootState) => state.auth);
 
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');

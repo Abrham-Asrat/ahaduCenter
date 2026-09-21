@@ -2,7 +2,7 @@
  * Tests for Footer branding, responsive padding, newsletter, and Quick Links (Task 7.1)
  * Validates: Requirements 6.1, 6.2, 7.1, 8.3
  */
-import React from 'react';
+
 import { describe, it, expect } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';

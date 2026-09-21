@@ -2,7 +2,7 @@
  * Tests for BentoGrid responsive padding and card navigation (Task 6.1)
  * Validates: Requirements 2.3, 2.4, 2.5, 2.6, 8.2
  */
-import React from 'react';
+
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';

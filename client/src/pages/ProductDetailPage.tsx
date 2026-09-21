@@ -1,7 +1,7 @@
 // src/pages/ProductDetailPage.jsx
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import Navbar from '../components/common/Navbar';
 import ProductGallery from '../components/electronics/ProductGallery';
 import ProductInfo from '../components/electronics/ProductInfo';
@@ -23,9 +23,9 @@ import { orderService } from '../services/orderService';
 const ProductDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  const { selectedProduct, products, loading, error } = useSelector((s) => s.product);
+  const { selectedProduct, products, loading, error } = useAppSelector((s) => s.product);
 
   const [toastMessage, setToastMessage] = useState(null);
   const [orderLoading, setOrderLoading] = useState(false);

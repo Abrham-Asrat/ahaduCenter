@@ -1,5 +1,10 @@
 // src/components/book/BookDetailTabs.jsx
-import React, { useState } from 'react';
+import { useState } from 'react';
+import type { Book } from '../../types';
+
+interface BookDetailTabsProps {
+    book: Book;
+}
 
 /**
  * BookDetailTabs Component
@@ -13,12 +18,12 @@ import React, { useState } from 'react';
  * - activeTab: 'about' | 'author' | 'policy' (for desktop)
  * - expandedSection: string | null (for mobile accordion)
  */
-const BookDetailTabs = ({ book }) => {
+const BookDetailTabs = ({ book }: BookDetailTabsProps) => {
     const [activeTab, setActiveTab] = useState('about');
-    const [expandedSection, setExpandedSection] = useState('about');
+    const [expandedSection, setExpandedSection] = useState<string | null>('about');
 
     // Toggle mobile accordion
-    const toggleAccordion = (section) => {
+    const toggleAccordion = (section: string) => {
         setExpandedSection(expandedSection === section ? null : section);
     };
 

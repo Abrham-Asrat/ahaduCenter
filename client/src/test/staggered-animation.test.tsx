@@ -9,7 +9,7 @@
  * **Validates: Requirements 12.1, 12.2, 12.3**
  */
 
-import React from 'react';
+
 import { describe, it, expect } from 'vitest';
 import { render, screen, cleanup } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';

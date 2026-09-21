@@ -8,7 +8,7 @@
  * 
  * **Validates: Requirements 11.1**
  */
-import React from 'react';
+
 import { describe, it, expect, vi, beforeAll } from 'vitest';
 import { render, act } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';

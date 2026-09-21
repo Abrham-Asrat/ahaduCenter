@@ -1,5 +1,9 @@
 // src/components/common/Pagination.jsx
-import React from 'react';
+interface PaginationProps {
+  currentPage?: number;
+  totalPages?: number;
+  onPageChange: (page: number) => void;
+}
 
 /**
  * Pagination Component
@@ -17,7 +21,7 @@ import React from 'react';
  * - Ellipsis for large page ranges
  * - Active page highlighted with primary color
  */
-const Pagination = ({ currentPage = 1, totalPages = 5, onPageChange }) => {
+const Pagination = ({ currentPage = 1, totalPages = 5, onPageChange }: PaginationProps) => {
 
   // Generate page numbers array (simplified - just show 1-3 + ellipsis + last)
   const getPageNumbers = () => {
@@ -49,7 +53,7 @@ const Pagination = ({ currentPage = 1, totalPages = 5, onPageChange }) => {
         ) : (
           <button
             key={page}
-            onClick={() => onPageChange(page)}
+            onClick={() => onPageChange(page as number)}
             className={`w-10 h-10 rounded text-sm transition-all ${currentPage === page
                 ? 'bg-primary-container text-white shadow-[0_0_15px_rgba(16,185,129,0.4)]'
                 : 'glass-panel text-on-surface-variant hover:text-on-surface hover:border-white/30'

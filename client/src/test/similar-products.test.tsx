@@ -7,7 +7,7 @@
  *   For any array of product objects with arbitrary id values, every rendered
  *   anchor's href must match `/electronics/{product.id}`.
  */
-import React from 'react';
+
 import { describe, it, expect } from 'vitest';
 import { render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';

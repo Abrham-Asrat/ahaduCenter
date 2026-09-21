@@ -1,6 +1,6 @@
 // src/pages/admin/AdminManageElectronicsPage.jsx
-import React, { useState, useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useState, useEffect, useRef } from 'react';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import AdminLayout from '../../components/admin/AdminLayout';
 import {
   fetchAdminProducts,
@@ -10,8 +10,8 @@ import {
 } from '../../redux/slices/adminSlice';
 
 const AdminManageElectronicsPage = () => {
-    const dispatch = useDispatch();
-    const { products, loading, error } = useSelector((s) => s.admin);
+    const dispatch = useAppDispatch();
+    const { products, loading, error } = useAppSelector((s) => s.admin);
 
     const [searchQuery, setSearchQuery] = useState('');
     const [categoryFilter, setCategoryFilter] = useState('All Categories');

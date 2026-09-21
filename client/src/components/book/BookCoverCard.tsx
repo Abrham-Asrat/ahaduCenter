@@ -1,5 +1,10 @@
 // src/components/book/BookCoverCard.jsx
-import React, { useState } from 'react';
+import { useState } from 'react';
+import type { Book } from '../../types';
+
+interface BookCoverCardProps {
+    book: Book;
+}
 
 /**
  * BookCoverCard Component
@@ -13,12 +18,12 @@ import React, { useState } from 'react';
  * Props:
  * - book: Object { coverUrl, title, availability }
  */
-const BookCoverCard = ({ book }) => {
+const BookCoverCard = ({ book }: BookCoverCardProps) => {
     const [isSaved, setIsSaved] = useState(false);
     const [isZoomed, setIsZoomed] = useState(false);
-    const [toastMessage, setToastMessage] = useState(null);
+    const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-    const showToast = (msg) => {
+    const showToast = (msg: string) => {
         setToastMessage(msg);
         setTimeout(() => setToastMessage(null), 3000);
     };

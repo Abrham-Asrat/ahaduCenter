@@ -1,6 +1,6 @@
 // src/pages/ElectronicsPage.jsx
-import React, { useState, useEffect, useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useState, useEffect, useCallback } from 'react';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { fetchProducts } from '../redux/slices/productSlice';
 import Navbar from '../components/common/Navbar';
 import SubNav from '../components/common/SubNav';
@@ -17,10 +17,10 @@ import { useNavigate } from 'react-router-dom';
  */
 const ElectronicsPage = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   // ── Redux state ──────────────────────────────────────────────────────────────
-  const { products, loading, error, pagination } = useSelector((s) => s.product);
+  const { products, loading, error, pagination } = useAppSelector((s) => s.product);
 
   // ── Local UI state ───────────────────────────────────────────────────────────
   const [activeCategory, setActiveCategory] = useState('All');

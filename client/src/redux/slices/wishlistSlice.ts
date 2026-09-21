@@ -1,8 +1,23 @@
 // Stores the authenticated user's wishlist and mutation request state.
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { userService } from '../../services/userService';
+import type { WishlistItem } from '../../types';
 
-let wishlistSnapshot = [];
+interface WishlistState {
+  items: WishlistItem[];
+  loading: boolean;
+  error: string | null;
+}
+
+interface WishlistPayload {
+  itemId: string;
+  itemType: string;
+  title?: string;
+  imageUrl?: string | null;
+  category?: string | null;
+}
+
+let wishlistSnapshot: WishlistItem[] = [];
 
 export const fetchWishlist = createAsyncThunk(
   'wishlist/fetchWishlist',
@@ -18,7 +33,7 @@ export const fetchWishlist = createAsyncThunk(
 
 export const addWishlistItem = createAsyncThunk(
   'wishlist/addWishlistItem',
-  async (payload, { dispatch, rejectWithValue }) => {
+  async (payload: WishlistPayload, { rejectWithValue }) => {
     try {
       const res = await userService.addToWishlist(payload);
       // Re-fetch to ensure complete item metadata is populated from backend
@@ -32,7 +47,7 @@ export const addWishlistItem = createAsyncThunk(
 
 export const removeWishlistItem = createAsyncThunk(
   'wishlist/removeWishlistItem',
-  async (itemId, { rejectWithValue }) => {
+  async (itemId: string, { rejectWithValue }) => {
     try {
       const res = await userService.removeFromWishlist(itemId);
       return { itemId, res };
@@ -42,7 +57,7 @@ export const removeWishlistItem = createAsyncThunk(
   }
 );
 
-const initialState = {
+const initialState: WishlistState = {
   items: [],
   loading: false,
   error: null,

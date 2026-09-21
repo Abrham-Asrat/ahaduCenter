@@ -1,5 +1,5 @@
 // src/components/movie/MovieFilters.jsx
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 /**
  * MovieFilters Component

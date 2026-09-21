@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { resendVerificationThunk, verifyEmailThunk } from '../redux/slices/authSlice';
 
 const VerifyEmailPage = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token');
   const [email, setEmail] = useState(searchParams.get('email') || '');
   const [status, setStatus] = useState(token ? 'verifying' : 'ready');
   const [message, setMessage] = useState('');
-  const { loading } = useSelector((state) => state.auth);
+  const { loading } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
     if (!token) return undefined;

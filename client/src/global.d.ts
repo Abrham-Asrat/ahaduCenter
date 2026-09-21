@@ -7,6 +7,8 @@ declare module '*.svg';
 
 declare module 'jwt-decode';
 
+export {};
+
 declare global {
 	interface Window {
 		google?: {
@@ -21,5 +23,9 @@ declare global {
 
 	interface GoogleCredentialResponse {
 		credential: string;
+	}
+
+	interface HTMLScriptElement {
+		readyState?: string;
 	}
 }

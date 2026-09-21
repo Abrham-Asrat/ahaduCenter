@@ -1,5 +1,15 @@
 // src/components/electronics/ProductInfo.jsx
-import React, { useState } from 'react';
+import { useState } from 'react';
+import type { FormEvent } from 'react';
+import type { Product } from '../../types';
+
+interface ProductInfoProps {
+    product: Product & { highlights: string[] };
+    onShowToast?: (message: string) => void;
+    onConfirmPickUp?: (quantity: number) => void;
+    orderLoading?: boolean;
+    orderError?: string | null;
+}
 
 /**
  * ProductInfo Component
@@ -15,7 +25,7 @@ import React, { useState } from 'react';
  * - orderLoading: boolean — true while a place-order request is in-flight
  * - orderError: string | null — server error message to display below the button
  */
-const ProductInfo = ({ product, onShowToast, onConfirmPickUp, orderLoading = false, orderError = null }) => {
+const ProductInfo = ({ product, onShowToast, onConfirmPickUp, orderLoading = false, orderError = null }: ProductInfoProps) => {
     const [isWishlisted, setIsWishlisted] = useState(false);
     const [isContactModalOpen, setIsContactModalOpen] = useState(false);
     const [contactMessage, setContactMessage] = useState('');
@@ -36,7 +46,7 @@ const ProductInfo = ({ product, onShowToast, onConfirmPickUp, orderLoading = fal
         }
     };
 
-    const handleSendInquiry = (e) => {
+    const handleSendInquiry = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setIsContactModalOpen(false);
         setContactMessage('');

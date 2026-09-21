@@ -1,8 +1,17 @@
 // src/components/electronics/ProductCard.jsx
-import React, { useState } from 'react';
+import type { MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { addWishlistItem, removeWishlistItem } from '../../redux/slices/wishlistSlice';
+import type { Product } from '../../types';
+
+interface ProductCardProps {
+  product: Product;
+  onAddToCart?: (product: Product) => void;
+  onCompare?: (product: Product) => void;
+  onToggleWishlist?: (product: Product, next: boolean) => void;
+  isWishlisted?: boolean;
+}
 
 /**
  * ProductCard Component
@@ -15,11 +24,11 @@ import { addWishlistItem, removeWishlistItem } from '../../redux/slices/wishlist
  * - onCompare: Function
  * - onToggleWishlist: Function
  */
-const ProductCard = ({ product, onAddToCart, onCompare, onToggleWishlist, isWishlisted: initialWishlisted = false }) => {
-  const dispatch = useDispatch();
-  const wishlistItems = useSelector((s) => s.wishlist?.items ?? []);
+const ProductCard = ({ product, onAddToCart, onCompare, onToggleWishlist, isWishlisted: initialWishlisted = false }: ProductCardProps) => {
+  const dispatch = useAppDispatch();
+  const wishlistItems = useAppSelector((s) => s.wishlist?.items ?? []);
 
-  const productId = product.id || product._id;
+  const productId = product.id || product._id || '';
   const isWishlisted = wishlistItems.some(
     (item) => item.id === productId || item.itemId === productId
   ) || initialWishlisted;
@@ -30,21 +39,21 @@ const ProductCard = ({ product, onAddToCart, onCompare, onToggleWishlist, isWish
     Refurbished: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
   };
 
-  const badgeClass = conditionStyles[product.condition] || conditionStyles.New;
+  const badgeClass = conditionStyles[product.condition ?? 'New' as keyof typeof conditionStyles] || conditionStyles.New;
 
-  const handleCartClick = (e) => {
+  const handleCartClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
     if (onAddToCart) onAddToCart(product);
   };
 
-  const handleCompareClick = (e) => {
+  const handleCompareClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
     if (onCompare) onCompare(product);
   };
 
-  const handleWishlistClick = (e) => {
+  const handleWishlistClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
     const next = !isWishlisted;

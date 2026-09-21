@@ -1,5 +1,5 @@
 // src/pages/OrderConfirmationPage.jsx
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { orderService } from '../services/orderService';
 

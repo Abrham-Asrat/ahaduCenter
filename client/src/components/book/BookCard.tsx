@@ -1,8 +1,15 @@
 // src/components/book/BookCard.jsx
-import React, { useState } from 'react';
+import type { MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { addWishlistItem, removeWishlistItem } from '../../redux/slices/wishlistSlice';
+import type { Book } from '../../types';
+
+interface BookCardProps {
+  book: Book;
+  onQuickAction?: (book: Book) => void;
+  isWishlisted?: boolean;
+}
 
 /**
  * BookCard Component
@@ -13,11 +20,11 @@ import { addWishlistItem, removeWishlistItem } from '../../redux/slices/wishlist
  * - book: Object { id, title, author, coverUrl, availability, price, waitlist, type }
  * - onQuickAction: Callback function
  */
-const BookCard = ({ book, onQuickAction, isWishlisted: initialWishlisted = false }) => {
-  const dispatch = useDispatch();
-  const wishlistItems = useSelector((s) => s.wishlist?.items ?? []);
+const BookCard = ({ book, onQuickAction, isWishlisted: initialWishlisted = false }: BookCardProps) => {
+  const dispatch = useAppDispatch();
+  const wishlistItems = useAppSelector((s) => s.wishlist?.items ?? []);
   
-  const bookId = book.id || book._id;
+  const bookId = book.id || book._id || '';
   const isWishlisted = wishlistItems.some(
     (item) => item.id === bookId || item.itemId === bookId
   ) || initialWishlisted;
@@ -46,17 +53,18 @@ const BookCard = ({ book, onQuickAction, isWishlisted: initialWishlisted = false
     Multiple: 'more_horiz',
   };
 
-  const badgeClass = badgeStyles[book.availability] || badgeStyles.Borrow;
-  const buttonClass = actionButtonStyles[book.availability] || actionButtonStyles.Borrow;
-  const icon = actionIcon[book.availability] || 'add';
+  const availability = book.availability ?? 'Borrow';
+  const badgeClass = badgeStyles[availability as keyof typeof badgeStyles] || badgeStyles.Borrow;
+  const buttonClass = actionButtonStyles[availability as keyof typeof actionButtonStyles] || actionButtonStyles.Borrow;
+  const icon = actionIcon[availability as keyof typeof actionIcon] || 'add';
 
-  const handleActionClick = (e) => {
+  const handleActionClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
     if (onQuickAction) onQuickAction(book);
   };
 
-  const handleBookmarkClick = (e) => {
+  const handleBookmarkClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
     if (isWishlisted) {

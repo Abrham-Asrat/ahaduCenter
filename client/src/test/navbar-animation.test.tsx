@@ -5,7 +5,7 @@
  * Asserts that the profile dropdown container uses `animate-fade-in` (kebab-case)
  * and NOT `animate-fadeIn` (camelCase), per the CSS class defined in index.css.
  */
-import React from 'react';
+
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';

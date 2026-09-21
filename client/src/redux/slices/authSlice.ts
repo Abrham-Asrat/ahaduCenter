@@ -2,11 +2,34 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { authService } from '../../services/authService';
 import { userService } from '../../services/userService';
+import type { User } from '../../types';
+
+interface AuthState {
+  user: User | null;
+  token: string | null;
+  loading: boolean;
+  error: string | null;
+  initialized: boolean;
+}
+
+interface GoogleAuthPayload {
+  credential: string;
+}
+
+interface AdminLoginPayload {
+  email: string;
+  password: string;
+}
+
+interface RegisterPayload {
+  name: string;
+  email: string;
+}
 
 // ── Auth Thunks ──
 export const loginThunk = createAsyncThunk(
   'auth/googleLogin',
-  async ({ credential }, { rejectWithValue }) => {
+  async ({ credential }: GoogleAuthPayload, { rejectWithValue }) => {
     try {
       const data = await authService.loginWithGoogle(credential);
       if (data.token) {
@@ -21,7 +44,7 @@ export const loginThunk = createAsyncThunk(
 
 export const googleRegisterThunk = createAsyncThunk(
   'auth/googleRegister',
-  async ({ credential }, { rejectWithValue }) => {
+  async ({ credential }: GoogleAuthPayload, { rejectWithValue }) => {
     try {
       const data = await authService.registerWithGoogle(credential);
       if (data.token) {
@@ -36,7 +59,7 @@ export const googleRegisterThunk = createAsyncThunk(
 
 export const adminLoginThunk = createAsyncThunk(
   'auth/adminLogin',
-  async ({ email, password }, { rejectWithValue }) => {
+  async ({ email, password }: AdminLoginPayload, { rejectWithValue }) => {
     try {
       const data = await authService.adminLogin(email, password);
       localStorage.setItem('token', data.token);
@@ -49,7 +72,7 @@ export const adminLoginThunk = createAsyncThunk(
 
 export const registerThunk = createAsyncThunk(
   'auth/register',
-  async ({ name, email }, { rejectWithValue }) => {
+  async ({ name, email }: RegisterPayload, { rejectWithValue }) => {
     try {
       const data = await authService.register(name, email);
       return data;
@@ -94,7 +117,7 @@ export const bootstrapAuthThunk = createAsyncThunk(
   }
 );
 
-const initialState = {
+const initialState: AuthState = {
   user: null,
   token: null,
   loading: false,
@@ -131,7 +154,7 @@ export const authSlice = createSlice({
       })
       .addCase(loginThunk.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = typeof action.payload === 'string' ? action.payload : null;
         state.initialized = true;
       })
       .addCase(googleRegisterThunk.pending, (state) => {
@@ -146,7 +169,7 @@ export const authSlice = createSlice({
       })
       .addCase(googleRegisterThunk.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = typeof action.payload === 'string' ? action.payload : null;
         state.initialized = true;
       })
       .addCase(adminLoginThunk.pending, (state) => {
@@ -161,7 +184,7 @@ export const authSlice = createSlice({
       })
       .addCase(adminLoginThunk.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = typeof action.payload === 'string' ? action.payload : null;
         state.initialized = true;
       })
 
@@ -181,7 +204,7 @@ export const authSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(registerThunk.fulfilled, (state, action) => {
+      .addCase(registerThunk.fulfilled, (state) => {
         state.loading = false;
         state.user = null;
         state.token = null;
@@ -189,7 +212,7 @@ export const authSlice = createSlice({
       })
       .addCase(registerThunk.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = typeof action.payload === 'string' ? action.payload : null;
         state.initialized = true;
       })
 
@@ -202,7 +225,7 @@ export const authSlice = createSlice({
       })
       .addCase(verifyEmailThunk.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = typeof action.payload === 'string' ? action.payload : null;
       })
       .addCase(resendVerificationThunk.pending, (state) => {
         state.loading = true;
@@ -213,7 +236,7 @@ export const authSlice = createSlice({
       })
       .addCase(resendVerificationThunk.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = typeof action.payload === 'string' ? action.payload : null;
       });
   },
 });

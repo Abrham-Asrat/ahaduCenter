@@ -1,6 +1,6 @@
 // src/pages/admin/AdminManageMoviesPage.jsx
-import React, { useState, useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useState, useEffect, useRef } from 'react';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import AdminLayout from '../../components/admin/AdminLayout';
 import {
   fetchAdminMovies,
@@ -10,8 +10,8 @@ import {
 } from '../../redux/slices/adminSlice';
 
 const AdminManageMoviesPage = () => {
-    const dispatch = useDispatch();
-    const { movies, loading, error } = useSelector((s) => s.admin);
+    const dispatch = useAppDispatch();
+    const { movies, loading, error } = useAppSelector((s) => s.admin);
 
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedGenre, setSelectedGenre] = useState('All Genres');

@@ -1,7 +1,7 @@
 // src/pages/admin/AdminDashboardPage.jsx
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import AdminLayout from '../../components/admin/AdminLayout';
 import { fetchAdminStats, fetchRecentActivity } from '../../redux/slices/adminSlice';
 
@@ -11,8 +11,8 @@ import { fetchAdminStats, fetchRecentActivity } from '../../redux/slices/adminSl
  * Overview page focusing on inventory stats and recent additions.
  */
 const AdminDashboardPage = () => {
-  const dispatch = useDispatch();
-  const { stats: adminStats, recentActivity, loading, error } = useSelector((s) => s.admin);
+  const dispatch = useAppDispatch();
+  const { stats: adminStats, recentActivity, loading, error } = useAppSelector((s) => s.admin);
 
   useEffect(() => {
     dispatch(fetchAdminStats());

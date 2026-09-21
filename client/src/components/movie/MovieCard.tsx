@@ -1,7 +1,7 @@
 // src/components/movie/MovieCard.jsx
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { addWishlistItem, removeWishlistItem } from '../../redux/slices/wishlistSlice';
 
 /**
@@ -15,8 +15,8 @@ import { addWishlistItem, removeWishlistItem } from '../../redux/slices/wishlist
  * - onToggleBookmark: Optional callback function when bookmark is clicked
  */
 const MovieCard = ({ movie, onPlayTrailer, onToggleBookmark, isBookmarked: initialBookmarked = false }) => {
-  const dispatch = useDispatch();
-  const wishlistItems = useSelector((s) => s.wishlist?.items ?? []);
+  const dispatch = useAppDispatch();
+  const wishlistItems = useAppSelector((s) => s.wishlist?.items ?? []);
 
   const movieId = movie.id || movie._id;
   const isBookmarked = wishlistItems.some(

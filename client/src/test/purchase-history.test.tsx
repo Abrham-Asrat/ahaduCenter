@@ -13,7 +13,7 @@
  *   the displayed page indicator shows N + 1.
  */
 
-import React from 'react';
+
 import { afterEach, describe, it, vi } from 'vitest';
 import { render, screen, fireEvent, cleanup, act, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';

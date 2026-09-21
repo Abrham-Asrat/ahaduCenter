@@ -1,11 +1,32 @@
 // Stores book catalog, detail, and borrowing request state.
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { bookService } from '../../services/bookService';
+import type { Book, PaginationState } from '../../types';
+
+interface BookState {
+  books: Book[];
+  currentBook: Book | null;
+  reviews: Array<Record<string, unknown>>;
+  loading: boolean;
+  error: string | null;
+  pagination: PaginationState;
+}
+
+interface BookQuery {
+  page?: number;
+  limit?: number;
+  category?: string;
+  q?: string;
+  availability?: string;
+  language?: string;
+  format?: string;
+  sort?: string;
+}
 
 // ── Book Thunks ──
 export const fetchBooks = createAsyncThunk(
   'book/fetchBooks',
-  async (params = {}, { rejectWithValue }) => {
+  async (params: BookQuery = {}, { rejectWithValue }) => {
     try {
       const data = await bookService.getBooks(params);
       return data;
@@ -17,7 +38,7 @@ export const fetchBooks = createAsyncThunk(
 
 export const fetchBook = createAsyncThunk(
   'book/fetchBook',
-  async (id, { rejectWithValue }) => {
+  async (id: string, { rejectWithValue }) => {
     try {
       const data = await bookService.getBook(id);
       return data;
@@ -29,7 +50,7 @@ export const fetchBook = createAsyncThunk(
 
 export const borrowBook = createAsyncThunk(
   'book/borrowBook',
-  async (bookId, { rejectWithValue }) => {
+  async (bookId: string, { rejectWithValue }) => {
     try {
       const data = await bookService.borrowBook(bookId);
       return data;
@@ -41,7 +62,7 @@ export const borrowBook = createAsyncThunk(
 
 export const reserveBook = createAsyncThunk(
   'book/reserveBook',
-  async (bookId, { rejectWithValue }) => {
+  async (bookId: string, { rejectWithValue }) => {
     try {
       const data = await bookService.reserveBook(bookId);
       return data;
@@ -53,7 +74,7 @@ export const reserveBook = createAsyncThunk(
 
 export const fetchBookReviews = createAsyncThunk(
   'book/fetchBookReviews',
-  async (bookId, { rejectWithValue }) => {
+  async (bookId: string, { rejectWithValue }) => {
     try {
       const data = await bookService.getBookReviews(bookId);
       return data;
@@ -65,7 +86,7 @@ export const fetchBookReviews = createAsyncThunk(
 
 export const createBookReview = createAsyncThunk(
   'book/createBookReview',
-  async ({ bookId, review }, { rejectWithValue }) => {
+  async ({ bookId, review }: { bookId: string; review: Record<string, unknown> }, { rejectWithValue }) => {
     try {
       const data = await bookService.createBookReview(bookId, review);
       return data;
@@ -75,7 +96,7 @@ export const createBookReview = createAsyncThunk(
   }
 );
 
-const initialState = {
+const initialState: BookState = {
   books: [],
   currentBook: null,
   reviews: [],
@@ -86,6 +107,7 @@ const initialState = {
     limit: 12,
     total: 0,
     totalPages: 0,
+    totalItems: 0,
   },
 };
 

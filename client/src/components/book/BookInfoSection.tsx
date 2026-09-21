@@ -1,6 +1,13 @@
 // src/components/book/BookInfoSection.jsx
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import type { Book } from '../../types';
+
+interface BookInfoSectionProps {
+    book: Book;
+    onShowToast?: (message: string) => void;
+    onBorrow?: () => void;
+    onReserve?: () => void;
+}
 
 /**
  * BookInfoSection Component
@@ -11,7 +18,7 @@ import { useNavigate } from 'react-router-dom';
  * - onBorrow: Optional callback override for Borrow button (if provided, used instead of default toast)
  * - onReserve: Optional callback override for Reserve button
  */
-const BookInfoSection = ({ book, onShowToast, onBorrow, onReserve }) => {
+const BookInfoSection = ({ book, onShowToast, onBorrow, onReserve }: BookInfoSectionProps) => {
     const navigate = useNavigate();
 
     const handleBorrow = () => {
@@ -47,7 +54,7 @@ const BookInfoSection = ({ book, onShowToast, onBorrow, onReserve }) => {
                     <div className="flex items-center text-secondary">
                         {[...Array(5)].map((_, i) => (
                             <span key={i} className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>
-                                {i < Math.floor(book.rating) ? 'star' : 'star_half'}
+                                {i < Math.floor(book.rating ?? 0) ? 'star' : 'star_half'}
                             </span>
                         ))}
                     </div>

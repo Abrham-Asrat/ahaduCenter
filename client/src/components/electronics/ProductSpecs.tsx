@@ -1,5 +1,10 @@
 // src/components/electronics/ProductSpecs.jsx
-import React, { useState } from 'react';
+import { useState } from 'react';
+
+interface ProductSpecsProps {
+    specifications: Record<string, string | number>;
+    description: string;
+}
 
 /**
  * ProductSpecs Component
@@ -14,12 +19,12 @@ import React, { useState } from 'react';
  * - activeTab: 'specifications' | 'description' | 'shipping' (for desktop)
  * - expandedSection: which accordion section is open (for mobile)
  */
-const ProductSpecs = ({ specifications, description }) => {
+const ProductSpecs = ({ specifications, description }: ProductSpecsProps) => {
     const [activeTab, setActiveTab] = useState('specifications');
-    const [expandedSection, setExpandedSection] = useState('specifications');
+    const [expandedSection, setExpandedSection] = useState<string | null>('specifications');
 
     // Toggle accordion on mobile
-    const toggleAccordion = (section) => {
+    const toggleAccordion = (section: string) => {
         setExpandedSection(expandedSection === section ? null : section);
     };
 

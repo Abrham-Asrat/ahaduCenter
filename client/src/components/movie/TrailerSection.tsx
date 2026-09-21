@@ -1,5 +1,5 @@
 // src/components/movie/TrailerSection.jsx
-import React from 'react';
+
 
 /**
  * TrailerSection Component

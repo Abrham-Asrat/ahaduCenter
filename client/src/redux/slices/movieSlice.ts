@@ -1,11 +1,30 @@
 // Stores movie catalog, detail, and review request state.
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { movieService } from '../../services/movieService';
+import type { Movie, PaginationState } from '../../types';
+
+interface MovieState {
+  movies: Movie[];
+  currentMovie: Movie | null;
+  reviews: Array<Record<string, unknown>>;
+  loading: boolean;
+  error: string | null;
+  pagination: PaginationState;
+}
+
+interface MovieQuery {
+  page?: number;
+  limit?: number;
+  category?: string;
+  q?: string;
+  genre?: string;
+  sort?: string;
+}
 
 // ── Movie Thunks ──
 export const fetchMovies = createAsyncThunk(
   'movie/fetchMovies',
-  async (params = {}, { rejectWithValue }) => {
+  async (params: MovieQuery = {}, { rejectWithValue }) => {
     try {
       const data = await movieService.getMovies(params);
       return data;
@@ -17,7 +36,7 @@ export const fetchMovies = createAsyncThunk(
 
 export const fetchMovie = createAsyncThunk(
   'movie/fetchMovie',
-  async (id, { rejectWithValue }) => {
+  async (id: string, { rejectWithValue }) => {
     try {
       const data = await movieService.getMovie(id);
       return data;
@@ -29,7 +48,7 @@ export const fetchMovie = createAsyncThunk(
 
 export const fetchMovieReviews = createAsyncThunk(
   'movie/fetchMovieReviews',
-  async (movieId, { rejectWithValue }) => {
+  async (movieId: string, { rejectWithValue }) => {
     try {
       const data = await movieService.getMovieReviews(movieId);
       return data;
@@ -41,7 +60,7 @@ export const fetchMovieReviews = createAsyncThunk(
 
 export const createMovieReview = createAsyncThunk(
   'movie/createMovieReview',
-  async ({ movieId, review }, { rejectWithValue }) => {
+  async ({ movieId, review }: { movieId: string; review: Record<string, unknown> }, { rejectWithValue }) => {
     try {
       const data = await movieService.createMovieReview(movieId, review);
       return data;
@@ -51,7 +70,7 @@ export const createMovieReview = createAsyncThunk(
   }
 );
 
-const initialState = {
+const initialState: MovieState = {
   movies: [],
   currentMovie: null,
   reviews: [],
@@ -62,6 +81,7 @@ const initialState = {
     limit: 12,
     total: 0,
     totalPages: 0,
+    totalItems: 0,
   },
 };
 

@@ -1,6 +1,6 @@
 // src/pages/BookCenterPage.jsx
-import React, { useState, useEffect, useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useState, useEffect, useCallback } from 'react';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { fetchBooks } from '../redux/slices/bookSlice';
 import Navbar from '../components/common/Navbar';
 import SubNav from '../components/common/SubNav';
@@ -17,11 +17,11 @@ import { useNavigate } from 'react-router-dom';
  * Wired to Redux store — dispatches fetchBooks on mount and on filter/page change.
  */
 const BookCenterPage = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   // ── Redux state ──────────────────────────────────────────────────────────────
-  const { books, loading, error, pagination } = useSelector((s) => s.book);
+  const { books, loading, error, pagination } = useAppSelector((s) => s.book);
 
   // ── Local UI state ───────────────────────────────────────────────────────────
   const [activeCategory, setActiveCategory] = useState('All Categories');

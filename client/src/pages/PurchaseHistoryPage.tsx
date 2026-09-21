@@ -1,5 +1,5 @@
 // src/pages/PurchaseHistoryPage.jsx
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import { orderService } from '../services/orderService';

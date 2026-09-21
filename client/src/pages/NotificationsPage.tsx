@@ -1,6 +1,6 @@
 // src/pages/NotificationsPage.jsx
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useState, useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import {
@@ -16,8 +16,8 @@ import {
  * Displays all user notifications with filtering and read/unread states.
  */
 const NotificationsPage = () => {
-  const dispatch = useDispatch();
-  const { notifications, unreadCount, loading, error } = useSelector((s) => s.notification);
+  const dispatch = useAppDispatch();
+  const { notifications, unreadCount, loading, error } = useAppSelector((s) => s.notification);
 
   // Active filter tab
   const [activeTab, setActiveTab] = useState('All');

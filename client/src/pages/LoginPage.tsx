@@ -1,7 +1,7 @@
 // src/pages/LoginPage.jsx
 import { useCallback, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { adminLoginThunk, loginThunk, resendVerificationThunk } from '../redux/slices/authSlice';
 import GoogleSignInButton from '../components/common/GoogleSignInButton';
 import type { RootState } from '../redux/store';
@@ -11,9 +11,9 @@ type LoginPageProps = {
 };
 
 const LoginPage = ({ onClose }: LoginPageProps) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { loading, error } = useSelector((state: RootState) => state.auth);
+  const { loading, error } = useAppSelector((state: RootState) => state.auth);
   const [adminMode, setAdminMode] = useState(false);
   const [adminEmail, setAdminEmail] = useState('');
   const [adminPassword, setAdminPassword] = useState('');

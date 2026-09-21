@@ -20,7 +20,7 @@
  *   - Click QR button; assert toast "QR Code coming soon" is rendered.
  */
 
-import React from 'react';
+
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import * as fc from 'fast-check';

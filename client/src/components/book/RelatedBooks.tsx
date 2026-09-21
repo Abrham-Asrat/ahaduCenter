@@ -1,5 +1,10 @@
 // src/components/book/RelatedBooks.jsx
-import React, { useRef } from 'react';
+import { useRef } from 'react';
+import type { Book } from '../../types';
+
+interface RelatedBooksProps {
+    books: Book[];
+}
 
 /**
  * RelatedBooks Component
@@ -9,10 +14,10 @@ import React, { useRef } from 'react';
  * Props:
  * - books: Array of book objects { id, title, author, coverUrl, price }
  */
-const RelatedBooks = ({ books }) => {
-    const scrollRef = useRef(null);
+const RelatedBooks = ({ books }: RelatedBooksProps) => {
+    const scrollRef = useRef<HTMLDivElement>(null);
 
-    const scroll = (dir) => {
+    const scroll = (dir: 'prev' | 'next') => {
         const el = scrollRef.current;
         if (el) el.scrollBy({ left: dir === 'next' ? 220 : -220, behavior: 'smooth' });
     };

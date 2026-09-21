@@ -1,5 +1,5 @@
 // src/components/movie/CastSection.jsx
-import React from 'react';
+
 
 /**
  * CastSection Component

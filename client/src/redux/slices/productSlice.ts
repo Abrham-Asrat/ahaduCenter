@@ -1,11 +1,28 @@
 // Stores electronics catalog and product detail request state.
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { productService } from '../../services/productService';
+import type { PaginationState, Product } from '../../types';
+
+interface ProductState {
+  products: Product[];
+  currentProduct: Product | null;
+  loading: boolean;
+  error: string | null;
+  pagination: PaginationState;
+}
+
+interface ProductQuery {
+  page?: number;
+  limit?: number;
+  category?: string;
+  q?: string;
+  sort?: string;
+}
 
 // ── Product Thunks ──
 export const fetchProducts = createAsyncThunk(
   'product/fetchProducts',
-  async (params = {}, { rejectWithValue }) => {
+  async (params: ProductQuery = {}, { rejectWithValue }) => {
     try {
       const data = await productService.getProducts(params);
       return data;
@@ -17,7 +34,7 @@ export const fetchProducts = createAsyncThunk(
 
 export const fetchProduct = createAsyncThunk(
   'product/fetchProduct',
-  async (id, { rejectWithValue }) => {
+  async (id: string, { rejectWithValue }) => {
     try {
       const data = await productService.getProduct(id);
       return data;
@@ -27,7 +44,7 @@ export const fetchProduct = createAsyncThunk(
   }
 );
 
-const initialState = {
+const initialState: ProductState = {
   products: [],
   currentProduct: null,
   loading: false,
@@ -37,6 +54,7 @@ const initialState = {
     limit: 12,
     total: 0,
     totalPages: 0,
+    totalItems: 0,
   },
 };
 

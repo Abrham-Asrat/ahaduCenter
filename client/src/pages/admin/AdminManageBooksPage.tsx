@@ -1,6 +1,6 @@
 // src/pages/admin/AdminManageBooksPage.jsx
-import React, { useState, useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useState, useEffect, useRef } from 'react';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import AdminLayout from '../../components/admin/AdminLayout';
 import {
   fetchAdminBooks,
@@ -10,8 +10,8 @@ import {
 } from '../../redux/slices/adminSlice';
 
 const AdminManageBooksPage = () => {
-    const dispatch = useDispatch();
-    const { books, loading, error } = useSelector((s) => s.admin);
+    const dispatch = useAppDispatch();
+    const { books, loading, error } = useAppSelector((s) => s.admin);
 
     const [activeTab, setActiveTab] = useState('Inventory');
 

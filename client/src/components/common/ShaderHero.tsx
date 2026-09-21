@@ -16,7 +16,7 @@ import { useEffect, useRef } from 'react';
  */
 const ShaderHero = () => {
     // Ref for the canvas element
-    const canvasRef = useRef(null);
+    const canvasRef = useRef<HTMLCanvasElement>(null);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -39,8 +39,9 @@ const ShaderHero = () => {
         syncSize();
 
         // Get WebGL context
-        const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-        if (!gl) return;
+        const context = canvas.getContext('webgl') as WebGLRenderingContext | null;
+        if (!context) return;
+        const gl = context;
 
         // Vertex shader source
         const vs = `
@@ -87,8 +88,9 @@ const ShaderHero = () => {
     `;
 
         // Helper to compile a shader
-        function compileShader(type, src) {
+        function compileShader(type: GLenum, src: string): WebGLShader | null {
             const s = gl.createShader(type);
+            if (!s) return null;
             gl.shaderSource(s, src);
             gl.compileShader(s);
             return s;
@@ -96,8 +98,11 @@ const ShaderHero = () => {
 
         // Create and link program
         const prog = gl.createProgram();
-        gl.attachShader(prog, compileShader(gl.VERTEX_SHADER, vs));
-        gl.attachShader(prog, compileShader(gl.FRAGMENT_SHADER, fs));
+        const vertexShader = compileShader(gl.VERTEX_SHADER, vs);
+        const fragmentShader = compileShader(gl.FRAGMENT_SHADER, fs);
+        if (!prog || !vertexShader || !fragmentShader) return;
+        gl.attachShader(prog, vertexShader);
+        gl.attachShader(prog, fragmentShader);
         gl.linkProgram(prog);
         gl.useProgram(prog);
 
@@ -115,7 +120,7 @@ const ShaderHero = () => {
 
         // Mouse tracking (ShaderToy style)
         const mouse = { x: canvas.width / 2, y: canvas.height / 2 };
-        const handleMouseMove = (event) => {
+        const handleMouseMove = (event: MouseEvent) => {
             const rect = canvas.getBoundingClientRect();
             if (rect.width && rect.height) {
                 const nx = (event.clientX - rect.left) / rect.width;
@@ -127,8 +132,8 @@ const ShaderHero = () => {
         window.addEventListener('mousemove', handleMouseMove);
 
         // Animation loop
-        let animationId;
-        const render = (t) => {
+        let animationId: number;
+        const render = (t: number) => {
             syncSize();
             gl.viewport(0, 0, canvas.width, canvas.height);
             if (uTime) gl.uniform1f(uTime, t * 0.001);
