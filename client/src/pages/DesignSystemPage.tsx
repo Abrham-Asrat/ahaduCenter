@@ -242,7 +242,7 @@ const DesignSystemPage = () => {
  * SectionTitle Component
  * Displays a consistent section header with gold underline.
  */
-const SectionTitle = ({ title }) => (
+const SectionTitle = ({ title }: { title: string }) => (
   <h2 className="text-3xl font-bold text-white border-b-2 border-secondary inline-block pb-2 mb-8">
     {title}
   </h2>
@@ -252,7 +252,7 @@ const SectionTitle = ({ title }) => (
  * ColorSwatch Component
  * Displays a color block with hex code and name.
  */
-const ColorSwatch = ({ colorHex, name, className }) => (
+const ColorSwatch = ({ colorHex, name, className }: { colorHex: string; name: string; className: string }) => (
   <div>
     <div className={`h-32 rounded-xl ${className} border border-white/10 shadow-lg`} />
     <div className="mt-2">

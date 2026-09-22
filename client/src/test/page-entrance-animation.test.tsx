@@ -9,7 +9,8 @@
  * **Validates: Requirements 11.1**
  */
 
-import { describe, it, expect, vi, beforeAll } from 'vitest';
+import { describe, it, expect } from 'vitest';
+import type { ComponentType } from 'react';
 import { render, act } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -39,8 +40,8 @@ import AdminDashboardPage from '../pages/admin/AdminDashboardPage';
  * Render a page component inside MemoryRouter + Redux Provider.
  * Returns the `container` from React Testing Library.
  */
-function renderPage(PageComponent, initialEntry = '/') {
-  let container;
+function renderPage(PageComponent: ComponentType, initialEntry = '/') {
+  let container: HTMLElement | null = null;
   act(() => {
     const res = render(
       <Provider store={store}>
@@ -51,6 +52,7 @@ function renderPage(PageComponent, initialEntry = '/') {
     );
     container = res.container;
   });
+  if (!container) throw new Error('Page render did not return a container');
   return container;
 }
 
@@ -63,7 +65,7 @@ function renderPage(PageComponent, initialEntry = '/') {
  *   animate-fade-in lives on the first child div rendered by the page itself
  *   inside AdminLayout's <main>. We use querySelector to locate it.
  */
-function getAnimatedElement(container, isAdminPage = false) {
+function getAnimatedElement(container: HTMLElement, isAdminPage = false): Element | null {
   if (isAdminPage) {
     // AdminDashboardPage renders <AdminLayout> which wraps content in a <main>.
     // The animate-fade-in class is on the first <div> inside that <main>.
@@ -81,6 +83,7 @@ describe('Property 7: Page entrance animation class is always present', () => {
     const container = renderPage(LoginPage, '/login');
     const el = getAnimatedElement(container);
     expect(el).not.toBeNull();
+    if (!el) throw new Error('Animated element not found');
     expect(el.classList.contains('animate-fade-in')).toBe(true);
   });
 
@@ -88,6 +91,7 @@ describe('Property 7: Page entrance animation class is always present', () => {
     const container = renderPage(RegisterPage, '/register');
     const el = getAnimatedElement(container);
     expect(el).not.toBeNull();
+    if (!el) throw new Error('Animated element not found');
     expect(el.classList.contains('animate-fade-in')).toBe(true);
   });
 
@@ -95,6 +99,7 @@ describe('Property 7: Page entrance animation class is always present', () => {
     const container = renderPage(ForgotPasswordPage, '/forgot-password');
     const el = getAnimatedElement(container);
     expect(el).not.toBeNull();
+    if (!el) throw new Error('Animated element not found');
     expect(el.classList.contains('animate-fade-in')).toBe(true);
   });
 
@@ -102,6 +107,7 @@ describe('Property 7: Page entrance animation class is always present', () => {
     const container = renderPage(ContactPage, '/contact');
     const el = getAnimatedElement(container);
     expect(el).not.toBeNull();
+    if (!el) throw new Error('Animated element not found');
     expect(el.classList.contains('animate-fade-in')).toBe(true);
   });
 
@@ -109,6 +115,7 @@ describe('Property 7: Page entrance animation class is always present', () => {
     const container = renderPage(WishlistPage, '/wishlist');
     const el = getAnimatedElement(container);
     expect(el).not.toBeNull();
+    if (!el) throw new Error('Animated element not found');
     expect(el.classList.contains('animate-fade-in')).toBe(true);
   });
 
@@ -118,6 +125,7 @@ describe('Property 7: Page entrance animation class is always present', () => {
     // (it is added in Task 26). Check the element exists and verify the class.
     const el = getAnimatedElement(container);
     expect(el).not.toBeNull();
+    if (!el) throw new Error('Animated element not found');
     expect(el.classList.contains('animate-fade-in')).toBe(true);
   });
 
@@ -125,6 +133,7 @@ describe('Property 7: Page entrance animation class is always present', () => {
     const container = renderPage(PurchaseHistoryPage, '/purchase-history');
     const el = getAnimatedElement(container);
     expect(el).not.toBeNull();
+    if (!el) throw new Error('Animated element not found');
     expect(el.classList.contains('animate-fade-in')).toBe(true);
   });
 
@@ -133,6 +142,7 @@ describe('Property 7: Page entrance animation class is always present', () => {
     // NotificationsPage currently lacks animate-fade-in (added in Task 14).
     const el = getAnimatedElement(container);
     expect(el).not.toBeNull();
+    if (!el) throw new Error('Animated element not found');
     expect(el.classList.contains('animate-fade-in')).toBe(true);
   });
 
@@ -140,6 +150,7 @@ describe('Property 7: Page entrance animation class is always present', () => {
     const container = renderPage(UserDashboardPage, '/account');
     const el = getAnimatedElement(container);
     expect(el).not.toBeNull();
+    if (!el) throw new Error('Animated element not found');
     expect(el.classList.contains('animate-fade-in')).toBe(true);
   });
 
@@ -147,6 +158,7 @@ describe('Property 7: Page entrance animation class is always present', () => {
     const container = renderPage(SearchResultsPage, '/search');
     const el = getAnimatedElement(container);
     expect(el).not.toBeNull();
+    if (!el) throw new Error('Animated element not found');
     expect(el.classList.contains('animate-fade-in')).toBe(true);
   });
 
@@ -154,6 +166,7 @@ describe('Property 7: Page entrance animation class is always present', () => {
     const container = renderPage(MovieRequestPage, '/movie-request');
     const el = getAnimatedElement(container);
     expect(el).not.toBeNull();
+    if (!el) throw new Error('Animated element not found');
     expect(el.classList.contains('animate-fade-in')).toBe(true);
   });
 
@@ -161,6 +174,7 @@ describe('Property 7: Page entrance animation class is always present', () => {
     const container = renderPage(BookConfirmPage, '/book-confirm');
     const el = getAnimatedElement(container);
     expect(el).not.toBeNull();
+    if (!el) throw new Error('Animated element not found');
     expect(el.classList.contains('animate-fade-in')).toBe(true);
   });
 
@@ -168,6 +182,7 @@ describe('Property 7: Page entrance animation class is always present', () => {
     const container = renderPage(OrderConfirmationPage, '/order-confirmation');
     const el = getAnimatedElement(container);
     expect(el).not.toBeNull();
+    if (!el) throw new Error('Animated element not found');
     expect(el.classList.contains('animate-fade-in')).toBe(true);
   });
 
@@ -175,6 +190,7 @@ describe('Property 7: Page entrance animation class is always present', () => {
     const container = renderPage(ProductComparisonPage, '/compare');
     const el = getAnimatedElement(container);
     expect(el).not.toBeNull();
+    if (!el) throw new Error('Animated element not found');
     expect(el.classList.contains('animate-fade-in')).toBe(true);
   });
 
@@ -184,6 +200,7 @@ describe('Property 7: Page entrance animation class is always present', () => {
     // the first inner div passed as children to AdminLayout.
     const el = getAnimatedElement(container, true);
     expect(el).not.toBeNull();
+    if (!el) throw new Error('Animated element not found');
     expect(el.classList.contains('animate-fade-in')).toBe(true);
   });
 
@@ -198,7 +215,7 @@ describe('Property 7: Page entrance animation class is always present', () => {
  */
 describe('Property 7 (fast-check): animate-fade-in is always present across all 15 pages', () => {
 
-  const pages = [
+  const pages: Array<{ name: string; Component: ComponentType; route: string; isAdmin: boolean }> = [
     { name: 'LoginPage',              Component: LoginPage,             route: '/login',               isAdmin: false },
     { name: 'RegisterPage',           Component: RegisterPage,          route: '/register',            isAdmin: false },
     { name: 'ForgotPasswordPage',     Component: ForgotPasswordPage,    route: '/forgot-password',     isAdmin: false },
@@ -222,7 +239,9 @@ describe('Property 7 (fast-check): animate-fade-in is always present across all 
         // Generate an index into the pages array
         fc.integer({ min: 0, max: pages.length - 1 }),
         (idx) => {
-          const { Component, route, isAdmin } = pages[idx];
+          const page = pages[idx];
+          if (!page) return false;
+          const { Component, route, isAdmin } = page;
           const container = renderPage(Component, route);
           const el = getAnimatedElement(container, isAdmin);
           return el !== null && el.classList.contains('animate-fade-in');

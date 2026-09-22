@@ -160,6 +160,22 @@ export interface PurchaseOrder {
   items?: Array<{ productImage?: string | null; [key: string]: unknown }>;
 }
 
+export interface OrderConfirmationItem {
+  _id?: string;
+  id?: string;
+  productName?: string;
+  name?: string;
+  product?: { name?: string; images?: string[] };
+  imageUrl?: string;
+  quantity?: number;
+}
+
+export interface OrderConfirmationOrder {
+  _id?: string;
+  id?: string;
+  items?: OrderConfirmationItem[];
+}
+
 export interface SearchResult {
   id?: string;
   _id?: string;

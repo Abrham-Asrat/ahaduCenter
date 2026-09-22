@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { orderService } from '../services/orderService';
+import type { OrderConfirmationItem, OrderConfirmationOrder } from '../types';
 
 /**
  * OrderConfirmationPage Component
@@ -16,9 +17,9 @@ const OrderConfirmationPage = () => {
   const location = useLocation();
   const { id } = useParams();
 
-  const [order, setOrder] = useState(location.state?.order ?? null);
+  const [order, setOrder] = useState<OrderConfirmationOrder | null>(location.state?.order ?? null);
   const [loading, setLoading] = useState(!!(id && !location.state?.order));
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     // If we already got the order from navigation state, nothing to do.
@@ -167,7 +168,7 @@ const OrderConfirmationPage = () => {
             <p className="text-on-surface-variant text-sm">No item details available.</p>
           ) : (
             <div className="space-y-4">
-              {items.map((item, index) => {
+              {items.map((item: OrderConfirmationItem, index: number) => {
                 // Support both populated `product` objects and plain strings/ids.
                 const productName =
                   item?.product?.name ?? item?.productName ?? item?.name ?? 'Product';
