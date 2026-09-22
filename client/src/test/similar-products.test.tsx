@@ -26,7 +26,7 @@ import SimilarProducts from '../components/electronics/SimilarProducts';
  */
 const productArbitrary = fc.record({
   id: fc.oneof(
-    fc.integer({ min: 1, max: 99999 }),
+    fc.integer({ min: 1, max: 99999 }).map(String),
     fc.uuid()
   ),
   title: fc.string({ minLength: 1, maxLength: 60 }),
