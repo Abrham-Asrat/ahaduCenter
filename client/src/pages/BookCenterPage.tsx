@@ -40,7 +40,6 @@ const BookCenterPage = () => {
   });
   const [currentPage, setCurrentPage] = useState(1);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
-  const [toastMessage, setToastMessage] = useState(null);
 
   const categories = [
     'All Categories',
@@ -125,14 +124,6 @@ const BookCenterPage = () => {
     <>
       <Navbar />
     <div className="min-h-screen bg-background text-on-background flex flex-col relative animate-fade-in">
-
-      {/* Toast Notification */}
-      {toastMessage && (
-        <div className="fixed bottom-8 right-8 z-50 bg-surface-container border border-primary/50 text-white px-5 py-3.5 rounded-xl shadow-2xl flex items-center gap-3 animate-bounce">
-          <span className="material-symbols-outlined text-primary">check_circle</span>
-          <span className="text-sm font-semibold">{toastMessage}</span>
-        </div>
-      )}
 
       {/* Sub-navigation for categories */}
      
