@@ -11,6 +11,10 @@ node_modules/
 # Build output
 dist/
 build/
+dist-extract/
+
+# Docker MongoDB data
+mongo_data/
 
 # Logs
 npm-debug.log*

@@ -21,7 +21,6 @@ const OrderItemSchema = new Schema(
     productId:    { type: Schema.Types.ObjectId, ref: 'Product', required: true },
     productName:  { type: String },
     productImage: { type: String },
-    price:        { type: Number },
     quantity:     { type: Number, min: 1, max: 99 },
   },
   { _id: false }
@@ -31,9 +30,6 @@ const OrderSchema = new Schema(
   {
     userId:              { type: Schema.Types.ObjectId, ref: 'User', required: true },
     items:               [OrderItemSchema],
-    subtotal:            { type: Number, required: true },
-    reservationFee:      { type: Number, required: true },
-    totalPayableAtStore: { type: Number, required: true },
     status:              {
       type:    String,
       enum:    ['Processing', 'Ready', 'Completed', 'Cancelled'],

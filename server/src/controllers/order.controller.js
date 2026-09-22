@@ -30,8 +30,6 @@ try {
   createNotification = async () => {};
 }
 
-// RESERVATION_FEE defaults to 50 ETB if the env variable is not set
-const RESERVATION_FEE = Number(process.env.RESERVATION_FEE ?? 50);
 
 // ── POST /api/orders ──────────────────────────────────────────────────────────
 // Requirements 9.1, 9.2, 12.7
@@ -85,6 +83,7 @@ const placeOrder = async (req, res, next) => {
     }
 
     // Enrich each item with a product snapshot (price, name, first image)
+      // Enrich each item with a product snapshot (name and first image)
     // and validate that every productId exists (Requirement 9.2)
     let enrichedItems;
     try {
@@ -118,23 +117,15 @@ const placeOrder = async (req, res, next) => {
     }
 
     // Compute subtotal = sum(price × quantity) (Requirement 9.1)
-    const subtotal = enrichedItems.reduce(
-      (sum, item) => sum + item.price * item.quantity,
-      0
-    );
-
-    // totalPayableAtStore = subtotal + RESERVATION_FEE (Requirement 9.1)
-    const totalPayableAtStore = subtotal + RESERVATION_FEE;
 
     // Create the Order record with status "Processing" (Requirement 9.1)
+      // Create the pickup order with status "Processing".
     let order;
     try {
       order = await Order.create({
         userId,
         items:               enrichedItems,
         subtotal,
-        reservationFee:      RESERVATION_FEE,
-        totalPayableAtStore,
         status:              'Processing',
       });
     } catch (orderErr) {
@@ -160,7 +151,7 @@ const placeOrder = async (req, res, next) => {
         userId,
         type:        'Electronics',
         title:       'Order Placed',
-        description: `Your order has been placed. Items: ${itemSummary}. Total payable at store: ${totalPayableAtStore} ETB.`,
+        description: `Your pickup order has been placed. Items: ${itemSummary}.`,
       });
     } catch (notifErr) {
       console.error('[placeOrder] Notification creation failed:', notifErr.message);
@@ -193,8 +184,7 @@ const getOrder = async (req, res, next) => {
     }
 
     // Populate customerName and phone from the owning User
-    // (Requirement 9.4 — respond with customerName, phone, storeLocation, operatingHours, items,
-    //  subtotal, reservationFee, totalPayableAtStore)
+    // Include the owning customer's contact details with the pickup order.
     const user = await User.findById(order.userId).select('name phone').lean();
 
     return res.status(200).json({
@@ -239,7 +229,6 @@ const getOrderHistory = async (req, res, next) => {
         quantity:     item.quantity,
       })),
       itemCount: order.items.reduce((sum, item) => sum + item.quantity, 0),
-      total:     order.totalPayableAtStore,
     }));
 
     return res.status(200).json({

@@ -18,7 +18,6 @@ const BorrowingSchema = new Schema({
   returnDate:   { type: Date, default: null },
   status:       { type: String, enum: ['Active', 'Returned', 'Overdue'], default: 'Active' },
   renewalsLeft: { type: Number, default: 2 },
-  fee:          { type: Number, default: 0 },
 }, { timestamps: true });
 
 BorrowingSchema.index(

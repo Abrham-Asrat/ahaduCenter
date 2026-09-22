@@ -21,7 +21,7 @@ const { paginate } = require('../../utils/paginate.js');
 // Requirements 6.1, 6.2, 6.3, 6.4
 const listMovies = async (req, res, next) => {
   try {
-    const { q, genre, page, limit } = req.query;
+    const { q, genre, country, page, limit } = req.query;
 
     // Build filter
     const filter = {};
@@ -33,7 +33,13 @@ const listMovies = async (req, res, next) => {
 
     if (genre && genre.trim()) {
       // Case-insensitive array-contains filter on genres field (Requirement 6.3)
-      filter.genres = { $elemMatch: { $regex: new RegExp(`^${escapeRegex(genre.trim())}$`, 'i') } };
+      filter.genres = {
+        $in: splitValues(genre).map((value) => new RegExp(`^${escapeRegex(value)}$`, 'i')),
+      };
+    }
+
+    if (country && country.trim()) {
+      filter.country = { $regex: new RegExp(`^${escapeRegex(country.trim())}$`, 'i') };
     }
 
     // Pagination options — defaults and bounds are enforced by movieQueryRules +

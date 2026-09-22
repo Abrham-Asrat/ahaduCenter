@@ -1,3 +1,4 @@
+# Build the static client bundle, then serve it with nginx.
 FROM node:20-alpine AS build
 
 WORKDIR /app
@@ -9,6 +10,9 @@ COPY . .
 
 ARG VITE_API_BASE_URL=/api
 ENV VITE_API_BASE_URL=${VITE_API_BASE_URL}
+
+ARG VITE_GOOGLE_CLIENT_ID
+ENV VITE_GOOGLE_CLIENT_ID=${VITE_GOOGLE_CLIENT_ID}
 
 RUN npm run build
 

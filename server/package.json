@@ -6,7 +6,11 @@
     "start": "node server.js",
     "dev": "node --watch server.js",
     "test": "jest --runInBand",
-    "seed": "node src/seed.js",
+    "seed": "node src/seed/index.js",
+    "seed:fresh": "node src/seed/index.js --fresh",
+    "seed:clear": "node src/seed/index.js --clear",
+    "seed:users": "node src/seed/index.js --only=users",
+    "seed:prod": "NODE_ENV=production node src/seed/index.js",
     "migrate:stock": "node src/migrations/20260903-add-stock-quantity.js",
     "migrate:indexes": "node src/migrations/20260903-fix-typed-unique-indexes.js"
   },

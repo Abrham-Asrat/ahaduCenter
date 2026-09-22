@@ -22,7 +22,7 @@ const { paginate } = require('../../utils/paginate.js');
 // Requirements 8.1, 8.2, 8.3, 8.4, 8.5
 const listProducts = async (req, res, next) => {
   try {
-    const { q, category, minPrice, maxPrice, page, limit } = req.query;
+    const { q, category, condition, brand, minPrice, maxPrice, page, limit } = req.query;
 
     // Build filter
     const filter = {};
@@ -37,6 +37,9 @@ const listProducts = async (req, res, next) => {
       // Case-insensitive category match (Requirement 8.3)
       filter.category = { $regex: new RegExp(`^${escapeRegex(category.trim())}$`, 'i') };
     }
+
+    if (condition && condition.trim()) filter.condition = { $in: splitValues(condition) };
+    if (brand && brand.trim()) filter.brand = { $in: splitValues(brand) };
 
     // Price range filter — only add conditions that are actually specified
     // (Requirement 8.4)
@@ -110,6 +113,10 @@ const getProduct = async (req, res, next) => {
  */
 function escapeRegex(str) {
   return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function splitValues(value) {
+  return value.split(',').map((item) => new RegExp(`^${escapeRegex(item.trim())}$`, 'i'));
 }
 
 module.exports = { listProducts, getProduct };

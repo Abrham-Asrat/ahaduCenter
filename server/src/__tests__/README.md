@@ -31,9 +31,7 @@ __tests__/
 |------|--------------|
 | `jwt.test.js` | `utils/jwt.js` — sign/verify round-trip, expired token throws `TokenExpiredError` |
 | `middleware.test.js` | `authenticate` (401 cases), `requireRole` (403 cases), `validate` (422 shape), `errorHandler` (500/400/409/422), CORS preflight (204 + headers) |
-| `overdue.test.js` | `utils/overdue.js` — Property 13: fee = N × `OVERDUE_FEE_PER_DAY` for any N ≥ 0 |
 | `paginate.test.js` | `utils/paginate.js` — Property 9: `totalPages = ceil(totalCount / limit)`, `data.length ≤ limit` |
-| `order.total.test.js` | Order total logic — Property 16: `subtotal = Σ(price × qty)`, `totalPayableAtStore = subtotal + RESERVATION_FEE` |
 | `upload.service.test.js` | `services/upload.service.js` — Property 18: 1000 UUID filenames are all distinct |
 
 ---
@@ -59,5 +57,5 @@ Each file manages its own `MongoMemoryServer` + `mongoose.connect()` lifecycle (
 ## Notes
 
 - All integration tests mock `nodemailer` at the top of the file to prevent real email sends.
-- `OVERDUE_FEE_PER_DAY` and `JWT_SECRET` env vars are set via `process.env` at the top of each file that needs them, before `require('../../app')`.
+- `JWT_SECRET` is set via `process.env` at the top of each file that needs it, before `require('../../app')`.
 - Property-based tests use `numRuns: 3–20` depending on how DB-intensive each run is.

@@ -1,0 +1,170 @@
+// Stores movie catalog, detail, and review request state.
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { movieService } from '../../services/movieService';
+import type { Movie, MovieQuery, PaginationState, Review } from '../../types';
+
+interface MovieState {
+  movies: Movie[];
+  currentMovie: Movie | null;
+  selectedMovie: Movie | null;
+  reviews: Review[];
+  loading: boolean;
+  error: string | null;
+  pagination: PaginationState;
+}
+
+// ── Movie Thunks ──
+export const fetchMovies = createAsyncThunk(
+  'movie/fetchMovies',
+  async (params: MovieQuery = {}, { rejectWithValue }) => {
+    try {
+      const data = await movieService.getMovies(params);
+      return data;
+    } catch (err) {
+      return rejectWithValue(typeof err === 'string' ? err : 'Failed to fetch movies');
+    }
+  }
+);
+
+export const fetchMovie = createAsyncThunk(
+  'movie/fetchMovie',
+  async (id: string, { rejectWithValue }) => {
+    try {
+      const data = await movieService.getMovie(id);
+      return data;
+    } catch (err) {
+      return rejectWithValue(typeof err === 'string' ? err : 'Failed to fetch movie');
+    }
+  }
+);
+
+export const fetchMovieReviews = createAsyncThunk(
+  'movie/fetchMovieReviews',
+  async (movieId: string, { rejectWithValue }) => {
+    try {
+      const data = await movieService.getMovieReviews(movieId);
+      return data;
+    } catch (err) {
+      return rejectWithValue(typeof err === 'string' ? err : 'Failed to fetch reviews');
+    }
+  }
+);
+
+export const createMovieReview = createAsyncThunk(
+  'movie/createMovieReview',
+  async ({ movieId, review }: { movieId: string; review: { rating: number; comment: string } }, { rejectWithValue }) => {
+    try {
+      const data = await movieService.createMovieReview(movieId, review);
+      return data;
+    } catch (err) {
+      return rejectWithValue(typeof err === 'string' ? err : 'Failed to create review');
+    }
+  }
+);
+
+const initialState: MovieState = {
+  movies: [],
+  currentMovie: null,
+  selectedMovie: null,
+  reviews: [],
+  loading: false,
+  error: null,
+  pagination: {
+    page: 1,
+    limit: 12,
+    total: 0,
+    totalPages: 0,
+    totalItems: 0,
+  },
+};
+
+export const movieSlice = createSlice({
+  name: 'movie',
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      // Fetch Movies
+      .addCase(fetchMovies.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchMovies.fulfilled, (state, action) => {
+        state.loading = false;
+        const payload = action.payload;
+        // Handle different response formats
+        if (Array.isArray(payload)) {
+          state.movies = payload;
+        } else if (payload.data && Array.isArray(payload.data)) {
+          state.movies = payload.data;
+          state.pagination = payload.pagination || {
+            page: payload.page ?? 1,
+            limit: payload.limit ?? state.pagination.limit,
+            total: payload.totalCount ?? 0,
+            totalPages: payload.totalPages ?? 0,
+          };
+        } else if (payload.movies && Array.isArray(payload.movies)) {
+          state.movies = payload.movies;
+          state.pagination = payload.pagination || {
+            page: payload.page ?? 1,
+            limit: payload.limit ?? state.pagination.limit,
+            total: payload.totalCount ?? 0,
+            totalPages: payload.totalPages ?? 0,
+          };
+        }
+      })
+      .addCase(fetchMovies.rejected, (state, action) => {
+        state.loading = false;
+          state.error = typeof action.payload === 'string' ? action.payload : null;
+      })
+
+      // Fetch Single Movie
+      .addCase(fetchMovie.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchMovie.fulfilled, (state, action) => {
+        state.loading = false;
+        state.currentMovie = action.payload;
+        state.selectedMovie = action.payload;
+      })
+      .addCase(fetchMovie.rejected, (state, action) => {
+        state.loading = false;
+          state.error = typeof action.payload === 'string' ? action.payload : null;
+      })
+
+      // Fetch Movie Reviews
+      .addCase(fetchMovieReviews.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchMovieReviews.fulfilled, (state, action) => {
+        state.loading = false;
+        state.reviews = Array.isArray(action.payload)
+          ? action.payload
+          : (action.payload?.data ?? []);
+      })
+      .addCase(fetchMovieReviews.rejected, (state, action) => {
+        state.loading = false;
+          state.error = typeof action.payload === 'string' ? action.payload : null;
+      })
+
+      // Create Movie Review
+      .addCase(createMovieReview.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(createMovieReview.fulfilled, (state, action) => {
+        state.loading = false;
+        if (state.reviews && Array.isArray(state.reviews)) {
+          state.reviews.push(action.payload);
+        }
+      })
+      .addCase(createMovieReview.rejected, (state, action) => {
+        state.loading = false;
+          state.error = typeof action.payload === 'string' ? action.payload : null;
+      });
+  },
+});
+
+export default movieSlice.reducer;

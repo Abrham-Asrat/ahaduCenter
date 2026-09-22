@@ -1,3 +1,4 @@
+// Express application assembly; server.js owns configuration and startup.
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
@@ -5,9 +6,20 @@ const path = require('path');
 const app = express();
 
 // ── CORS ──────────────────────────────────────────────────────────────────────
+const allowedOrigins = (process.env.CLIENT_ORIGIN || 'http://localhost:3000,http://localhost:5173,http://127.0.0.1:3000,http://127.0.0.1:5173')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
 app.use(
   cors({
-    origin: process.env.CLIENT_ORIGIN || 'http://localhost:5173',
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+        return;
+      }
+      callback(new Error(`CORS origin not allowed: ${origin}`));
+    },
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     preflightContinue: false,
@@ -60,11 +72,6 @@ app.use('/api/notifications', notificationRouter);
 // ── Search routes ─────────────────────────────────────────────────────────────
 const searchRouter = require('./routes/search.routes');
 app.use('/api/search', searchRouter);
-
-// ── Route stubs (return 501 until routes are implemented) ────────────────────
-// These will be replaced by real routers as each task is implemented.
-const stub = (name) => (_req, res) =>
-  res.status(501).json({ error: `${name} not yet implemented` });
 
 // ── Upload routes ─────────────────────────────────────────────────────────────
 const uploadRouter = require('./routes/upload.routes');

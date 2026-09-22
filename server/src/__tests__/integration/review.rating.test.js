@@ -31,7 +31,6 @@ const { registerAndLoginWithGoogle } = require('../helpers/auth');
 
 // Set env vars BEFORE requiring the app (JWT_SECRET is needed at load time)
 process.env.JWT_SECRET = 'test-secret-review-rating';
-process.env.OVERDUE_FEE_PER_DAY = '1';
 process.env.GOOGLE_CLIENT_ID = 'test-google-client-id';
 
 const app = require('../../app');

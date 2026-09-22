@@ -1,0 +1,5 @@
+{
+  "bookCategories": ["Fiction", "History", "Science", "Technology", "Biography", "Poetry", "Psychology", "Self Help", "Philosophy", "Reference", "Language"],
+  "productCategories": ["Phones", "Laptops", "Audio", "Accessories", "Monitors", "TVs", "Networking", "Storage", "Cameras", "Wearables", "Tablets"],
+  "cities": ["Addis Ababa", "Adama", "Hawassa", "Bahir Dar", "Mekelle"]
+}

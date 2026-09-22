@@ -12,15 +12,13 @@
  *   5.5  — POST /api/borrowings/:id/renew   (renewBorrowing)
  *   5.6  — 400 when renewalsLeft === 0      (renewBorrowing)
  *   5.7  — POST /api/borrowings/:id/return  (returnBook)
- *   5.8  — Overdue-on-read with fee calc    (getBorrowingHistory + resolveOverdue)
+ *   5.8  — Overdue-on-read status resolution (getBorrowingHistory + resolveOverdue)
  *   5.10 — 409 when user already has active borrowing for same book (borrowBook)
  *   12.8 — createNotification side-effect on borrow (borrowBook)
  */
 
 const Book      = require('../models/Book.js');
 const Borrowing = require('../models/Borrowing.js');
-const { calculateOverdueFee } = require('../../utils/overdue.js');
-
 // Notification service (Requirement 12.8)
 const { createNotification } = require('../services/notification.service.js');
 
@@ -28,7 +26,7 @@ const { createNotification } = require('../services/notification.service.js');
 
 /**
  * Checks a single Borrowing record for overdue status and, if found, updates
- * the document in-place (sets status to "Overdue", computes fee, saves).
+ * the document in-place and saves it.
  * Returns the (possibly mutated and saved) document.
  *
  * @param {import('mongoose').Document} borrowing - A Mongoose Borrowing document
@@ -37,7 +35,6 @@ const { createNotification } = require('../services/notification.service.js');
 async function resolveOverdue(borrowing) {
   if (borrowing.status === 'Active' && borrowing.dueDate < new Date()) {
     borrowing.status = 'Overdue';
-    borrowing.fee    = calculateOverdueFee(borrowing.dueDate);
     await borrowing.save();
   }
   return borrowing;
@@ -88,7 +85,6 @@ const borrowBook = async (req, res, next) => {
         dueDate,
         status:       'Active',
         renewalsLeft: 2,
-        fee:          0,
       });
     } catch (createErr) {
       await Book.findByIdAndUpdate(bookId, { $inc: { availableCopies: 1 } });
@@ -140,11 +136,6 @@ const returnBook = async (req, res, next) => {
       return res.status(exists && !owned ? 403 : exists ? 400 : 404).json({
         error: exists && !owned ? 'Forbidden' : exists ? 'Only active or overdue borrowings can be returned' : 'Borrowing record not found',
       });
-    }
-
-    if (borrowing.dueDate < new Date()) {
-      borrowing.fee = calculateOverdueFee(borrowing.dueDate);
-      await borrowing.save();
     }
 
     // Increment availableCopies atomically (Requirement 5.7)
@@ -228,7 +219,6 @@ const getBorrowingHistory = async (req, res, next) => {
       returnDate:  b.returnDate,
       status:      b.status,
       renewalsLeft:b.renewalsLeft,
-      fee:         b.fee,
     }));
 
     return res.status(200).json(data);
