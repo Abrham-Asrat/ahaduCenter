@@ -15,8 +15,8 @@ const { mockNavigate } = vi.hoisted(() => ({
   mockNavigate: vi.fn(),
 }));
 
-vi.mock('react-router-dom', async (importOriginal) => {
-  const actual = await importOriginal();
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
   return {
     ...actual,
     useNavigate: () => mockNavigate,
@@ -25,7 +25,7 @@ vi.mock('react-router-dom', async (importOriginal) => {
 
 import Navbar from '../components/common/Navbar';
 import { Provider } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore, type UnknownAction } from '@reduxjs/toolkit';
 
 /**
  * Build a minimal Redux store that simulates a logged-in user.
@@ -42,11 +42,11 @@ function buildLoggedInStore() {
           error: null,
           initialized: true,
         },
-        _action
+        _action: UnknownAction
       ) => state,
       notification: (
         state = { notifications: [], unreadCount: 0, loading: false, error: null },
-        _action
+        _action: UnknownAction
       ) => state,
     },
   });

@@ -12,8 +12,8 @@ const { mockNavigate } = vi.hoisted(() => ({
   mockNavigate: vi.fn(),
 }));
 
-vi.mock('react-router-dom', async (importOriginal) => {
-  const actual = await importOriginal();
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
   return {
     ...actual,
     useNavigate: () => mockNavigate,
@@ -45,18 +45,21 @@ describe('HeroSection responsive padding (Requirement 8.1)', () => {
     const { container } = renderHero();
     const section = container.querySelector('section');
     expect(section).toBeInTheDocument();
+    if (!section) throw new Error('Hero section was not rendered');
     expect(section.className).toContain('px-4');
   });
 
   it('outer <section> has lg:px-20 class for desktop padding', () => {
     const { container } = renderHero();
     const section = container.querySelector('section');
+    if (!section) throw new Error('Hero section was not rendered');
     expect(section.className).toContain('lg:px-20');
   });
 
   it('outer <section> does NOT have the old bare px-20 class', () => {
     const { container } = renderHero();
     const section = container.querySelector('section');
+    if (!section) throw new Error('Hero section was not rendered');
     // The class list should not contain a standalone "px-20" token
     const classes = section.className.split(/\s+/);
     expect(classes).not.toContain('px-20');

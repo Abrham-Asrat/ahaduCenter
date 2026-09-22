@@ -24,6 +24,14 @@ const Footer = () => {
           <Link to="/contact" className="footer-link text-sm text-on-surface-variant hover:text-secondary transition-all opacity-80 hover:opacity-100">
             Terms of Service
           </Link>
+          <a
+            href="https://github.com/Abrham-Asrat/ahaduCenter/blob/main/LICENSE"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="footer-link text-sm text-on-surface-variant hover:text-secondary transition-all opacity-80 hover:opacity-100"
+          >
+            MIT License
+          </a>
         </div>
         <div className="footer-reveal flex flex-col gap-2" style={{ '--footer-delay': '200ms' } as CSSProperties}>
           <h4 className="font-bold text-white mb-3">Support</h4>

@@ -50,18 +50,21 @@ describe('Footer responsive padding (Requirement 8.3)', () => {
     const { container } = renderFooter();
     const grid = container.querySelector('.grid');
     expect(grid).toBeInTheDocument();
+    if (!grid) throw new Error('Footer grid was not rendered');
     expect(grid.className).toContain('px-4');
   });
 
   it('grid container has lg:px-20 class for desktop padding', () => {
     const { container } = renderFooter();
     const grid = container.querySelector('.grid');
+    if (!grid) throw new Error('Footer grid was not rendered');
     expect(grid.className).toContain('lg:px-20');
   });
 
   it('grid container does NOT have the old bare px-20 class', () => {
     const { container } = renderFooter();
     const grid = container.querySelector('.grid');
+    if (!grid) throw new Error('Footer grid was not rendered');
     const classes = grid.className.split(/\s+/);
     expect(classes).not.toContain('px-20');
   });
@@ -117,5 +120,13 @@ describe('Footer Quick Links navigation (Requirement 6.2)', () => {
     const contactLink = screen.getByRole('link', { name: /contact us/i });
     expect(contactLink).toBeInTheDocument();
     expect(contactLink).toHaveAttribute('href', '/contact');
+  });
+
+  it('"MIT License" link points to the repository license', () => {
+    renderFooter();
+    const licenseLink = screen.getByRole('link', { name: /mit license/i });
+    expect(licenseLink).toHaveAttribute('href', 'https://github.com/Abrham-Asrat/ahaduCenter/blob/main/LICENSE');
+    expect(licenseLink).toHaveAttribute('target', '_blank');
+    expect(licenseLink).toHaveAttribute('rel', 'noopener noreferrer');
   });
 });

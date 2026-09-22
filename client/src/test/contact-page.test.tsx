@@ -9,7 +9,7 @@
  */
 
 
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach, type MockInstance } from 'vitest';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -58,7 +58,7 @@ async function fillAndSubmit() {
 // ─────────────────────────────────────────────────────────────────────────────
 
 describe('ContactPage submit (Requirement 5.9)', () => {
-  let alertSpy;
+  let alertSpy: MockInstance;
 
   beforeEach(() => {
     // Spy on window.alert to ensure it is never called

@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import fc from 'fast-check';
+import { AxiosHeaders, type InternalAxiosRequestConfig } from 'axios';
 import API from '../services/api';
 import { store } from '../redux/store';
 
@@ -21,8 +22,13 @@ describe('API Interceptor Property-Based Tests', () => {
       fc.asyncProperty(fc.string({ minLength: 1 }), async (token) => {
         localStorage.setItem('token', token);
 
-        const requestInterceptor = API.interceptors.request.handlers[0].fulfilled;
-        const dummyConfig = { headers: {} };
+        const requestInterceptor = API.interceptors.request.handlers?.[0]?.fulfilled;
+        expect(requestInterceptor).toBeDefined();
+        if (!requestInterceptor) {
+          throw new Error('Request interceptor is not registered');
+        }
+
+        const dummyConfig = { headers: new AxiosHeaders() } as InternalAxiosRequestConfig;
         const resultConfig = await requestInterceptor(dummyConfig);
 
         expect(resultConfig.headers.Authorization).toBe(`Bearer ${token}`);
@@ -38,7 +44,11 @@ describe('API Interceptor Property-Based Tests', () => {
         fc.integer({ min: 400, max: 599 }).filter((s) => s !== 401),
         fc.string({ minLength: 1 }),
         async (status, errorMsg) => {
-          const responseInterceptorErr = API.interceptors.response.handlers[0].rejected;
+          const responseInterceptorErr = API.interceptors.response.handlers?.[0]?.rejected;
+          expect(responseInterceptorErr).toBeDefined();
+          if (!responseInterceptorErr) {
+            throw new Error('Response interceptor is not registered');
+          }
 
           const errorPayload = {
             response: {
@@ -67,10 +77,16 @@ describe('API Interceptor Property-Based Tests', () => {
 
         // Mock window.location
         const originalLocation = window.location;
-        delete window.location;
-        window.location = { href: '' };
+        Object.defineProperty(window, 'location', {
+          configurable: true,
+          value: { href: '' },
+        });
 
-        const responseInterceptorErr = API.interceptors.response.handlers[0].rejected;
+        const responseInterceptorErr = API.interceptors.response.handlers?.[0]?.rejected;
+        expect(responseInterceptorErr).toBeDefined();
+        if (!responseInterceptorErr) {
+          throw new Error('Response interceptor is not registered');
+        }
         const errorPayload = {
           response: {
             status: 401,
@@ -87,7 +103,10 @@ describe('API Interceptor Property-Based Tests', () => {
         expect(store.dispatch).toHaveBeenCalledWith(expect.objectContaining({ type: 'auth/logoutAction' }));
         expect(window.location.href).toBe('/login');
 
-        window.location = originalLocation;
+        Object.defineProperty(window, 'location', {
+          configurable: true,
+          value: originalLocation,
+        });
       }),
       { numRuns: 10 }
     );
