@@ -95,7 +95,7 @@ const PurchaseHistoryPage = () => {
       .slice(0, 3);
 
     // Map API status values to display-friendly strings.
-    const statusMap = {
+    const statusMap: Record<string, string> = {
       pending: 'Processing',
       processing: 'Processing',
       ready: 'Ready',
@@ -219,7 +219,7 @@ const PurchaseHistoryPage = () => {
             <h2 className="text-xl font-bold text-white mb-2">Could not load purchase history</h2>
             <p className="text-on-surface-variant text-sm mb-6">{error}</p>
             <button
-              onClick={fetchOrderHistory}
+              onClick={() => { void fetchOrderHistory(); }}
               className="bg-primary text-black px-6 py-3 rounded-xl font-bold text-sm uppercase tracking-wider hover:opacity-90 transition-opacity"
             >
               Try Again
