@@ -54,7 +54,7 @@ function renderPage(PageComponent: ComponentType, route = '/') {
  */
 function getStaggeredElements(container: HTMLElement): HTMLElement[] {
   return Array.from(container.querySelectorAll('[style]')).filter(
-    (el) => el.style.animationDelay !== ''
+    (el): el is HTMLElement => el instanceof HTMLElement && el.style.animationDelay !== ''
   );
 }
 
@@ -131,7 +131,9 @@ describe(
         fc.property(itemsArbitrary, (items) => {
           const { getAllByTestId, unmount } = render(<StaggeredList items={items} />);
           const elements = getAllByTestId('staggered-item');
-          expect(elements[0].style.animationDelay).toBe('0s');
+          const firstElement = elements[0];
+          if (!firstElement) throw new Error('Expected a first staggered element');
+          expect(firstElement.style.animationDelay).toBe('0s');
           unmount();
         }),
         { numRuns: 10 }

@@ -112,8 +112,10 @@ describe('ElectronicsPage compare navigation (Requirement 1.3)', () => {
     // Find all "Compare" buttons and click the first one
     const compareButtons = screen.getAllByRole('button', { name: /compare/i });
     expect(compareButtons.length).toBeGreaterThan(0);
+    const firstCompareButton = compareButtons[0];
+    if (!firstCompareButton) throw new Error('Compare button was not rendered');
 
-    fireEvent.click(compareButtons[0]);
+    fireEvent.click(firstCompareButton);
 
     // navigate('/compare') is called after a 1200ms setTimeout inside handleCompare
     await waitFor(

@@ -101,8 +101,10 @@ describe('ProductComparisonPage checkout navigation (Requirement 1.5)', () => {
     // Find "Buy Now" buttons — at least one product is In Stock
     const buyNowButtons = screen.getAllByRole('button', { name: /buy now/i });
     expect(buyNowButtons.length).toBeGreaterThan(0);
+    const firstBuyNowButton = buyNowButtons[0];
+    if (!firstBuyNowButton) throw new Error('Buy Now button was not rendered');
 
-    fireEvent.click(buyNowButtons[0]);
+    fireEvent.click(firstBuyNowButton);
 
     // navigate('/order-confirmation') is called after a 1000 ms setTimeout inside handleBuyNow
     vi.runAllTimers();

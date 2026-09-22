@@ -29,6 +29,7 @@ const productArbitrary = fc.record({
     fc.integer({ min: 1, max: 99999 }),
     fc.uuid()
   ),
+  title: fc.string({ minLength: 1, maxLength: 60 }),
   name: fc.string({ minLength: 1, maxLength: 60 }),
   brand: fc.string({ minLength: 1, maxLength: 40 }),
   imageUrl: fc.constant('https://example.com/product.jpg'),
