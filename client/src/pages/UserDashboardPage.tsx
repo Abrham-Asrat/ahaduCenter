@@ -1,9 +1,10 @@
 // src/pages/UserDashboardPage.jsx
-import { useState, useEffect } from 'react';
+import { useState, useEffect, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import { userService } from '../services/userService';
+import type { ActivityRecord, DashboardStats, DashboardUser } from '../types';
 
 /**
  * UserDashboardPage Component
@@ -74,7 +75,7 @@ const ActivitySkeleton = () => (
 
 // ── Utility: derive icon/color from activity type ─────────────────────────────
 
-const getActivityMeta = (activity) => {
+const getActivityMeta = (activity: ActivityRecord) => {
   const type = activity.type || '';
   if (type === 'movie_request' || activity.title?.toLowerCase().includes('request')) {
     return {
@@ -109,19 +110,19 @@ const getActivityMeta = (activity) => {
 
 const UserDashboardPage = () => {
   // ── Data state ──
-  const [user, setUser] = useState(null);
-  const [statsData, setStatsData] = useState(null);
-  const [activities, setActivities] = useState([]);
+  const [user, setUser] = useState<DashboardUser | null>(null);
+  const [statsData, setStatsData] = useState<DashboardStats | null>(null);
+  const [activities, setActivities] = useState<ActivityRecord[]>([]);
 
   // ── UI state ──
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editForm, setEditForm] = useState({ name: '', email: '', phone: '' });
   const [isSaving, setIsSaving] = useState(false);
-  const [saveError, setSaveError] = useState(null);
-  const [toastMessage, setToastMessage] = useState(null);
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   // ── Fetch all three concurrently on mount ──────────────────────────────────
   useEffect(() => {
@@ -170,14 +171,13 @@ const UserDashboardPage = () => {
   // ── Derived display values ─────────────────────────────────────────────────
   const displayName = user?.name ?? '';
   const displayEmail = user?.email ?? '';
-  const displayPhone = user?.phone ?? '';
   const displayMemberSince = user?.createdAt
     ? new Date(user.createdAt).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
     : (user?.memberSince ?? '');
   const displayInitials = displayName
     .split(' ')
     .filter(Boolean)
-    .map((n) => n[0].toUpperCase())
+    .map((n) => n[0]?.toUpperCase() ?? '')
     .join('');
   // ── Stats cards derived from statsData ──────────────────────────────────────
   const stats = [
@@ -208,7 +208,7 @@ const UserDashboardPage = () => {
   ];
 
   // ── Handlers ───────────────────────────────────────────────────────────────
-  const handleSaveProfile = async (e) => {
+  const handleSaveProfile = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSaving(true);
     setSaveError(null);
@@ -237,7 +237,7 @@ const UserDashboardPage = () => {
   };
 
   // ── Sidebar nav ────────────────────────────────────────────────────────────
-  const navItems = [
+  const navItems: Array<{ label: string; icon: string; path: string; active?: boolean; danger?: boolean }> = [
     { label: 'Overview', icon: 'dashboard', active: true, path: '/account' },
     { label: 'Favorites', icon: 'favorite', path: '/wishlist' },
     { label: 'Purchase History', icon: 'receipt_long', path: '/purchase-history' },

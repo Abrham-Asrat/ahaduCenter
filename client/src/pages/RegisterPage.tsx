@@ -51,7 +51,7 @@ const RegisterPage = ({ onClose }: RegisterPageProps) => {
     setValidationError(null);
 
     const result = await dispatch(registerThunk({
-      name: fullName || email.split('@')[0],
+      name: fullName || email.split('@')[0] || email,
       email,
     }));
 

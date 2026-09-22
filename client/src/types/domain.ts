@@ -176,6 +176,33 @@ export interface SearchResult {
   description?: string;
 }
 
+export interface DashboardUser extends User {
+  phone?: string;
+  createdAt?: string;
+  memberSince?: string;
+}
+
+export interface DashboardStats {
+  favorites?: number;
+  wishlistCount?: number;
+  purchases?: number;
+  orderCount?: number;
+  borrowed?: number;
+  borrowingCount?: number;
+  requests?: number;
+  movieRequestCount?: number;
+}
+
+export interface ActivityRecord {
+  _id?: string;
+  title?: string;
+  description?: string;
+  type?: string;
+  status?: string;
+  date?: string;
+  createdAt?: string;
+}
+
 export interface PaginationState {
   page: number;
   limit: number;

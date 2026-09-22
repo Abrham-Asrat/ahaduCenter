@@ -84,7 +84,7 @@ export const registerThunk = createAsyncThunk(
 
 export const verifyEmailThunk = createAsyncThunk(
   'auth/verifyEmail',
-  async (token, { rejectWithValue }) => {
+  async (token: string, { rejectWithValue }) => {
     try {
       return await authService.verifyEmail(token);
     } catch (err) {

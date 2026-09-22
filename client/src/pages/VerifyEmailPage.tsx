@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { resendVerificationThunk, verifyEmailThunk } from '../redux/slices/authSlice';
@@ -23,20 +23,20 @@ const VerifyEmailPage = () => {
         setMessage('Your email has been verified. You can now sign in with Google.');
       } else {
         setStatus('error');
-        setMessage(result.payload || 'This verification link is invalid or has expired.');
+        setMessage(typeof result.payload === 'string' ? result.payload : 'This verification link is invalid or has expired.');
       }
     });
 
     return () => { active = false; };
   }, [dispatch, token]);
 
-  const handleResend = async (event) => {
+  const handleResend = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const result = await dispatch(resendVerificationThunk(email));
     if (resendVerificationThunk.fulfilled.match(result)) {
       setMessage('If an account requires verification, a new email has been sent.');
     } else {
-      setMessage(result.payload || 'Unable to resend the verification email.');
+      setMessage(typeof result.payload === 'string' ? result.payload : 'Unable to resend the verification email.');
     }
   };
 
