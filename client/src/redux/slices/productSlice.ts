@@ -6,6 +6,7 @@ import type { PaginationState, Product, ProductQuery } from '../../types';
 interface ProductState {
   products: Product[];
   currentProduct: Product | null;
+  selectedProduct: Product | null;
   loading: boolean;
   error: string | null;
   pagination: PaginationState;
@@ -39,6 +40,7 @@ export const fetchProduct = createAsyncThunk(
 const initialState: ProductState = {
   products: [],
   currentProduct: null,
+  selectedProduct: null,
   loading: false,
   error: null,
   pagination: {
@@ -87,7 +89,7 @@ export const productSlice = createSlice({
       })
       .addCase(fetchProducts.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = typeof action.payload === 'string' ? action.payload : null;
       })
 
       // Fetch Single Product
@@ -98,10 +100,11 @@ export const productSlice = createSlice({
       .addCase(fetchProduct.fulfilled, (state, action) => {
         state.loading = false;
         state.currentProduct = action.payload;
+        state.selectedProduct = action.payload;
       })
       .addCase(fetchProduct.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = typeof action.payload === 'string' ? action.payload : null;
       });
   },
 });

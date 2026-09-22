@@ -10,6 +10,7 @@ import SimilarProducts from '../components/electronics/SimilarProducts';
 import Footer from '../components/common/Footer';
 import { fetchProduct, fetchProducts } from '../redux/slices/productSlice';
 import { orderService } from '../services/orderService';
+import type { Product } from '../types';
 
 /**
  * ProductDetailPage Component
@@ -27,11 +28,11 @@ const ProductDetailPage = () => {
 
   const { selectedProduct, products, loading, error } = useAppSelector((s) => s.product);
 
-  const [toastMessage, setToastMessage] = useState(null);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [orderLoading, setOrderLoading] = useState(false);
-  const [orderError, setOrderError] = useState(null);
+  const [orderError, setOrderError] = useState<string | null>(null);
 
-  const showToast = (msg) => {
+  const showToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 3000);
   };
@@ -56,7 +57,10 @@ const ProductDetailPage = () => {
       });
       navigate('/order-confirmation', { state: { order: orderData } });
     } catch (err) {
-      setOrderError(typeof err === 'string' ? err : (err?.message || 'Failed to place order. Please try again.'));
+      const message = err && typeof err === 'object' && 'message' in err && typeof err.message === 'string'
+        ? err.message
+        : 'Failed to place order. Please try again.';
+      setOrderError(typeof err === 'string' ? err : message);
       setOrderLoading(false);
     }
   };
@@ -83,23 +87,30 @@ const ProductDetailPage = () => {
    *   { _id, name, brand, condition, images: [], price, originalPrice, discount,
    *     description, highlights: [], specifications: Map, rating, reviewCount, category }
    */
-  const buildProductProps = (p) => {
+  const buildProductProps = (p: Product | null): (Product & { images: string[]; highlights: string[]; specifications: Record<string, string | number> }) | null => {
     if (!p) return null;
     // specifications may come back as a plain object or a JS Map-like object;
     // ensure it's a plain object for ProductSpecs
-    let specs = {};
+    let specs: Record<string, string | number> = {};
     if (p.specifications) {
-      if (typeof p.specifications.toJSON === 'function') {
-        specs = p.specifications.toJSON();
+      const rawSpecifications = p.specifications as Record<string, string | number> & {
+        toJSON?: () => unknown;
+      };
+      if (typeof rawSpecifications.toJSON === 'function') {
+        const json = rawSpecifications.toJSON();
+        if (json && typeof json === 'object') specs = json as Record<string, string | number>;
       } else if (p.specifications instanceof Map) {
-        p.specifications.forEach((v, k) => { specs[k] = v; });
+        p.specifications.forEach((v, k) => {
+          if (typeof k === 'string' && (typeof v === 'string' || typeof v === 'number')) specs[k] = v;
+        });
       } else {
         specs = { ...p.specifications };
       }
     }
 
     return {
-      id:            p._id || p.id,
+      id:            p._id || p.id || '',
+      title:         p.title || p.name || '',
       name:          p.name || '',
       brand:         p.brand || '',
       condition:     p.condition || 'New',
@@ -109,8 +120,8 @@ const ProductDetailPage = () => {
       rating:        typeof p.rating === 'number' ? p.rating : 0,
       reviews:       p.reviewCount || 0,
       price:         p.price || 0,
-      originalPrice: p.originalPrice || null,
-      discount:      p.discount || null,
+      originalPrice: p.originalPrice || undefined,
+      discount:      p.discount || undefined,
       description:   p.description || '',
       highlights:    Array.isArray(p.highlights) ? p.highlights : [],
       specifications: specs,
@@ -119,12 +130,13 @@ const ProductDetailPage = () => {
   };
 
   // Map similar products list to what SimilarProducts expects: { id, name, imageUrl, price, brand }
-  const buildSimilarProducts = () => {
+  const buildSimilarProducts = (): Product[] => {
     const currentId = selectedProduct?._id || selectedProduct?.id;
     return products
       .filter((p) => (p._id || p.id) !== currentId)
       .map((p) => ({
-        id:       p._id || p.id,
+        id:       p._id || p.id || '',
+        title:    p.title || p.name || '',
         name:     p.name || '',
         brand:    p.brand || '',
         imageUrl: Array.isArray(p.images) && p.images.length > 0
@@ -161,7 +173,7 @@ const ProductDetailPage = () => {
       <span className="material-symbols-outlined text-5xl text-error">error</span>
       <h2 className="text-2xl font-bold text-white">Failed to load product</h2>
       <p className="text-on-surface-variant">
-        {typeof error === 'string' ? error : (error?.message || 'An unexpected error occurred.')}
+        {error || 'An unexpected error occurred.'}
       </p>
       <button
         onClick={() => navigate('/electronics')}
@@ -222,7 +234,7 @@ const ProductDetailPage = () => {
             <div className="max-w-7xl mx-auto px-6 mb-12">
               <ProductSpecs
                 specifications={product.specifications}
-                description={product.description}
+                description={product.description ?? ''}
               />
             </div>
 

@@ -89,6 +89,8 @@ export interface Product {
   discount?: number;
   description?: string;
   highlights?: string[];
+  reviewCount?: number;
+  specifications?: Record<string, string | number>;
   [key: string]: unknown;
 }
 

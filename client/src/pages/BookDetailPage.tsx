@@ -117,7 +117,9 @@ const BookDetailPage = () => {
         rating: book.rating || 0,
         reviews: typeof book.reviewCount === 'number' ? book.reviewCount : reviews.length,
         description: book.description,
-        availableCopies: book.availableCopies ?? book.available_copies ?? 0,
+        availableCopies: typeof book.availableCopies === 'number'
+          ? book.availableCopies
+          : typeof book.available_copies === 'number' ? book.available_copies : 0,
         location: book.location || 'Main Branch',
         price: book.price || 0,
         coverUrl: book.coverImage || book.coverUrl,
