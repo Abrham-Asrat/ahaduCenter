@@ -95,7 +95,7 @@ export const verifyEmailThunk = createAsyncThunk(
 
 export const resendVerificationThunk = createAsyncThunk(
   'auth/resendVerification',
-  async (email, { rejectWithValue }) => {
+  async (email: string, { rejectWithValue }) => {
     try {
       return await authService.resendVerification(email);
     } catch (err) {

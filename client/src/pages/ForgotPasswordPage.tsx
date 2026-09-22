@@ -1,5 +1,5 @@
 // src/pages/ForgotPasswordPage.jsx
-import { useState } from 'react';
+import { useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { authService } from '../services/authService';
 /**
@@ -22,10 +22,10 @@ const ForgotPasswordPage = () => {
   const [submitted, setSubmitted] = useState(false);
   // Loading and error state for API call
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
   // Handle form submission
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     setError(null);

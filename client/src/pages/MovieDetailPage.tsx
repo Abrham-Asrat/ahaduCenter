@@ -111,7 +111,7 @@ const MovieDetailPage = () => {
           ? selectedMovie.description
           : typeof selectedMovie.synopsis === 'string' ? selectedMovie.synopsis : '',
         cast: (selectedMovie.cast || []).map((c, i) => ({
-          id: c._id || c.id || i,
+          id: c._id || c.id || String(i),
           name: c.name,
           role: c.role || c.character,
           photoUrl:

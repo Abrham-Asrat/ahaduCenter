@@ -17,7 +17,7 @@ export const fetchNotifications = createAsyncThunk(
 
 export const markOneRead = createAsyncThunk(
   'notification/markOneRead',
-  async (id, { rejectWithValue }) => {
+  async (id: string, { rejectWithValue }) => {
     try {
       const data = await userService.markNotificationRead(id);
       return { id, data };
@@ -79,11 +79,11 @@ export const notificationSlice = createSlice({
       .addCase(fetchNotifications.fulfilled, (state, action) => {
         state.loading = false;
         state.notifications = action.payload;
-        state.unreadCount = action.payload.filter((n) => !n.isRead).length;
+        state.unreadCount = action.payload.filter((n: Notification) => !n.isRead).length;
       })
       .addCase(fetchNotifications.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = typeof action.payload === 'string' ? action.payload : null;
       })
 
       // ── markOneRead ──
@@ -104,7 +104,7 @@ export const notificationSlice = createSlice({
       })
       .addCase(markOneRead.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = typeof action.payload === 'string' ? action.payload : null;
       })
 
       // ── markAllRead ──
@@ -121,7 +121,7 @@ export const notificationSlice = createSlice({
       })
       .addCase(markAllRead.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = typeof action.payload === 'string' ? action.payload : null;
       })
 
       // ── clearAll ──
@@ -136,7 +136,7 @@ export const notificationSlice = createSlice({
       })
       .addCase(clearAll.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = typeof action.payload === 'string' ? action.payload : null;
       });
   },
 });

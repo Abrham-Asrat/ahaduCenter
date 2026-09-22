@@ -1,5 +1,5 @@
 // src/pages/ContactPage.jsx
-import { useState } from 'react';
+import { useState, type ChangeEvent, type FormEvent } from 'react';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import { contactService } from '../services/contactService';
@@ -21,20 +21,20 @@ const ContactPage = () => {
 
   // UI state
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   // FAQ open state (null = all closed)
-  const [openFaq, setOpenFaq] = useState(null);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   // Handle form input changes
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   // Handle form submission
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
@@ -190,7 +190,7 @@ const ContactPage = () => {
                   <textarea
                     id="message"
                     name="message"
-                    rows="5"
+                      rows={5}
                     value={formData.message}
                     onChange={handleInputChange}
                     disabled={loading}

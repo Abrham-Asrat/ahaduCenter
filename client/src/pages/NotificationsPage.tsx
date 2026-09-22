@@ -22,9 +22,9 @@ const NotificationsPage = () => {
   // Active filter tab
   const [activeTab, setActiveTab] = useState('All');
   // Toast state
-  const [toastMessage, setToastMessage] = useState(null);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-  const showToast = (msg) => {
+  const showToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 3000);
   };
@@ -47,7 +47,7 @@ const NotificationsPage = () => {
       });
 
   // Helper: get icon and color based on notification type
-  const getTypeStyles = (type) => {
+  const getTypeStyles = (type: string) => {
     switch (type) {
       case 'Movies':
         return { icon: 'movie', color: 'text-secondary', bg: 'bg-secondary/10 border-secondary/20' };
@@ -85,7 +85,7 @@ const NotificationsPage = () => {
   };
 
   // Handle marking individual notification as read (on click)
-  const handleNotificationClick = async (id, isRead) => {
+  const handleNotificationClick = async (id: string, isRead: boolean) => {
     if (isRead) return;
     try {
       await dispatch(markOneRead(id)).unwrap();
@@ -94,7 +94,7 @@ const NotificationsPage = () => {
     }
   };
 
-  const formatDate = (dateStr) => {
+  const formatDate = (dateStr?: string) => {
     if (!dateStr) return '';
     try {
       return new Date(dateStr).toLocaleDateString('en-US', {
@@ -205,8 +205,8 @@ const NotificationsPage = () => {
               </div>
             ) : (
               filteredNotifications.map((notification) => {
-                const id = notification._id || notification.id;
-                const { icon, color, bg } = getTypeStyles(notification.type);
+                  const id = notification._id || notification.id || '';
+                  const { icon, color, bg } = getTypeStyles(notification.type || 'System');
                 const isRead = notification.isRead;
                 const timeText = formatDate(notification.timestamp || notification.createdAt);
 
