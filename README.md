@@ -2,7 +2,7 @@
 
 AhaduCenter - Movies, Books & Electronics in one premium platform.
 
-![Build](https://img.shields.io/badge/build-local-lightgrey) ![Tests](https://img.shields.io/badge/tests-Vitest%20%7C%20Jest-blue) ![License](https://img.shields.io/badge/license-<INSERT_LICENSE>-lightgrey) ![Node](https://img.shields.io/badge/Node.js-18%2B-brightgreen) ![PRs](https://img.shields.io/badge/PRs-welcome-brightgreen)
+![Build](https://img.shields.io/badge/build-local-lightgrey) ![Tests](https://img.shields.io/badge/tests-Vitest%20%7C%20Jest-blue) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) ![Node](https://img.shields.io/badge/Node.js-18%2B-brightgreen) ![PRs](https://img.shields.io/badge/PRs-welcome-brightgreen)
 
 **Live demo:** [ahadu-center.vercel.app](https://ahadu-center.vercel.app/)
 
@@ -160,7 +160,7 @@ See the complete endpoint reference in [server/README.md](server/README.md).
 
 ## License
 
-This repository has no license file or declared license in the inspected project files. Replace `<INSERT_LICENSE>` with the selected license and add its link here.
+This project is licensed under the [MIT License](LICENSE).
 
 ## Author and contact
 
@@ -172,7 +172,6 @@ This repository has no license file or declared license in the inspected project
 
 ## TODO
 
-- Add the license.
 - Add CI-backed build and test badges when a workflow is published.
 - Add product screenshots or short workflow GIFs.
 - Decide whether to add `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `SECURITY.md`, and `CHANGELOG.md`.

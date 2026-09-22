@@ -236,7 +236,7 @@ Set all required production environment variables, use MongoDB Atlas or another 
 
 - Add an OpenAPI document with authoritative response schemas.
 - Add deployment-specific reverse-proxy and hosting instructions.
-- Add a license, security contact, and CI badge URLs.
+- Add a security contact and CI badge URLs.
 # AhaduCenter Server
 
 Express and Mongoose API for the AhaduCenter client. Start the API with `npm start` after configuring `server/.env` from `.env.example`.
