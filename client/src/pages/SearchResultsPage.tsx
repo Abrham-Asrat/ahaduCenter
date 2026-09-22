@@ -4,6 +4,7 @@ import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import { searchService } from '../services/searchService';
+import type { SearchResult } from '../types';
 
 /**
  * SearchResultsPage Component
@@ -25,10 +26,9 @@ const SearchResultsPage = () => {
   const [priceMax, setPriceMax] = useState('');
 
   // API Data State
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [totalCount, setTotalCount] = useState(0);
+  const [error, setError] = useState<string | null>(null);
 
   // Fetch search results whenever searchQuery or activeTab changes
   useEffect(() => {
@@ -36,7 +36,6 @@ const SearchResultsPage = () => {
     const fetchResults = async () => {
       if (!searchQuery.trim()) {
         setResults([]);
-        setTotalCount(0);
         return;
       }
 
@@ -55,7 +54,6 @@ const SearchResultsPage = () => {
         if (!cancelled) {
           const list = Array.isArray(res) ? res : (res?.data ?? []);
           setResults(list);
-          setTotalCount(res?.totalCount ?? list.length);
         }
       } catch (err) {
         if (!cancelled) {
@@ -71,7 +69,7 @@ const SearchResultsPage = () => {
   }, [searchQuery, activeTab, sortBy, priceMin, priceMax]);
 
   // Toggle Genre filter selection
-  const handleGenreToggle = (genre) => {
+  const handleGenreToggle = (genre: string) => {
     setSelectedGenres((prev) =>
       prev.includes(genre) ? prev.filter((g) => g !== genre) : [...prev, genre]
     );

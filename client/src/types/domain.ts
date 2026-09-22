@@ -95,12 +95,21 @@ export interface Product {
 }
 
 export interface WishlistItem {
+  _id?: string;
   id?: string;
   itemId: string;
   itemType?: string;
+  type?: string;
   title?: string;
+  name?: string;
   imageUrl?: string | null;
+  posterUrl?: string;
+  coverUrl?: string;
+  link?: string;
   category?: string | null;
+  rating?: number;
+  availability?: string;
+  price?: number;
   addedAt?: string;
 }
 
@@ -149,6 +158,22 @@ export interface PurchaseOrder {
   status?: string;
   createdAt?: string;
   items?: Array<{ productImage?: string | null; [key: string]: unknown }>;
+}
+
+export interface SearchResult {
+  id?: string;
+  _id?: string;
+  type?: string;
+  itemType?: string;
+  title?: string;
+  name?: string;
+  imageUrl?: string;
+  posterUrl?: string;
+  coverUrl?: string;
+  link?: string;
+  category?: string;
+  rating?: number;
+  description?: string;
 }
 
 export interface PaginationState {

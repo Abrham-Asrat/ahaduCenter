@@ -1,5 +1,17 @@
 // src/pages/ProductComparisonPage.jsx
 import { useState } from 'react';
+import type { Product } from '../types';
+
+type ComparisonProduct = Product & {
+  id: string | number;
+  name: string;
+  imageUrl: string;
+  rating: string;
+  price: string;
+  specs: string;
+  warranty: string;
+  availability: string;
+};
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
@@ -11,15 +23,15 @@ import Footer from '../components/common/Footer';
  */
 const ProductComparisonPage = () => {
   const navigate = useNavigate();
-  const [toastMessage, setToastMessage] = useState(null);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-  const showToast = (msg) => {
+  const showToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 3000);
   };
 
   // Products being compared (dummy data)
-  const [products, setProducts] = useState([
+  const [products, setProducts] = useState<ComparisonProduct[]>([
     {
       id: 1,
       name: 'Quantum Phone X Pro',
@@ -58,7 +70,7 @@ const ProductComparisonPage = () => {
     },
   ]);
 
-  const removeProduct = (id) => {
+  const removeProduct = (id: string | number) => {
     const p = products.find((item) => item.id === id);
     setProducts(products.filter((p) => p.id !== id));
     if (p) showToast(`Removed "${p.name}" from comparison.`);
@@ -69,12 +81,12 @@ const ProductComparisonPage = () => {
     showToast('Cleared comparison list.');
   };
 
-  const handleBuyNow = (product) => {
+  const handleBuyNow = (product: ComparisonProduct) => {
     showToast(`Redirecting to checkout for "${product.name}"...`);
     setTimeout(() => navigate('/order-confirmation'), 1000);
   };
 
-  const handleWishlist = (product) => {
+  const handleWishlist = (product: ComparisonProduct) => {
     showToast(`"${product.name}" saved to wishlist!`);
   };
 

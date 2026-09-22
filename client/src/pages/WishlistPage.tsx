@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import { fetchWishlist, removeWishlistItem } from '../redux/slices/wishlistSlice';
+import type { WishlistItem } from '../types';
 
 /**
  * WishlistPage Component
@@ -17,19 +18,19 @@ const WishlistPage = () => {
 
   const { items: wishlistItems, loading, error } = useAppSelector((s) => s.wishlist);
   const [activeTab, setActiveTab] = useState('all');
-  const [toastMessage, setToastMessage] = useState(null);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   useEffect(() => {
     dispatch(fetchWishlist());
   }, [dispatch]);
 
-  const handleRemove = (id, title) => {
+  const handleRemove = (id: string, title: string) => {
     dispatch(removeWishlistItem(id));
     setToastMessage(`Removed "${title}" from wishlist.`);
     setTimeout(() => setToastMessage(null), 3000);
   };
 
-  const handleAction = (item) => {
+  const handleAction = (item: WishlistItem) => {
     if (item.link) {
       navigate(item.link);
     } else if (item.type === 'Product' || item.type === 'Electronics') {
@@ -59,7 +60,7 @@ const WishlistPage = () => {
       });
 
   // Determine action icon based on type
-  const getActionIcon = (type) => {
+  const getActionIcon = (type?: string) => {
     switch (type) {
       case 'Movie': return 'add';
       case 'Product':
