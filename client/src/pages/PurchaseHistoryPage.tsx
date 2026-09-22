@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import { orderService } from '../services/orderService';
+import type { PurchaseOrder } from '../types';
 
 /**
  * PurchaseHistoryPage Component
@@ -29,12 +30,12 @@ import { orderService } from '../services/orderService';
  */
 const PurchaseHistoryPage = () => {
   const [activeFilter, setActiveFilter] = useState('All Orders');
-  const [toastMessage, setToastMessage] = useState(null);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   // API-driven state
-  const [orders, setOrders] = useState([]);
+  const [orders, setOrders] = useState<PurchaseOrder[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [pagination, setPagination] = useState({
     totalPages: 1,
@@ -73,7 +74,7 @@ const PurchaseHistoryPage = () => {
   }, [currentPage]);
 
   /** Show a transient toast that auto-dismisses after 3 seconds. */
-  const showToast = (msg) => {
+  const showToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 3000);
   };
@@ -85,12 +86,12 @@ const PurchaseHistoryPage = () => {
    * Normalise a raw API order object into the shape this component renders.
   * The API order has: _id, status, createdAt, and items[{ productName, quantity }]
    */
-  const normaliseOrder = (raw) => {
+  const normaliseOrder = (raw: PurchaseOrder) => {
     const rawItems = raw.items ?? [];
     // Collect up to 3 thumbnail image URLs from the order items.
     const thumbnails = rawItems
       .map((i) => i?.productImage ?? null)
-      .filter(Boolean)
+      .filter((image): image is string => typeof image === 'string')
       .slice(0, 3);
 
     // Map API status values to display-friendly strings.
@@ -134,7 +135,7 @@ const PurchaseHistoryPage = () => {
       : normalisedOrders.filter((o) => o.status === activeFilter);
 
   // Status badge styles
-  const getStatusBadge = (status) => {
+  const getStatusBadge = (status: string) => {
     switch (status) {
       case 'Completed':
         return 'bg-primary/15 text-primary border-primary/20';

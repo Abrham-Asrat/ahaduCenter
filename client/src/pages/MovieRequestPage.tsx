@@ -138,7 +138,7 @@ const MovieRequestPage = () => {
   // Normalise a request record so the UI always uses .id, .date, .status consistently
   const normaliseRequest = (r: MovieRequest): MovieRequest & { id: string; date: string; status: string } => ({
     ...r,
-    id: r._id ?? r.id,
+    id: r._id ?? r.id ?? `request-${r.title}`,
     date: r.date
       ? r.date
       : r.createdAt
@@ -223,7 +223,7 @@ const MovieRequestPage = () => {
               </div>
               <div className="flex justify-between">
                 <span className="text-on-surface-variant">Status:</span>
-                <span className={`px-2 py-0.5 rounded text-xs border ${getStatusBadge(selectedRequestModal.status)}`}>
+                  <span className={`px-2 py-0.5 rounded text-xs border ${getStatusBadge(selectedRequestModal.status || 'Pending')}`}>
                   {selectedRequestModal.status}
                 </span>
               </div>
@@ -333,7 +333,7 @@ const MovieRequestPage = () => {
                 name="details"
                 value={formData.details}
                 onChange={handleChange}
-                rows="3"
+                  rows={3}
                 className="w-full bg-background border border-white/10 rounded-lg px-4 py-2.5 text-white focus:border-primary outline-none resize-none"
                 placeholder="Any specific actors, directors, audio language, or quality requirement?"
               />

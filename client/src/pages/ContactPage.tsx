@@ -81,12 +81,7 @@ const ContactPage = () => {
 
       <main className="flex-grow max-w-7xl mx-auto px-4 md:px-8 w-full flex flex-col gap-8">
         {/* Header */}
-        <header className="text-center md:text-left">
-          <p className="text-lg text-on-surface-variant max-w-2xl">
-            Connect with the Ahadu Center. Whether you have an inquiry about our cinematic library, high-end electronics, or literary collection, our team is ready to assist.
-          </p>
-        </header>
-
+       
         {/* Two-column layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Left column: Form + Map (8 cols) */}

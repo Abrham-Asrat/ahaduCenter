@@ -143,6 +143,14 @@ export interface MovieRequest {
   status?: string;
 }
 
+export interface PurchaseOrder {
+  _id?: string;
+  id?: string;
+  status?: string;
+  createdAt?: string;
+  items?: Array<{ productImage?: string | null; [key: string]: unknown }>;
+}
+
 export interface PaginationState {
   page: number;
   limit: number;
