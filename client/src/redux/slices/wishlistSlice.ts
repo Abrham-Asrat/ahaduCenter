@@ -35,7 +35,7 @@ export const addWishlistItem = createAsyncThunk(
   'wishlist/addWishlistItem',
   async (payload: WishlistPayload, { rejectWithValue }) => {
     try {
-      const res = await userService.addToWishlist(payload);
+      await userService.addToWishlist(payload);
       // Re-fetch to ensure complete item metadata is populated from backend
       const updatedList = await userService.getWishlist();
       return updatedList;
@@ -80,7 +80,7 @@ export const wishlistSlice = createSlice({
       })
       .addCase(fetchWishlist.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = typeof action.payload === 'string' ? action.payload : null;
       })
 
       // ── addWishlistItem ──
@@ -109,7 +109,7 @@ export const wishlistSlice = createSlice({
       .addCase(addWishlistItem.rejected, (state, action) => {
         state.items = wishlistSnapshot;
         state.loading = false;
-        state.error = action.payload;
+        state.error = typeof action.payload === 'string' ? action.payload : null;
       })
 
       // ── removeWishlistItem ──
@@ -128,7 +128,7 @@ export const wishlistSlice = createSlice({
       .addCase(removeWishlistItem.rejected, (state, action) => {
         state.items = wishlistSnapshot;
         state.loading = false;
-        state.error = action.payload;
+        state.error = typeof action.payload === 'string' ? action.payload : null;
       });
   },
 });

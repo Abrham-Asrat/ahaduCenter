@@ -10,11 +10,12 @@
  * **Validates: Requirements 11.1**
  */
 
-import { describe, it, expect, vi, beforeAll, afterAll } from 'vitest';
-import { render, act } from '@testing-library/react';
+import { describe, it, expect, vi } from 'vitest';
+import { render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore, type UnknownAction } from '@reduxjs/toolkit';
+import type { ComponentType } from 'react';
 import * as fc from 'fast-check';
 
 // ─── Page imports ──────────────────────────────────────────────────────────────
@@ -113,8 +114,6 @@ vi.mock('../../services/adminService', () => ({
  * This avoids real API calls while providing the shape components expect.
  */
 function buildMockStore() {
-  const noop = (state = {}, _action) => state;
-
   const authInitial = { user: null, token: null, loading: false, error: null, initialized: true };
   const bookInitial = { books: [], selectedBook: null, loading: false, error: null };
   const movieInitial = { movies: [], selectedMovie: null, loading: false, error: null };
@@ -125,13 +124,13 @@ function buildMockStore() {
 
   return configureStore({
     reducer: {
-      auth: (state = authInitial, action) => state,
-      book: (state = bookInitial, action) => state,
-      movie: (state = movieInitial, action) => state,
-      product: (state = productInitial, action) => state,
-      wishlist: (state = wishlistInitial, action) => state,
-      notification: (state = notificationInitial, action) => state,
-      admin: (state = adminInitial, action) => state,
+      auth: (state = authInitial, _action: UnknownAction) => state,
+      book: (state = bookInitial, _action: UnknownAction) => state,
+      movie: (state = movieInitial, _action: UnknownAction) => state,
+      product: (state = productInitial, _action: UnknownAction) => state,
+      wishlist: (state = wishlistInitial, _action: UnknownAction) => state,
+      notification: (state = notificationInitial, _action: UnknownAction) => state,
+      admin: (state = adminInitial, _action: UnknownAction) => state,
     },
   });
 }
@@ -142,19 +141,15 @@ function buildMockStore() {
  * Renders a page component wrapped in MemoryRouter + Redux Provider.
  * Returns the container element from React Testing Library.
  */
-function renderPage(PageComponent, initialEntry = '/') {
+function renderPage(PageComponent: ComponentType, initialEntry = '/'): HTMLElement {
   const mockStore = buildMockStore();
-  let container;
-  act(() => {
-    const res = render(
-      <Provider store={mockStore}>
-        <MemoryRouter initialEntries={[initialEntry]}>
-          <PageComponent />
-        </MemoryRouter>
-      </Provider>
-    );
-    container = res.container;
-  });
+  const { container } = render(
+    <Provider store={mockStore}>
+      <MemoryRouter initialEntries={[initialEntry]}>
+        <PageComponent />
+      </MemoryRouter>
+    </Provider>
+  );
   return container;
 }
 
@@ -167,14 +162,14 @@ function renderPage(PageComponent, initialEntry = '/') {
  *   animate-fade-in lives on the first child div rendered by the page itself
  *   inside AdminLayout's <main>. Use querySelector to locate it.
  */
-function getAnimatedElement(container, isAdminPage = false) {
-  if (isAdminPage) {
-    // AdminDashboardPage renders <AdminLayout> which wraps page content in a <main>.
-    // The animate-fade-in class is on the first <div> inside that <main>.
-    return container.querySelector('.animate-fade-in');
-  }
-  return Array.from(container.children).find((child) => child.classList.contains('animate-fade-in'))
-    || container.querySelector('.animate-fade-in');
+function getAnimatedElement(container: HTMLElement, isAdminPage = false): Element {
+  const animatedElement = isAdminPage
+    ? container.querySelector('.animate-fade-in')
+    : Array.from(container.children).find((child) => child.classList.contains('animate-fade-in'))
+      || container.querySelector('.animate-fade-in');
+
+  if (!animatedElement) throw new Error('Animated page element was not rendered');
+  return animatedElement;
 }
 
 // ─── Individual page tests (Property 7) ───────────────────────────────────────
@@ -301,7 +296,14 @@ describe('Property 7: Page entrance animation class is always present', () => {
  */
 describe('Property 7 (fast-check): animate-fade-in is always present across all 15 pages', () => {
 
-  const pages = [
+  type PageEntry = {
+    name: string;
+    Component: ComponentType;
+    route: string;
+    isAdmin: boolean;
+  };
+
+  const pages: PageEntry[] = [
     { name: 'LoginPage',             Component: LoginPage,             route: '/login',               isAdmin: false },
     { name: 'ForgotPasswordPage',    Component: ForgotPasswordPage,    route: '/forgot-password',     isAdmin: false },
     { name: 'SearchResultsPage',     Component: SearchResultsPage,     route: '/search',              isAdmin: false },
@@ -325,7 +327,9 @@ describe('Property 7 (fast-check): animate-fade-in is always present across all 
         // Generate an index into the pages array
         fc.integer({ min: 0, max: pages.length - 1 }),
         (idx) => {
-          const { Component, route, isAdmin } = pages[idx];
+          const page = pages[idx];
+          if (!page) return false;
+          const { Component, route, isAdmin } = page;
           const container = renderPage(Component, route);
           const el = getAnimatedElement(container, isAdmin);
           return el !== null && el.classList.contains('animate-fade-in');
