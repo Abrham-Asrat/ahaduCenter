@@ -58,16 +58,19 @@ describe('BookCoverCard Save toggle — Property 3 (Validates: Requirements 4.2)
 
                     // Verify the initial state — bookmark icon present, not saved
                     const iconBefore = saveButton.querySelector('.material-symbols-outlined');
+                    if (!iconBefore) throw new Error('Save icon was not rendered');
                     expect(iconBefore.textContent.trim()).toBe('bookmark');
 
                     // First click — toggle ON (saved)
                     fireEvent.click(saveButton);
                     const iconAfterFirstClick = saveButton.querySelector('.material-symbols-outlined');
+                    if (!iconAfterFirstClick) throw new Error('Saved icon was not rendered');
                     expect(iconAfterFirstClick.textContent.trim()).toBe('bookmark_added');
 
                     // Second click — toggle OFF (back to original state)
                     fireEvent.click(saveButton);
                     const iconAfterSecondClick = saveButton.querySelector('.material-symbols-outlined');
+                    if (!iconAfterSecondClick) throw new Error('Restored save icon was not rendered');
                     expect(iconAfterSecondClick.textContent.trim()).toBe('bookmark');
 
                     unmount();

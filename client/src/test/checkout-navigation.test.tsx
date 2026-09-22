@@ -4,7 +4,7 @@
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from '../redux/store';
@@ -14,8 +14,8 @@ const { mockNavigate } = vi.hoisted(() => ({
   mockNavigate: vi.fn(),
 }));
 
-vi.mock('react-router-dom', async (importOriginal) => {
-  const actual = await importOriginal();
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
   return {
     ...actual,
     useNavigate: () => mockNavigate,

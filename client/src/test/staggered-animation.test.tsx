@@ -11,12 +11,13 @@
 
 
 import { describe, it, expect } from 'vitest';
-import { render, screen, cleanup } from '@testing-library/react';
+import { render, cleanup } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import * as fc from 'fast-check';
 
 import { configureStore } from '@reduxjs/toolkit';
+import type { ComponentType } from 'react';
 import ElectronicsPage from '../pages/ElectronicsPage';
 
 const mockProducts = Array.from({ length: 8 }, (_, i) => ({
@@ -29,7 +30,7 @@ const mockProducts = Array.from({ length: 8 }, (_, i) => ({
   images: ['https://example.com/img.jpg'],
 }));
 
-function renderPage(PageComponent, route = '/') {
+function renderPage(PageComponent: ComponentType, route = '/') {
   const mockStore = configureStore({
     reducer: {
       product: () => ({ products: mockProducts, loading: false, error: null, pagination: { totalPages: 1 } }),
@@ -51,7 +52,7 @@ function renderPage(PageComponent, route = '/') {
  * Returns all DOM elements that have a non-empty `animationDelay` inline style,
  * in document order.  These are the staggered card wrappers.
  */
-function getStaggeredElements(container) {
+function getStaggeredElements(container: HTMLElement): HTMLElement[] {
   return Array.from(container.querySelectorAll('[style]')).filter(
     (el) => el.style.animationDelay !== ''
   );
@@ -65,7 +66,7 @@ function getStaggeredElements(container) {
 // Used for the fast-check property test to avoid importing heavy page components
 // in a tight loop.
 // ─────────────────────────────────────────────────────────────────────────────
-function StaggeredList({ items }) {
+function StaggeredList({ items }: { items: Array<{ id: number; label: string }> }) {
   return (
     <div data-testid="staggered-list">
       {items.map((item, index) => (
@@ -146,8 +147,11 @@ describe(
           const elements = getAllByTestId('staggered-item');
 
           for (let i = 1; i < elements.length; i++) {
-            const prevDelay = parseFloat(elements[i - 1].style.animationDelay);
-            const currDelay = parseFloat(elements[i].style.animationDelay);
+            const previousElement = elements[i - 1];
+            const currentElement = elements[i];
+            if (!previousElement || !currentElement) throw new Error('Expected consecutive staggered elements');
+            const prevDelay = parseFloat(previousElement.style.animationDelay);
+            const currDelay = parseFloat(currentElement.style.animationDelay);
             expect(currDelay - prevDelay).toBeCloseTo(0.05, 10);
           }
 
@@ -191,7 +195,9 @@ describe('Property 6: ElectronicsPage staggered delays (Validates: Requirements 
     const container = renderPage(ElectronicsPage, '/electronics');
     const staggeredEls = getStaggeredElements(container);
     expect(staggeredEls.length).toBeGreaterThan(0);
-    expect(staggeredEls[0].style.animationDelay).toBe('0s');
+    const firstElement = staggeredEls[0];
+    if (!firstElement) throw new Error('Expected a first staggered element');
+    expect(firstElement.style.animationDelay).toBe('0s');
     cleanup();
   });
 
@@ -199,8 +205,10 @@ describe('Property 6: ElectronicsPage staggered delays (Validates: Requirements 
     const container = renderPage(ElectronicsPage, '/electronics');
     const staggeredEls = getStaggeredElements(container);
     expect(staggeredEls.length).toBe(8);
+    const lastElement = staggeredEls[7];
+    if (!lastElement) throw new Error('Expected a last staggered element');
     // Use the same formula as the implementation to avoid floating-point mismatch
-    expect(staggeredEls[7].style.animationDelay).toBe(`${7 * 0.05}s`);
+    expect(lastElement.style.animationDelay).toBe(`${7 * 0.05}s`);
     cleanup();
   });
 });

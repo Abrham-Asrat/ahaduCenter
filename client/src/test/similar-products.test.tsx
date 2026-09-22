@@ -12,6 +12,7 @@ import { describe, it, expect } from 'vitest';
 import { render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import * as fc from 'fast-check';
+import type { Product } from '../types';
 
 import SimilarProducts from '../components/electronics/SimilarProducts';
 
@@ -47,7 +48,7 @@ const productsArrayArbitrary = fc.uniqueArray(productArbitrary, {
 // ─────────────────────────────────────────────────────────────────────────────
 // Helper
 // ─────────────────────────────────────────────────────────────────────────────
-const renderSimilarProducts = (products) =>
+const renderSimilarProducts = (products: Product[]) =>
   render(
     <MemoryRouter>
       <SimilarProducts products={products} />

@@ -29,7 +29,7 @@ const renderPage = () => {
 describe('RegisterPage passwordless registration', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    authService.register.mockResolvedValue({
+    vi.mocked(authService.register).mockResolvedValue({
       verificationRequired: true,
       user: { name: 'Test User', email: 'test@example.com' },
     });
@@ -46,7 +46,7 @@ describe('RegisterPage passwordless registration', () => {
   });
 
   it('shows server errors', async () => {
-    authService.register.mockRejectedValueOnce('Email is already registered');
+    vi.mocked(authService.register).mockRejectedValueOnce('Email is already registered');
     renderPage();
     fireEvent.change(screen.getByLabelText(/full name/i), { target: { value: 'Test User' } });
     fireEvent.change(screen.getByLabelText(/email address/i), { target: { value: 'test@example.com' } });

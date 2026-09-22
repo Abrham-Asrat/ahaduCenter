@@ -27,18 +27,21 @@ describe('BentoGrid responsive padding (Requirement 8.2)', () => {
     const { container } = renderBentoGrid();
     const section = container.querySelector('section');
     expect(section).toBeInTheDocument();
+    if (!section) throw new Error('Bento grid section was not rendered');
     expect(section.className).toContain('px-4');
   });
 
   it('outer <section> has lg:px-20 class for desktop padding', () => {
     const { container } = renderBentoGrid();
     const section = container.querySelector('section');
+    if (!section) throw new Error('Bento grid section was not rendered');
     expect(section.className).toContain('lg:px-20');
   });
 
   it('outer <section> does NOT have the old bare px-20 class', () => {
     const { container } = renderBentoGrid();
     const section = container.querySelector('section');
+    if (!section) throw new Error('Bento grid section was not rendered');
     // Split on whitespace and ensure no token equals exactly "px-20"
     const classes = section.className.split(/\s+/);
     expect(classes).not.toContain('px-20');
@@ -65,6 +68,7 @@ describe('BentoGrid Movies card link (Requirement 2.3)', () => {
     const { container } = renderBentoGrid();
     const moviesLink = container.querySelector('a[href="/movies"]');
     expect(moviesLink).not.toBeNull();
+    if (!moviesLink) throw new Error('Movies link was not rendered');
     expect(moviesLink.textContent).toMatch(/cinematic masterpieces/i);
   });
 });
@@ -87,6 +91,7 @@ describe('BentoGrid Electronics card link (Requirement 2.4)', () => {
     const { container } = renderBentoGrid();
     const electronicsLink = container.querySelector('a[href="/electronics"]');
     expect(electronicsLink).not.toBeNull();
+    if (!electronicsLink) throw new Error('Electronics link was not rendered');
     expect(electronicsLink.textContent).toMatch(/next-gen tech/i);
   });
 });
@@ -109,6 +114,7 @@ describe('BentoGrid Books card link (Requirement 2.5)', () => {
     const { container } = renderBentoGrid();
     const booksLink = container.querySelector('a[href="/books"]');
     expect(booksLink).not.toBeNull();
+    if (!booksLink) throw new Error('Books link was not rendered');
     expect(booksLink.textContent).toMatch(/bestsellers/i);
   });
 });
@@ -131,6 +137,7 @@ describe('BentoGrid "Join the Community" link (Requirement 2.6)', () => {
     const { container } = renderBentoGrid();
     const registerLink = container.querySelector('a[href="/register"]');
     expect(registerLink).not.toBeNull();
+    if (!registerLink) throw new Error('Register link was not rendered');
     expect(registerLink.textContent).toMatch(/join the community/i);
   });
 });

@@ -36,7 +36,7 @@ describe('Pagination and Slices Property-Based Tests', () => {
   it('Property 9: wishlist optimistic rollback on rejected add restores previous items', () => {
     fc.assert(
       fc.property(
-        fc.array(fc.record({ id: fc.string(), title: fc.string() })),
+        fc.array(fc.record({ itemId: fc.string(), title: fc.string() })),
         fc.record({ itemId: fc.string(), itemType: fc.constantFrom('Book', 'Movie', 'Product') }),
         fc.string({ minLength: 1 }),
         (initialItems, newItem, errorMsg) => {
