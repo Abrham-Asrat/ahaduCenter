@@ -4,6 +4,8 @@ type ComparisonProduct = {
   id: string | number;
   name: string;
   imageUrl: string;
+  brand: string;
+  condition: string;
   rating: string;
   price: string;
   specs: string;
