@@ -142,7 +142,7 @@ const WishlistPage = () => {
           /* Wishlist grid */
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {filteredItems.map((item) => {
-              const id = item.id || item._id;
+                const id = item.id || item._id || item.itemId;
               const type = item.type || item.itemType || 'Item';
               const title = item.title || item.name || 'Untitled';
               const img = item.imageUrl || item.posterUrl || item.coverUrl || 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=600&q=80';

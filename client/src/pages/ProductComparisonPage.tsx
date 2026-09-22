@@ -1,8 +1,6 @@
 // src/pages/ProductComparisonPage.jsx
 import { useState } from 'react';
-import type { Product } from '../types';
-
-type ComparisonProduct = Product & {
+type ComparisonProduct = {
   id: string | number;
   name: string;
   imageUrl: string;
