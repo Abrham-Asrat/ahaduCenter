@@ -1,17 +1,18 @@
 // src/pages/MovieRequestPage.jsx
-import { useState, useEffect } from 'react';
+import { useState, useEffect, type ChangeEvent, type FormEvent } from 'react';
 import { useLocation } from 'react-router-dom';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import { movieService } from '../services/movieService';
+import type { MovieRequest } from '../types';
 
 const MovieRequestPage = () => {
   const location = useLocation();
 
   // Toast state
-  const [toastMessage, setToastMessage] = useState(null);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [toastType, setToastType] = useState('success'); // 'success' | 'error'
-  const [selectedRequestModal, setSelectedRequestModal] = useState(null);
+  const [selectedRequestModal, setSelectedRequestModal] = useState<MovieRequest | null>(null);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -22,7 +23,7 @@ const MovieRequestPage = () => {
     details: '',
   });
 
-  const showToast = (msg, type = 'success') => {
+  const showToast = (msg: string, type: 'success' | 'error' = 'success') => {
     setToastMessage(msg);
     setToastType(type);
     setTimeout(() => {
@@ -40,13 +41,13 @@ const MovieRequestPage = () => {
   }, [location.search]);
 
   // Request history state
-  const [requests, setRequests] = useState([]);
+  const [requests, setRequests] = useState<MovieRequest[]>([]);
   const [loadingRequests, setLoadingRequests] = useState(true);
-  const [fetchError, setFetchError] = useState(null);
+  const [fetchError, setFetchError] = useState<string | null>(null);
 
   // Submit state
   const [submitting, setSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState(null);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   // Cancel state — track which request ids are being cancelled
   const [cancellingIds, setCancellingIds] = useState(new Set());
@@ -71,13 +72,13 @@ const MovieRequestPage = () => {
   }, []);
 
   // Handle input change
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
   // Handle form submit
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!formData.title.trim()) return;
 
@@ -107,7 +108,7 @@ const MovieRequestPage = () => {
     }
   };
 
-  const handleCancelRequest = async (reqId, title) => {
+  const handleCancelRequest = async (reqId: string, title: string) => {
     setCancellingIds((prev) => new Set(prev).add(reqId));
     try {
       await movieService.cancelMovieRequest(reqId);
@@ -135,7 +136,7 @@ const MovieRequestPage = () => {
   };
 
   // Normalise a request record so the UI always uses .id, .date, .status consistently
-  const normaliseRequest = (r) => ({
+  const normaliseRequest = (r: MovieRequest): MovieRequest & { id: string; date: string; status: string } => ({
     ...r,
     id: r._id ?? r.id,
     date: r.date
@@ -153,7 +154,7 @@ const MovieRequestPage = () => {
   });
 
   // Status badge styles
-  const getStatusBadge = (status) => {
+  const getStatusBadge = (status: string) => {
     switch (status) {
       case 'Available':
         return 'bg-primary/15 text-primary border-primary/30';

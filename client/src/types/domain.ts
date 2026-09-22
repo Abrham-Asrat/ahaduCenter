@@ -130,6 +130,19 @@ export interface Review {
   helpfulCount?: number;
 }
 
+export interface MovieRequest {
+  _id?: string;
+  id?: string;
+  title: string;
+  type?: string;
+  year?: string | number;
+  genre?: string;
+  details?: string;
+  date?: string;
+  createdAt?: string;
+  status?: string;
+}
+
 export interface PaginationState {
   page: number;
   limit: number;
