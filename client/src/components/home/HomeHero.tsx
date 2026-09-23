@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 const HomeHero = () => {
   return (
    <section className="relative overflow-hidden bg-surface-container-lowest">
-  <div className="flex flex-col items-center px-6 pb-8 pt-6 text-center md:hidden">
+  <div className="flex flex-col items-center px-6 pb-8 py-4 text-center md:hidden">
     <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-surface-container-high px-4 text-[12px] font-semibold text-primary shadow-sm">
       <span>🇪🇹</span>
       <span>From Mizan Teferi with Love</span>
@@ -18,7 +18,7 @@ const HomeHero = () => {
         <span>Explore Catalog</span>
         <span className="material-symbols-outlined text-xl">arrow_forward</span>
       </Link>
-      <Link to="/register" className="inline-flex h-14 items-center justify-center rounded-full bg-surface-container-highest px-6 text-base font-semibold text-on-surface active:scale-[0.98]">Sign Up Free</Link>
+      {/* <Link to="/register" className="inline-flex h-14 items-center justify-center rounded-full bg-surface-container-highest px-6 text-base font-semibold text-on-surface active:scale-[0.98]">Sign Up Free</Link> */}
     </div>
     <div className="w-full max-w-[350px] rounded-2xl bg-surface-container-high p-4 text-left shadow-[0_16px_36px_-10px_rgba(0,0,0,0.6)]">
       <div className="mb-3 flex items-center justify-between border-b border-white/5 pb-2">
