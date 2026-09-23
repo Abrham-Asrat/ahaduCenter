@@ -11,8 +11,12 @@ const HomeTestimonials = () => {
         </div>
 
         <div className="flex gap-4 overflow-x-auto pb-2 md:grid md:grid-cols-3 md:gap-6">
-          {testimonials.map((item) => (
-            <div key={item.author} className="flex w-[290px] shrink-0 flex-col justify-between gap-6 rounded-2xl bg-surface-container-high p-4 shadow-md transition-all duration-200 hover:-translate-y-1 md:w-auto md:p-8">
+          {testimonials.map((item, index) => (
+            <div
+              key={item.author}
+              className="flex w-[290px] min-w-0 shrink-0 flex-col justify-between gap-6 rounded-2xl bg-surface-container-high p-4 shadow-md transition-all duration-200 hover:-translate-y-1 animate-fade-up md:w-auto md:p-8"
+              style={{ animationDelay: `${index * 100}ms` }}
+            >
               <div className="flex flex-col gap-4">
                 <div className="flex items-center gap-1 text-primary">
                   {Array.from({ length: 5 }).map((_, index) => (

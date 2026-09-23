@@ -16,11 +16,12 @@ const HomeCategories = () => {
         </div>
 
         <div className="grid grid-cols-1 gap-4 md:gap-6 lg:grid-cols-3">
-          {categoryCards.map((card) => (
+          {categoryCards.map((card, index) => (
             <Link
               key={card.title}
               to={card.to}
-              className="group relative flex h-52 flex-col justify-between overflow-hidden rounded-2xl bg-surface-container-high p-4 shadow-lg transition-all duration-300 hover:-translate-y-1.5 md:h-[440px] md:rounded-3xl md:p-8"
+              className="group relative flex h-52 min-w-0 flex-col justify-between overflow-hidden rounded-2xl bg-surface-container-high p-4 shadow-lg transition-all duration-300 hover:-translate-y-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary animate-fade-up md:h-[440px] md:rounded-3xl md:p-8"
+              style={{ animationDelay: `${index * 90}ms` }}
             >
               <img
                 className="absolute inset-0 h-full w-full object-cover opacity-40 transition-transform duration-500 group-hover:scale-105"
