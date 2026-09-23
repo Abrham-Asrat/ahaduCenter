@@ -1,4 +1,4 @@
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, BookOpenText, MonitorSmartphone, ShieldCheck, Sparkles, TrendingUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const collectionCards = [
@@ -31,9 +31,32 @@ const collectionCards = [
     },
 ];
 
+const features = [
+    {
+        title: 'Curated quality',
+        description: 'Every title is selected for quality, style, and long-term value.',
+        icon: Sparkles,
+    },
+    {
+        title: 'Seamless discovery',
+        description: 'Browse movies, books, and devices without friction or clutter.',
+        icon: MonitorSmartphone,
+    },
+    {
+        title: 'Smart recommendations',
+        description: 'Explore collections built around your interests and habits.',
+        icon: TrendingUp,
+    },
+    {
+        title: 'Trust & comfort',
+        description: 'A polished shopping journey with secure, dependable service.',
+        icon: ShieldCheck,
+    },
+];
+
 const BentoGrid = () => {
     return (
-        <section className="mx-auto max-w-7xl px-4 pb-16 pt-6 sm:px-6 lg:px-8 lg:pb-20">
+        <section className="mx-auto max-w-7xl px-4 pb-16 pt-6 sm:px-6 lg:px-8 lg:pb-24">
             <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                 <div>
                     <p className="text-xs font-medium uppercase tracking-[0.24em] text-emerald-300">Explore</p>
@@ -84,6 +107,33 @@ const BentoGrid = () => {
                         <ArrowRight size={16} />
                     </div>
                 </Link>
+            </div>
+
+            <div className="mt-14">
+                <div className="mb-6 flex items-center justify-between gap-3">
+                    <div>
+                        <p className="text-xs font-medium uppercase tracking-[0.24em] text-emerald-300">Why us</p>
+                        <h3 className="mt-2 text-2xl font-bold tracking-[-0.04em] text-white sm:text-3xl">
+                            Designed for modern discovery
+                        </h3>
+                    </div>
+                </div>
+
+                <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+                    {features.map(({ title, description, icon: Icon }, index) => (
+                        <div
+                            key={title}
+                            className="group rounded-[24px] border border-white/10 bg-white/5 p-5 backdrop-blur-sm shadow-[0_20px_40px_rgba(15,23,42,0.18)] transition-all duration-300 hover:-translate-y-1 hover:border-emerald-400/30 hover:bg-white/10 animate-fade-up"
+                            style={{ animationDelay: `${index * 120}ms` }}
+                        >
+                            <div className="mb-4 inline-flex rounded-2xl border border-emerald-400/20 bg-emerald-500/10 p-3 text-emerald-300 transition-transform duration-300 group-hover:scale-110">
+                                <Icon size={22} />
+                            </div>
+                            <h4 className="text-xl font-semibold text-white">{title}</h4>
+                            <p className="mt-3 text-sm leading-6 text-slate-300">{description}</p>
+                        </div>
+                    ))}
+                </div>
             </div>
         </section>
     );

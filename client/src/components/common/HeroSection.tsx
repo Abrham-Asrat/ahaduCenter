@@ -13,10 +13,10 @@ const HeroSection = () => {
             </div>
             <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_right,_rgba(16,185,129,0.18),transparent_35%),radial-gradient(circle_at_bottom_left,_rgba(212,175,55,0.12),transparent_30%),linear-gradient(90deg,_rgba(7,17,29,0.96)_0%,_rgba(7,17,29,0.84)_52%,_rgba(7,17,29,0.68)_100%)]" />
 
-            <div className="mx-auto max-w-7xl px-4 pb-12 pt-8 sm:px-6 lg:px-8 lg:pb-20 lg:pt-12">
+            <div className="mx-auto max-w-7xl px-4 pb-10 pt-8 sm:px-6 lg:px-8 lg:pb-20 lg:pt-12">
                 <div className="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-14">
                     <div className="order-2 flex flex-col justify-center lg:order-1">
-                        <div className="mb-6 inline-flex w-fit items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-500/10 px-3 py-1.5 text-xs font-medium uppercase tracking-[0.24em] text-emerald-300">
+                        <div className="mb-6 inline-flex w-fit items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-500/10 px-3 py-1.5 text-xs font-medium uppercase tracking-[0.24em] text-emerald-300 animate-pulse-soft">
                             <Sparkles size={14} />
                             Curated for every mood
                         </div>
@@ -54,8 +54,12 @@ const HeroSection = () => {
                                 { value: '2.5k+', label: 'Curated titles' },
                                 { value: '4.9/5', label: 'Reader rating' },
                                 { value: '24h', label: 'Fast delivery' },
-                            ].map((stat) => (
-                                <div key={stat.label} className="rounded-2xl border border-white/10 bg-white/5 p-3 backdrop-blur-sm shadow-lg shadow-slate-950/20">
+                            ].map((stat, index) => (
+                                <div
+                                    key={stat.label}
+                                    className="rounded-2xl border border-white/10 bg-white/5 p-3 backdrop-blur-sm shadow-lg shadow-slate-950/20 animate-fade-up"
+                                    style={{ animationDelay: `${index * 120}ms` }}
+                                >
                                     <div className="text-xl font-bold text-white sm:text-2xl">{stat.value}</div>
                                     <div className="mt-1 text-[11px] uppercase tracking-[0.18em] text-slate-400">{stat.label}</div>
                                 </div>
@@ -65,7 +69,7 @@ const HeroSection = () => {
 
                     <div className="order-1 flex items-center justify-center lg:order-2">
                         <div className="relative w-full max-w-[520px]">
-                            <div className="absolute -left-8 top-8 hidden rotate-[-12deg] rounded-2xl border border-white/10 bg-slate-900/80 p-2 shadow-2xl shadow-slate-950/40 backdrop-blur-md sm:block">
+                            <div className="floating-card absolute -left-8 top-8 hidden rotate-[-12deg] rounded-2xl border border-white/10 bg-slate-900/80 p-2 shadow-2xl shadow-slate-950/40 backdrop-blur-md sm:block">
                                 <div className="w-32 overflow-hidden rounded-xl bg-slate-800">
                                     <img
                                         src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=800&q=80"
@@ -93,7 +97,7 @@ const HeroSection = () => {
                                 </div>
                             </div>
 
-                            <div className="absolute -right-4 bottom-8 rotate-[10deg] rounded-2xl border border-white/10 bg-slate-900/80 p-2 shadow-2xl shadow-slate-950/40 backdrop-blur-md sm:block">
+                            <div className="floating-card-delay absolute -right-4 bottom-8 rotate-[10deg] rounded-2xl border border-white/10 bg-slate-900/80 p-2 shadow-2xl shadow-slate-950/40 backdrop-blur-md sm:block">
                                 <div className="w-28 overflow-hidden rounded-xl bg-slate-800">
                                     <img
                                         src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=800&q=80"
