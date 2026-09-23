@@ -1,89 +1,88 @@
-// src/components/common/BentoGrid.jsx
-
+import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-/**
- * BentoGrid Component
- * 
- * Displays a bento-style grid of curated collections.
- * Features:
- * - Movies (large card spanning 2 columns)
- * - Electronics (single card)
- * - Books (single card)
- * - Join the Community (spans 2 columns)
- * 
- * Responsive:
- * - 1 column on mobile
- * - 3 columns on desktop
- */
+const collectionCards = [
+    {
+        title: 'Cinematic picks',
+        subtitle: 'Award-winning stories and cult classics',
+        href: '/movies',
+        image:
+            "url('https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=1200&q=80')",
+        className: 'md:col-span-2 md:row-span-2 min-h-[360px] md:min-h-[440px]',
+        badge: 'New arrivals',
+    },
+    {
+        title: 'Smart tech',
+        subtitle: 'Upgrade your setup',
+        href: '/electronics',
+        image:
+            "url('https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=900&q=80')",
+        className: 'min-h-[220px] md:min-h-[260px]',
+        badge: 'Trending',
+    },
+    {
+        title: 'Bestsellers',
+        subtitle: 'Stories that stay with you',
+        href: '/books',
+        image:
+            "url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=900&q=80')",
+        className: 'min-h-[220px] md:min-h-[260px]',
+        badge: 'Editor choice',
+    },
+];
+
 const BentoGrid = () => {
     return (
-        <section className="py-12 px-4 sm:px-8 lg:px-20 max-w-7xl mx-auto">
-            <h2 className="text-3xl font-bold text-white mb-8">Curated Collections</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <section className="mx-auto max-w-7xl px-4 pb-16 pt-6 sm:px-6 lg:px-8 lg:pb-20">
+            <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                    <p className="text-xs font-medium uppercase tracking-[0.24em] text-emerald-300">Explore</p>
+                    <h2 className="mt-2 text-3xl font-bold tracking-[-0.04em] text-white sm:text-4xl">
+                        Curated collections
+                    </h2>
+                </div>
+                <p className="max-w-xl text-sm text-slate-300 sm:text-base">
+                    Browse our hand-selected favorites across entertainment, technology, and stories.
+                </p>
+            </div>
 
-                {/* Movies large card */}
-                <Link to="/movies" className="md:col-span-2 glass-border-gradient rounded-xl overflow-hidden group relative min-h-[400px] cursor-pointer">
-                    <div
-                        className="absolute inset-0 bg-cover bg-center opacity-40 group-hover:opacity-60 transition-opacity duration-500"
-                        style={{
-                            backgroundImage:
-                                "url('https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80')",
-                        }}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#151B28] via-[#151B28]/50 to-transparent" />
-                    <div className="relative z-10 h-full flex flex-col justify-end p-8">
-                        <span className="text-xs uppercase tracking-wider text-primary bg-primary/10 px-3 py-1 rounded w-fit mb-2">
-                            Featured
-                        </span>
-                        <h3 className="text-2xl font-semibold text-white mb-2">Cinematic Masterpieces</h3>
-                        <p className="text-on-surface-variant max-w-md">
-                            Immerse yourself in our hand-picked selection of award-winning films and blockbuster hits.
-                        </p>
-                    </div>
-                </Link>
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
+                {collectionCards.map((card) => (
+                    <Link
+                        key={card.title}
+                        to={card.href}
+                        className={`group relative overflow-hidden rounded-[28px] border border-white/10 bg-slate-900/60 shadow-[0_20px_55px_rgba(15,23,42,0.35)] transition-transform duration-300 hover:-translate-y-1 ${card.className}`}
+                    >
+                        <div
+                            className="absolute inset-0 bg-cover bg-center opacity-60 transition-transform duration-500 group-hover:scale-105"
+                            style={{ backgroundImage: card.image }}
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#0b1220] via-[#0b1220]/50 to-transparent" />
+                        <div className="relative z-10 flex h-full flex-col justify-end p-5 sm:p-6">
+                            <span className="mb-3 inline-flex w-fit rounded-full border border-white/10 bg-slate-950/60 px-2.5 py-1 text-[10px] uppercase tracking-[0.22em] text-emerald-200">
+                                {card.badge}
+                            </span>
+                            <h3 className="text-2xl font-semibold text-white">{card.title}</h3>
+                            <p className="mt-2 max-w-xs text-sm text-slate-200/90">{card.subtitle}</p>
+                        </div>
+                    </Link>
+                ))}
 
-                {/* Electronics card */}
-                <Link to="/electronics" className="glass-border-gradient rounded-xl overflow-hidden group relative min-h-[400px] cursor-pointer">
-                    <div
-                        className="absolute inset-0 bg-cover bg-center opacity-40 group-hover:opacity-60 transition-opacity duration-500"
-                        style={{
-                            backgroundImage:
-                                "url('https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=800&q=80')",
-                        }}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#151B28] via-[#151B28]/50 to-transparent" />
-                    <div className="relative z-10 h-full flex flex-col justify-end p-6">
-                        <h3 className="text-2xl font-semibold text-white mb-2">Next-Gen Tech</h3>
-                        <p className="text-sm text-on-surface-variant">Elevate your setup.</p>
-                    </div>
-                </Link>
-
-                {/* Books card */}
-                <Link to="/books" className="glass-border-gradient rounded-xl overflow-hidden group relative min-h-[300px] md:col-span-1 cursor-pointer">
-                    <div
-                        className="absolute inset-0 bg-cover bg-center opacity-40 group-hover:opacity-60 transition-opacity duration-500"
-                        style={{
-                            backgroundImage:
-                                "url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=800&q=80')",
-                        }}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#151B28] via-[#151B28]/50 to-transparent" />
-                    <div className="relative z-10 h-full flex flex-col justify-end p-6">
-                        <h3 className="text-2xl font-semibold text-white mb-2">Bestsellers</h3>
-                        <p className="text-sm text-on-surface-variant">Expand your mind.</p>
-                    </div>
-                </Link>
-
-                {/* Community card */}
-                <Link to="/register" className="md:col-span-2 glass-border-gradient rounded-xl p-6 flex items-center justify-between group glow-hover cursor-pointer">
+                <Link
+                    to="/register"
+                    className="group relative flex min-h-[220px] flex-col justify-between overflow-hidden rounded-[28px] border border-emerald-400/20 bg-[radial-gradient(circle_at_top_left,_rgba(16,185,129,0.22),transparent_35%),linear-gradient(135deg,_rgba(15,23,42,0.96),_rgba(6,14,24,1))] p-6 shadow-[0_20px_55px_rgba(16,185,129,0.12)] transition-transform duration-300 hover:-translate-y-1 md:col-span-2 xl:col-span-1"
+                >
                     <div>
-                        <h4 className="text-2xl font-semibold text-white">Join the Community</h4>
-                        <p className="text-sm text-on-surface-variant">Get access to exclusive drops.</p>
+                        <p className="text-xs font-medium uppercase tracking-[0.2em] text-emerald-200">Community</p>
+                        <h3 className="mt-4 text-2xl font-semibold text-white">Join the club</h3>
                     </div>
-                    <span className="btn-primary rounded-full w-12 h-12 flex items-center justify-center">
-                        <span className="material-symbols-outlined">arrow_forward</span>
-                    </span>
+                    <p className="mt-4 max-w-sm text-sm text-slate-300">
+                        Get early access to exclusive drops, member pricing, and standout picks.
+                    </p>
+                    <div className="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-emerald-500 px-4 py-2 text-sm font-semibold text-white">
+                        Get started
+                        <ArrowRight size={16} />
+                    </div>
                 </Link>
             </div>
         </section>
