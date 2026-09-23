@@ -4,7 +4,7 @@ const HomeHero = () => {
   return (
     <section className="relative overflow-hidden bg-surface-container-lowest">
       <div className="flex flex-col items-center px-6 pb-8 text-center md:hidden">
-        <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-surface-container-high px-4 py-1.5 text-[12px] font-semibold text-primary shadow-sm">
+        <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-surface-container-high px-4 text-[12px] font-semibold text-primary shadow-sm">
           <span>🇪🇹</span>
           <span>From Mizan Teferi with Love</span>
         </div>
