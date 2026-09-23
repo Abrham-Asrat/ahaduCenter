@@ -1,20 +1,28 @@
-import Navbar from '../components/common/Navbar';
-import HeroSection from '../components/common/HeroSection';
-import BentoGrid from '../components/common/BentoGrid';
 import Footer from '../components/common/Footer';
+import HomeCategories from '../components/home/HomeCategories';
+import HomeFeatured from '../components/home/HomeFeatured';
+import HomeHero from '../components/home/HomeHero';
+import HomeNewsletter from '../components/home/HomeNewsletter';
+import HomeProcess from '../components/home/HomeProcess';
+import HomeStats from '../components/home/HomeStats';
+import HomeTestimonials from '../components/home/HomeTestimonials';
+import Navbar from '../components/common/Navbar';
 
 const HomePage = () => {
   return (
-    <>
+    <div className="bg-background text-on-surface antialiased selection:bg-primary/30 selection:text-on-primary-container">
       <Navbar />
-    <div className="min-h-screen bg-dark-bg text-white flex flex-col animate-fade-in">
-      <main className="flex-grow  md:pb-0">
-        <HeroSection />
-        <BentoGrid />
+      <main className="w-full bg-background">
+        <HomeHero />
+        <HomeStats />
+        <HomeCategories />
+        <HomeFeatured />
+        <HomeProcess />
+        <HomeTestimonials />
       </main>
+
       <Footer />
     </div>
-    </>
   );
 };
 
