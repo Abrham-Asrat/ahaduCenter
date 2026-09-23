@@ -58,6 +58,7 @@ export const featuredItems = [
       'An epic biographical odyssey exploring Emperor Fasilides and the architectural marvels of 17th-century Abyssinia.',
     price: null,
     button: 'Watch',
+    to: '/movies',
     image:
       'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80',
   },
@@ -69,6 +70,7 @@ export const featuredItems = [
       'A seminal anthology celebrating the oral histories, democratic governance philosophy, and poetry of Oromia.',
     price: 'ETB 1,250',
     button: 'Get Book',
+    to: '/books',
     image:
       'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=900&q=80',
   },
@@ -80,6 +82,7 @@ export const featuredItems = [
       'Audiophile grade active noise cancelling with low-latency lossless streaming codec tuned for studio mixing and daily commute.',
     price: 'ETB 14,800',
     button: 'Order',
+    to: '/electronics',
     image:
       'https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=900&q=80',
   },
@@ -91,6 +94,7 @@ export const featuredItems = [
       'A photographic and archival deep-dive into the distinct 20th-century vernacular and modernist cityscape of Mizan Teferi',
     price: 'ETB 2,400',
     button: 'Borrow',
+    to: '/books',
     image:
       'https://images.unsplash.com/photo-1524578271613-d550eacf6090?auto=format&fit=crop&w=900&q=80',
   },

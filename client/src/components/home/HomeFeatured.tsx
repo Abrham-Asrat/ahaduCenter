@@ -51,7 +51,7 @@ const HomeFeatured = () => {
 
                 <div className="flex items-center justify-between pt-2">
                   <span className="truncate text-sm font-bold text-primary md:text-lg">{item.price ?? 'Stream Available'}</span>
-                  <button type="button" className="inline-flex h-8 shrink-0 items-center gap-1.5 rounded-full bg-primary px-3 text-xs font-bold text-on-primary-container shadow-sm transition-all hover:scale-105 md:h-auto md:px-5 md:py-2 md:text-sm">
+                  <Link to={item.to} className="inline-flex h-8 shrink-0 items-center gap-1.5 rounded-full bg-primary px-3 text-xs font-bold text-on-primary-container shadow-sm transition-all hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary md:h-auto md:px-5 md:py-2 md:text-sm">
                     {item.type === 'Movie' ? (
                       <>
                         <span className="material-symbols-outlined text-base" style={{ fontVariationSettings: 'FILL 1' }}>play_arrow</span>
@@ -68,7 +68,7 @@ const HomeFeatured = () => {
                         <span>{item.button}</span>
                       </>
                     )}
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -76,7 +76,7 @@ const HomeFeatured = () => {
         </div>
 
         <div className="flex justify-center pt-2 md:pt-4">
-          <Link to="/movies" className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-surface-container-high px-6 py-3.5 text-base font-bold text-primary transition-all hover:bg-surface-bright md:w-auto md:rounded-full md:px-10 md:text-lg">
+          <Link to="/search" className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-surface-container-high px-6 py-3.5 text-base font-bold text-primary transition-all hover:bg-surface-bright focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary md:w-auto md:rounded-full md:px-10 md:text-lg">
             <span>View All Featured (48+)</span>
             <span className="material-symbols-outlined text-lg">arrow_forward</span>
           </Link>
