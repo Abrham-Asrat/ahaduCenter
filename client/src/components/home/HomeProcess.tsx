@@ -15,8 +15,12 @@ const HomeProcess = () => {
         <div className="relative grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-8">
           <div className="absolute bottom-8 left-4 top-8 w-0.5 bg-surface-container-highest md:bottom-auto md:left-[18%] md:right-[18%] md:top-10 md:h-0.5 md:w-auto md:border-t-2 md:border-dashed md:border-primary/30" />
 
-          {steps.map((step) => (
-            <div key={step.number} className="group relative z-10 flex items-start gap-4 text-left md:flex-col md:items-center md:gap-4 md:text-center">
+          {steps.map((step, index) => (
+            <div
+              key={step.number}
+              className="group relative z-10 flex items-start gap-4 text-left animate-fade-up md:flex-col md:items-center md:gap-4 md:text-center"
+              style={{ animationDelay: `${index * 100}ms` }}
+            >
               <div className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-black text-on-primary-container shadow-lg transition-transform duration-200 group-hover:scale-110 md:h-20 md:w-20 md:bg-surface-container-high md:text-base md:text-primary">
                 <span className="hidden absolute -right-1 -top-1 h-7 w-7 items-center justify-center rounded-full bg-primary text-[10px] font-black text-on-primary-container shadow md:flex">
                   {step.number}

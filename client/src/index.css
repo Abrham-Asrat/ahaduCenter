@@ -179,6 +179,18 @@ html {
   animation: fadeUp 0.7s ease-out both;
 }
 
+.home-reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 700ms ease, transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--home-reveal-delay, 0ms);
+}
+
+.home-reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 .animate-pulse-soft {
   animation: pulseSoft 2.5s ease-in-out infinite;
 }

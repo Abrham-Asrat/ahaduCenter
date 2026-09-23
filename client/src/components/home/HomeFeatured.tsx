@@ -21,8 +21,12 @@ const HomeFeatured = () => {
         </div>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:gap-8">
-          {featuredItems.map((item) => (
-            <div key={item.title} className="group flex items-center gap-3 rounded-2xl bg-surface-container-high p-2 shadow-md transition-colors hover:bg-surface-bright md:gap-6 md:p-6">
+          {featuredItems.map((item, index) => (
+            <div
+              key={item.title}
+              className="group flex min-w-0 items-center gap-3 rounded-2xl bg-surface-container-high p-2 shadow-md transition-colors hover:bg-surface-bright md:gap-6 md:p-6 animate-fade-up"
+              style={{ animationDelay: `${index * 80}ms` }}
+            >
               <div className="relative h-28 w-20 shrink-0 overflow-hidden rounded-xl bg-surface-container-lowest md:h-56 md:w-44">
                 <img
                   src={item.image}
