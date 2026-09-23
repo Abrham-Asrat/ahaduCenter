@@ -10,7 +10,7 @@ services:
     volumes:
       - mongo_data:/data/db
     healthcheck:
-      test: ["CMD-SHELL", "mongosh --quiet --eval \"db.adminCommand('ping').ok\""]
+      test: [ "CMD-SHELL", "mongosh --quiet --eval \"db.adminCommand('ping').ok\"" ]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -39,8 +39,8 @@ services:
       context: ./client
       args:
         VITE_API_BASE_URL: /api
-        # Set VITE_GOOGLE_CLIENT_ID in the shell when building with Google login.
-        VITE_GOOGLE_CLIENT_ID: ${VITE_GOOGLE_CLIENT_ID:-}
+        # Override VITE_GOOGLE_CLIENT_ID in the shell for another Google OAuth client.
+        VITE_GOOGLE_CLIENT_ID: ${VITE_GOOGLE_CLIENT_ID:-595155246581-s0j0b0fikrv6agl17g61q43k2qhh79mi.apps.googleusercontent.com}
     restart: unless-stopped
     depends_on:
       - api
