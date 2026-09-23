@@ -2,7 +2,6 @@ import Footer from '../components/common/Footer';
 import HomeCategories from '../components/home/HomeCategories';
 import HomeFeatured from '../components/home/HomeFeatured';
 import HomeHero from '../components/home/HomeHero';
-import HomeNewsletter from '../components/home/HomeNewsletter';
 import HomeProcess from '../components/home/HomeProcess';
 import HomeStats from '../components/home/HomeStats';
 import HomeTestimonials from '../components/home/HomeTestimonials';
