@@ -22,7 +22,7 @@ const ProductGallery = ({ product }: ProductGalleryProps) => {
         <img
           src={selectedImage}
           alt={product.title || product.name || 'Product image'}
-          className="h-[420px] w-full object-cover md:h-[520px]"
+          className="aspect-[4/3] max-h-[520px] w-full object-cover"
         />
       </div>
 

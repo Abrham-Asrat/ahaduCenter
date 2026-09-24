@@ -21,9 +21,9 @@ const ProductCard = ({
   const title = product.title || product.name || 'Product';
 
   return (
-    <article className="overflow-hidden rounded-[26px] border border-white/10 bg-card-surface/60 p-3 shadow-[0_20px_45px_rgba(15,23,42,0.25)] transition-transform duration-300 hover:-translate-y-1">
+    <article className="min-w-0 overflow-hidden rounded-[26px] border border-white/10 bg-card-surface/60 p-3 shadow-[0_20px_45px_rgba(15,23,42,0.25)] transition-transform duration-300 hover:-translate-y-1">
       <div className="relative overflow-hidden rounded-[20px]">
-        <img src={image} alt={title} className="h-56 w-full object-cover" />
+        <img src={image} alt={title} className="aspect-[4/3] w-full object-cover" />
         <button
           type="button"
           onClick={() => onToggleWishlist?.(product, !isWishlisted)}
@@ -35,13 +35,13 @@ const ProductCard = ({
       </div>
 
       <div className="mt-4 space-y-3 px-1 pb-1">
-        <div className="flex items-center justify-between gap-3 text-xs uppercase tracking-[0.18em] text-light-gray">
-          <span>{product.brand || 'Premium'}</span>
-          <span>{product.condition || 'New'}</span>
+        <div className="flex min-w-0 flex-wrap items-center justify-between gap-x-3 gap-y-1 text-xs uppercase tracking-[0.18em] text-light-gray">
+          <span className="min-w-0 max-w-full truncate">{product.brand || 'Premium'}</span>
+          <span className="shrink-0">{product.condition || 'New'}</span>
         </div>
 
         <div>
-          <h3 className="text-lg font-semibold text-white">{title}</h3>
+          <h3 className="break-words text-lg font-semibold text-white">{title}</h3>
           <div className="mt-2 flex items-center gap-2 text-sm text-on-surface-variant">
             <Star size={14} className="fill-primary text-primary" />
             <span>{product.rating ?? 4.8}</span>

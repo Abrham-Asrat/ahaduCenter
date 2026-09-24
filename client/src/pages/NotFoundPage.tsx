@@ -16,7 +16,7 @@ const NotFoundPage = () => {
   return (
     <div className="min-h-screen bg-background text-on-surface flex flex-col animate-fade-in">
       <main className="flex-grow flex items-center justify-center px-4 py-16 relative overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
+        <div className="pointer-events-none absolute left-1/2 top-1/2 h-[min(500px,80vw)] w-[min(500px,80vw)] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/5 blur-[100px]" />
 
         <div className="glass-panel rounded-xl p-8 max-w-3xl w-full text-center relative z-10">
           <h1

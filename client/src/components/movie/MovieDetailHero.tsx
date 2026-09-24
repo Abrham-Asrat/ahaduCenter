@@ -47,17 +47,17 @@ const MovieDetailHero = ({ movie, onShowToast }: MovieDetailHeroProps) => {
 
     return (
         <section
-            className="relative w-full h-[420px] bg-cover bg-center"
+            className="relative flex min-h-[420px] w-full items-end bg-cover bg-center md:min-h-[460px]"
             style={{ backgroundImage: `url('${movie.bannerUrl}')` }}
         >
             {/* Gradient overlay for text readability */}
             <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F19] via-[#0B0F19]/70 to-transparent" />
 
             {/* Content container */}
-            <div className="absolute bottom-0 left-0 w-full px-4 md:px-8 pb-8 max-w-7xl mx-auto left-1/2 -translate-x-1/2">
+            <div className="relative z-10 mx-auto w-full max-w-7xl px-4 pb-8 md:px-8">
                 <div className="flex flex-col gap-2">
                     {/* Movie Title */}
-                    <h1 className="text-4xl md:text-6xl font-bold text-white tracking-widest uppercase drop-shadow-lg">
+                    <h1 className="break-words text-3xl font-bold uppercase tracking-[0.08em] text-white drop-shadow-lg sm:text-4xl md:text-6xl">
                         {movie.title}
                     </h1>
 
