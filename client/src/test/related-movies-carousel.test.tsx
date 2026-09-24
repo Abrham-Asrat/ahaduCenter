@@ -14,6 +14,15 @@ import { MemoryRouter } from 'react-router-dom';
 import * as fc from 'fast-check';
 
 import RelatedMoviesCarousel from '../components/movie/RelatedMoviesCarousel';
+import type { Movie } from '../types';
+
+type CarouselMovie = {
+  id: string | number;
+  title: string;
+  posterUrl: string;
+  year: string;
+  rating: string;
+};
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Arbitraries
@@ -48,10 +57,10 @@ const moviesArrayArbitrary = fc
 // ─────────────────────────────────────────────────────────────────────────────
 // Helper
 // ─────────────────────────────────────────────────────────────────────────────
-const renderCarousel = (movies) =>
+const renderCarousel = (movies: CarouselMovie[]) =>
   render(
     <MemoryRouter>
-      <RelatedMoviesCarousel movies={movies} />
+      <RelatedMoviesCarousel movies={movies as Movie[]} />
     </MemoryRouter>
   );
 
