@@ -60,7 +60,7 @@ const moviesArrayArbitrary = fc
 const renderCarousel = (movies: CarouselMovie[]) =>
   render(
     <MemoryRouter>
-      <RelatedMoviesCarousel movies={movies as Movie[]} />
+      <RelatedMoviesCarousel movies={movies as unknown as Movie[]} />
     </MemoryRouter>
   );
 
