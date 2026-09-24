@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import MovieCenterPage from './pages/MovieCenterPage';
 import MovieDetailPage from './pages/MovieDetailPage';
@@ -36,6 +36,40 @@ import { useAppDispatch } from './redux/hooks';
 
 function App() {
   const dispatch = useAppDispatch();
+  const location = useLocation();
+
+  useEffect(() => {
+    const publicNavPaths = [
+      '/',
+      '/movies',
+      '/electronics',
+      '/books',
+      '/search',
+      '/contact',
+      '/design-system',
+      '/compare',
+      '/account',
+      '/wishlist',
+      '/purchase-history',
+      '/borrowing-history',
+      '/movie-request',
+      '/notifications',
+      '/book-confirm',
+    ];
+    const isPublicNavRoute = publicNavPaths.some(
+      (path) => location.pathname === path || (path !== '/' && location.pathname.startsWith(`${path}/`)),
+    );
+
+    document.body.dataset.layout = location.pathname.startsWith('/admin')
+      ? 'admin'
+      : isPublicNavRoute
+        ? 'public-nav'
+        : 'standalone';
+
+    return () => {
+      delete document.body.dataset.layout;
+    };
+  }, [location.pathname]);
 
   useEffect(() => {
     dispatch(bootstrapAuthThunk());
