@@ -14,7 +14,7 @@ const ProductGallery = ({ product }: ProductGalleryProps) => {
     ? product.images
     : [product.imageUrl || 'https://via.placeholder.com/800x600/0f172a/ffffff?text=Product'];
 
-  const [selectedImage, setSelectedImage] = useState<string>(images[0]);
+  const [selectedImage, setSelectedImage] = useState<string>(images[0] ?? '');
 
   return (
     <div className="rounded-[28px] border border-white/10 bg-card-surface/60 p-4 shadow-[0_25px_80px_rgba(15,23,42,0.35)]">
