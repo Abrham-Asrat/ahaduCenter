@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import type { Book } from '../../../types';
 
 interface BookInfoSectionProps {
@@ -7,7 +8,16 @@ interface BookInfoSectionProps {
   onShowToast?: (message: string) => void;
 }
 
-const BookInfoSection = ({ book, onBorrow, onReserve }: BookInfoSectionProps) => {
+const BookInfoSection = ({ book, onBorrow, onReserve, onShowToast }: BookInfoSectionProps) => {
+  const navigate = useNavigate();
+
+  const handleBuy = () => {
+    onShowToast?.(`Preparing checkout for ${book.title}`);
+    window.setTimeout(() => {
+      navigate('/book-confirm');
+    }, 1000);
+  };
+
   return (
     <div className="space-y-6">
       <div className="space-y-3">
@@ -44,6 +54,13 @@ const BookInfoSection = ({ book, onBorrow, onReserve }: BookInfoSectionProps) =>
       </div>
 
       <div className="flex flex-wrap gap-3">
+        <button
+          type="button"
+          onClick={handleBuy}
+          className="rounded-xl bg-primary px-5 py-3 text-sm font-bold text-slate-950 transition-opacity hover:opacity-90"
+        >
+          Buy ETB {Number(book.price ?? 0).toLocaleString()}
+        </button>
         <button
           type="button"
           onClick={onBorrow}
