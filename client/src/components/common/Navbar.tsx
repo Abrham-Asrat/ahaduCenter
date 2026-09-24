@@ -73,14 +73,13 @@ const Navbar = () => {
   return (
     <>
       <nav className="fixed inset-x-0 top-0 z-50 w-full bg-surface-container/80 backdrop-blur-xl border-b border-white/10 shadow-xl transition-colors animate-nav-drop md:block">
-        <div className="mx-auto flex min-h-[4.25rem] w-full max-w-7xl items-center justify-between px-4 py-3 sm:px-6 md:grid md:grid-cols-[1fr_auto_1fr] md:px-8">
+        <div className="grid grid-cols-[1fr_auto_1fr] items-center px-4 sm:px-6 md:px-8 py-3 max-w-7xl mx-auto min-h-[4.25rem]">
           {/* Brand Logo */}
-          <Link to="/" aria-label="AhaduCenter home" className="logo-light-sweep flex items-center md:justify-self-start">
-            <img
-              src="/logo.png"
-              alt="AhaduCenter"
-              className="h-10 w-auto max-w-[160px] object-contain sm:h-11 sm:max-w-[200px] md:h-12 md:max-w-[240px] lg:h-14 lg:max-w-[280px]"
-            />
+          <Link to="/" className="justify-self-start font-heading text-2xl font-black text-primary flex items-center gap-2 tracking-wide">
+            <div className="w-9 h-9 rounded-xl bg-primary text-black flex items-center justify-center font-black shadow-lg">
+              <span className="material-symbols-outlined text-black text-xl">storefront</span>
+            </div>
+            <span className="text-white">Ahadu<span className="text-primary">Center</span></span>
           </Link>
 
           {/* Desktop Navigation Links */}
