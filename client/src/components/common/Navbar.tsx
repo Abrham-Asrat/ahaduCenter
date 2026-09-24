@@ -73,11 +73,11 @@ const Navbar = () => {
   return (
     <>
       <nav className="fixed inset-x-0 top-0 z-50 w-full bg-surface-container/80 backdrop-blur-xl border-b border-white/10 shadow-xl transition-colors animate-nav-drop md:block">
-        <div className="mx-auto flex min-h-[4.25rem] w-full max-w-7xl items-center justify-between px-4 py-3 sm:px-6 md:grid md:grid-cols-[1fr_auto_1fr] md:px-8">
+        <div className="mx-auto flex min-h-[4.25rem] w-full max-w-7xl items-center justify-between sm:px-6 md:grid md:grid-cols-[1fr_auto_1fr] md:px-8">
           {/* Brand Logo */}
           <Link to="/" aria-label="AhaduCenter home" className="logo-light-sweep flex items-center md:justify-self-start">
             <img
-              src="/logo.png"
+              src="/logoBlack1.png"
               alt="AhaduCenter"
               className="h-10 w-auto max-w-[160px] object-contain sm:h-11 sm:max-w-[200px] md:h-12 md:max-w-[240px] lg:h-14 lg:max-w-[280px]"
             />
