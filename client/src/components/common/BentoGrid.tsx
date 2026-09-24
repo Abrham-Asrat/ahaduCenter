@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const collectionCards = [
     {
-        title: 'Cinematic picks',
+        title: 'Cinematic Masterpieces',
         subtitle: 'Award-winning stories and cult classics',
         href: '/movies',
         image:
@@ -12,7 +12,7 @@ const collectionCards = [
         badge: 'New arrivals',
     },
     {
-        title: 'Smart tech',
+        title: 'Next-gen tech',
         subtitle: 'Upgrade your setup',
         href: '/electronics',
         image:
@@ -56,7 +56,7 @@ const features = [
 
 const BentoGrid = () => {
     return (
-        <section className="mx-auto max-w-7xl px-4 pb-16 pt-6 sm:px-6 lg:px-8 lg:pb-24">
+        <section className="mx-auto max-w-7xl px-4 pb-16 pt-6 sm:px-6 lg:px-20 lg:pb-24">
             <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                 <div>
                     <p className="text-xs font-medium uppercase tracking-[0.24em] text-primary">Explore</p>
@@ -97,7 +97,7 @@ const BentoGrid = () => {
                 >
                     <div>
                         <p className="text-xs font-medium uppercase tracking-[0.2em] text-primary">Community</p>
-                        <h3 className="mt-4 text-2xl font-semibold text-white">Join the club</h3>
+                        <h3 className="mt-4 text-2xl font-semibold text-white">Join the Community</h3>
                     </div>
                     <p className="mt-4 max-w-sm text-sm text-on-surface-variant">
                         Get early access to exclusive drops, member pricing, and standout picks.
