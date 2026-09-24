@@ -1,26 +1,47 @@
 // src/pages/admin/AdminManageMoviesPage.jsx
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, type ChangeEvent, type FormEvent, type MouseEvent } from 'react';
+import type { Movie } from '../../types';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import AdminLayout from '../../components/admin/AdminLayout';
 import {
-  fetchAdminMovies,
-  createMovie,
-  updateMovie,
-  deleteMovie,
+    fetchAdminMovies,
+    createMovie,
+    updateMovie,
+    deleteMovie,
 } from '../../redux/slices/adminSlice';
+
+type MovieFormData = {
+    title: string;
+    director: string;
+    cast: Array<{ name: string; role?: string; character?: string }> | string;
+    description: string;
+    genres: string[];
+    country: string;
+    year: string | number;
+    runtime: string;
+    rating: string | number;
+    releaseDate: string;
+    trailerUrl: string;
+};
+
+interface MovieModalProps {
+    movie: Movie | null;
+    onClose: () => void;
+    onSave: (formData: Record<string, unknown>) => Promise<void>;
+}
 
 const AdminManageMoviesPage = () => {
     const dispatch = useAppDispatch();
-    const { movies, loading, error } = useAppSelector((s) => s.admin);
+    const { movies, error } = useAppSelector((s) => s.admin);
 
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedGenre, setSelectedGenre] = useState('All Genres');
     const [selectedCountry, setSelectedCountry] = useState('All Countries');
     const [selectedStatus, setSelectedStatus] = useState('All Status');
     const [showModal, setShowModal] = useState(false);
-    const [editingMovie, setEditingMovie] = useState(null);
+    const [editingMovie, setEditingMovie] = useState<Movie | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
-    const [actionError, setActionError] = useState(null);
+    const [actionError, setActionError] = useState<string | null>(null);
 
     useEffect(() => {
         dispatch(fetchAdminMovies());
@@ -37,8 +58,8 @@ const AdminManageMoviesPage = () => {
     });
 
     const handleAdd = () => { setActionError(null); setEditingMovie(null); setShowModal(true); };
-    const handleEdit = (movie) => { setActionError(null); setEditingMovie(movie); setShowModal(true); };
-    const handleDelete = async (id) => {
+    const handleEdit = (movie: Movie) => { setActionError(null); setEditingMovie(movie); setShowModal(true); };
+    const handleDelete = async (id: string) => {
         if (confirm('Delete this movie?')) {
             setActionError(null);
             try {
@@ -48,11 +69,12 @@ const AdminManageMoviesPage = () => {
             }
         }
     };
-    const handleSave = async (formData) => {
+    const handleSave = async (formData: Record<string, unknown>) => {
         setActionError(null);
         try {
             if (editingMovie) {
                 const targetId = editingMovie._id || editingMovie.id;
+                if (!targetId) throw new Error('Movie ID is missing');
                 await dispatch(updateMovie({ id: targetId, payload: formData })).unwrap();
             } else {
                 await dispatch(createMovie(formData)).unwrap();
@@ -151,7 +173,7 @@ const AdminManageMoviesPage = () => {
                                             <button onClick={() => handleEdit(movie)} className="p-1.5 text-on-surface-variant hover:text-primary" title="Edit">
                                                 <span className="material-symbols-outlined text-lg">edit</span>
                                             </button>
-                                            <button onClick={() => handleDelete(movie._id)} className="p-1.5 text-on-surface-variant hover:text-error" title="Delete">
+                                            <button onClick={() => handleDelete(movie._id || movie.id || '')} className="p-1.5 text-on-surface-variant hover:text-error" title="Delete">
                                                 <span className="material-symbols-outlined text-lg">delete</span>
                                             </button>
                                         </div>
@@ -184,7 +206,7 @@ const AdminManageMoviesPage = () => {
                                     <button onClick={() => handleEdit(movie)} className="p-1 text-on-surface-variant hover:text-primary">
                                         <span className="material-symbols-outlined">edit</span>
                                     </button>
-                                    <button onClick={() => handleDelete(movie._id)} className="p-1 text-on-surface-variant hover:text-error">
+                                    <button onClick={() => handleDelete(movie._id || movie.id || '')} className="p-1 text-on-surface-variant hover:text-error">
                                         <span className="material-symbols-outlined">delete</span>
                                     </button>
                                 </div>
@@ -215,8 +237,8 @@ const AdminManageMoviesPage = () => {
 /* ─────────────────────────────────────────────────────────────────────────── */
 /* MovieModal                                                                  */
 /* ─────────────────────────────────────────────────────────────────────────── */
-const MovieModal = ({ movie, onClose, onSave }) => {
-    const [formData, setFormData] = useState({
+const MovieModal = ({ movie, onClose, onSave }: MovieModalProps) => {
+    const [formData, setFormData] = useState<MovieFormData>({
         title: movie?.title || '',
         director: movie?.director || '',
         cast: movie?.cast || [],
@@ -226,27 +248,28 @@ const MovieModal = ({ movie, onClose, onSave }) => {
         year: movie?.year || new Date().getFullYear(),
         runtime: movie?.runtime || '',
         rating: movie?.rating || '',
+        releaseDate: movie?.releaseDate || '',
         trailerUrl: movie?.trailerUrl || '',
     });
 
     const [photoPreviews, setPhotoPreviews] = useState(movie?.posterUrl ? [movie.posterUrl] : []);
-    const fileInputRef = useRef(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const handleChange = (e) => {
+    const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handlePhotoChange = (e) => {
-        const files = Array.from(e.target.files);
+    const handlePhotoChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const files = Array.from(e.target.files ?? []);
         if (!files.length) return;
         const newPreviews = files.map((f) => URL.createObjectURL(f));
         setPhotoPreviews((prev) => [...prev, ...newPreviews].slice(0, 5));
     };
 
-    const removePhoto = (idx) => setPhotoPreviews((prev) => prev.filter((_, i) => i !== idx));
+    const removePhoto = (idx: number) => setPhotoPreviews((prev) => prev.filter((_, i) => i !== idx));
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: FormEvent<HTMLFormElement> | MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         onSave({
             ...formData,
@@ -316,7 +339,7 @@ const MovieModal = ({ movie, onClose, onSave }) => {
                     {/* Cast */}
                     <div>
                         <label className={labelCls}>Cast</label>
-                            <input type="text" name="cast" value={Array.isArray(formData.cast) ? formData.cast.map((member) => member.name).join(', ') : formData.cast} onChange={handleChange} className={inputCls} placeholder="e.g. Actor A, Actor B, Actor C" />
+                        <input type="text" name="cast" value={Array.isArray(formData.cast) ? formData.cast.map((member) => member.name).join(', ') : formData.cast} onChange={handleChange} className={inputCls} placeholder="e.g. Actor A, Actor B, Actor C" />
                     </div>
 
                     {/* Description */}

@@ -4,26 +4,26 @@ import API from './api';
 export const userService = {
   // ── Profile ──
   getProfile: () => API.get('/users/me').then((r) => r.data),
-  updateProfile: (payload) => API.put('/users/me', payload).then((r) => r.data),
+  updateProfile: (payload: unknown) => API.put('/users/me', payload).then((r) => r.data),
   getUserStats: () => API.get('/users/me/stats').then((r) => r.data),
   getUserActivity: () => API.get('/users/me/activity').then((r) => r.data),
 
   // ── Borrowings ──
   getBorrowingHistory: () => API.get('/users/me/borrowings').then((r) => r.data),
-  renewBorrowing: (borrowingId) =>
+  renewBorrowing: (borrowingId: string) =>
     API.post(`/borrowings/${borrowingId}/renew`).then((r) => r.data),
-  returnBook: (borrowingId) =>
+  returnBook: (borrowingId: string) =>
     API.post(`/borrowings/${borrowingId}/return`).then((r) => r.data),
 
   // ── Wishlist ──
   getWishlist: () => API.get('/users/me/wishlist').then((r) => r.data),
-  addToWishlist: (payload) => API.post('/users/me/wishlist', payload).then((r) => r.data),
-  removeFromWishlist: (itemId) =>
+  addToWishlist: (payload: unknown) => API.post('/users/me/wishlist', payload).then((r) => r.data),
+  removeFromWishlist: (itemId: string) =>
     API.delete(`/users/me/wishlist/${itemId}`).then((r) => r.data),
 
   // ── Notifications ──
   getNotifications: () => API.get('/users/me/notifications').then((r) => r.data),
-  markNotificationRead: (id) =>
+  markNotificationRead: (id: string) =>
     API.patch(`/notifications/${id}/read`).then((r) => r.data),
   markAllNotificationsRead: () =>
     API.post('/users/me/notifications/read-all').then((r) => r.data),

@@ -80,11 +80,15 @@ const BookConfirmPage = () => {
     setConfirmError(null);
 
     try {
+      const bookId = book.id || book._id;
+      if (!bookId) {
+        throw new Error('Book ID is missing');
+      }
       let result;
       if (action === 'borrow') {
-        result = await bookService.borrowBook(book.id);
+        result = await bookService.borrowBook(bookId);
       } else {
-        result = await bookService.reserveBook(book.id);
+        result = await bookService.reserveBook(bookId);
       }
       setServerResult(result);
       setConfirmState('success');

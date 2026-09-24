@@ -1,33 +1,64 @@
 // src/pages/admin/AdminManageBooksPage.jsx
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, type ChangeEvent, type FormEvent, type MouseEvent } from 'react';
+import type { Book } from '../../types';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import AdminLayout from '../../components/admin/AdminLayout';
 import {
-  fetchAdminBooks,
-  createBook,
-  updateBook,
-  deleteBook,
+    fetchAdminBooks,
+    createBook,
+    updateBook,
+    deleteBook,
 } from '../../redux/slices/adminSlice';
+
+type BookFormData = {
+    title: string;
+    author: string;
+    isbn: string;
+    description: string;
+    publisher: string;
+    year: string | number;
+    category: string;
+    language: string;
+    totalCopies: string | number;
+    availableCopies: string | number;
+    price: string | number;
+    location: string;
+    [key: string]: string | number;
+};
+
+type DeleteConfirm = { id: string; title: string };
+
+interface BookModalProps {
+    book: Book | null;
+    onClose: () => void;
+    onSave: (formData: Record<string, unknown>) => Promise<void>;
+}
 
 const AdminManageBooksPage = () => {
     const dispatch = useAppDispatch();
-    const { books, loading, error } = useAppSelector((s) => s.admin);
+    const { books, error } = useAppSelector((s) => s.admin);
 
     const [activeTab, setActiveTab] = useState('Inventory');
 
     const [showModal, setShowModal] = useState(false);
-    const [editingBook, setEditingBook] = useState(null);
-    const [deleteConfirm, setDeleteConfirm] = useState(null); // { id, title }
+    const [editingBook, setEditingBook] = useState<Book | null>(null);
+    const [deleteConfirm, setDeleteConfirm] = useState<DeleteConfirm | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [categoryFilter, setCategoryFilter] = useState('All Categories');
     const [languageFilter, setLanguageFilter] = useState('All Languages');
     const [availabilityFilter, setAvailabilityFilter] = useState('All Availability');
     const [currentPage, setCurrentPage] = useState(1);
-    const [actionError, setActionError] = useState(null);
+    const [actionError, setActionError] = useState<string | null>(null);
 
     useEffect(() => {
         dispatch(fetchAdminBooks());
     }, [dispatch]);
+
+    const getBookStatus = (book: Book) => {
+        const availableCopies = book.availableCopies ?? 0;
+        const totalCopies = book.totalCopies ?? 0;
+        return availableCopies === 0 ? 'Out of Stock' : availableCopies < totalCopies ? 'Limited' : 'Available';
+    };
 
     const filteredBooks = books.filter((book) => {
         const title = book.title || '';
@@ -37,7 +68,7 @@ const AdminManageBooksPage = () => {
             author.toLowerCase().includes(searchQuery.toLowerCase());
         const matchesCategory = categoryFilter === 'All Categories' || book.category === categoryFilter;
         const matchesLanguage = languageFilter === 'All Languages' || book.language === languageFilter;
-        const status = book.availableCopies === 0 ? 'Out of Stock' : book.availableCopies < book.totalCopies ? 'Limited' : 'Available';
+        const status = getBookStatus(book);
         const matchesAvailability = availabilityFilter === 'All Availability' || status === availabilityFilter;
         return matchesSearch && matchesCategory && matchesLanguage && matchesAvailability;
     });
@@ -51,11 +82,12 @@ const AdminManageBooksPage = () => {
     };
 
     const handleAdd = () => { setActionError(null); setEditingBook(null); setShowModal(true); };
-    const handleEdit = (book) => { setActionError(null); setEditingBook(book); setShowModal(true); };
-    const handleDelete = (id) => {
+    const handleEdit = (book: Book) => { setActionError(null); setEditingBook(book); setShowModal(true); };
+    const handleDelete = (id: string) => {
         const book = books.find((b) => (b._id || b.id) === id);
         setActionError(null);
-        setDeleteConfirm({ id: book?._id || book?.id, title: book?.title || 'this book' });
+        const bookId = book?._id || book?.id;
+        if (bookId) setDeleteConfirm({ id: bookId, title: book?.title || 'this book' });
     };
 
     const confirmDelete = async () => {
@@ -70,11 +102,12 @@ const AdminManageBooksPage = () => {
         }
     };
 
-    const handleSave = async (formData) => {
+    const handleSave = async (formData: Record<string, unknown>) => {
         setActionError(null);
         try {
             if (editingBook) {
                 const targetId = editingBook._id || editingBook.id;
+                if (!targetId) throw new Error('Book ID is missing');
                 await dispatch(updateBook({ id: targetId, payload: formData })).unwrap();
             } else {
                 await dispatch(createBook(formData)).unwrap();
@@ -85,7 +118,7 @@ const AdminManageBooksPage = () => {
         }
     };
 
-    const getStatusBadge = (status) => {
+    const getStatusBadge = (status: string) => {
         switch (status) {
             case 'Available': return 'bg-primary/15 text-primary border-primary/20';
             case 'Limited': return 'bg-secondary/15 text-secondary border-secondary/20';
@@ -213,14 +246,14 @@ const AdminManageBooksPage = () => {
                                             <td className="p-3 text-on-surface-variant">{book.language}</td>
                                             <td className="p-3 text-right">{book.totalCopies} / <span className="text-primary font-bold">{book.availableCopies}</span></td>
                                             <td className="p-3 text-center">
-                                                <span className={`inline-block px-2 py-1 rounded text-xs uppercase border ${getStatusBadge(book.availableCopies === 0 ? 'Out of Stock' : book.availableCopies < book.totalCopies ? 'Limited' : 'Available')}`}>{book.availableCopies === 0 ? 'Out of Stock' : book.availableCopies < book.totalCopies ? 'Limited' : 'Available'}</span>
+                                                <span className={`inline-block px-2 py-1 rounded text-xs uppercase border ${getStatusBadge(getBookStatus(book))}`}>{getBookStatus(book)}</span>
                                             </td>
                                             <td className="p-3 text-right">
                                                 <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                                     <button onClick={() => handleEdit(book)} className="p-1.5 text-on-surface-variant hover:text-primary" title="Edit">
                                                         <span className="material-symbols-outlined text-lg">edit</span>
                                                     </button>
-                                                    <button onClick={() => handleDelete(book._id)} className="p-1.5 text-on-surface-variant hover:text-error" title="Delete">
+                                                    <button onClick={() => handleDelete(book._id || book.id || '')} className="p-1.5 text-on-surface-variant hover:text-error" title="Delete">
                                                         <span className="material-symbols-outlined text-lg">delete</span>
                                                     </button>
                                                 </div>
@@ -247,7 +280,7 @@ const AdminManageBooksPage = () => {
                                     <div className="flex-grow min-w-0">
                                         <div className="flex justify-between items-start mb-1">
                                             <h3 className="text-white font-semibold truncate pr-2">{book.title}</h3>
-                                            <span className={`px-2 py-1 rounded text-xs uppercase border flex-shrink-0 ${getStatusBadge(book.availableCopies === 0 ? 'Out of Stock' : book.availableCopies < book.totalCopies ? 'Limited' : 'Available')}`}>{book.availableCopies === 0 ? 'Out of Stock' : book.availableCopies < book.totalCopies ? 'Limited' : 'Available'}</span>
+                                            <span className={`px-2 py-1 rounded text-xs uppercase border flex-shrink-0 ${getStatusBadge(getBookStatus(book))}`}>{getBookStatus(book)}</span>
                                         </div>
                                         <p className="text-sm text-on-surface-variant mb-2 truncate">{book.author}</p>
                                         <div className="flex items-center justify-between">
@@ -256,7 +289,7 @@ const AdminManageBooksPage = () => {
                                                 <button onClick={() => handleEdit(book)} className="p-1 text-on-surface-variant hover:text-primary">
                                                     <span className="material-symbols-outlined">edit</span>
                                                 </button>
-                                                <button onClick={() => handleDelete(book._id)} className="p-1 text-on-surface-variant hover:text-error">
+                                                <button onClick={() => handleDelete(book._id || book.id || '')} className="p-1 text-on-surface-variant hover:text-error">
                                                     <span className="material-symbols-outlined">delete</span>
                                                 </button>
                                             </div>
@@ -322,8 +355,8 @@ const AdminManageBooksPage = () => {
 /* ─────────────────────────────────────────────────────────────────────────── */
 /* BookModal                                                                   */
 /* ─────────────────────────────────────────────────────────────────────────── */
-const BookModal = ({ book, onClose, onSave }) => {
-    const [formData, setFormData] = useState({
+const BookModal = ({ book, onClose, onSave }: BookModalProps) => {
+    const [formData, setFormData] = useState<BookFormData>({
         title: book?.title || '',
         author: book?.author || '',
         isbn: book?.isbn || '',
@@ -339,25 +372,25 @@ const BookModal = ({ book, onClose, onSave }) => {
     });
 
     const [photoPreviews, setPhotoPreviews] = useState(book?.coverUrl ? [book.coverUrl] : []);
-    const fileInputRef = useRef(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const handleChange = (e) => {
+    const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handlePhotoChange = (e) => {
-        const files = Array.from(e.target.files);
+    const handlePhotoChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const files = Array.from(e.target.files ?? []);
         if (!files.length) return;
         const newPreviews = files.map((f) => URL.createObjectURL(f));
         setPhotoPreviews((prev) => [...prev, ...newPreviews]);
     };
 
-    const removePhoto = (idx) => {
+    const removePhoto = (idx: number) => {
         setPhotoPreviews((prev) => prev.filter((_, i) => i !== idx));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: FormEvent<HTMLFormElement> | MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         const copies = Number(formData.availableCopies);
         const total = Number(formData.totalCopies);

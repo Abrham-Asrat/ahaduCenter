@@ -1,30 +1,53 @@
 // src/pages/admin/AdminManageElectronicsPage.jsx
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, type ChangeEvent, type FormEvent, type MouseEvent } from 'react';
+import type { Product } from '../../types';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import AdminLayout from '../../components/admin/AdminLayout';
 import {
-  fetchAdminProducts,
-  createProduct,
-  updateProduct,
-  deleteProduct,
+    fetchAdminProducts,
+    createProduct,
+    updateProduct,
+    deleteProduct,
 } from '../../redux/slices/adminSlice';
+
+type ProductFormData = {
+    name: string;
+    sku: string;
+    brand: string;
+    category: string;
+    condition: string;
+    description: string;
+    specifications: string;
+    price: string | number;
+    originalPrice: string | number;
+    stockQuantity: string | number;
+    warrantyMonths: string | number;
+};
+
+interface ProductModalProps {
+    product: Product | null;
+    onClose: () => void;
+    onSave: (formData: Record<string, unknown>) => Promise<void>;
+}
 
 const AdminManageElectronicsPage = () => {
     const dispatch = useAppDispatch();
-    const { products, loading, error } = useAppSelector((s) => s.admin);
+    const { products, error } = useAppSelector((s) => s.admin);
 
     const [searchQuery, setSearchQuery] = useState('');
     const [categoryFilter, setCategoryFilter] = useState('All Categories');
     const [conditionFilter, setConditionFilter] = useState('All Conditions');
     const [brandFilter, setBrandFilter] = useState('All Brands');
     const [showModal, setShowModal] = useState(false);
-    const [editingProduct, setEditingProduct] = useState(null);
+    const [editingProduct, setEditingProduct] = useState<Product | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
-    const [actionError, setActionError] = useState(null);
+    const [actionError, setActionError] = useState<string | null>(null);
 
     useEffect(() => {
         dispatch(fetchAdminProducts());
     }, [dispatch]);
+
+    const getStock = (product: Product) => product.stockQuantity ?? (product.inStock ? 1 : 0);
 
     const filteredProducts = products.filter((p) => {
         const name = p.name || p.title || '';
@@ -39,8 +62,8 @@ const AdminManageElectronicsPage = () => {
 
     const handleResetFilters = () => { setSearchQuery(''); setCategoryFilter('All Categories'); setConditionFilter('All Conditions'); setBrandFilter('All Brands'); };
     const handleAdd = () => { setActionError(null); setEditingProduct(null); setShowModal(true); };
-    const handleEdit = (p) => { setActionError(null); setEditingProduct(p); setShowModal(true); };
-    const handleDelete = async (id) => {
+    const handleEdit = (p: Product) => { setActionError(null); setEditingProduct(p); setShowModal(true); };
+    const handleDelete = async (id: string) => {
         if (confirm('Delete this product?')) {
             setActionError(null);
             try {
@@ -50,11 +73,12 @@ const AdminManageElectronicsPage = () => {
             }
         }
     };
-    const handleSave = async (formData) => {
+    const handleSave = async (formData: Record<string, unknown>) => {
         setActionError(null);
         try {
             if (editingProduct) {
                 const targetId = editingProduct._id || editingProduct.id;
+                if (!targetId) throw new Error('Product ID is missing');
                 await dispatch(updateProduct({ id: targetId, payload: formData })).unwrap();
             } else {
                 await dispatch(createProduct(formData)).unwrap();
@@ -65,7 +89,7 @@ const AdminManageElectronicsPage = () => {
         }
     };
 
-    const getStatusBadge = (status) => {
+    const getStatusBadge = (status: string) => {
         switch (status) {
             case 'In Stock': return 'bg-primary/10 text-primary border-primary/20';
             case 'Low Stock': return 'bg-secondary/10 text-secondary border-secondary/20';
@@ -74,7 +98,7 @@ const AdminManageElectronicsPage = () => {
         }
     };
 
-    const getConditionBadge = (condition) => condition === 'Refurbished' ? 'bg-secondary/10 text-secondary border-secondary/20' : 'bg-white/5 text-on-surface border-white/10';
+    const getConditionBadge = (condition?: string) => condition === 'Refurbished' ? 'bg-secondary/10 text-secondary border-secondary/20' : 'bg-white/5 text-on-surface border-white/10';
 
     return (
         <AdminLayout>
@@ -155,24 +179,24 @@ const AdminManageElectronicsPage = () => {
                                         <span className={`px-2 py-1 rounded text-xs border ${getConditionBadge(product.condition)}`}>{product.condition}</span>
                                     </td>
                                     <td className="py-3 px-4 text-right">
-                                        <div className="text-primary font-semibold">ETB {product.price.toLocaleString()}</div>
+                                        <div className="text-primary font-semibold">ETB {(product.price ?? 0).toLocaleString()}</div>
                                         {product.originalPrice && <div className="text-secondary text-xs line-through">ETB {product.originalPrice.toLocaleString()}</div>}
                                     </td>
                                     <td className="py-3 px-4 text-center">
                                         <div className="flex items-center justify-center gap-1.5">
-                                            <div className={`w-2 h-2 rounded-full ${product.stockQuantity > 10 ? 'bg-primary' : product.stockQuantity > 0 ? 'bg-secondary' : 'bg-error'}`} />
-                                            <span>{product.stockQuantity ?? (product.inStock ? 1 : 0)}</span>
+                                            <div className={`w-2 h-2 rounded-full ${getStock(product) > 10 ? 'bg-primary' : getStock(product) > 0 ? 'bg-secondary' : 'bg-error'}`} />
+                                            <span>{getStock(product)}</span>
                                         </div>
                                     </td>
                                     <td className="py-3 px-4 text-center">
-                                        <span className={`px-2 py-1 rounded text-xs border ${getStatusBadge((product.stockQuantity ?? (product.inStock ? 1 : 0)) > 0 ? 'In Stock' : 'Out of Stock')}`}>{(product.stockQuantity ?? (product.inStock ? 1 : 0)) > 0 ? 'In Stock' : 'Out of Stock'}</span>
+                                        <span className={`px-2 py-1 rounded text-xs border ${getStatusBadge(getStock(product) > 0 ? 'In Stock' : 'Out of Stock')}`}>{getStock(product) > 0 ? 'In Stock' : 'Out of Stock'}</span>
                                     </td>
                                     <td className="py-3 px-4 text-right">
                                         <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                             <button onClick={() => handleEdit(product)} className="p-1.5 text-on-surface-variant hover:text-primary rounded hover:bg-primary/10">
                                                 <span className="material-symbols-outlined text-sm">edit</span>
                                             </button>
-                                            <button onClick={() => handleDelete(product._id)} className="p-1.5 text-on-surface-variant hover:text-error rounded hover:bg-error/10">
+                                            <button onClick={() => handleDelete(product._id || product.id || '')} className="p-1.5 text-on-surface-variant hover:text-error rounded hover:bg-error/10">
                                                 <span className="material-symbols-outlined text-sm">delete</span>
                                             </button>
                                         </div>
@@ -191,13 +215,13 @@ const AdminManageElectronicsPage = () => {
                         <div className="h-40 relative overflow-hidden bg-background">
                             <img src={product.images?.[0]} alt={product.name} className="w-full h-full object-cover" />
                             <div className="absolute top-2 right-2">
-                                <span className={`px-2 py-1 rounded text-xs border ${getStatusBadge((product.stockQuantity ?? (product.inStock ? 1 : 0)) > 0 ? 'In Stock' : 'Out of Stock')}`}>{(product.stockQuantity ?? (product.inStock ? 1 : 0)) > 0 ? 'In Stock' : 'Out of Stock'}</span>
+                                <span className={`px-2 py-1 rounded text-xs border ${getStatusBadge(getStock(product) > 0 ? 'In Stock' : 'Out of Stock')}`}>{getStock(product) > 0 ? 'In Stock' : 'Out of Stock'}</span>
                             </div>
                         </div>
                         <div className="p-4">
                             <div className="flex justify-between items-start mb-1 min-w-0">
                                 <span className="text-xs uppercase text-on-surface-variant truncate">{product.category}</span>
-                                <span className="text-base font-bold text-secondary shrink-0 ml-2">ETB {product.price.toLocaleString()}</span>
+                                <span className="text-base font-bold text-secondary shrink-0 ml-2">ETB {(product.price ?? 0).toLocaleString()}</span>
                             </div>
                             <h3 className="text-base font-semibold text-white mb-2 truncate">{product.name}</h3>
                             <div className="flex items-center justify-between border-t border-white/10 pt-3 min-w-0">
@@ -206,7 +230,7 @@ const AdminManageElectronicsPage = () => {
                                     <button onClick={() => handleEdit(product)} className="p-1 text-on-surface-variant hover:text-primary">
                                         <span className="material-symbols-outlined">edit</span>
                                     </button>
-                                    <button onClick={() => handleDelete(product._id)} className="p-1 text-on-surface-variant hover:text-error">
+                                    <button onClick={() => handleDelete(product._id || product.id || '')} className="p-1 text-on-surface-variant hover:text-error">
                                         <span className="material-symbols-outlined">delete</span>
                                     </button>
                                 </div>
@@ -237,15 +261,15 @@ const AdminManageElectronicsPage = () => {
 /* ─────────────────────────────────────────────────────────────────────────── */
 /* ProductModal                                                                */
 /* ─────────────────────────────────────────────────────────────────────────── */
-const ProductModal = ({ product, onClose, onSave }) => {
-    const [formData, setFormData] = useState({
+const ProductModal = ({ product, onClose, onSave }: ProductModalProps) => {
+    const [formData, setFormData] = useState<ProductFormData>({
         name: product?.name || '',
         sku: product?.sku || '',
         brand: product?.brand || '',
         category: product?.category || 'Laptops',
         condition: product?.condition || 'New',
         description: product?.description || '',
-        specifications: product?.specifications || '',
+        specifications: typeof product?.specifications === 'string' ? product.specifications : '',
         price: product?.price || '',
         originalPrice: product?.originalPrice || '',
         stockQuantity: product?.stockQuantity ?? (product?.inStock ? 1 : 0),
@@ -253,23 +277,23 @@ const ProductModal = ({ product, onClose, onSave }) => {
     });
 
     const [photoPreviews, setPhotoPreviews] = useState(product?.images || []);
-    const fileInputRef = useRef(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const handleChange = (e) => {
+    const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handlePhotoChange = (e) => {
-        const files = Array.from(e.target.files);
+    const handlePhotoChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const files = Array.from(e.target.files ?? []);
         if (!files.length) return;
         const newPreviews = files.map((f) => URL.createObjectURL(f));
         setPhotoPreviews((prev) => [...prev, ...newPreviews].slice(0, 5));
     };
 
-    const removePhoto = (idx) => setPhotoPreviews((prev) => prev.filter((_, i) => i !== idx));
+    const removePhoto = (idx: number) => setPhotoPreviews((prev) => prev.filter((_, i) => i !== idx));
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: FormEvent<HTMLFormElement> | MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         const stockQuantity = Number(formData.stockQuantity);
         onSave({
