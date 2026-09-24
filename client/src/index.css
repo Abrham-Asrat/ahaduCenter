@@ -9,10 +9,17 @@ body {
   background-color: #0B0F19;
   color: #d6e4f7;
   font-family: 'Inter', sans-serif;
-  padding-top: 4.25rem;
 }
 
 html {
+  scroll-padding-top: 0;
+}
+
+body[data-layout='public-nav'] {
+  padding-top: 4.25rem;
+}
+
+body[data-layout='public-nav'] html {
   scroll-padding-top: 5.5rem;
 }
 
@@ -367,12 +374,12 @@ html {
 
 /* Padding adjustment for mobile bottom navigation */
 @media (max-width: 767px) {
-  body {
+  body[data-layout='public-nav'] {
     padding-top: 4.25rem;
     padding-bottom: calc(72px + env(safe-area-inset-bottom));
   }
 
-  html {
+  html:has(body[data-layout='public-nav']) {
     scroll-padding-top: 5.5rem;
     scroll-padding-bottom: calc(72px + env(safe-area-inset-bottom));
   }
