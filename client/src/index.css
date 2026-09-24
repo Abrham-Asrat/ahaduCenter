@@ -118,54 +118,6 @@ html {
   }
 }
 
-@keyframes floatUp {
-
-  0%,
-  100% {
-    transform: translateY(0px);
-  }
-
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-@keyframes floatUpDelayed {
-
-  0%,
-  100% {
-    transform: translateY(0px);
-  }
-
-  50% {
-    transform: translateY(-14px);
-  }
-}
-
-@keyframes pulseSoft {
-
-  0%,
-  100% {
-    box-shadow: 0 0 0 rgba(16, 185, 129, 0);
-  }
-
-  50% {
-    box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
-  }
-}
-
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(18px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 .animate-fade-in {
   opacity: 1;
   transform: none;
@@ -173,34 +125,6 @@ html {
 
 .animate-slide-up {
   animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-.animate-fade-up {
-  animation: fadeUp 0.7s ease-out both;
-}
-
-.home-reveal {
-  opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 700ms ease, transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
-  transition-delay: var(--home-reveal-delay, 0ms);
-}
-
-.home-reveal-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.animate-pulse-soft {
-  animation: pulseSoft 2.5s ease-in-out infinite;
-}
-
-.floating-card {
-  animation: floatUp 5s ease-in-out infinite;
-}
-
-.floating-card-delay {
-  animation: floatUpDelayed 6s ease-in-out infinite;
 }
 
 @keyframes filterBackdrop {
@@ -289,6 +213,28 @@ html {
   right: 0;
 }
 
+.logo-light-sweep {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: 0.75rem;
+}
+
+.logo-light-sweep::before {
+  content: '';
+  position: absolute;
+  inset: -80% -35%;
+  z-index: -1;
+  background: linear-gradient(110deg,
+      transparent 35%,
+      rgba(255, 255, 255, 0.08) 44%,
+      rgba(255, 255, 255, 0.24) 50%,
+      rgba(255, 255, 255, 0.08) 56%,
+      transparent 65%);
+  transform: translateX(-55%);
+  animation: logoLightSweep 3s ease-in-out infinite;
+}
+
 .mobile-nav-link {
   position: relative;
   display: flex;
@@ -375,6 +321,19 @@ html {
   to {
     opacity: 1;
     transform: scaleX(1);
+  }
+}
+
+@keyframes logoLightSweep {
+
+  0%,
+  30% {
+    transform: translateX(-55%);
+  }
+
+  70%,
+  100% {
+    transform: translateX(55%);
   }
 }
 
