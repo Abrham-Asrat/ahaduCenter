@@ -77,9 +77,9 @@ const MovieDetailHero = ({ movie, onShowToast }: MovieDetailHeroProps) => {
                     </div>
 
                     {/* Genre chips and action buttons */}
-                    <div className="flex flex-wrap items-center gap-4 mt-3">
+                    <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
                         {/* Genre chips */}
-                        <div className="flex gap-2">
+                        <div className="flex flex-wrap gap-2">
                             {movie.genres?.map((genre: string) => (
                                 <span
                                     key={genre}
@@ -91,11 +91,11 @@ const MovieDetailHero = ({ movie, onShowToast }: MovieDetailHeroProps) => {
                         </div>
 
                         {/* Action buttons */}
-                        <div className="flex gap-2.5 ml-auto md:ml-6">
+                        <div className="flex w-full flex-wrap gap-2.5 sm:w-auto sm:ml-auto md:ml-6">
                             {/* Request Movie - primary button */}
                             <button
                                 onClick={handleRequestClick}
-                                className="flex items-center gap-2 bg-primary-container text-white px-5 py-2.5 rounded-lg emerald-glow hover:scale-105 active:scale-95 transition-all font-semibold shadow-lg"
+                                className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary-container px-5 py-2.5 font-semibold text-white shadow-lg transition-all hover:scale-105 active:scale-95 sm:w-auto"
                             >
                                 <span className="material-symbols-outlined text-xl">movie</span>
                                 <span>Request Movie</span>

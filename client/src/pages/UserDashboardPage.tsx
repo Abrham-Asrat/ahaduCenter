@@ -33,7 +33,7 @@ const SkeletonBlock = ({ className = '' }) => (
 const ProfileHeaderSkeleton = () => (
   <section className="w-full rounded-xl overflow-hidden glass-panel mb-8 relative bg-gradient-premium">
     <div className="absolute inset-0 bg-gradient-to-r from-background/80 to-transparent z-0" />
-    <div className="relative z-10 px-6 py-8 flex flex-col md:flex-row items-center gap-6">
+    <div className="relative z-10 flex flex-col items-center gap-6 px-4 py-6 sm:px-6 sm:py-8 md:flex-row">
       <SkeletonBlock className="w-32 h-32 rounded-full flex-shrink-0" />
       <div className="flex-grow flex flex-col gap-3 w-full">
         <SkeletonBlock className="h-10 w-56" />
@@ -251,288 +251,287 @@ const UserDashboardPage = () => {
   return (
     <>
       <Navbar />
-    <div className="min-h-screen bg-background text-on-background flex flex-col animate-fade-in">
+      <div className="min-h-screen bg-background text-on-background flex flex-col animate-fade-in">
 
-      <main className="flex-grow max-w-7xl mx-auto w-full px-4 md:px-8">
+        <main className="flex-grow max-w-7xl mx-auto w-full px-4 md:px-8">
 
-        {/* ── Error Banner ── */}
-        {error && (
-          <div className="mb-6 p-4 rounded-xl bg-error/10 border border-error/30 text-error flex items-center gap-3">
-            <span className="material-symbols-outlined">error</span>
-            <span>{error}</span>
-            <button
-              onClick={() => window.location.reload()}
-              className="ml-auto text-xs underline font-bold cursor-pointer"
-            >
-              Retry
-            </button>
-          </div>
-        )}
-
-        {/* ── Profile Header ── */}
-        {loading ? (
-          <ProfileHeaderSkeleton />
-        ) : (
-          <section className="w-full rounded-xl overflow-hidden glass-panel mb-8 relative bg-gradient-premium">
-            <div className="absolute inset-0 bg-gradient-to-r from-background/80 to-transparent z-0" />
-            <div className="relative z-10 px-6 py-8 flex flex-col md:flex-row items-center gap-6">
-              {/* Profile initials */}
-              <div className="flex-shrink-0">
-                <div className="w-32 h-32 rounded-full border-2 border-primary flex items-center justify-center bg-surface-container shadow-[0_0_20px_rgba(16,185,129,0.3)]">
-                  <span className="font-heading text-3xl font-bold text-primary">{displayInitials}</span>
-                </div>
-              </div>
-
-              {/* User info */}
-              <div className="flex-grow text-center md:text-left flex flex-col justify-center">
-                <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">{displayName}</h1>
-                <p className="text-lg text-on-surface-variant">
-                  {displayEmail}
-                  {displayMemberSince && (
-                    <>
-                      <span className="mx-2 opacity-50">|</span>
-                      Member since {displayMemberSince}
-                    </>
-                  )}
-                </p>
-                <div className="mt-4">
-                  <button
-                    onClick={() => setIsEditModalOpen(true)}
-                    className="btn-secondary px-6 py-2.5 rounded-xl text-xs uppercase tracking-wider font-bold flex items-center gap-2 mx-auto md:mx-0 cursor-pointer"
-                  >
-                    <span className="material-symbols-outlined text-sm">edit</span>
-                    Edit Profile Information
-                  </button>
-                </div>
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* ── Dashboard Layout: Sidebar + Main ── */}
-        <div className="flex flex-col md:flex-row gap-8">
-          {/* Left Sidebar Navigation */}
-          <aside className="w-full md:w-1/4 flex-shrink-0">
-            <nav className="glass-panel rounded-xl p-4 flex flex-col gap-2 sticky top-[120px]">
-              {navItems.map((item) => (
-                <Link
-                  key={item.label}
-                  to={item.path}
-                  className={`flex items-center gap-4 px-4 py-2 rounded-lg transition-all ${
-                    item.danger
-                      ? 'text-error hover:bg-error/10'
-                      : item.active
-                      ? 'bg-primary/10 text-primary border-l-2 border-primary'
-                      : 'text-on-surface-variant hover:text-primary hover:bg-white/5'
-                  }`}
-                >
-                  <span className="material-symbols-outlined">{item.icon}</span>
-                  <span className="font-semibold">{item.label}</span>
-                </Link>
-              ))}
-            </nav>
-          </aside>
-
-          {/* Right Main Area */}
-          <div className="w-full md:w-3/4 flex flex-col gap-8">
-
-            {/* Stats Row */}
-            {loading ? (
-              <StatsSkeleton />
-            ) : (
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                {stats.map((stat) => (
-                  <div
-                    key={stat.label}
-                    className="glass-panel rounded-xl p-4 flex flex-col gap-2 hover-glow-emerald transition-all cursor-default"
-                  >
-                    <div className="flex items-center gap-2">
-                      <span className={`material-symbols-outlined ${stat.color}`}>{stat.icon}</span>
-                      <span className="text-xs uppercase tracking-wider text-on-surface-variant">{stat.label}</span>
-                    </div>
-                    <span className="text-4xl font-bold text-white">{stat.value}</span>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* Recent Activity */}
-            {loading ? (
-              <ActivitySkeleton />
-            ) : (
-              <section className="glass-panel rounded-xl p-6 flex flex-col gap-4">
-                <h2 className="text-2xl font-semibold text-white border-b border-white/10 pb-3">
-                  Recent Activity
-                </h2>
-                {activities.length === 0 ? (
-                  <p className="text-on-surface-variant text-sm py-4 text-center">No recent activity found.</p>
-                ) : (
-                  <div className="flex flex-col gap-3 mt-2">
-                    {activities.map((activity, index) => {
-                      const meta = getActivityMeta(activity);
-                      return (
-                        <div
-                          key={activity._id ?? index}
-                          className="flex items-center justify-between p-4 rounded-lg bg-surface-container-high/50 border border-white/5 hover:border-white/10 transition-colors"
-                        >
-                          <div className="flex items-center gap-4">
-                            <div className={`w-10 h-10 rounded-full flex items-center justify-center border ${meta.iconColor}`}>
-                              <span className="material-symbols-outlined text-sm">{meta.icon}</span>
-                            </div>
-                            <div className="flex flex-col">
-                              <span className="text-white font-semibold">{activity.title ?? activity.description ?? 'Activity'}</span>
-                              <span className="text-sm text-on-surface-variant">
-                                {activity.date
-                                  ? activity.date
-                                  : activity.createdAt
-                                  ? new Date(activity.createdAt).toLocaleDateString('en-US', {
-                                      month: 'short',
-                                      day: 'numeric',
-                                      year: 'numeric',
-                                    })
-                                  : ''}
-                              </span>
-                            </div>
-                          </div>
-                          <span className={`px-3 py-1 rounded-full text-xs uppercase border ${meta.statusColor}`}>
-                            {activity.status ?? 'Info'}
-                          </span>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </section>
-            )}
-
-            {/* Quick Actions */}
-            <section>
-              <h3 className="text-2xl font-semibold text-white mb-4">Quick Actions</h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <Link
-                  to="/movies"
-                  className="glass-panel rounded-xl p-4 flex items-center gap-4 hover-glow-emerald transition-all group"
-                >
-                  <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
-                    <span className="material-symbols-outlined">theaters</span>
-                  </div>
-                  <span className="font-semibold text-white">Browse Movies</span>
-                </Link>
-                <Link
-                  to="/electronics"
-                  className="glass-panel rounded-xl p-4 flex items-center gap-4 hover-glow-emerald transition-all group"
-                >
-                  <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
-                    <span className="material-symbols-outlined">devices</span>
-                  </div>
-                  <span className="font-semibold text-white">Shop Electronics</span>
-                </Link>
-                <Link
-                  to="/books"
-                  className="glass-panel rounded-xl p-4 flex items-center gap-4 hover-glow-emerald transition-all group"
-                >
-                  <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
-                    <span className="material-symbols-outlined">import_contacts</span>
-                  </div>
-                  <span className="font-semibold text-white">Explore Books</span>
-                </Link>
-              </div>
-            </section>
-          </div>
-        </div>
-      </main>
-
-      {/* ── Edit Profile Modal ── */}
-      {isEditModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-          <div className="glass-panel w-full max-w-md rounded-2xl shadow-2xl border border-white/20 overflow-hidden animate-slide-up">
-            <div className="p-6 border-b border-white/10 flex items-center justify-between bg-white/5">
-              <h3 className="text-xl font-bold text-white flex items-center gap-2">
-                <span className="material-symbols-outlined text-primary">edit</span>
-                Edit Profile Information
-              </h3>
-              <button onClick={handleCloseEditModal} className="text-on-surface-variant hover:text-error cursor-pointer">
-                <span className="material-symbols-outlined">close</span>
+          {/* ── Error Banner ── */}
+          {error && (
+            <div className="mb-6 p-4 rounded-xl bg-error/10 border border-error/30 text-error flex items-center gap-3">
+              <span className="material-symbols-outlined">error</span>
+              <span>{error}</span>
+              <button
+                onClick={() => window.location.reload()}
+                className="ml-auto text-xs underline font-bold cursor-pointer"
+              >
+                Retry
               </button>
             </div>
+          )}
 
-            <form onSubmit={handleSaveProfile} className="p-6 space-y-4">
-              <div>
-                <label className="block text-xs uppercase text-on-surface-variant font-bold mb-2">Full Name</label>
-                <input
-                  type="text"
-                  value={editForm.name}
-                  onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
-                  className="w-full bg-background border border-white/10 rounded-xl px-4 py-2.5 text-white focus:border-primary outline-none text-sm transition-all duration-200"
-                  required
-                  disabled={isSaving}
-                />
-              </div>
-              <div>
-                <label className="block text-xs uppercase text-on-surface-variant font-bold mb-2">Email Address</label>
-                <input
-                  type="email"
-                  value={editForm.email}
-                  onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
-                  className="w-full bg-background border border-white/10 rounded-xl px-4 py-2.5 text-white focus:border-primary outline-none text-sm transition-all duration-200"
-                  required
-                  disabled={isSaving}
-                />
-              </div>
-              <div>
-                <label className="block text-xs uppercase text-on-surface-variant font-bold mb-2">Phone Number</label>
-                <input
-                  type="tel"
-                  value={editForm.phone}
-                  onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })}
-                  className="w-full bg-background border border-white/10 rounded-xl px-4 py-2.5 text-white focus:border-primary outline-none text-sm transition-all duration-200"
-                  disabled={isSaving}
-                />
-              </div>
+          {/* ── Profile Header ── */}
+          {loading ? (
+            <ProfileHeaderSkeleton />
+          ) : (
+            <section className="w-full rounded-xl overflow-hidden glass-panel mb-8 relative bg-gradient-premium">
+              <div className="absolute inset-0 bg-gradient-to-r from-background/80 to-transparent z-0" />
+              <div className="relative z-10 flex flex-col items-center gap-6 px-4 py-6 sm:px-6 sm:py-8 md:flex-row">
+                {/* Profile initials */}
+                <div className="flex-shrink-0">
+                  <div className="flex h-24 w-24 items-center justify-center rounded-full border-2 border-primary bg-surface-container shadow-[0_0_20px_rgba(16,185,129,0.3)] sm:h-32 sm:w-32">
+                    <span className="font-heading text-3xl font-bold text-primary">{displayInitials}</span>
+                  </div>
+                </div>
 
-              {/* ── Inline error inside modal ── */}
-              {saveError && (
-                <div className="flex items-center gap-2 p-3 rounded-xl bg-error/10 border border-error/30 text-error text-sm">
-                  <span className="material-symbols-outlined text-base flex-shrink-0">error</span>
-                  <span>{saveError}</span>
+                {/* User info */}
+                <div className="flex-grow text-center md:text-left flex flex-col justify-center">
+                  <h1 className="mb-2 break-words text-3xl font-bold text-white sm:text-4xl md:text-5xl">{displayName}</h1>
+                  <p className="break-words text-sm text-on-surface-variant sm:text-lg">
+                    {displayEmail}
+                    {displayMemberSince && (
+                      <>
+                        <span className="mx-2 opacity-50">|</span>
+                        Member since {displayMemberSince}
+                      </>
+                    )}
+                  </p>
+                  <div className="mt-4">
+                    <button
+                      onClick={() => setIsEditModalOpen(true)}
+                      className="btn-secondary px-6 py-2.5 rounded-xl text-xs uppercase tracking-wider font-bold flex items-center gap-2 mx-auto md:mx-0 cursor-pointer"
+                    >
+                      <span className="material-symbols-outlined text-sm">edit</span>
+                      Edit Profile Information
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </section>
+          )}
+
+          {/* ── Dashboard Layout: Sidebar + Main ── */}
+          <div className="flex flex-col md:flex-row gap-8">
+            {/* Left Sidebar Navigation */}
+            <aside className="w-full md:w-1/4 flex-shrink-0">
+              <nav className="glass-panel rounded-xl p-4 flex flex-col gap-2 sticky top-[120px]">
+                {navItems.map((item) => (
+                  <Link
+                    key={item.label}
+                    to={item.path}
+                    className={`flex items-center gap-4 px-4 py-2 rounded-lg transition-all ${item.danger
+                        ? 'text-error hover:bg-error/10'
+                        : item.active
+                          ? 'bg-primary/10 text-primary border-l-2 border-primary'
+                          : 'text-on-surface-variant hover:text-primary hover:bg-white/5'
+                      }`}
+                  >
+                    <span className="material-symbols-outlined">{item.icon}</span>
+                    <span className="font-semibold">{item.label}</span>
+                  </Link>
+                ))}
+              </nav>
+            </aside>
+
+            {/* Right Main Area */}
+            <div className="w-full md:w-3/4 flex flex-col gap-8">
+
+              {/* Stats Row */}
+              {loading ? (
+                <StatsSkeleton />
+              ) : (
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                  {stats.map((stat) => (
+                    <div
+                      key={stat.label}
+                      className="glass-panel rounded-xl p-4 flex flex-col gap-2 hover-glow-emerald transition-all cursor-default"
+                    >
+                      <div className="flex items-center gap-2">
+                        <span className={`material-symbols-outlined ${stat.color}`}>{stat.icon}</span>
+                        <span className="text-xs uppercase tracking-wider text-on-surface-variant">{stat.label}</span>
+                      </div>
+                      <span className="text-4xl font-bold text-white">{stat.value}</span>
+                    </div>
+                  ))}
                 </div>
               )}
 
-              <div className="pt-4 border-t border-white/10 flex justify-end gap-3">
-                <button
-                  type="button"
-                  onClick={handleCloseEditModal}
-                  disabled={isSaving}
-                  className="px-5 py-2.5 rounded-xl border border-secondary text-secondary font-bold text-xs uppercase cursor-pointer hover:bg-secondary/10 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={isSaving}
-                  className="px-6 py-2.5 rounded-xl bg-primary text-black font-extrabold text-xs uppercase cursor-pointer hover:shadow-[0_0_20px_rgba(16,185,129,0.5)] disabled:opacity-70 disabled:cursor-not-allowed flex items-center gap-2"
-                >
-                  {isSaving && (
-                    <span className="w-4 h-4 border-2 border-black/40 border-t-black rounded-full animate-spin" />
+              {/* Recent Activity */}
+              {loading ? (
+                <ActivitySkeleton />
+              ) : (
+                <section className="glass-panel rounded-xl p-6 flex flex-col gap-4">
+                  <h2 className="text-2xl font-semibold text-white border-b border-white/10 pb-3">
+                    Recent Activity
+                  </h2>
+                  {activities.length === 0 ? (
+                    <p className="text-on-surface-variant text-sm py-4 text-center">No recent activity found.</p>
+                  ) : (
+                    <div className="flex flex-col gap-3 mt-2">
+                      {activities.map((activity, index) => {
+                        const meta = getActivityMeta(activity);
+                        return (
+                          <div
+                            key={activity._id ?? index}
+                            className="flex flex-col gap-3 rounded-lg border border-white/5 bg-surface-container-high/50 p-4 transition-colors hover:border-white/10 sm:flex-row sm:items-center sm:justify-between"
+                          >
+                            <div className="flex min-w-0 items-center gap-4">
+                              <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full border ${meta.iconColor}`}>
+                                <span className="material-symbols-outlined text-sm">{meta.icon}</span>
+                              </div>
+                              <div className="flex min-w-0 flex-col">
+                                <span className="break-words text-white font-semibold">{activity.title ?? activity.description ?? 'Activity'}</span>
+                                <span className="text-sm text-on-surface-variant">
+                                  {activity.date
+                                    ? activity.date
+                                    : activity.createdAt
+                                      ? new Date(activity.createdAt).toLocaleDateString('en-US', {
+                                        month: 'short',
+                                        day: 'numeric',
+                                        year: 'numeric',
+                                      })
+                                      : ''}
+                                </span>
+                              </div>
+                            </div>
+                            <span className={`self-start px-3 py-1 rounded-full text-xs uppercase border sm:shrink-0 ${meta.statusColor}`}>
+                              {activity.status ?? 'Info'}
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
                   )}
-                  {isSaving ? 'Saving…' : 'Save Changes'}
+                </section>
+              )}
+
+              {/* Quick Actions */}
+              <section>
+                <h3 className="text-2xl font-semibold text-white mb-4">Quick Actions</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <Link
+                    to="/movies"
+                    className="glass-panel rounded-xl p-4 flex items-center gap-4 hover-glow-emerald transition-all group"
+                  >
+                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                      <span className="material-symbols-outlined">theaters</span>
+                    </div>
+                    <span className="font-semibold text-white">Browse Movies</span>
+                  </Link>
+                  <Link
+                    to="/electronics"
+                    className="glass-panel rounded-xl p-4 flex items-center gap-4 hover-glow-emerald transition-all group"
+                  >
+                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                      <span className="material-symbols-outlined">devices</span>
+                    </div>
+                    <span className="font-semibold text-white">Shop Electronics</span>
+                  </Link>
+                  <Link
+                    to="/books"
+                    className="glass-panel rounded-xl p-4 flex items-center gap-4 hover-glow-emerald transition-all group"
+                  >
+                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                      <span className="material-symbols-outlined">import_contacts</span>
+                    </div>
+                    <span className="font-semibold text-white">Explore Books</span>
+                  </Link>
+                </div>
+              </section>
+            </div>
+          </div>
+        </main>
+
+        {/* ── Edit Profile Modal ── */}
+        {isEditModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+            <div className="glass-panel w-full max-w-md rounded-2xl shadow-2xl border border-white/20 overflow-hidden animate-slide-up">
+              <div className="p-6 border-b border-white/10 flex items-center justify-between bg-white/5">
+                <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                  <span className="material-symbols-outlined text-primary">edit</span>
+                  Edit Profile Information
+                </h3>
+                <button onClick={handleCloseEditModal} className="text-on-surface-variant hover:text-error cursor-pointer">
+                  <span className="material-symbols-outlined">close</span>
                 </button>
               </div>
-            </form>
+
+              <form onSubmit={handleSaveProfile} className="p-6 space-y-4">
+                <div>
+                  <label className="block text-xs uppercase text-on-surface-variant font-bold mb-2">Full Name</label>
+                  <input
+                    type="text"
+                    value={editForm.name}
+                    onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
+                    className="w-full bg-background border border-white/10 rounded-xl px-4 py-2.5 text-white focus:border-primary outline-none text-sm transition-all duration-200"
+                    required
+                    disabled={isSaving}
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs uppercase text-on-surface-variant font-bold mb-2">Email Address</label>
+                  <input
+                    type="email"
+                    value={editForm.email}
+                    onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
+                    className="w-full bg-background border border-white/10 rounded-xl px-4 py-2.5 text-white focus:border-primary outline-none text-sm transition-all duration-200"
+                    required
+                    disabled={isSaving}
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs uppercase text-on-surface-variant font-bold mb-2">Phone Number</label>
+                  <input
+                    type="tel"
+                    value={editForm.phone}
+                    onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })}
+                    className="w-full bg-background border border-white/10 rounded-xl px-4 py-2.5 text-white focus:border-primary outline-none text-sm transition-all duration-200"
+                    disabled={isSaving}
+                  />
+                </div>
+
+                {/* ── Inline error inside modal ── */}
+                {saveError && (
+                  <div className="flex items-center gap-2 p-3 rounded-xl bg-error/10 border border-error/30 text-error text-sm">
+                    <span className="material-symbols-outlined text-base flex-shrink-0">error</span>
+                    <span>{saveError}</span>
+                  </div>
+                )}
+
+                <div className="pt-4 border-t border-white/10 flex justify-end gap-3">
+                  <button
+                    type="button"
+                    onClick={handleCloseEditModal}
+                    disabled={isSaving}
+                    className="px-5 py-2.5 rounded-xl border border-secondary text-secondary font-bold text-xs uppercase cursor-pointer hover:bg-secondary/10 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={isSaving}
+                    className="px-6 py-2.5 rounded-xl bg-primary text-black font-extrabold text-xs uppercase cursor-pointer hover:shadow-[0_0_20px_rgba(16,185,129,0.5)] disabled:opacity-70 disabled:cursor-not-allowed flex items-center gap-2"
+                  >
+                    {isSaving && (
+                      <span className="w-4 h-4 border-2 border-black/40 border-t-black rounded-full animate-spin" />
+                    )}
+                    {isSaving ? 'Saving…' : 'Save Changes'}
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* ── Toast notification ── */}
-      {toastMessage && (
-        <div className="fixed bottom-6 right-6 bg-primary text-black font-extrabold px-6 py-3 rounded-2xl shadow-2xl z-50 flex items-center gap-2 animate-bounce">
-          <span className="material-symbols-outlined">check_circle</span>
-          {toastMessage}
-        </div>
-      )}
+        {/* ── Toast notification ── */}
+        {toastMessage && (
+          <div className="fixed bottom-6 right-6 bg-primary text-black font-extrabold px-6 py-3 rounded-2xl shadow-2xl z-50 flex items-center gap-2 animate-bounce">
+            <span className="material-symbols-outlined">check_circle</span>
+            {toastMessage}
+          </div>
+        )}
 
-      <Footer />
-    </div>
+        <Footer />
+      </div>
     </>
   );
 };

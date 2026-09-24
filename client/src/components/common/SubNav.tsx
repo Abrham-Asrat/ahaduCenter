@@ -40,16 +40,16 @@ const SubNav = ({ tabs, onTabChange }: SubNavProps) => {
   };
 
   return (
-    <div className="border-b border-white/5 bg-surface-container-lowest sticky top-[80px] z-40 backdrop-blur-md">
-      <div className="max-w-7xl mx-auto px-6 py-3 overflow-x-auto">
+    <div className="sticky top-[4.25rem] z-40 border-b border-white/5 bg-surface-container-lowest backdrop-blur-md">
+      <div className="mx-auto max-w-7xl overflow-x-auto px-3 py-3 sm:px-6">
         <ul className="flex gap-3 items-center min-w-max">
           {navTabs.map((tab) => (
             <li key={tab}>
               <button
                 onClick={() => handleTabClick(tab)}
                 className={`px-6 py-2 rounded-full text-sm transition-all ${activeTab === tab
-                    ? 'bg-primary-container/20 border border-primary text-primary shadow-[0_0_10px_rgba(78,222,163,0.2)]'
-                    : 'bg-surface-variant border border-white/10 text-on-surface-variant hover:text-on-surface hover:border-white/30'
+                  ? 'bg-primary-container/20 border border-primary text-primary shadow-[0_0_10px_rgba(78,222,163,0.2)]'
+                  : 'bg-surface-variant border border-white/10 text-on-surface-variant hover:text-on-surface hover:border-white/30'
                   }`}
               >
                 {tab}

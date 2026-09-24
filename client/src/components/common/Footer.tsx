@@ -11,7 +11,7 @@ const Footer = () => {
   return (
     <footer className="relative overflow-hidden bg-surface-container-lowest dark:bg-surface-container-lowest w-full rounded-t-xl border-t border-white/5 mt-20">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/70 to-transparent" />
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-10 px-4 sm:px-8 lg:px-20 py-12 sm:py-14 lg:py-16 max-w-7xl mx-auto">
+      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-12 sm:grid-cols-2 sm:px-8 sm:py-14 lg:grid-cols-4 lg:px-12 lg:py-16">
         <div className="footer-reveal sm:col-span-2 lg:col-span-1">
           <div className="text-2xl font-bold text-on-surface mb-4 transition-colors duration-300 hover:text-primary">Ahadu Center</div>
           <p className="max-w-xs text-sm leading-6 text-on-surface-variant">© 2024 Ahadu Center. All rights reserved.</p>
