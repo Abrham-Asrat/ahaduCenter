@@ -35,7 +35,7 @@ const BookCoverCard = ({ book }: BookCoverCardProps) => {
         <img
           src={imageUrl}
           alt={title}
-          className={`h-[440px] w-full rounded-[20px] object-cover transition-transform duration-300 ${isZoomed ? 'scale-110' : ''}`}
+          className={`aspect-[3/4] max-h-[440px] w-full rounded-[20px] object-cover transition-transform duration-300 ${isZoomed ? 'scale-110' : ''}`}
         />
 
         <div className="absolute left-6 top-6 rounded-full bg-dark-bg/80 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-primary">
