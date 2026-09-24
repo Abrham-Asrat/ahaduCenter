@@ -1,4 +1,4 @@
-import type { Book } from '../../types';
+import type { Book } from '../../../types';
 
 interface BookInfoSectionProps {
   book: Book;

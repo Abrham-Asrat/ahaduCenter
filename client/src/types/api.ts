@@ -1,5 +1,6 @@
 export type ApiError = {
   message: string;
+  error?: string;
   code?: string;
   details?: Record<string, unknown>;
 };

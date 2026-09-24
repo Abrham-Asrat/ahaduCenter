@@ -1,5 +1,5 @@
 import { ArrowRight, BookOpen, Star } from 'lucide-react';
-import type { Book } from '../../types';
+import type { Book } from '../../../types';
 
 interface BookCardProps {
   book: Book;

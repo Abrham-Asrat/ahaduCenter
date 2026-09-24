@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { Book } from '../../types';
+import type { Book } from '../../../types';
 
 interface BookCoverCardProps {
   book: Partial<Book>;

@@ -27,6 +27,7 @@ export interface Book {
   coverImage?: string;
   reviews?: number;
   availableCopies?: number;
+  totalCopies?: number;
   location?: string;
   format?: string;
   pages?: number;
@@ -57,6 +58,7 @@ export interface Movie {
   bannerImage?: string;
   posterImage?: string;
   synopsis?: string;
+  description?: string;
   images?: string[];
   trailerThumbnail?: string;
   thumbnailUrl?: string;
@@ -90,6 +92,10 @@ export interface Product {
   description?: string;
   highlights?: string[];
   reviewCount?: number;
+  sku?: string;
+  stockQuantity?: number;
+  inStock?: boolean;
+  warrantyMonths?: number;
   specifications?: Record<string, string | number>;
   [key: string]: unknown;
 }

@@ -1,6 +1,39 @@
 // Stores administrator dashboard data and content-management request state.
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { adminService } from '../../services/adminService';
+import type { Book, Movie, MovieRequest, Product } from '../../types';
+
+type AdminParams = Record<string, unknown>;
+type AdminPayload = Record<string, unknown>;
+export interface AdminStats {
+  movies?: string | number;
+  products?: string | number;
+  books?: string | number;
+  totalMovies?: string | number;
+  totalProducts?: string | number;
+  totalBooks?: string | number;
+}
+
+export interface AdminActivity {
+  id?: string;
+  _id?: string;
+  title?: string;
+  name?: string;
+  date?: string;
+  type?: string;
+}
+
+interface AdminState {
+  stats: AdminStats | null;
+  recentActivity: AdminActivity[];
+  books: Book[];
+  movies: Movie[];
+  products: Product[];
+  movieRequests: MovieRequest[];
+  contactSubmissions: Record<string, unknown>[];
+  loading: boolean;
+  error: string | null;
+}
 
 // ── Dashboard Thunks ──
 export const fetchAdminStats = createAsyncThunk(
@@ -15,18 +48,18 @@ export const fetchAdminStats = createAsyncThunk(
   }
 );
 
-export const fetchRecentActivity = createAsyncThunk(
+export const fetchRecentActivity = createAsyncThunk<AdminActivity[]>(
   'admin/fetchRecentActivity',
   async (_, { rejectWithValue }) => {
     try {
       const data = await adminService.getRecentActivity();
-      if (Array.isArray(data)) return data;
-      if (Array.isArray(data?.activities)) return data.activities;
+      if (Array.isArray(data)) return data as AdminActivity[];
+      if (Array.isArray(data?.activities)) return data.activities as AdminActivity[];
 
       return [
-        ...(data?.recentMovies ?? []).map((item) => ({ ...item, type: 'Movie' })),
-        ...(data?.recentBooks ?? []).map((item) => ({ ...item, type: 'Book' })),
-        ...(data?.recentProducts ?? []).map((item) => ({ ...item, type: 'Product' })),
+        ...(data?.recentMovies ?? []).map((item: AdminActivity) => ({ ...item, type: 'Movie' })),
+        ...(data?.recentBooks ?? []).map((item: AdminActivity) => ({ ...item, type: 'Book' })),
+        ...(data?.recentProducts ?? []).map((item: AdminActivity) => ({ ...item, type: 'Product' })),
       ];
     } catch (err) {
       return rejectWithValue(typeof err === 'string' ? err : 'Failed to fetch recent activity');
@@ -35,19 +68,19 @@ export const fetchRecentActivity = createAsyncThunk(
 );
 
 // ── Book Thunks ──
-export const fetchAdminBooks = createAsyncThunk(
+export const fetchAdminBooks = createAsyncThunk<Book[], AdminParams | undefined>(
   'admin/fetchAdminBooks',
   async (params, { rejectWithValue }) => {
     try {
       const data = await adminService.getAdminBooks(params);
-      return Array.isArray(data) ? data : (data?.data ?? data?.books ?? []);
+      return (Array.isArray(data) ? data : (data?.data ?? data?.books ?? [])) as Book[];
     } catch (err) {
       return rejectWithValue(typeof err === 'string' ? err : 'Failed to fetch admin books');
     }
   }
 );
 
-export const createBook = createAsyncThunk(
+export const createBook = createAsyncThunk<Book, AdminPayload>(
   'admin/createBook',
   async (payload, { rejectWithValue }) => {
     try {
@@ -59,7 +92,7 @@ export const createBook = createAsyncThunk(
   }
 );
 
-export const updateBook = createAsyncThunk(
+export const updateBook = createAsyncThunk<Book, { id: string; payload: AdminPayload }>(
   'admin/updateBook',
   async ({ id, payload }, { rejectWithValue }) => {
     try {
@@ -71,7 +104,7 @@ export const updateBook = createAsyncThunk(
   }
 );
 
-export const deleteBook = createAsyncThunk(
+export const deleteBook = createAsyncThunk<string, string>(
   'admin/deleteBook',
   async (id, { rejectWithValue }) => {
     try {
@@ -84,19 +117,19 @@ export const deleteBook = createAsyncThunk(
 );
 
 // ── Movie Thunks ──
-export const fetchAdminMovies = createAsyncThunk(
+export const fetchAdminMovies = createAsyncThunk<Movie[], AdminParams | undefined>(
   'admin/fetchAdminMovies',
   async (params, { rejectWithValue }) => {
     try {
       const data = await adminService.getAdminMovies(params);
-      return Array.isArray(data) ? data : (data?.data ?? data?.movies ?? []);
+      return (Array.isArray(data) ? data : (data?.data ?? data?.movies ?? [])) as Movie[];
     } catch (err) {
       return rejectWithValue(typeof err === 'string' ? err : 'Failed to fetch admin movies');
     }
   }
 );
 
-export const createMovie = createAsyncThunk(
+export const createMovie = createAsyncThunk<Movie, AdminPayload>(
   'admin/createMovie',
   async (payload, { rejectWithValue }) => {
     try {
@@ -108,7 +141,7 @@ export const createMovie = createAsyncThunk(
   }
 );
 
-export const updateMovie = createAsyncThunk(
+export const updateMovie = createAsyncThunk<Movie, { id: string; payload: AdminPayload }>(
   'admin/updateMovie',
   async ({ id, payload }, { rejectWithValue }) => {
     try {
@@ -120,7 +153,7 @@ export const updateMovie = createAsyncThunk(
   }
 );
 
-export const deleteMovie = createAsyncThunk(
+export const deleteMovie = createAsyncThunk<string, string>(
   'admin/deleteMovie',
   async (id, { rejectWithValue }) => {
     try {
@@ -133,19 +166,19 @@ export const deleteMovie = createAsyncThunk(
 );
 
 // ── Product Thunks ──
-export const fetchAdminProducts = createAsyncThunk(
+export const fetchAdminProducts = createAsyncThunk<Product[], AdminParams | undefined>(
   'admin/fetchAdminProducts',
   async (params, { rejectWithValue }) => {
     try {
       const data = await adminService.getAdminProducts(params);
-      return Array.isArray(data) ? data : (data?.data ?? data?.products ?? []);
+      return (Array.isArray(data) ? data : (data?.data ?? data?.products ?? [])) as Product[];
     } catch (err) {
       return rejectWithValue(typeof err === 'string' ? err : 'Failed to fetch admin products');
     }
   }
 );
 
-export const createProduct = createAsyncThunk(
+export const createProduct = createAsyncThunk<Product, AdminPayload>(
   'admin/createProduct',
   async (payload, { rejectWithValue }) => {
     try {
@@ -157,7 +190,7 @@ export const createProduct = createAsyncThunk(
   }
 );
 
-export const updateProduct = createAsyncThunk(
+export const updateProduct = createAsyncThunk<Product, { id: string; payload: AdminPayload }>(
   'admin/updateProduct',
   async ({ id, payload }, { rejectWithValue }) => {
     try {
@@ -169,7 +202,7 @@ export const updateProduct = createAsyncThunk(
   }
 );
 
-export const deleteProduct = createAsyncThunk(
+export const deleteProduct = createAsyncThunk<string, string>(
   'admin/deleteProduct',
   async (id, { rejectWithValue }) => {
     try {
@@ -182,19 +215,19 @@ export const deleteProduct = createAsyncThunk(
 );
 
 // ── Movie Request Thunks ──
-export const fetchMovieRequests = createAsyncThunk(
+export const fetchMovieRequests = createAsyncThunk<MovieRequest[]>(
   'admin/fetchMovieRequests',
   async (_, { rejectWithValue }) => {
     try {
       const data = await adminService.getMovieRequests();
-      return Array.isArray(data) ? data : (data?.requests ?? []);
+      return (Array.isArray(data) ? data : (data?.requests ?? [])) as MovieRequest[];
     } catch (err) {
       return rejectWithValue(typeof err === 'string' ? err : 'Failed to fetch movie requests');
     }
   }
 );
 
-export const updateMovieRequestStatus = createAsyncThunk(
+export const updateMovieRequestStatus = createAsyncThunk<MovieRequest, { id: string; status: string }>(
   'admin/updateMovieRequestStatus',
   async ({ id, status }, { rejectWithValue }) => {
     try {
@@ -207,19 +240,19 @@ export const updateMovieRequestStatus = createAsyncThunk(
 );
 
 // ── Contact Submission Thunk ──
-export const fetchContactSubmissions = createAsyncThunk(
+export const fetchContactSubmissions = createAsyncThunk<Record<string, unknown>[]>(
   'admin/fetchContactSubmissions',
   async (_, { rejectWithValue }) => {
     try {
       const data = await adminService.getContactSubmissions();
-      return Array.isArray(data) ? data : (data?.contacts ?? []);
+      return (Array.isArray(data) ? data : (data?.contacts ?? [])) as Record<string, unknown>[];
     } catch (err) {
       return rejectWithValue(typeof err === 'string' ? err : 'Failed to fetch contact submissions');
     }
   }
 );
 
-const initialState = {
+const initialState: AdminState = {
   stats: null,
   recentActivity: [],
   books: [],
@@ -236,13 +269,13 @@ export const adminSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    const handlePending = (state) => {
+    const handlePending = (state: AdminState) => {
       state.loading = true;
       state.error = null;
     };
-    const handleRejected = (state, action) => {
+    const handleRejected = (state: AdminState, action: { payload: unknown }) => {
       state.loading = false;
-      state.error = action.payload;
+      state.error = typeof action.payload === 'string' ? action.payload : 'Request failed';
     };
 
     builder

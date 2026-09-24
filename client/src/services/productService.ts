@@ -2,8 +2,8 @@
 import API from './api';
 
 export const productService = {
-  getProducts: (params = {}) =>
+  getProducts: (params: object = {}) =>
     API.get('/products', { params }).then((r) => r.data),
-  getProduct: (id) =>
+  getProduct: (id: string) =>
     API.get(`/products/${id}`).then((r) => r.data),
 };
