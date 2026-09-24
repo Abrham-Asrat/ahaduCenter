@@ -33,8 +33,8 @@ const ProductGallery = ({ product }: ProductGalleryProps) => {
             type="button"
             onClick={() => setSelectedImage(image)}
             className={`overflow-hidden rounded-xl border transition-all ${selectedImage === image
-                ? 'border-primary bg-primary/10'
-                : 'border-white/10 bg-surface-container hover:border-primary/40'
+              ? 'border-primary bg-primary/10'
+              : 'border-white/10 bg-surface-container hover:border-primary/40'
               }`}
           >
             <img src={image} alt={`${product.title || product.name || 'Product'} view ${index + 1}`} className="h-20 w-full object-cover" />

@@ -105,8 +105,8 @@ const MovieDetailHero = ({ movie, onShowToast }: MovieDetailHeroProps) => {
                             <button
                                 onClick={handleSaveClick}
                                 className={`flex items-center gap-2 border px-4 py-2.5 rounded-lg hover:scale-105 active:scale-95 transition-all font-semibold ${isSaved
-                                        ? 'bg-secondary/20 border-secondary text-secondary shadow-[0_0_15px_rgba(233,195,73,0.4)]'
-                                        : 'border-secondary/50 text-secondary hover:bg-secondary/10'
+                                    ? 'bg-secondary/20 border-secondary text-secondary shadow-[0_0_15px_rgba(233,195,73,0.4)]'
+                                    : 'border-secondary/50 text-secondary hover:bg-secondary/10'
                                     }`}
                             >
                                 <span className="material-symbols-outlined text-xl" style={{ fontVariationSettings: isSaved ? "'FILL' 1" : "'FILL' 0" }}>

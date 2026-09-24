@@ -71,8 +71,8 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
                             to={item.path}
                             onClick={() => setIsDrawerOpen(false)}
                             className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all text-xs uppercase tracking-wider font-bold ${isActive(item.path)
-                                    ? 'text-primary bg-primary/10 border-l-4 border-primary shadow-sm'
-                                    : 'text-on-surface-variant hover:bg-white/5 hover:text-white'
+                                ? 'text-primary bg-primary/10 border-l-4 border-primary shadow-sm'
+                                : 'text-on-surface-variant hover:bg-white/5 hover:text-white'
                                 }`}
                         >
                             <span className="material-symbols-outlined text-lg">{item.icon}</span>
