@@ -24,7 +24,7 @@ const { paginate } = require('../../utils/paginate.js');
 // Requirements 4.1, 4.2, 4.3, 4.4
 const listBooks = async (req, res, next) => {
   try {
-    const { q, category, availability, format, language, page, limit } = req.query;
+    const { q, category, availability, format, language, page, limit, sort } = req.query;
 
     // Build filter
     const filter = {};
@@ -48,7 +48,11 @@ const listBooks = async (req, res, next) => {
     const opts = {
       page:   page  || 1,
       limit:  limit || 20,
-      sort:   { createdAt: -1 },
+      sort:   sort === 'rating'
+        ? { rating: -1, createdAt: -1 }
+        : sort === 'popular'
+          ? { reviewCount: -1, createdAt: -1 }
+          : { createdAt: -1 },
       select: 'title author publisher year isbn rating reviewCount availableCopies coverUrl availability format language price category',
     };
 

@@ -267,6 +267,7 @@ export interface MovieQuery {
   country?: string;
   genre?: string;
   genres?: string;
+  contentType?: string;
 }
 
 export interface BookActionResult {

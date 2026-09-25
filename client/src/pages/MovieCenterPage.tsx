@@ -66,6 +66,7 @@ const MovieCenterPage = () => {
     if (filters.searchQuery) params.q = filters.searchQuery;
     if (filters.country && filters.country !== 'All') params.country = filters.country;
     if (filters.genres && filters.genres.length > 0) params.genre = filters.genres.join(',');
+    if (filters.contentType && filters.contentType !== 'All') params.contentType = filters.contentType;
 
     return params;
   }, [activeTab, filters, sortOption, currentPage]);

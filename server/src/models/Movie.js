@@ -29,6 +29,7 @@ const MovieSchema = new Schema({
   title:            { type: String, required: true, trim: true },
   year:             { type: Number },
   country:          { type: String },
+  contentType:      { type: String, enum: ['Movie', 'TV Series'], default: 'Movie' },
   runtime:          { type: String },               // e.g. "2h 15m"
   quality:          { type: String },               // e.g. "4K", "HD"
   language:         { type: String },

@@ -21,7 +21,7 @@ const { paginate } = require('../../utils/paginate.js');
 // Requirements 6.1, 6.2, 6.3, 6.4
 const listMovies = async (req, res, next) => {
   try {
-    const { q, genre, country, page, limit, sort } = req.query;
+    const { q, genre, country, contentType, page, limit, sort } = req.query;
 
     // Build filter
     const filter = {};
@@ -42,13 +42,26 @@ const listMovies = async (req, res, next) => {
       filter.country = { $regex: new RegExp(`^${escapeRegex(country.trim())}$`, 'i') };
     }
 
+    if (contentType && contentType.trim()) {
+      const contentTypeRegex = new RegExp(`^${escapeRegex(contentType.trim())}$`, 'i');
+      filter.contentType = contentType.trim().toLowerCase() === 'movie'
+        ? { $in: [contentTypeRegex, null] }
+        : contentTypeRegex;
+    }
+
     // Pagination options — defaults and bounds are enforced by movieQueryRules +
     // the paginate helper, but sensible defaults are applied here as well.
     const opts = {
       page:   page  || 1,
       limit:  limit || 20,
-      sort:   sort === 'rating' ? { rating: -1 } : sort === 'oldest' ? { createdAt: 1 } : { createdAt: -1 },
-      select: 'title posterUrl year country runtime quality language genres rating reviewCount releaseDate',
+      sort:   sort === 'rating'
+        ? { rating: -1, createdAt: -1 }
+        : sort === 'oldest'
+          ? { createdAt: 1 }
+          : sort === 'trending'
+            ? { reviewCount: -1, rating: -1, createdAt: -1 }
+            : { createdAt: -1 },
+      select: 'title posterUrl year country contentType runtime quality language genres rating reviewCount releaseDate',
     };
 
     const result = await paginate(Movie, filter, opts);
