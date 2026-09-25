@@ -8,7 +8,6 @@ import SubNav from '../components/common/SubNav';
 import Filters, { type FilterGroup, type FilterValues } from '../components/common/Filters';
 import BookCard from '../components/book/BookCard';
 import Pagination from '../components/common/Pagination';
-import SortingFilter from '../components/common/SortingFilter';
 import { useNavigate } from 'react-router-dom';
 import type { Book, BookQuery } from '../types';
 
@@ -27,7 +26,7 @@ const BookCenterPage = () => {
 
   // ── Local UI state ───────────────────────────────────────────────────────────
   const [activeCategory, setActiveCategory] = useState('All Categories');
-  const [sortOption, setSortOption] = useState('Newest Arrivals');
+  
   const [filterState, setFilterState] = useState<{
     searchQuery: string;
     availability: string[];
@@ -68,13 +67,10 @@ const BookCenterPage = () => {
     if (filterState.language !== 'All Languages') params.language = filterState.language;
     if (filterState.format.length > 0) params.format = filterState.format.join(',');
 
-    // Map UI sort labels to API sort values
-    if (sortOption === 'Highest Rated') params.sort = 'rating';
-    else if (sortOption === 'Most Popular') params.sort = 'popular';
-    else params.sort = 'newest';
+
 
     return params;
-  }, [activeCategory, filterState, sortOption, currentPage]);
+  }, [activeCategory, filterState,currentPage]);
 
   // ── Fetch on mount and whenever filters / page change ────────────────────────
   useEffect(() => {
@@ -161,15 +157,8 @@ const BookCenterPage = () => {
             </aside>
 
             {/* Book grid area */}
-            <div className="flex-1 pt-28 sm:pt-20">
-              <SortingFilter
-                count={books.length}
-                total={pagination.totalItems ?? 0}
-                loading={loading}
-                value={sortOption}
-                options={['Newest Arrivals', 'Most Popular', 'Highest Rated']}
-                onChange={handleSortChange}
-              />
+            <div className="flex-1 pt-2">
+              
 
               {/* Error banner */}
               {error && (

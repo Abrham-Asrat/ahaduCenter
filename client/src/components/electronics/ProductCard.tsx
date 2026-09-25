@@ -13,7 +13,7 @@ const ProductCard = ({
   product,
   isWishlisted = false,
   onAddToCart,
-  onToggleWishlist,
+  onToggleWishlist
 }: ProductCardProps) => {
   const productId = product._id || product.id || 'product';
   const image = product.imageUrl || product.images?.[0] || 'https://via.placeholder.com/600x400/0f172a/ffffff?text=Product';
