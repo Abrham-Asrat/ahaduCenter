@@ -33,8 +33,8 @@ const MovieCenterPage = () => {
   const [sortOption, setSortOption] = useState('Newest Arrivals');
   const [currentPage, setCurrentPage] = useState(1);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
-  const [activeTrailer, setActiveTrailer] = useState<Movie | null>(null);
-  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [, setActiveTrailer] = useState<Movie | null>(null);
+  const [, setToastMessage] = useState<string | null>(null);
   const [bookmarkedIds, setBookmarkedIds] = useState<string[]>([]);
 
   const showToast = (msg: string) => {
