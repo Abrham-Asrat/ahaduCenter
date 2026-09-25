@@ -1,13 +1,15 @@
 // src/pages/MovieCenterPage.jsx
 import { useState, useEffect, useCallback } from 'react';
+import MobileFilterButton from '../components/common/MobileFilterButton';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { fetchMovies } from '../redux/slices/movieSlice';
 import Navbar from '../components/common/Navbar';
 import SubNav from '../components/common/SubNav';
-import MovieFilters from '../components/movie/MovieFilters';
+import Filters, { type FilterGroup, type FilterValues } from '../components/common/Filters';
 import MovieCard from '../components/movie/MovieCard';
 import Pagination from '../components/common/Pagination';
 import type { Movie, MovieQuery } from '../types';
+import type { ChangeEvent } from 'react';
 
 /**
  * MovieCenterPage Component
@@ -31,9 +33,15 @@ const MovieCenterPage = () => {
   const [activeTab, setActiveTab] = useState('All');
   const [currentPage, setCurrentPage] = useState(1);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
-  const [activeTrailer, setActiveTrailer] = useState<Movie | null>(null);
-  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [, setActiveTrailer] = useState<Movie | null>(null);
+  const [, setToastMessage] = useState<string | null>(null);
   const [bookmarkedIds, setBookmarkedIds] = useState<string[]>([]);
+
+  const filterGroups: FilterGroup[] = [
+    { key: 'genres', label: 'Genre', options: ['Action', 'Comedy', 'Drama', 'Sci-Fi', 'Thriller', 'Horror', 'Adventure'], multiSelect: true },
+    { key: 'country', label: 'Country', options: ['All', 'Ethiopia', 'USA', 'UK', 'Korea', 'Japan'] },
+    { key: 'contentType', label: 'Content Type', options: ['All', 'Movie', 'TV Series'] },
+  ];
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -44,16 +52,10 @@ const MovieCenterPage = () => {
   const buildParams = useCallback((): MovieQuery => {
     const params: MovieQuery = { page: currentPage, limit: 12 };
 
-    // Tab → API param mapping
-    if (activeTab === 'Latest')         params.sort = 'latest';
-    else if (activeTab === 'Trending')  params.sort = 'trending';
-    else if (activeTab === 'Coming Soon') params.availability = 'Coming Soon';
-    else if (activeTab === 'Featured')  params.featured = true;
-    else if (activeTab === 'Recently Added') params.sort = 'newest';
-
-    if (filters.searchQuery)                         params.q = filters.searchQuery;
+    if (filters.searchQuery) params.q = filters.searchQuery;
     if (filters.country && filters.country !== 'All') params.country = filters.country;
     if (filters.genres && filters.genres.length > 0) params.genre = filters.genres.join(',');
+    if (filters.contentType && filters.contentType !== 'All') params.contentType = filters.contentType;
 
     return params;
   }, [activeTab, filters, currentPage]);
@@ -64,8 +66,17 @@ const MovieCenterPage = () => {
   }, [dispatch, buildParams]);
 
   // ── Control change handlers ──────────────────────────────────────────────────
-  const handleFilterChange = (newFilters: { genres: string[]; contentType: string; searchQuery: string; country: string }) => {
-    setFilters(newFilters);
+  const handleFilterChange = (newFilters: FilterValues) => {
+    const contentType = Array.isArray(newFilters.contentType)
+      ? newFilters.contentType[0] ?? 'All'
+      : 'All';
+    const country = Array.isArray(newFilters.country) ? newFilters.country[0] ?? 'All' : 'All';
+    setFilters({
+      genres: Array.isArray(newFilters.genres) ? newFilters.genres : [],
+      contentType,
+      searchQuery: newFilters.searchQuery,
+      country,
+    });
     setCurrentPage(1);
   };
 
@@ -73,6 +84,8 @@ const MovieCenterPage = () => {
     setActiveTab(tab);
     setCurrentPage(1);
   };
+
+  
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -117,18 +130,18 @@ const MovieCenterPage = () => {
   return (
     <>
       <Navbar />
-    <div className="min-h-screen bg-background text-on-surface flex flex-col relative animate-fade-in">
+      <div className="min-h-screen bg-background text-on-surface flex flex-col relative animate-fade-in">
 
-      {/* Toast Notification */}
-      {toastMessage && (
+        {/* Toast Notification */}
+        {/* {toastMessage && (
         <div className="fixed bottom-6 right-6 z-50 bg-primary-container text-white px-5 py-3 rounded-lg shadow-2xl flex items-center gap-3 border border-primary/40 animate-bounce">
           <span className="material-symbols-outlined text-xl">check_circle</span>
           <span className="text-sm font-semibold">{toastMessage}</span>
         </div>
-      )}
+      )} */}
 
-      {/* Trailer Modal */}
-      {activeTrailer && (
+        {/* Trailer Modal */}
+        {/* {activeTrailer && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
           <div className="relative w-full max-w-4xl bg-surface-container rounded-2xl overflow-hidden border border-white/20 shadow-2xl">
             <div className="flex justify-between items-center px-6 py-4 border-b border-white/10">
@@ -154,55 +167,26 @@ const MovieCenterPage = () => {
             </div>
           </div>
         </div>
-      )}
+      )} */}
 
-      <main className="flex-grow md:pb-0">
-        <SubNav onTabChange={handleTabChange} />
-
-        <div id="movie-catalog" className="max-w-7xl mx-auto px-4 md:px-8 py-8">
-          {/* Mobile Filter Toggle */}
-          <div className="md:hidden mb-6 flex justify-between items-center">
-            <p className="text-sm text-on-surface-variant font-medium">
-              {loading ? (
-                <span className="inline-block w-28 h-4 bg-surface-container rounded animate-pulse" />
-              ) : (
-                <>
-                  Showing <span className="text-white font-bold">{pagination.totalItems}</span> movies
-                </>
-              )}
-            </p>
-            <button
-              onClick={() => setShowMobileFilters(!showMobileFilters)}
-              className="bg-surface-container border border-white/10 px-4 py-2 rounded-lg text-sm text-white flex items-center gap-2 font-semibold"
-            >
-              <span className="material-symbols-outlined text-primary">tune</span>
-              {showMobileFilters ? 'Hide Filters' : 'Show Filters'}
-            </button>
-          </div>
-
-          <div className="flex flex-col md:flex-row gap-8">
-            {/* Sidebar Filters */}
-            <aside className={`${showMobileFilters ? 'block' : 'hidden'} md:block w-full md:w-64 flex-shrink-0`}>
-              <MovieFilters onFilterChange={handleFilterChange} />
+        {/* <main className="flex-grow md:pb-0"> */}
+        <main className="mx-auto w-full max-w-7xl flex-grow px-3 pt-4 sm:px-6 sm:pt-6 lg:px-8 md:pb-8">
+          <SubNav onTabChange={handleTabChange} />
+          <div className="flex min-w-0 flex-col gap-5 md:flex-row md:gap-8">
+            {/* Sidebar filters (desktop) */}
+            <aside className="hidden md:block w-60 flex-shrink-0">
+              <Filters
+                groups={filterGroups}
+                searchLabel="Search Title"
+                searchPlaceholder="Search movies..."
+                onFilterChange={handleFilterChange}
+              />
             </aside>
 
             {/* Catalog Grid */}
-            <div className="flex-grow flex flex-col justify-between">
+            <div className="flex-grow flex flex-col justify-between pt-2">
               <div>
-                {/* Desktop results count */}
-                <div className="hidden md:flex justify-between items-center mb-6">
-                  <p className="text-sm text-on-surface-variant font-medium">
-                    {loading ? (
-                      <span className="inline-block w-36 h-4 bg-surface-container rounded animate-pulse" />
-                    ) : (
-                      <>
-                        Showing <span className="text-white font-bold">{movies.length}</span> of{' '}
-                        <span className="text-white font-bold">{pagination.totalItems}</span> results
-                      </>
-                    )}
-                  </p>
-                </div>
-
+        
                 {/* Error banner */}
                 {error && (
                   <div className="glass-panel rounded-xl border border-red-500/30 bg-red-500/5 p-5 mb-6 flex items-center justify-between gap-4">
@@ -280,11 +264,45 @@ const MovieCenterPage = () => {
               )}
             </div>
           </div>
-        </div>
-      </main>
 
-      {/* <Footer /> */}
-    </div>
+        </main>
+
+        <MobileFilterButton
+          onClick={() => setShowMobileFilters((visible) => !visible)}
+        />
+
+
+        {/* Mobile filter modal */}
+        {showMobileFilters && (
+          <div className="md:hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-end animate-filter-backdrop" onClick={() => setShowMobileFilters(false)}>
+            <div
+              className="bg-background w-full rounded-t-2xl p-6 border-t border-white/10 max-h-[85vh] overflow-y-auto animate-filter-sheet"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-xl font-bold text-white">Filter Books</h3>
+                <button onClick={() => setShowMobileFilters(false)} className="text-on-surface-variant hover:text-white">
+                  <span className="material-symbols-outlined">close</span>
+                </button>
+              </div>
+              <Filters
+                groups={filterGroups}
+                searchLabel="Search Title"
+                searchPlaceholder="Search Books..."
+                onFilterChange={handleFilterChange}
+              />
+              <button
+                className="w-full mt-6 bg-primary text-black font-bold py-3 rounded-xl uppercase text-xs tracking-wider"
+                onClick={() => setShowMobileFilters(false)}
+              >
+                Apply Filters
+              </button>
+            </div>
+          </div>
+        )}
+
+
+      </div>
     </>
   );
 };

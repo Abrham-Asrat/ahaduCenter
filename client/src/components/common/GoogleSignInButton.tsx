@@ -1,6 +1,28 @@
 import { useEffect, useRef, useState } from 'react';
 
 const GOOGLE_SCRIPT = 'https://accounts.google.com/gsi/client';
+
+type GooglePromptNotification = {
+  isNotDisplayed: () => boolean;
+  isSkippedMoment: () => boolean;
+};
+
+type GoogleIdClient = {
+  initialize: (config: { client_id: string; callback: (response: GoogleCredentialResponse) => void }) => void;
+  renderButton: (element: Element, options: { theme: 'filled_black'; size: 'large'; width: number; text: string }) => void;
+  prompt?: (callback?: (notification: GooglePromptNotification) => void) => void;
+};
+
+declare global {
+  interface Window {
+    google?: {
+      accounts?: {
+        id?: GoogleIdClient;
+      };
+    };
+  }
+}
+
 let initializedClientId: string | null = null;
 let activeCredentialCallback: ((response: GoogleCredentialResponse) => void) | null = null;
 

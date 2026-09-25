@@ -252,6 +252,7 @@ export interface ProductQuery {
   q?: string;
   condition?: string;
   brand?: string;
+  minPrice?: number;
   maxPrice?: number;
   sort?: string;
 }
@@ -266,6 +267,7 @@ export interface MovieQuery {
   country?: string;
   genre?: string;
   genres?: string;
+  contentType?: string;
 }
 
 export interface BookActionResult {

@@ -41,7 +41,7 @@ const SubNav = ({ tabs, onTabChange }: SubNavProps) => {
 
   return (
     <div className="sticky top-[4.25rem] z-40 border-b border-white/5 bg-surface-container-lowest backdrop-blur-md">
-      <div className="mx-auto max-w-7xl overflow-x-auto px-3 py-3 sm:px-6">
+      <div className="mx-auto max-w-7xl overflow-x-auto px-3 py-2 sm:px-6">
         <ul className="flex gap-3 items-center min-w-max">
           {navTabs.map((tab) => (
             <li key={tab}>

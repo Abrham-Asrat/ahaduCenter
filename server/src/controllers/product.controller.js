@@ -22,7 +22,7 @@ const { paginate } = require('../../utils/paginate.js');
 // Requirements 8.1, 8.2, 8.3, 8.4, 8.5
 const listProducts = async (req, res, next) => {
   try {
-    const { q, category, condition, brand, minPrice, maxPrice, page, limit } = req.query;
+    const { q, category, condition, brand, minPrice, maxPrice, page, limit, sort } = req.query;
 
     // Build filter
     const filter = {};
@@ -58,7 +58,13 @@ const listProducts = async (req, res, next) => {
     const opts = {
       page:   page  || 1,
       limit:  limit || 20,
-      sort:   { createdAt: -1 },
+      sort:   sort === 'price_asc'
+        ? { price: 1 }
+        : sort === 'price_desc'
+          ? { price: -1 }
+          : sort === 'rating'
+            ? { rating: -1, createdAt: -1 }
+            : { createdAt: -1 },
       select: 'name brand category condition images price originalPrice discount rating reviewCount stockQuantity inStock',
     };
 

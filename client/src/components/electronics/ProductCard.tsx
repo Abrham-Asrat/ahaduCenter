@@ -1,4 +1,4 @@
-import { Heart, Plus, Scale, Star } from 'lucide-react';
+import { Eye, Heart, Plus, Star } from 'lucide-react';
 import type { Product } from '../../types';
 
 interface ProductCardProps {
@@ -13,8 +13,7 @@ const ProductCard = ({
   product,
   isWishlisted = false,
   onAddToCart,
-  onCompare,
-  onToggleWishlist,
+  onToggleWishlist
 }: ProductCardProps) => {
   const productId = product._id || product.id || 'product';
   const image = product.imageUrl || product.images?.[0] || 'https://via.placeholder.com/600x400/0f172a/ffffff?text=Product';
@@ -24,10 +23,18 @@ const ProductCard = ({
     <article className="min-w-0 overflow-hidden rounded-[26px] border border-white/10 bg-card-surface/60 p-3 shadow-[0_20px_45px_rgba(15,23,42,0.25)] transition-transform duration-300 hover:-translate-y-1">
       <div className="relative overflow-hidden rounded-[20px]">
         <img src={image} alt={title} className="aspect-[4/3] w-full object-cover" />
+        <a
+          href={`/electronics/${productId}`}
+          aria-label={`View details for ${title}`}
+          title="View details"
+          className="absolute right-3 bottom-3 z-10 inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-dark-bg/10 text-white backdrop-blur-sm transition-colors hover:bg-white/10 hover:text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
+        >
+          <Eye size={18} aria-hidden="true" />
+        </a>
         <button
           type="button"
           onClick={() => onToggleWishlist?.(product, !isWishlisted)}
-          className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-dark-bg/80 text-white backdrop-blur-sm"
+          className="absolute left-3 top-3 flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-dark-bg/50 text-white backdrop-blur-sm"
           aria-label={isWishlisted ? `Remove ${title} from wishlist` : `Save ${title} to wishlist`}
         >
           <Heart size={16} className={isWishlisted ? 'fill-primary text-primary' : ''} />
@@ -58,15 +65,8 @@ const ProductCard = ({
             )}
           </div>
 
-          <div className="ml-auto flex shrink-0 items-center gap-2">
-            <button
-              type="button"
-              onClick={() => onCompare?.(product)}
-              className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition-colors hover:border-primary/50 hover:text-primary"
-              aria-label={`Compare ${title}`}
-            >
-              <Scale size={16} />
-            </button>
+          <div className="ml-auto flex shrink-0 items-center justify-between-">
+
             <button
               type="button"
               onClick={() => onAddToCart?.(product)}
@@ -79,7 +79,6 @@ const ProductCard = ({
         </div>
       </div>
 
-      <a href={`/electronics/${productId}`} className="sr-only">View details</a>
     </article>
   );
 };

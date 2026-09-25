@@ -17,8 +17,8 @@ const AdminRoute = () => {
     );
   }
 
-  if (!token) return <Navigate to="/login" replace />;
-  if (user?.role !== 'admin') return <Navigate to="/" replace />;
+  if (!token) return <Navigate to="/admin-login" replace />;
+  if (user?.role !== 'admin') return <Navigate to="/admin-login" replace />;
 
   return <Outlet />;
 };

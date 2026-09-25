@@ -66,7 +66,7 @@ const MovieCard = ({ movie, onPlayTrailer, onToggleBookmark, isBookmarked: initi
       <div className="glass-panel rounded-lg overflow-hidden cursor-pointer transition-all duration-300 glow-hover relative flex flex-col h-full hover:-translate-y-1">
 
         {/* Poster Container - maintains 2:3 aspect ratio */}
-        <div className="relative aspect-[2/3] w-full overflow-hidden bg-surface-container">
+        <div className="relative aspect-[4/5] w-full overflow-hidden bg-surface-container">
 
           {/* Movie Poster Image - scales up on hover */}
           <img
@@ -78,11 +78,11 @@ const MovieCard = ({ movie, onPlayTrailer, onToggleBookmark, isBookmarked: initi
 
           {/* Top-right badges (e.g., 4K quality) */}
           <div className="absolute top-2 right-2 flex gap-1 z-10">
-              {typeof movie.quality === 'string' && movie.quality && (
+            {typeof movie.quality === 'string' && movie.quality && (
               <span className="bg-secondary-container/90 text-secondary-fixed backdrop-blur-sm px-2 py-0.5 rounded text-xs font-semibold shadow-lg border border-secondary/30">
-                  {movie.quality}
+                {movie.quality}
               </span>
-              )}
+            )}
           </div>
 
           {/* Top-left rating badge with star icon */}
@@ -114,8 +114,8 @@ const MovieCard = ({ movie, onPlayTrailer, onToggleBookmark, isBookmarked: initi
               onClick={handleBookmark}
               title={isBookmarked ? "Remove from Wishlist" : "Save to Wishlist"}
               className={`w-11 h-11 rounded-full glass-panel flex items-center justify-center hover:scale-110 active:scale-95 transition-all cursor-pointer ${isBookmarked
-                  ? 'text-secondary border-secondary bg-secondary/20 shadow-[0_0_15px_rgba(233,195,73,0.5)]'
-                  : 'text-on-surface hover:text-secondary hover:border-secondary'
+                ? 'text-secondary border-secondary bg-secondary/20 shadow-[0_0_15px_rgba(233,195,73,0.5)]'
+                : 'text-on-surface hover:text-secondary hover:border-secondary'
                 }`}
             >
               <span
@@ -136,22 +136,22 @@ const MovieCard = ({ movie, onPlayTrailer, onToggleBookmark, isBookmarked: initi
             </h4>
 
             <p className="text-[12px] text-on-surface-variant line-clamp-1 mt-1">
-              {movie.genres?.join(' • ')} • {movie.year}
+              {movie.genres?.join(' • ')}
             </p>
           </div>
 
           <div className="mt-3 flex justify-between items-center">
-            <span className={`text-[10px] font-bold tracking-wider px-2 py-0.5 rounded border ${movie.availability === 'Available'
-                ? 'bg-primary-container/20 text-primary border-primary/30'
-                : 'bg-secondary-container/20 text-secondary border-secondary/30'
-              }`}>
-              {movie.availability?.toUpperCase() || 'AVAILABLE'}
-            </span>
+
             {movie.country && (
               <span className="text-[11px] text-on-surface-variant font-medium">
                 {movie.country}
               </span>
             )}
+
+            <span className={`text-[10px] font-bold tracking-wider px-2 py-0.5 rounded border dary border-secondary/30'
+              }`}>
+              {movie.year}
+            </span>
           </div>
         </div>
       </div>

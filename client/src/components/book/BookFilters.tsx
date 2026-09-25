@@ -1,1 +1,1 @@
-export { default } from '../admin/book/BookFilters';
+export { default } from '../common/Filters';

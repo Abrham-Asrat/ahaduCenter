@@ -5,6 +5,7 @@ import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import { searchService } from '../services/searchService';
 import type { SearchResult } from '../types';
+import MobileFilterButton from '../components/common/MobileFilterButton';
 
 /**
  * SearchResultsPage Component
@@ -338,13 +339,11 @@ const SearchResultsPage = () => {
         </main>
 
         {/* Mobile filter button */}
-        <button
-          aria-label="Open search filters"
-          className="md:hidden fixed bottom-[calc(72px+env(safe-area-inset-bottom)+1rem)] right-4 z-40 p-4 rounded-full bg-surface-container border border-primary/30 text-primary shadow-lg cursor-pointer"
-          onClick={() => setShowFilters(true)}
-        >
-          <span className="material-symbols-outlined">tune</span>
-        </button>
+
+
+        <MobileFilterButton
+          onClick={() => setShowFilters((visible) => !visible)}
+        />
 
         {/* Mobile filter bottom sheet */}
         {showFilters && (

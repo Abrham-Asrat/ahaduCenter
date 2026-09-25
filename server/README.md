@@ -61,6 +61,7 @@ npm run dev
 | `EMAIL_USER` | No | SMTP username | `user` |
 | `EMAIL_PASS` | No | SMTP password | `<secret>` |
 | `EMAIL_FROM` | No | Sender identity; falls back to `EMAIL_USER` | `AhaduCenter <no-reply@example.com>` |
+| `CONTACT_EMAIL` | No | Recipient for contact form notifications; falls back to `EMAIL_USER` | `admin@example.com` |
 | `GOOGLE_CLIENT_ID` | No | Required for Google auth operations | `...apps.googleusercontent.com` |
 | `MONGO_SEED_URI` | No | Seed database override | `mongodb://localhost:27017/ahadu_seed` |
 | `SEED_USERS` ... `SEED_CONTACTS` | No | Per-resource seed counts | `12` |
