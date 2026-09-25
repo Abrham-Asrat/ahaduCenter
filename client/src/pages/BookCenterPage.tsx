@@ -8,6 +8,7 @@ import SubNav from '../components/common/SubNav';
 import Filters, { type FilterGroup, type FilterValues } from '../components/common/Filters';
 import BookCard from '../components/book/BookCard';
 import Pagination from '../components/common/Pagination';
+import SortingFilter from '../components/common/SortingFilter';
 import { useNavigate } from 'react-router-dom';
 import type { Book, BookQuery } from '../types';
 
@@ -99,7 +100,11 @@ const BookCenterPage = () => {
     setCurrentPage(1);
   };
 
- 
+  const handleSortChange = (value: string) => {
+    setSortOption(value);
+    setCurrentPage(1);
+  };
+
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -156,8 +161,15 @@ const BookCenterPage = () => {
             </aside>
 
             {/* Book grid area */}
-            <div className="flex-1">
-              
+            <div className="flex-1 pt-28 sm:pt-20">
+              <SortingFilter
+                count={books.length}
+                total={pagination.totalItems ?? 0}
+                loading={loading}
+                value={sortOption}
+                options={['Newest Arrivals', 'Most Popular', 'Highest Rated']}
+                onChange={handleSortChange}
+              />
 
               {/* Error banner */}
               {error && (

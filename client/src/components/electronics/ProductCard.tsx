@@ -13,7 +13,6 @@ const ProductCard = ({
   product,
   isWishlisted = false,
   onAddToCart,
-  onCompare,
   onToggleWishlist,
 }: ProductCardProps) => {
   const productId = product._id || product.id || 'product';
