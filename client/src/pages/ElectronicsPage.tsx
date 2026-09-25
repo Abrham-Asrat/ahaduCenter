@@ -130,7 +130,7 @@ const ElectronicsPage = () => {
 
   const handleResetFilters = () => {
     setActiveCategory('All');
-    setFilterState({ conditions: [], brands: [], searchQuery: '', maxPrice: 3000 });
+    setFilterState({ conditions: [], brands: [], searchQuery: '', maxPrice: 150000 });
     setSortOption('Featured');
     setCurrentPage(1);
   };
