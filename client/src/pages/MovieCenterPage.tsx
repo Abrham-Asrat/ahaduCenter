@@ -9,6 +9,7 @@ import MovieCard from '../components/movie/MovieCard';
 import Pagination from '../components/common/Pagination';
 import type { Movie, MovieQuery } from '../types';
 import type { ChangeEvent } from 'react';
+import SortingFilter from '../components/common/SortingFilter';
 
 /**
  * MovieCenterPage Component
@@ -79,8 +80,8 @@ const MovieCenterPage = () => {
     setCurrentPage(1);
   };
 
-  const handleSortChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    setSortOption(event.target.value);
+  const handleSortChange =(value: string) => {
+    setSortOption(value);
     setCurrentPage(1);
   };
 
@@ -124,6 +125,7 @@ const MovieCenterPage = () => {
     </div>
   );
 
+  
   return (
     <>
       <Navbar />
@@ -198,30 +200,18 @@ const MovieCenterPage = () => {
               </aside>
 
               {/* Catalog Grid */}
-              <div className="flex-grow flex flex-col justify-between pt-20">
+              <div className="flex-1 pt-28 sm:pt-20">
                 <div>
                   {/* Desktop results count */}
-                  <div className="fixed inset-x-3 top-[150px] z-20 hidden items-center justify-between rounded-xl border border-white/10 bg-background/95 p-4 glass-panel backdrop-blur-md md:flex lg:left-[calc(50%-208px)] lg:right-8 xl:left-[calc(50%-336px)] xl:right-[calc(50%-640px)]">
-                    <p className="text-sm text-on-surface-variant font-medium">
-                      {loading ? (
-                        <span className="inline-block w-36 h-4 bg-surface-container rounded animate-pulse" />
-                      ) : (
-                        <>
-                          Showing <span className="text-white font-bold">{movies.length}</span> of{' '}
-                          <span className="text-white font-bold">{pagination.totalItems}</span> results
-                        </>
-                      )}
-                    </p>
-                    <div className="flex items-center gap-3">
-                      <span className="text-sm text-on-surface-variant font-medium">Sort by:</span>
-                      <select value={sortOption} onChange={handleSortChange} className="cursor-pointer rounded-lg border border-white/10 bg-background py-1.5 pl-3 pr-8 text-sm font-semibold text-primary outline-none">
-                        <option>Newest</option>
-                        <option>Oldest</option>
-                        <option>High Rated</option>
-                      </select>
-                    </div>
-                  </div>
-
+               
+                  <SortingFilter
+                                count={movies.length}
+                                total={pagination.totalItems ?? 0}
+                                loading={loading}
+                                value={sortOption}
+                                options={['Newest', 'Oldest', 'Highest Rated']}
+                                onChange={handleSortChange}
+                              />
                   {/* Error banner */}
                   {error && (
                     <div className="glass-panel rounded-xl border border-red-500/30 bg-red-500/5 p-5 mb-6 flex items-center justify-between gap-4">

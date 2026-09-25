@@ -5,12 +5,12 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { fetchBooks } from '../redux/slices/bookSlice';
 import Navbar from '../components/common/Navbar';
 import SubNav from '../components/common/SubNav';
-import BookFilters from '../components/book/BookFilters';
+import Filters, { type FilterGroup, type FilterValues } from '../components/common/Filters';
 import BookCard from '../components/book/BookCard';
 import Pagination from '../components/common/Pagination';
+import SortingFilter from '../components/common/SortingFilter';
 import { useNavigate } from 'react-router-dom';
 import type { Book, BookQuery } from '../types';
-import type { ChangeEvent } from 'react';
 
 /**
  * BookCenterPage Component
@@ -53,6 +53,11 @@ const BookCenterPage = () => {
     'Language',
   ];
 
+  const filterGroups: FilterGroup[] = [
+    { key: 'availability', label: 'Availability', options: ['All', 'Available', 'Reserved'] },
+    { key: 'language', label: 'Languages', options: ['All Languages', 'English', 'Amharic'] },
+  ];
+
   // ── Build query params from local filter/sort state ──────────────────────────
   const buildParams = useCallback((): BookQuery => {
     const params: BookQuery = { page: currentPage, limit: 12 };
@@ -77,8 +82,13 @@ const BookCenterPage = () => {
   }, [dispatch, buildParams]);
 
   // Reset to page 1 when filters/sort change (but not when currentPage changes)
-  const handleFilterChange = (newFilters: Partial<typeof filterState>) => {
-    setFilterState((prev) => ({ ...prev, ...newFilters }));
+  const handleFilterChange = (newFilters: FilterValues) => {
+    setFilterState((prev) => ({
+      ...prev,
+      searchQuery: newFilters.searchQuery,
+      availability: newFilters.availability ?? [],
+      language: newFilters.language?.[0] ?? 'All Languages',
+    }));
     setCurrentPage(1);
   };
 
@@ -87,8 +97,8 @@ const BookCenterPage = () => {
     setCurrentPage(1);
   };
 
-  const handleSortChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setSortOption(e.target.value);
+  const handleSortChange = (value: string) => {
+    setSortOption(value);
     setCurrentPage(1);
   };
 
@@ -139,36 +149,24 @@ const BookCenterPage = () => {
           <div className="flex min-w-0 flex-col gap-5 md:flex-row md:gap-8">
             {/* Sidebar filters (desktop) */}
             <aside className="hidden md:block w-60 flex-shrink-0">
-              <BookFilters onFilterChange={handleFilterChange} />
+              <Filters
+                groups={filterGroups}
+                searchLabel="Search Title"
+                searchPlaceholder="Search Books..."
+                onFilterChange={handleFilterChange}
+              />
             </aside>
 
             {/* Book grid area */}
             <div className="flex-1 pt-28 sm:pt-20">
-              {/* Grid controls */}
-              <div className="fixed inset-x-3 top-[150px] z-20 flex flex-col items-stretch gap-3 rounded-xl border border-white/10 bg-background/95 p-3.5 glass-panel backdrop-blur-md sm:flex-row sm:items-center sm:justify-between lg:left-[calc(50%-208px)] lg:right-8 xl:left-[calc(50%-336px)] xl:right-[calc(50%-640px)]">
-                <span className="text-xs font-medium text-on-surface-variant sm:text-sm">
-                  {loading ? (
-                    <span className="inline-block w-32 h-4 bg-surface-container rounded animate-pulse" />
-                  ) : (
-                    <>
-                      Showing <strong className="text-white">{books.length}</strong> of{' '}
-                      <strong className="text-white">{pagination.totalItems}</strong> titles
-                    </>
-                  )}
-                </span>
-                <div className="flex items-center justify-between gap-2 sm:justify-end">
-                  <span className="text-xs font-medium text-on-surface-variant sm:text-sm">Sort by:</span>
-                  <select
-                    value={sortOption}
-                    onChange={handleSortChange}
-                    className="min-w-0 max-w-full cursor-pointer rounded-lg border border-white/10 bg-background px-2 py-1 text-xs font-semibold text-primary outline-none sm:px-3 sm:text-sm"
-                  >
-                    <option>Newest Arrivals</option>
-                    <option>Most Popular</option>
-                    <option>Highest Rated</option>
-                  </select>
-                </div>
-              </div>
+              <SortingFilter
+                count={books.length}
+                total={pagination.totalItems ?? 0}
+                loading={loading}
+                value={sortOption}
+                options={['Newest Arrivals', 'Most Popular', 'Highest Rated']}
+                onChange={handleSortChange}
+              />
 
               {/* Error banner */}
               {error && (
@@ -259,7 +257,12 @@ const BookCenterPage = () => {
                   <span className="material-symbols-outlined">close</span>
                 </button>
               </div>
-              <BookFilters onFilterChange={handleFilterChange} />
+              <Filters
+                groups={filterGroups}
+                searchLabel="Search Title"
+                searchPlaceholder="Search Books..."
+                onFilterChange={handleFilterChange}
+              />
               <button
                 className="w-full mt-6 bg-primary text-black font-bold py-3 rounded-xl uppercase text-xs tracking-wider"
                 onClick={() => setShowMobileFilters(false)}
