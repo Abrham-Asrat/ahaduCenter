@@ -1,5 +1,6 @@
 // src/pages/BookCenterPage.jsx
 import { useState, useEffect, useCallback } from 'react';
+import MobileFilterButton from '../components/common/MobileFilterButton';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { fetchBooks } from '../redux/slices/bookSlice';
 import Navbar from '../components/common/Navbar';
@@ -241,13 +242,9 @@ const BookCenterPage = () => {
         </main>
 
         {/* Mobile floating filter button */}
-        <button
-          className="fixed bottom-24 right-4 z-40 flex items-center justify-center gap-2 rounded-full border border-primary/50 bg-primary p-3 font-bold text-black shadow-2xl transition-transform hover:scale-105 md:hidden sm:right-6 sm:p-4"
-          onClick={() => setShowMobileFilters(true)}
-        >
-          <span className="material-symbols-outlined">tune</span>
-          <span className="text-xs uppercase tracking-wider font-extrabold">Filters</span>
-        </button>
+        <MobileFilterButton
+          onClick={() => setShowMobileFilters((visible) => !visible)}
+        />
 
         {/* Mobile filter modal */}
         {showMobileFilters && (

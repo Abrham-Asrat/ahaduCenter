@@ -10,6 +10,7 @@ import Pagination from '../components/common/Pagination';
 import { useNavigate } from 'react-router-dom';
 import type { ChangeEvent } from 'react';
 import type { Product, ProductQuery } from '../types';
+import MobileFilterButton from '../components/common/MobileFilterButton';
 
 /**
  * ElectronicsPage Component
@@ -42,7 +43,8 @@ const ElectronicsPage = () => {
 
   const [, setToastMessage] = useState<string | null>(null);
   const [wishlistIds, setWishlistIds] = useState<string[]>([]);
-  const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
+
+  const [showMobileFilters, setShowMobileFilters] = useState(false);
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -280,26 +282,24 @@ const ElectronicsPage = () => {
               )}
 
               {/* Mobile floating filter button */}
-              <button
-                onClick={() => setIsMobileFiltersOpen(true)}
-                className="md:hidden fixed bottom-6 right-6 z-40 p-4 rounded-full bg-primary text-black font-bold shadow-2xl flex items-center justify-center gap-2 border border-primary/50"
-              >
-                <span className="material-symbols-outlined">tune</span>
-                <span className="text-xs uppercase tracking-wider font-extrabold">Filters</span>
-              </button>
+
+              <MobileFilterButton
+                onClick={() => setShowMobileFilters((visible) => !visible)}
+              />
+
             </div>
           </div>
         </main>
 
         {/* Mobile Filters Drawer Modal */}
-        {isMobileFiltersOpen && (
-          <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex justify-end md:hidden animate-filter-backdrop" onClick={() => setIsMobileFiltersOpen(false)}>
+        {showMobileFilters && (
+          <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex justify-end md:hidden animate-filter-backdrop" onClick={() => setShowMobileFilters(false)}>
             <div className="w-full max-w-xs bg-background h-full p-6 overflow-y-auto border-l border-white/10 flex flex-col justify-between animate-filter-drawer" onClick={(event) => event.stopPropagation()}>
               <div>
                 <div className="flex justify-between items-center mb-6">
                   <h3 className="text-xl font-bold text-white">Filter Tech</h3>
                   <button
-                    onClick={() => setIsMobileFiltersOpen(false)}
+                    onClick={() => setShowMobileFilters(false)}
                     className="text-on-surface-variant hover:text-white"
                   >
                     <span className="material-symbols-outlined">close</span>
@@ -308,7 +308,7 @@ const ElectronicsPage = () => {
                 <ElectronicsFilters onFilterChange={handleFilterChange} />
               </div>
               <button
-                onClick={() => setIsMobileFiltersOpen(false)}
+                onClick={() => setShowMobileFilters(false)}
                 className="w-full bg-primary text-black font-bold py-3 rounded-xl mt-6 uppercase text-xs tracking-wider"
               >
                 Apply Filters

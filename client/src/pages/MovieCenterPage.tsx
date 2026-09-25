@@ -30,7 +30,7 @@ const MovieCenterPage = () => {
     country: 'All',
   });
   const [activeTab, setActiveTab] = useState('All');
-  const [sortOption, setSortOption] = useState('Newest Arrivals');
+  const [sortOption, setSortOption] = useState('Newest');
   const [currentPage, setCurrentPage] = useState(1);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [, setActiveTrailer] = useState<Movie | null>(null);
@@ -47,8 +47,8 @@ const MovieCenterPage = () => {
     const params: MovieQuery = { page: currentPage, limit: 12 };
 
     // Tab → API param mapping
-    if (sortOption === 'Highest Rated') params.sort = 'rating';
-    else if (sortOption === 'Most Popular') params.sort = 'popular';
+    if (sortOption === 'High Rated') params.sort = 'rating';
+    else if (sortOption === 'Oldest') params.sort = 'oldest';
     else if (activeTab === 'Latest') params.sort = 'latest';
     else if (activeTab === 'Trending') params.sort = 'trending';
     else if (activeTab === 'Coming Soon') params.availability = 'Coming Soon';
@@ -215,9 +215,9 @@ const MovieCenterPage = () => {
                     <div className="flex items-center gap-3">
                       <span className="text-sm text-on-surface-variant font-medium">Sort by:</span>
                       <select value={sortOption} onChange={handleSortChange} className="cursor-pointer rounded-lg border border-white/10 bg-background py-1.5 pl-3 pr-8 text-sm font-semibold text-primary outline-none">
-                        <option>Newest Arrivals</option>
-                        <option>Most Popular</option>
-                        <option>Highest Rated</option>
+                        <option>Newest</option>
+                        <option>Oldest</option>
+                        <option>High Rated</option>
                       </select>
                     </div>
                   </div>

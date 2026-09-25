@@ -47,7 +47,7 @@ const listMovies = async (req, res, next) => {
     const opts = {
       page:   page  || 1,
       limit:  limit || 20,
-      sort:   sort === 'rating' ? { rating: -1 } : sort === 'popular' ? { reviewCount: -1 } : { createdAt: -1 },
+      sort:   sort === 'rating' ? { rating: -1 } : sort === 'oldest' ? { createdAt: 1 } : { createdAt: -1 },
       select: 'title posterUrl year country runtime quality language genres rating reviewCount releaseDate',
     };
 
