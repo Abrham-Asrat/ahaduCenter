@@ -142,9 +142,9 @@ const BookCenterPage = () => {
             </aside>
 
             {/* Book grid area */}
-            <div className="flex-1">
+            <div className="flex-1 pt-28 sm:pt-20">
               {/* Grid controls */}
-              <div className="mb-5 flex flex-col items-stretch gap-3 rounded-xl border border-white/10 p-3.5 glass-panel sm:flex-row sm:items-center sm:justify-between">
+              <div className="fixed inset-x-3 top-[150px] z-20 flex flex-col items-stretch gap-3 rounded-xl border border-white/10 bg-background/95 p-3.5 glass-panel backdrop-blur-md sm:flex-row sm:items-center sm:justify-between lg:left-[calc(50%-208px)] lg:right-8 xl:left-[calc(50%-336px)] xl:right-[calc(50%-640px)]">
                 <span className="text-xs font-medium text-on-surface-variant sm:text-sm">
                   {loading ? (
                     <span className="inline-block w-32 h-4 bg-surface-container rounded animate-pulse" />

@@ -177,9 +177,9 @@ const ElectronicsPage = () => {
             </aside>
 
             {/* Product grid area */}
-            <div className="flex-grow">
+            <div className="flex-grow pt-28 sm:pt-20">
               {/* Toolbar */}
-              <div className="glass-panel p-4 rounded-xl flex flex-wrap justify-between items-center gap-4 mb-6 border border-white/10">
+              <div className="fixed inset-x-3 top-[150px] z-20 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-white/10 bg-background/95 p-4 glass-panel backdrop-blur-md lg:left-[calc(50%-208px)] lg:right-8 xl:left-[calc(50%-336px)] xl:right-[calc(50%-640px)]">
                 <span className="text-on-surface-variant text-sm font-medium">
                   {loading ? (
                     <span className="inline-block w-36 h-4 bg-surface-container rounded animate-pulse" />

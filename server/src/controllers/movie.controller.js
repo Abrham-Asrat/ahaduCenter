@@ -21,7 +21,7 @@ const { paginate } = require('../../utils/paginate.js');
 // Requirements 6.1, 6.2, 6.3, 6.4
 const listMovies = async (req, res, next) => {
   try {
-    const { q, genre, country, page, limit } = req.query;
+    const { q, genre, country, page, limit, sort } = req.query;
 
     // Build filter
     const filter = {};
@@ -47,7 +47,7 @@ const listMovies = async (req, res, next) => {
     const opts = {
       page:   page  || 1,
       limit:  limit || 20,
-      sort:   { createdAt: -1 },
+      sort:   sort === 'rating' ? { rating: -1 } : sort === 'popular' ? { reviewCount: -1 } : { createdAt: -1 },
       select: 'title posterUrl year country runtime quality language genres rating reviewCount releaseDate',
     };
 
