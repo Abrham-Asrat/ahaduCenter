@@ -8,6 +8,7 @@ import ProductDetailPage from './pages/ProductDetailPage';
 import BookCenterPage from './pages/BookCenterPage';
 import BookDetailPage from './pages/BookDetailPage';
 import LoginPage from './pages/LoginPage';
+import AdminLoginPage from './pages/AdminLoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import UserDashboardPage from './pages/UserDashboardPage';
@@ -87,6 +88,7 @@ function App() {
         <Route path="/books" element={<BookCenterPage />} />
         <Route path="/books/:id" element={<BookDetailPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/admin-login" element={<AdminLoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/verify-email" element={<VerifyEmailPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />

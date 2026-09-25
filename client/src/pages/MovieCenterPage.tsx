@@ -120,15 +120,15 @@ const MovieCenterPage = () => {
     <div className="min-h-screen bg-background text-on-surface flex flex-col relative animate-fade-in">
 
       {/* Toast Notification */}
-      {toastMessage && (
+      {/* {toastMessage && (
         <div className="fixed bottom-6 right-6 z-50 bg-primary-container text-white px-5 py-3 rounded-lg shadow-2xl flex items-center gap-3 border border-primary/40 animate-bounce">
           <span className="material-symbols-outlined text-xl">check_circle</span>
           <span className="text-sm font-semibold">{toastMessage}</span>
         </div>
-      )}
+      )} */}
 
       {/* Trailer Modal */}
-      {activeTrailer && (
+      {/* {activeTrailer && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
           <div className="relative w-full max-w-4xl bg-surface-container rounded-2xl overflow-hidden border border-white/20 shadow-2xl">
             <div className="flex justify-between items-center px-6 py-4 border-b border-white/10">
@@ -154,9 +154,10 @@ const MovieCenterPage = () => {
             </div>
           </div>
         </div>
-      )}
+      )} */}
 
-      <main className="flex-grow md:pb-0">
+      {/* <main className="flex-grow md:pb-0"> */}
+      <main className="mx-auto w-full max-w-7xl flex-grow px-3 pt-4 sm:px-6 sm:pt-6 lg:px-8 md:pb-8">
         <SubNav onTabChange={handleTabChange} />
 
         <div id="movie-catalog" className="max-w-7xl mx-auto px-4 md:px-8 py-8">

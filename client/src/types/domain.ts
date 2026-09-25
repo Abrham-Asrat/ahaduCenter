@@ -252,6 +252,7 @@ export interface ProductQuery {
   q?: string;
   condition?: string;
   brand?: string;
+  minPrice?: number;
   maxPrice?: number;
   sort?: string;
 }

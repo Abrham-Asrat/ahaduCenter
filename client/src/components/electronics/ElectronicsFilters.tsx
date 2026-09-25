@@ -1,82 +1,179 @@
-import { Search, SlidersHorizontal } from 'lucide-react';
+import { useState, type ChangeEvent } from 'react';
+
+type ElectronicsFilterState = {
+  conditions: string[];
+  brands: string[];
+  searchQuery: string;
+  minPrice: number;
+  maxPrice: number;
+};
 
 interface ElectronicsFiltersProps {
-  onFilterChange?: (next: {
-    conditions?: string[];
-    brands?: string[];
-    searchQuery?: string;
-    maxPrice?: number;
-  }) => void;
+  onFilterChange?: (filters: ElectronicsFilterState) => void;
 }
 
-const ElectronicsFilters = ({ onFilterChange }: ElectronicsFiltersProps) => {
-  const handleSearch = (value: string) => {
-    onFilterChange?.({ searchQuery: value });
+/**
+ * Electronics Filters Component
+ * 
+ * Sidebar filter panel for Electronics s.
+ * 
+ * Props:
+ * - onFilterChange: Callback function triggered when any filter updates
+ */
+const ElectionicsFilters = ({ onFilterChange }: ElectronicsFiltersProps) => {
+  // const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
+  // const [contentType, setContentType] = useState('All');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedConditions, setSelectedConditions] = useState('All');
+  const [selectedBrands, setSelectedBrands] = useState('All');
+  const [minPrice, setMinPrice] = useState('');
+  const [maxPrice, setMaxPrice] = useState('');
+
+  const brandType = ['All', 'Apple ', 'Dell', 'Samsung', 'Hp', 'sony'];
+  const conditions = ['All', 'New', 'Used', 'slightly-used'];
+
+  const triggerChange = (updated: Partial<ElectronicsFilterState>) => {
+    if (onFilterChange) {
+      onFilterChange({
+        conditions: selectedConditions === 'All' ? [] : [selectedConditions],
+        brands: selectedBrands === 'All' ? [] : [selectedBrands],
+        searchQuery,
+        minPrice: minPrice ? Number(minPrice) : 0,
+        maxPrice: maxPrice ? Number(maxPrice) : 150000,
+        ...updated,
+      });
+    }
   };
 
-  const handleCondition = (condition: string) => {
-    onFilterChange?.({ conditions: [condition] });
+  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setSearchQuery(val);
+    triggerChange({ searchQuery: val });
   };
 
-  const handleBrand = (brand: string) => {
-    onFilterChange?.({ brands: [brand] });
+  const handleBrandChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const brands = e.target.value;
+    setSelectedBrands(brands);
+    triggerChange({ brands: brands === 'All' ? [] : [brands] });
   };
+
+  const handleConditionsChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const conditions = e.target.value;
+    setSelectedConditions(conditions);
+    triggerChange({ conditions: conditions === 'All' ? [] : [conditions] });
+  };
+
+  const handlePriceChange = (kind: 'min' | 'max', value: string) => {
+    if (kind === 'min') setMinPrice(value);
+    else setMaxPrice(value);
+    triggerChange({
+      minPrice: kind === 'min' ? (value ? Number(value) : 0) : minPrice ? Number(minPrice) : 0,
+      maxPrice: kind === 'max' ? (value ? Number(value) : 150000) : maxPrice ? Number(maxPrice) : 150000,
+    });
+  };
+
+
+  const handleClearAll = () => {
+    setSearchQuery('');
+    setSelectedConditions('All');
+    setSelectedBrands('All');
+    setMinPrice('');
+    setMaxPrice('');
+    triggerChange({
+      conditions: [],
+      brands: [],
+      searchQuery: '',
+      minPrice: 0,
+      maxPrice: 150000,
+    });
+  };
+
+  const hasActiveFilters = selectedConditions !== 'All' || searchQuery !== '' || selectedBrands !== 'All' || minPrice !== '' || maxPrice !== '';
 
   return (
-    <div className="rounded-[28px] border border-white/10 bg-card-surface/60 p-5 shadow-[0_20px_55px_rgba(15,23,42,0.25)]">
-      <div className="flex items-center gap-2 border-b border-white/10 pb-4">
-        <SlidersHorizontal size={18} className="text-primary" />
-        <h3 className="text-lg font-semibold text-white">Filters</h3>
+    <div className="glass-panel rounded-xl p-6 sticky top-[150px] shadow-xl">
+      {/* Filters Header */}
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-2">
+          <span className="material-symbols-outlined text-primary">tune</span>
+          <h2 className="text-xl font-bold text-white">Filters</h2>
+        </div>
+        {hasActiveFilters && (
+          <button
+            onClick={handleClearAll}
+            className="text-xs text-secondary hover:underline cursor-pointer font-semibold transition-colors"
+          >
+            Clear All
+          </button>
+        )}
       </div>
 
-      <div className="mt-5 space-y-5">
-        <div>
-          <label className="mb-2 block text-xs font-medium uppercase tracking-[0.2em] text-light-gray">Search</label>
-          <div className="flex items-center gap-2 rounded-xl border border-white/10 bg-surface-container px-3 py-2">
-            <Search size={16} className="text-on-surface-variant" />
-            <input
-              type="text"
-              placeholder="Search devices"
-              onChange={(e) => handleSearch(e.target.value)}
-              className="w-full bg-transparent text-sm text-white outline-none placeholder:text-on-surface-variant"
-            />
-          </div>
+      {/* Search Filter */}
+      <div className="mb-6">
+        <label className="block text-xs uppercase tracking-wider text-on-surface-variant mb-2 font-semibold">
+          Search Title
+        </label>
+        <div className="relative">
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={handleSearchChange}
+            placeholder="Search Electronics s..."
+            className="w-full bg-surface-container border border-white/10 rounded-lg pl-9 pr-3 py-2 text-sm text-white focus:border-primary outline-none transition-all"
+          />
+          <span className="material-symbols-outlined text-on-surface-variant text-lg absolute left-2.5 top-2.5 pointer-events-none">
+            search
+          </span>
         </div>
+      </div>
 
-        <div>
-          <label className="mb-2 block text-xs font-medium uppercase tracking-[0.2em] text-light-gray">Condition</label>
-          <div className="space-y-2 text-sm text-on-surface-variant">
-            {['New', 'Used', 'Refurbished'].map((condition) => (
-              <button
-                key={condition}
-                type="button"
-                onClick={() => handleCondition(condition)}
-                className="flex w-full items-center justify-between rounded-xl border border-white/10 bg-surface-container px-3 py-2 text-left hover:border-primary/40"
-              >
-                <span>{condition}</span>
-              </button>
-            ))}
-          </div>
-        </div>
+      {/* Conditions Filter */}
+      <div className="mb-6">
+        <label className="block text-xs uppercase tracking-wider text-on-surface-variant mb-2 font-semibold">
+          Conditions
+        </label>
+        <select
+          value={selectedConditions}
+          onChange={handleConditionsChange}
+          className="w-full bg-surface-container border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-primary outline-none cursor-pointer"
+        >
+          {conditions.map((c) => (
+            <option key={c} value={c} className="bg-surface-container-high text-white">
+              {c === 'All' ? 'All' : c}
+            </option>
+          ))}
+        </select>
+      </div>
 
-        <div>
-          <label className="mb-2 block text-xs font-medium uppercase tracking-[0.2em] text-light-gray">Popular brands</label>
-          <div className="space-y-2 text-sm text-on-surface-variant">
-            {['Apple', 'Samsung', 'Sony', 'Dell'].map((brand) => (
-              <button
-                key={brand}
-                type="button"
-                onClick={() => handleBrand(brand)}
-                className="flex w-full items-center justify-between rounded-xl border border-white/10 bg-surface-container px-3 py-2 text-left hover:border-primary/40"
-              >
-                <span>{brand}</span>
-              </button>
-            ))}
-          </div>
+      <div className="mb-6">
+        <label className="block text-xs uppercase tracking-wider text-on-surface-variant mb-2 font-semibold">
+          Price Range
+        </label>
+        <div className="grid grid-cols-2 gap-2">
+          <input type="number" min="0" value={minPrice} onChange={(e) => handlePriceChange('min', e.target.value)} placeholder="Min" aria-label="Minimum price" className="w-full bg-surface-container border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-primary outline-none" />
+          <input type="number" min="0" value={maxPrice} onChange={(e) => handlePriceChange('max', e.target.value)} placeholder="Max" aria-label="Maximum price" className="w-full bg-surface-container border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-primary outline-none" />
         </div>
+      </div>
+
+      {/* Content Type Filter Group */}
+      <div className="mb-6">
+        <label className="block text-xs uppercase tracking-wider text-on-surface-variant mb-2 font-semibold">
+          Brands
+        </label>
+        <select
+          value={selectedBrands}
+          onChange={handleBrandChange}
+          className="w-full bg-surface-container border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-primary outline-none cursor-pointer"
+        >
+          {brandType.map((c) => (
+            <option key={c} value={c} className="bg-surface-container-high text-white">
+              {c === 'All' ? 'All Types' : c}
+            </option>
+          ))}
+        </select>
       </div>
     </div>
   );
 };
 
-export default ElectronicsFilters;
+export default ElectionicsFilters;

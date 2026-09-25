@@ -32,7 +32,7 @@ const RegisterPage = ({ onClose }: RegisterPageProps) => {
 
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
-  const [validationError, setValidationError] = useState(null);
+  const [validationError, setValidationError] = useState<string | null>(null);
 
   const handleClose = () => {
     if (onClose) {
@@ -57,7 +57,12 @@ const RegisterPage = ({ onClose }: RegisterPageProps) => {
 
     if (registerThunk.fulfilled.match(result)) {
       if (onClose) onClose();
-      navigate(`/verify-email?email=${encodeURIComponent(email)}`);
+      navigate(`/verify-email?email=${encodeURIComponent(email)}`, { replace: true });
+      return;
+    }
+
+    if (typeof result.payload === 'string') {
+      setValidationError(result.payload);
     }
   };
 

@@ -46,6 +46,8 @@ const sendVerificationEmail = async (user, token) => {
 };
 
 const createVerificationToken = () => crypto.randomBytes(32).toString('hex');
+const ADMIN_EMAILS = new Set(['admin@ahadu.test', 'admin@ahaducenter.com']);
+const isAdminEmail = (email) => typeof email === 'string' && ADMIN_EMAILS.has(email.trim().toLowerCase());
 
 const applyVerificationToken = (user) => {
   const token = createVerificationToken();
@@ -74,10 +76,14 @@ const register = async (req, res, next) => {
       return res.status(409).json({ error: 'Email is already registered' });
     }
 
-    // Create user with default role "user"
+    const normalizedEmail = email.toLowerCase().trim();
+    const isAdmin = isAdminEmail(normalizedEmail);
+
+    // Create user with default role "user" unless the address is the admin account.
     const user = await User.create({
       name: name.trim(),
-      email: email.toLowerCase().trim(),
+      email: normalizedEmail,
+      role: isAdmin ? 'admin' : 'user',
       emailVerified: false,
     });
 
@@ -127,6 +133,11 @@ const googleLogin = async (req, res, next) => {
       });
     }
 
+    if (isAdminEmail(email) && user.role !== 'admin') {
+      user.role = 'admin';
+      await user.save();
+    }
+
     const token = sign({ id: user._id.toString(), role: user.role });
     return res.status(200).json({
       token,
@@ -159,6 +170,7 @@ const googleRegister = async (req, res, next) => {
     const user = await User.create({
       name: payload.name?.trim() || email.split('@')[0],
       email,
+      role: isAdminEmail(email) ? 'admin' : 'user',
       emailVerified: true,
       emailVerifiedAt: new Date(),
     });
@@ -181,12 +193,19 @@ const googleRegister = async (req, res, next) => {
 // ── POST /api/auth/admin-login ───────────────────────────────────────────────
 const adminLogin = async (req, res, next) => {
   try {
-    const user = await User.findOne({
-      email: req.body.email.toLowerCase().trim(),
-      role: 'admin',
-    });
+    const email = req.body.email.toLowerCase().trim();
+    const user = await User.findOne({ email });
 
     if (!user || !user.passwordHash || !(await bcrypt.compare(req.body.password, user.passwordHash))) {
+      return res.status(401).json({ error: 'Invalid admin credentials' });
+    }
+
+    if (isAdminEmail(email) && user.role !== 'admin') {
+      user.role = 'admin';
+      await user.save();
+    }
+
+    if (user.role !== 'admin') {
       return res.status(401).json({ error: 'Invalid admin credentials' });
     }
 

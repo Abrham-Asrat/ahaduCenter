@@ -40,7 +40,7 @@ const ElectronicsPage = () => {
   });
   const [currentPage, setCurrentPage] = useState(1);
 
-  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [, setToastMessage] = useState<string | null>(null);
   const [wishlistIds, setWishlistIds] = useState<string[]>([]);
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
 
@@ -56,7 +56,7 @@ const ElectronicsPage = () => {
     const params: ProductQuery = { page: currentPage, limit: 12 };
 
     if (activeCategory && activeCategory !== 'All') params.category = activeCategory;
-      if (filterState.searchQuery) params.q = filterState.searchQuery;
+    if (filterState.searchQuery) params.q = filterState.searchQuery;
     if (filterState.conditions && filterState.conditions.length > 0)
       params.condition = filterState.conditions.join(',');
     if (filterState.brands && filterState.brands.length > 0)
@@ -149,173 +149,176 @@ const ElectronicsPage = () => {
   return (
     <>
       <Navbar />
-    <div className="min-h-screen bg-background text-on-background flex flex-col relative animate-fade-in">
+      <div className="min-h-screen bg-background text-on-background flex flex-col relative animate-fade-in">
 
-      {/* Toast Notification */}
-      {toastMessage && (
+        {/* Toast Notification */}
+        {/* {toastMessage && (
         <div className="fixed bottom-8 right-8 z-50 bg-surface-container border border-primary/50 text-white px-5 py-3.5 rounded-xl shadow-2xl flex items-center gap-3 animate-bounce">
           <span className="material-symbols-outlined text-primary">check_circle</span>
           <span className="text-sm font-semibold">{toastMessage}</span>
         </div>
-      )}
+      )} */}
 
-      <main className="flex-grow">
-        {/* Catalog Section Header */}
-        
+        {/* <main className="flex-grow"> */}
+        <main className="mx-auto w-full max-w-7xl flex-grow px-3 pt-4 sm:px-6 sm:pt-6 lg:px-8 md:pb-8">
+          {/* Catalog Section Header */}
+
           <SubNav tabs={categories} onTabChange={handleCategoryChange} />
-        
 
-        {/* Main content: sidebar + grid */}
-        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row gap-8">
 
-          {/* Sidebar filters (desktop) */}
-          <aside className="hidden md:block w-64 shrink-0">
-            <ElectronicsFilters onFilterChange={handleFilterChange} />
-          </aside>
+          {/* Main content: sidebar + grid */}
+          {/* <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row gap-8"> */}
 
-          {/* Product grid area */}
-          <div className="flex-grow">
-            {/* Toolbar */}
-            <div className="glass-panel p-4 rounded-xl flex flex-wrap justify-between items-center gap-4 mb-6 border border-white/10">
-              <span className="text-on-surface-variant text-sm font-medium">
-                {loading ? (
-                  <span className="inline-block w-36 h-4 bg-surface-container rounded animate-pulse" />
-                ) : (
-                  <>
-                    Showing <strong className="text-white">{products.length}</strong> of{' '}
-                    <strong className="text-white">{pagination.totalItems}</strong> products
-                  </>
-                )}
-              </span>
-              <div className="flex items-center gap-3">
-                <span className="text-on-surface-variant text-sm font-medium">Sort by:</span>
-                <select
-                  value={sortOption}
-                  onChange={handleSortChange}
-                  className="bg-background border border-white/10 text-white text-sm rounded-lg focus:border-primary py-1.5 pl-3 pr-8 outline-none cursor-pointer"
-                >
-                  <option>Featured</option>
-                  <option>Price: Low to High</option>
-                  <option>Price: High to Low</option>
-                  <option>Rating</option>
-                </select>
-              </div>
-            </div>
+          <div className="flex flex-col md:flex-row gap-8">
 
-            {/* Error banner */}
-            {error && (
-              <div className="glass-panel rounded-xl border border-red-500/30 bg-red-500/5 p-5 mb-6 flex items-center justify-between gap-4">
-                <div className="flex items-center gap-3">
-                  <span className="material-symbols-outlined text-red-400">error</span>
-                  <p className="text-sm text-red-300">
-                    {typeof error === 'string' ? error : 'Failed to load products. Please try again.'}
-                  </p>
-                </div>
-                <button
-                  onClick={handleRetry}
-                  className="text-xs font-bold uppercase tracking-wider text-primary border border-primary/40 px-4 py-2 rounded-lg hover:bg-primary/10 transition-colors flex-shrink-0"
-                >
-                  Retry
-                </button>
-              </div>
-            )}
+            {/* Sidebar filters (desktop) */}
+            <aside className="hidden md:block w-full md:w-64 flex-shrink-0">
+              <ElectronicsFilters onFilterChange={handleFilterChange} />
+            </aside>
 
-            {/* Loading skeleton */}
-            {loading ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {Array.from({ length: 9 }).map((_, i) => (
-                  <SkeletonCard key={i} />
-                ))}
-              </div>
-            ) : products.length === 0 && !error ? (
-              /* Empty state */
-              <div className="glass-panel rounded-2xl p-12 text-center border border-white/10 my-8">
-                <span className="material-symbols-outlined text-6xl text-on-surface-variant/40 mb-3">
-                  devices_off
+            {/* Product grid area */}
+            <div className="flex-grow">
+              {/* Toolbar */}
+              <div className="glass-panel p-4 rounded-xl flex flex-wrap justify-between items-center gap-4 mb-6 border border-white/10">
+                <span className="text-on-surface-variant text-sm font-medium">
+                  {loading ? (
+                    <span className="inline-block w-36 h-4 bg-surface-container rounded animate-pulse" />
+                  ) : (
+                    <>
+                      Showing <strong className="text-white">{products.length}</strong> of{' '}
+                      <strong className="text-white">{pagination.totalItems}</strong> products
+                    </>
+                  )}
                 </span>
-                <h3 className="text-2xl font-bold text-white mb-2">No Products Found</h3>
-                <p className="text-on-surface-variant text-sm mb-6 max-w-md mx-auto">
-                  We couldn&apos;t find any electronics matching your current search and filter criteria.
-                </p>
-                <button
-                  onClick={handleResetFilters}
-                  className="bg-primary text-black px-6 py-2.5 rounded-lg font-bold hover:shadow-[0_0_15px_rgba(16,185,129,0.4)] transition-all text-sm"
-                >
-                  Reset Filters
-                </button>
-              </div>
-            ) : (
-              /* Product grid */
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {products.map((product, index) => (
-                  <div
-                    key={product._id || product.id || index}
-                    className="animate-fade-in"
-                    style={{ animationDelay: `${index * 0.05}s` }}
+                <div className="flex items-center gap-3">
+                  <span className="text-on-surface-variant text-sm font-medium">Sort by:</span>
+                  <select
+                    value={sortOption}
+                    onChange={handleSortChange}
+                    className="bg-background border border-white/10 text-white text-sm rounded-lg focus:border-primary py-1.5 pl-3 pr-8 outline-none cursor-pointer"
                   >
-                    <ProductCard
-                      product={product}
-                      isWishlisted={wishlistIds.includes(product._id || product.id || '')}
-                      onAddToCart={handleAddToCart}
-                      onCompare={handleCompare}
-                      onToggleWishlist={handleToggleWishlist}
-                    />
+                    <option>Featured</option>
+                    <option>Price: Low to High</option>
+                    <option>Price: High to Low</option>
+                    <option>Rating</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Error banner */}
+              {error && (
+                <div className="glass-panel rounded-xl border border-red-500/30 bg-red-500/5 p-5 mb-6 flex items-center justify-between gap-4">
+                  <div className="flex items-center gap-3">
+                    <span className="material-symbols-outlined text-red-400">error</span>
+                    <p className="text-sm text-red-300">
+                      {typeof error === 'string' ? error : 'Failed to load products. Please try again.'}
+                    </p>
                   </div>
-                ))}
-              </div>
-            )}
+                  <button
+                    onClick={handleRetry}
+                    className="text-xs font-bold uppercase tracking-wider text-primary border border-primary/40 px-4 py-2 rounded-lg hover:bg-primary/10 transition-colors flex-shrink-0"
+                  >
+                    Retry
+                  </button>
+                </div>
+              )}
 
-            {/* Pagination */}
-            {!loading && pagination.totalPages > 1 && (
-              <div className="mt-8">
-                <Pagination
-                  currentPage={pagination.currentPage}
-                  totalPages={pagination.totalPages}
-                  onPageChange={handlePageChange}
-                />
-              </div>
-            )}
+              {/* Loading skeleton */}
+              {loading ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {Array.from({ length: 9 }).map((_, i) => (
+                    <SkeletonCard key={i} />
+                  ))}
+                </div>
+              ) : products.length === 0 && !error ? (
+                /* Empty state */
+                <div className="glass-panel rounded-2xl p-12 text-center border border-white/10 my-8">
+                  <span className="material-symbols-outlined text-6xl text-on-surface-variant/40 mb-3">
+                    devices_off
+                  </span>
+                  <h3 className="text-2xl font-bold text-white mb-2">No Products Found</h3>
+                  <p className="text-on-surface-variant text-sm mb-6 max-w-md mx-auto">
+                    We couldn&apos;t find any electronics matching your current search and filter criteria.
+                  </p>
+                  <button
+                    onClick={handleResetFilters}
+                    className="bg-primary text-black px-6 py-2.5 rounded-lg font-bold hover:shadow-[0_0_15px_rgba(16,185,129,0.4)] transition-all text-sm"
+                  >
+                    Reset Filters
+                  </button>
+                </div>
+              ) : (
+                /* Product grid */
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {products.map((product, index) => (
+                    <div
+                      key={product._id || product.id || index}
+                      className="animate-fade-in"
+                      style={{ animationDelay: `${index * 0.05}s` }}
+                    >
+                      <ProductCard
+                        product={product}
+                        isWishlisted={wishlistIds.includes(product._id || product.id || '')}
+                        onAddToCart={handleAddToCart}
+                        onCompare={handleCompare}
+                        onToggleWishlist={handleToggleWishlist}
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
 
-            {/* Mobile floating filter button */}
-            <button
-              onClick={() => setIsMobileFiltersOpen(true)}
-              className="md:hidden fixed bottom-6 right-6 z-40 p-4 rounded-full bg-primary text-black font-bold shadow-2xl flex items-center justify-center gap-2 border border-primary/50"
-            >
-              <span className="material-symbols-outlined">tune</span>
-              <span className="text-xs uppercase tracking-wider font-extrabold">Filters</span>
-            </button>
+              {/* Pagination */}
+              {!loading && pagination.totalPages > 1 && (
+                <div className="mt-8">
+                  <Pagination
+                    currentPage={pagination.currentPage}
+                    totalPages={pagination.totalPages}
+                    onPageChange={handlePageChange}
+                  />
+                </div>
+              )}
+
+              {/* Mobile floating filter button */}
+              <button
+                onClick={() => setIsMobileFiltersOpen(true)}
+                className="md:hidden fixed bottom-6 right-6 z-40 p-4 rounded-full bg-primary text-black font-bold shadow-2xl flex items-center justify-center gap-2 border border-primary/50"
+              >
+                <span className="material-symbols-outlined">tune</span>
+                <span className="text-xs uppercase tracking-wider font-extrabold">Filters</span>
+              </button>
+            </div>
           </div>
-        </div>
-      </main>
+        </main>
 
-      {/* Mobile Filters Drawer Modal */}
-      {isMobileFiltersOpen && (
+        {/* Mobile Filters Drawer Modal */}
+        {isMobileFiltersOpen && (
           <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex justify-end md:hidden animate-filter-backdrop" onClick={() => setIsMobileFiltersOpen(false)}>
             <div className="w-full max-w-xs bg-background h-full p-6 overflow-y-auto border-l border-white/10 flex flex-col justify-between animate-filter-drawer" onClick={(event) => event.stopPropagation()}>
-            <div>
-              <div className="flex justify-between items-center mb-6">
-                <h3 className="text-xl font-bold text-white">Filter Tech</h3>
-                <button
-                  onClick={() => setIsMobileFiltersOpen(false)}
-                  className="text-on-surface-variant hover:text-white"
-                >
-                  <span className="material-symbols-outlined">close</span>
-                </button>
+              <div>
+                <div className="flex justify-between items-center mb-6">
+                  <h3 className="text-xl font-bold text-white">Filter Tech</h3>
+                  <button
+                    onClick={() => setIsMobileFiltersOpen(false)}
+                    className="text-on-surface-variant hover:text-white"
+                  >
+                    <span className="material-symbols-outlined">close</span>
+                  </button>
+                </div>
+                <ElectronicsFilters onFilterChange={handleFilterChange} />
               </div>
-              <ElectronicsFilters onFilterChange={handleFilterChange} />
+              <button
+                onClick={() => setIsMobileFiltersOpen(false)}
+                className="w-full bg-primary text-black font-bold py-3 rounded-xl mt-6 uppercase text-xs tracking-wider"
+              >
+                Apply Filters
+              </button>
             </div>
-            <button
-              onClick={() => setIsMobileFiltersOpen(false)}
-              className="w-full bg-primary text-black font-bold py-3 rounded-xl mt-6 uppercase text-xs tracking-wider"
-            >
-              Apply Filters
-            </button>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* <Footer /> */}
-    </div>
+        {/* <Footer /> */}
+      </div>
     </>
   );
 };
