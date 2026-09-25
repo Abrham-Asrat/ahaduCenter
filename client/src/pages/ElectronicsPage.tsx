@@ -4,11 +4,11 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { fetchProducts } from '../redux/slices/productSlice';
 import Navbar from '../components/common/Navbar';
 import SubNav from '../components/common/SubNav';
+import SortingFilter from '../components/common/SortingFilter';
 import ElectronicsFilters from '../components/electronics/ElectronicsFilters';
 import ProductCard from '../components/electronics/ProductCard';
 import Pagination from '../components/common/Pagination';
 import { useNavigate } from 'react-router-dom';
-import type { ChangeEvent } from 'react';
 import type { Product, ProductQuery } from '../types';
 import MobileFilterButton from '../components/common/MobileFilterButton';
 
@@ -91,8 +91,8 @@ const ElectronicsPage = () => {
     setCurrentPage(1);
   };
 
-  const handleSortChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setSortOption(e.target.value);
+  const handleSortChange = (value: string) => {
+    setSortOption(value);
     setCurrentPage(1);
   };
 
@@ -180,32 +180,15 @@ const ElectronicsPage = () => {
 
             {/* Product grid area */}
             <div className="flex-grow pt-28 sm:pt-20">
-              {/* Toolbar */}
-              <div className="fixed inset-x-3 top-[150px] z-20 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-white/10 bg-background/95 p-4 glass-panel backdrop-blur-md lg:left-[calc(50%-208px)] lg:right-8 xl:left-[calc(50%-336px)] xl:right-[calc(50%-640px)]">
-                <span className="text-on-surface-variant text-sm font-medium">
-                  {loading ? (
-                    <span className="inline-block w-36 h-4 bg-surface-container rounded animate-pulse" />
-                  ) : (
-                    <>
-                      Showing <strong className="text-white">{products.length}</strong> of{' '}
-                      <strong className="text-white">{pagination.totalItems}</strong> products
-                    </>
-                  )}
-                </span>
-                <div className="flex items-center gap-3">
-                  <span className="text-on-surface-variant text-sm font-medium">Sort by:</span>
-                  <select
-                    value={sortOption}
-                    onChange={handleSortChange}
-                    className="bg-background border border-white/10 text-white text-sm rounded-lg focus:border-primary py-1.5 pl-3 pr-8 outline-none cursor-pointer"
-                  >
-                    <option>Featured</option>
-                    <option>Price: Low to High</option>
-                    <option>Price: High to Low</option>
-                    <option>Rating</option>
-                  </select>
-                </div>
-              </div>
+              <SortingFilter
+                count={products.length}
+                total={pagination.totalItems ?? 0}
+                loading={loading}
+                value={sortOption}
+                options={['Featured', 'Price: Low to High', 'Price: High to Low', 'Rating']}
+                itemLabel="products"
+                onChange={handleSortChange}
+              />
 
               {/* Error banner */}
               {error && (

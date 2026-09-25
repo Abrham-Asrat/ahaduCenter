@@ -86,8 +86,11 @@ const BookCenterPage = () => {
     setFilterState((prev) => ({
       ...prev,
       searchQuery: newFilters.searchQuery,
-      availability: newFilters.availability ?? [],
-      language: newFilters.language?.[0] ?? 'All Languages',
+      availability: Array.isArray(newFilters.availability) ? newFilters.availability : [],
+      language:
+        Array.isArray(newFilters.language) && newFilters.language.length > 0
+          ? newFilters.language[0] ?? 'All Languages'
+          : 'All Languages',
     }));
     setCurrentPage(1);
   };
