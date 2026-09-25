@@ -66,7 +66,7 @@ const MovieCard = ({ movie, onPlayTrailer, onToggleBookmark, isBookmarked: initi
       <div className="glass-panel rounded-lg overflow-hidden cursor-pointer transition-all duration-300 glow-hover relative flex flex-col h-full hover:-translate-y-1">
 
         {/* Poster Container - maintains 2:3 aspect ratio */}
-        <div className="relative aspect-[2/3] w-full overflow-hidden bg-surface-container">
+       <div className="relative aspect-[4/5] w-full overflow-hidden bg-surface-container">
 
           {/* Movie Poster Image - scales up on hover */}
           <img

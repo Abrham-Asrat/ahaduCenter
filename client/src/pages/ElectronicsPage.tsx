@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { fetchProducts } from '../redux/slices/productSlice';
 import Navbar from '../components/common/Navbar';
 import SubNav from '../components/common/SubNav';
-import SortingFilter from '../components/common/SortingFilter';
+// import SortingFilter from '../components/common/SortingFilter';
 import ElectronicsFilters from '../components/electronics/ElectronicsFilters';
 import ProductCard from '../components/electronics/ProductCard';
 import Pagination from '../components/common/Pagination';
@@ -91,10 +91,10 @@ const ElectronicsPage = () => {
     setCurrentPage(1);
   };
 
-  const handleSortChange = (value: string) => {
-    setSortOption(value);
-    setCurrentPage(1);
-  };
+  // const handleSortChange = (value: string) => {
+  //   setSortOption(value);
+  //   setCurrentPage(1);
+  // };
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -152,25 +152,12 @@ const ElectronicsPage = () => {
     <>
       <Navbar />
       <div className="min-h-screen bg-background text-on-background flex flex-col relative animate-fade-in">
-
-        {/* Toast Notification */}
-        {/* {toastMessage && (
-        <div className="fixed bottom-8 right-8 z-50 bg-surface-container border border-primary/50 text-white px-5 py-3.5 rounded-xl shadow-2xl flex items-center gap-3 animate-bounce">
-          <span className="material-symbols-outlined text-primary">check_circle</span>
-          <span className="text-sm font-semibold">{toastMessage}</span>
-        </div>
-      )} */}
-
-        {/* <main className="flex-grow"> */}
         <main className="mx-auto w-full max-w-7xl flex-grow px-3 pt-4 sm:px-6 sm:pt-6 lg:px-8 md:pb-8">
           {/* Catalog Section Header */}
 
           <SubNav tabs={categories} onTabChange={handleCategoryChange} />
 
-
           {/* Main content: sidebar + grid */}
-          {/* <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row gap-8"> */}
-
           <div className="flex flex-col md:flex-row gap-8">
 
             {/* Sidebar filters (desktop) */}
@@ -179,8 +166,8 @@ const ElectronicsPage = () => {
             </aside>
 
             {/* Product grid area */}
-            <div className="flex-grow pt-28 sm:pt-20">
-              <SortingFilter
+            <div>
+              {/* <SortingFilter
                 count={products.length}
                 total={pagination.totalItems ?? 0}
                 loading={loading}
@@ -188,7 +175,7 @@ const ElectronicsPage = () => {
                 options={['Featured', 'Price: Low to High', 'Price: High to Low', 'Rating']}
                 itemLabel="products"
                 onChange={handleSortChange}
-              />
+              /> */}
 
               {/* Error banner */}
               {error && (

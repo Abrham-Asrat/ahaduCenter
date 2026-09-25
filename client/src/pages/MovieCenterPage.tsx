@@ -53,15 +53,7 @@ const MovieCenterPage = () => {
   const buildParams = useCallback((): MovieQuery => {
     const params: MovieQuery = { page: currentPage, limit: 12 };
 
-    // Tab → API param mapping
-    if (sortOption === 'High Rated') params.sort = 'rating';
-    else if (sortOption === 'Oldest') params.sort = 'oldest';
-    else if (activeTab === 'Latest') params.sort = 'latest';
-    else if (activeTab === 'Trending') params.sort = 'trending';
-    else if (activeTab === 'Coming Soon') params.availability = 'Coming Soon';
-    else if (activeTab === 'Featured') params.featured = true;
-    else if (activeTab === 'Recently Added') params.sort = 'newest';
-    else params.sort = 'newest';
+
 
     if (filters.searchQuery) params.q = filters.searchQuery;
     if (filters.country && filters.country !== 'All') params.country = filters.country;
@@ -96,11 +88,7 @@ const MovieCenterPage = () => {
     setCurrentPage(1);
   };
 
-  const handleSortChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    setSortOption(event.target.value);
-    setCurrentPage(1);
-  };
-
+ 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
     const catalogEl = document.getElementById('movie-catalog');
@@ -198,30 +186,9 @@ const MovieCenterPage = () => {
             </aside>
 
             {/* Catalog Grid */}
-            <div className="flex-grow flex flex-col justify-between pt-20">
+            <div className="flex-grow flex flex-col justify-between">
               <div>
-                {/* Desktop results count */}
-                <div className="fixed inset-x-3 top-[150px] z-20 hidden items-center justify-between rounded-xl border border-white/10 bg-background/95 p-4 glass-panel backdrop-blur-md md:flex lg:left-[calc(50%-208px)] lg:right-8 xl:left-[calc(50%-336px)] xl:right-[calc(50%-640px)]">
-                  <p className="text-sm text-on-surface-variant font-medium">
-                    {loading ? (
-                      <span className="inline-block w-36 h-4 bg-surface-container rounded animate-pulse" />
-                    ) : (
-                      <>
-                        Showing <span className="text-white font-bold">{movies.length}</span> of{' '}
-                        <span className="text-white font-bold">{pagination.totalItems}</span> results
-                      </>
-                    )}
-                  </p>
-                  <div className="flex items-center gap-3">
-                    <span className="text-sm text-on-surface-variant font-medium">Sort by:</span>
-                    <select value={sortOption} onChange={handleSortChange} className="cursor-pointer rounded-lg border border-white/10 bg-background py-1.5 pl-3 pr-8 text-sm font-semibold text-primary outline-none">
-                      <option>Newest</option>
-                      <option>Oldest</option>
-                      <option>High Rated</option>
-                    </select>
-                  </div>
-                </div>
-
+                
                 {/* Error banner */}
                 {error && (
                   <div className="glass-panel rounded-xl border border-red-500/30 bg-red-500/5 p-5 mb-6 flex items-center justify-between gap-4">

@@ -8,7 +8,7 @@ interface BookCardProps {
 
 const BookCard = ({ book, onQuickAction }: BookCardProps) => {
   const image = book.coverUrl || book.coverImage || 'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=900&q=80';
-  const status = book.availability === 'available' ? 'Available' : book.availability === 'reserved' ? 'Reserved' : 'Borrowed';
+  const status = book.availability === 'available' ? 'Available': 'Borrowed';
 
   return (
     <article className="h-full overflow-hidden rounded-2xl border border-white/10 bg-card-surface/60 p-2 shadow-[0_20px_45px_rgba(15,23,42,0.25)] transition-transform duration-300 hover:-translate-y-1 sm:rounded-[26px] sm:p-3">
@@ -22,7 +22,7 @@ const BookCard = ({ book, onQuickAction }: BookCardProps) => {
       <div className="mt-3 flex flex-col gap-2 px-1 pb-1 sm:mt-4 sm:gap-3">
         <div className="flex min-w-0 flex-wrap items-center justify-between gap-x-2 gap-y-1 text-[9px] uppercase tracking-[0.1em] text-light-gray sm:text-xs sm:tracking-[0.18em]">
           <span className="min-w-0 max-w-full truncate">{book.category || 'Featured'}</span>
-          <span className="min-w-0 max-w-full truncate">{book.format || 'Hardcover'}</span>
+          
         </div>
 
         <div className="min-w-0">
@@ -38,7 +38,7 @@ const BookCard = ({ book, onQuickAction }: BookCardProps) => {
 
         <div className="mt-auto flex flex-col items-stretch gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-3">
           <div>
-            <div className="text-lg font-bold text-white sm:text-2xl">ETB {Number(book.price ?? 0).toLocaleString()}</div>
+            
             <div className="text-xs text-on-surface-variant sm:text-sm">{book.availableCopies ?? 3} copies</div>
           </div>
 
