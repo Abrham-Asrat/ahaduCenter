@@ -73,13 +73,14 @@ const Navbar = () => {
   return (
     <>
       <nav className="fixed inset-x-0 top-0 z-50 w-full bg-surface-container/80 backdrop-blur-xl border-b border-white/10 shadow-xl transition-colors animate-nav-drop md:block">
-        <div className="grid grid-cols-[1fr_auto_1fr] items-center px-4 sm:px-6 md:px-8 py-3 max-w-7xl mx-auto min-h-[4.25rem]">
+        <div className="grid grid-cols-[1fr_1fr] md:grid-cols-[1fr_auto_1fr] items-center justify-items-strech px-4 sm:px-6 md:px-8 py-3 max-w-7xl mx-auto min-h-[4.25rem]">
           {/* Brand Logo */}
-          <Link to="/" className="justify-self-start font-heading text-2xl font-black text-primary flex items-center gap-2 tracking-wide">
-            <div className="w-9 h-9 rounded-xl bg-primary text-black flex items-center justify-center font-black shadow-lg">
-              <span className="material-symbols-outlined text-black text-xl">storefront</span>
-            </div>
-            <span className="text-white">Ahadu<span className="text-primary">Center</span></span>
+          <Link to="/" aria-label="AhaduCenter home" className="logo-light-sweep  flex items-center justify-self-start">
+            <img
+              src="/logoBlack1.png"
+              alt="AhaduCenter"
+              className="h-10 w-auto max-w-[160px] object-contain sm:h-11 sm:max-w-[200px] md:h-12 md:max-w-[240px] lg:h-14 lg:max-w-[280px]"
+            />
           </Link>
 
           {/* Desktop Navigation Links */}
@@ -123,7 +124,7 @@ const Navbar = () => {
           </div>
 
           {/* Right Action Icons & Controls */}
-          <div className="ml-auto flex items-center gap-4 md:justify-self-end">
+          <div className="ml-auto flex items-center md:justify-self-end">
 
 
             {token ? (
@@ -276,7 +277,7 @@ const Navbar = () => {
               </div>
             ) : (
               /* Logged-Out Actions: Sign In & Sign Up Buttons (desktop) + icon (mobile) */
-              <div className="flex items-center gap-3">
+              <div className="flex items-centergap-3">
                 {/* Mobile: compact login icon */}
                 <Link to="/login" className="flex md:hidden items-center justify-center w-9 h-9 rounded-full border border-white/20 text-white hover:bg-white/10 transition-all">
                   <span className="material-symbols-outlined text-xl">login</span>
