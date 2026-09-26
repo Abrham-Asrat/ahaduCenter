@@ -29,22 +29,10 @@ const Navbar = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   // Theme state: dark vs light
-  const [isDarkMode, setIsDarkMode] = useState(() => {
-    const theme = localStorage.getItem('ahadu_theme');
-    return theme ? theme === 'dark' : true;
-  });
+  
 
   // Sync theme with HTML root class
-  useEffect(() => {
-    if (isDarkMode) {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('ahadu_theme', 'dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('ahadu_theme', 'light');
-    }
-  }, [isDarkMode]);
-
+  
   // Close dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -56,9 +44,6 @@ const Navbar = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const toggleTheme = () => {
-    setIsDarkMode(!isDarkMode);
-  };
 
   const handleLogout = () => {
     dispatch(logoutAction());
@@ -180,25 +165,6 @@ const Navbar = () => {
                         </div>
                       </div>
 
-                      {/* Dark Mode / Light Mode Toggler */}
-                      <div className="bg-background/60 p-3 rounded-xl border border-white/10 mb-3 flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <span className="material-symbols-outlined text-secondary text-xl">
-                            {isDarkMode ? 'dark_mode' : 'light_mode'}
-                          </span>
-                          <span className="text-xs text-white font-bold">
-                            {isDarkMode ? 'Dark Mode' : 'Light Mode'}
-                          </span>
-                        </div>
-                        <button
-                          onClick={toggleTheme}
-                          className={`w-12 h-6 rounded-full p-1 transition-colors duration-300 flex items-center cursor-pointer ${isDarkMode ? 'bg-primary justify-end' : 'bg-surface-variant justify-start'
-                            }`}
-                        >
-                          <span className="w-4 h-4 rounded-full bg-black shadow-md block" />
-                        </button>
-                      </div>
-
                       {/* Menu Navigation Links */}
                       <div className="space-y-1 text-xs font-bold uppercase tracking-wider">
                         <Link
@@ -210,14 +176,7 @@ const Navbar = () => {
                           Edit Profile / Account
                         </Link>
 
-                        <Link
-                          to="/purchase-history"
-                          onClick={() => setIsProfileOpen(false)}
-                          className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-on-surface-variant hover:text-white hover:bg-white/5 transition-colors"
-                        >
-                          <span className="material-symbols-outlined text-lg text-secondary">confirmation_number</span>
-                          My Pick-Up Passes
-                        </Link>
+                     
 
                         <Link
                           to="/borrowing-history"

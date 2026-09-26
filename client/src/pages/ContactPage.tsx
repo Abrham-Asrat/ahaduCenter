@@ -80,7 +80,7 @@ const ContactPage = () => {
       <Navbar />
       <div className="min-h-screen bg-background text-on-surface flex flex-col animate-fade-in px-4 py-4">
 
-        <main className="flex-grow max-w-7xl mx-auto px-4 md:px-8 w-full flex flex-col gap-8">
+        <main className="flex-grow max-w-7xl mx-auto px-4 md:px-8 w-full flex flex-col gap-8 py-4">
           {/* Header */}
 
           {/* Two-column layout */}

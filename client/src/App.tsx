@@ -22,7 +22,7 @@ import AdminManageBooksPage from './pages/admin/AdminManageBooksPage';
 import DesignSystemPage from './pages/DesignSystemPage';
 import ProductComparisonPage from './pages/ProductComparisonPage';
 import MovieRequestPage from './pages/MovieRequestPage';
-import PurchaseHistoryPage from './pages/PurchaseHistoryPage';
+
 import BorrowingHistoryPage from './pages/BorrowingHistoryPage';
 import BookConfirmPage from './pages/BookConfirmPage';
 import NotificationsPage from './pages/NotificationsPage';
@@ -112,7 +112,7 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="/account" element={<UserDashboardPage />} />
           <Route path="/wishlist" element={<WishlistPage />} />
-          <Route path="/purchase-history" element={<PurchaseHistoryPage />} />
+          
           <Route path="/borrowing-history" element={<BorrowingHistoryPage />} />
           <Route path="/movie-request" element={<MovieRequestPage />} />
           <Route path="/notifications" element={<NotificationsPage />} />

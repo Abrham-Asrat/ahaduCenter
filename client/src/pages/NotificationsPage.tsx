@@ -112,7 +112,7 @@ const NotificationsPage = () => {
   return (
     <>
       <Navbar />
-    <div className="min-h-screen bg-background text-on-background flex flex-col animate-fade-in">
+    <div className="min-h-screen bg-background text-on-background flex flex-col animate-fade-in pt-5">
 
       {/* Toast notification */}
       {toastMessage && (

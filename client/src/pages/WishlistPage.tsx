@@ -85,18 +85,7 @@ const WishlistPage = () => {
 
       <main className="flex-grow pt-2 px-4 md:px-8 max-w-7xl mx-auto w-full">
         {/* Page header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
-          <div>
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">MY WISHLIST</h1>
-            <p className="text-lg text-on-surface-variant max-w-2xl">
-              Your saved movies, electronics, and books in one place.
-            </p>
-          </div>
-          <button onClick={() => navigate('/books')} className="border border-primary text-primary px-6 py-2 rounded hover:bg-primary/10 transition-all flex items-center gap-2 cursor-pointer">
-            <span className="material-symbols-outlined text-sm">add</span>
-            ADD ITEMS
-          </button>
-        </div>
+        
 
         {/* Error banner */}
         {error && (
