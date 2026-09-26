@@ -96,10 +96,7 @@ const BookCenterPage = () => {
     setCurrentPage(1);
   };
 
-  const handleSortChange = (value: string) => {
-    setSortOption(value);
-    setCurrentPage(1);
-  };
+ 
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);

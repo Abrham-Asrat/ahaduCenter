@@ -14,7 +14,7 @@ const BookCard = ({ book, onQuickAction }: BookCardProps) => {
 
   return (
     <article className="h-full overflow-hidden rounded-2xl border border-white/10 bg-card-surface/60 p-2 shadow-[0_20px_45px_rgba(15,23,42,0.25)] transition-transform duration-300 hover:-translate-y-1 sm:rounded-[26px] sm:p-3">
-      <div className="aspect-[3/4] overflow-hidden rounded-xl sm:rounded-[20px]">
+      <div className="relative aspect-[3/4] overflow-hidden rounded-xl sm:rounded-[20px]">
         <img src={image} alt={book.title} className="h-full w-full object-cover" />
         <div className="absolute left-2 top-2 max-w-[calc(100%-1rem)] truncate rounded-full bg-dark-bg/80 px-2 py-1 text-[9px] font-medium uppercase tracking-[0.1em] text-primary sm:left-3 sm:top-3 sm:text-[10px] sm:tracking-[0.14em]">
           {status}
