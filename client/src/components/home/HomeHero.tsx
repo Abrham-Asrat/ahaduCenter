@@ -1,6 +1,10 @@
 import { Link } from 'react-router-dom';
+import { useAppSelector} from '../../redux/hooks';
+import type { RootState } from '../../redux/store';
 
 const HomeHero = () => {
+   // Auth state from Redux store
+    const {token} = useAppSelector((state: RootState) => state.auth);
   return (
     <section className="relative overflow-hidden bg-surface-container-lowest">
       <div className="flex flex-col items-center px-6 pb-8 py-4 text-center md:hidden">
@@ -72,8 +76,13 @@ const HomeHero = () => {
             <p className="max-w-xl text-lg leading-relaxed text-on-surface-variant lg:text-[18px] lg:leading-[28px]">
               Discover, borrow, and shop — from the heart of Mizan Teferi. An authentic cultural sanctuary where indigenous storytelling harmonizes with world-class gear.
             </p>
-
-            <div className="flex w-full flex-wrap items-center gap-4 sm:w-auto">
+            {token?( <div className="flex w-full flex-wrap items-center gap-4 sm:w-auto">
+              <Link to="/movies" className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-8 py-3.5 text-lg font-bold text-on-primary-container shadow-[0_12px_36px_-8px_rgba(245,158,11,0.4)] transition-all duration-200 hover:scale-[1.02]">
+                <span>Explore Catalog</span>
+                <span className="material-symbols-outlined text-lg">arrow_forward</span>
+              </Link>
+              
+            </div>):( <div className="flex w-full flex-wrap items-center gap-4 sm:w-auto">
               <Link to="/movies" className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-8 py-3.5 text-lg font-bold text-on-primary-container shadow-[0_12px_36px_-8px_rgba(245,158,11,0.4)] transition-all duration-200 hover:scale-[1.02]">
                 <span>Explore Catalog</span>
                 <span className="material-symbols-outlined text-lg">arrow_forward</span>
@@ -82,7 +91,8 @@ const HomeHero = () => {
                 <span>Sign Up Free</span>
                 <span className="material-symbols-outlined text-lg">person_add</span>
               </Link>
-            </div>
+            </div>)}
+           
 
             <div className="flex items-center gap-4">
               <div className="flex -space-x-2.5 overflow-hidden">
@@ -109,7 +119,7 @@ const HomeHero = () => {
                   ))}
                 </div>
                 <span className="text-xs font-medium text-on-surface-variant">
-                  4.9/5 from 3,200+ members in Bole, Piassa & Kazanchis
+                  4.9/5 from 3,200+ members
                 </span>
               </div>
             </div>

@@ -80,7 +80,7 @@ const RegisterPage = ({ onClose }: RegisterPageProps) => {
         <button
           type="button"
           onClick={handleClose}
-          className="absolute -top-3 right-0 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-surface-container text-on-surface-variant transition hover:border-primary hover:text-primary"
+          className="absolute top-3 right-3 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-surface-container text-on-surface-variant transition hover:border-primary hover:text-primary"
           aria-label="Close sign up"
         >
           <span className="material-symbols-outlined">close</span>

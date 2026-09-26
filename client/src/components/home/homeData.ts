@@ -7,10 +7,10 @@ export const navItems = [
 ];
 
 export const stats = [
-  { icon: '🎬', value: '10K+', label: 'Movies & Short Films' },
-  { icon: '📚', value: '5K+', label: 'Books & Manuscripts' },
-  { icon: '💻', value: '2K+', label: 'Verified Tech Products' },
-  { icon: '👥', value: '50K+', label: 'Happy Members' },
+  { icon: '🎬', value: '50K+', label: 'Movies & Short Films' },
+  { icon: '📚', value: '500+', label: 'Books & Manuscripts' },
+  { icon: '💻', value: '200+', label: 'Verified Tech Products' },
+  { icon: '👥', value: '80+', label: 'Happy Members' },
 ];
 
 export const categoryCards = [

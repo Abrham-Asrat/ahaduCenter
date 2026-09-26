@@ -2,7 +2,7 @@ import Footer from '../components/common/Footer';
 import HomeCategories from '../components/home/HomeCategories';
 import HomeFeatured from '../components/home/HomeFeatured';
 import HomeHero from '../components/home/HomeHero';
-import HomeProcess from '../components/home/HomeProcess';
+
 import HomeStats from '../components/home/HomeStats';
 import HomeTestimonials from '../components/home/HomeTestimonials';
 import HomeReveal from '../components/home/HomeReveal';
@@ -26,9 +26,6 @@ const HomePage = () => {
           <HomeFeatured />
         </HomeReveal>
         <HomeReveal delay={200}>
-          <HomeProcess />
-        </HomeReveal>
-        <HomeReveal delay={240}>
           <HomeTestimonials />
         </HomeReveal>
       </main>

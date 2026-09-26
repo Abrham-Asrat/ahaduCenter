@@ -11,13 +11,7 @@ const HomeFeatured = () => {
             <h2 className="mt-1 text-[28px] font-extrabold leading-9 tracking-[-0.015em] text-on-surface md:text-4xl">Featured This Week</h2>
             <p className="mt-1 hidden text-base text-on-surface-variant md:block">Hand-picked releases and verified gear trending across Mizan Teferi.</p>
           </div>
-          <div className="flex items-center gap-2">
-            {['Verified Escrow', 'Telebirr & CBE'].map((tag) => (
-              <span key={tag} className="rounded-full bg-surface-container px-3 py-1 text-xs font-semibold text-on-surface-variant">
-                {tag}
-              </span>
-            ))}
-          </div>
+          
         </div>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:gap-8">
