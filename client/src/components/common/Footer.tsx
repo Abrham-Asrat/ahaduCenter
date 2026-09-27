@@ -36,29 +36,29 @@ const Footer = () => {
           <div className="footer-reveal min-w-0" style={{ '--footer-delay': '150ms' } as CSSProperties}>
             <h3 className="mb-5 font-heading text-xs font-bold uppercase tracking-wider text-secondary">{t('footer.quickLinks')}</h3>
             <ul className="space-y-3.5">
-              <li><Link to="/" className="footer-link text-sm text-light-gray hover:text-primary">Home <span className="material-symbols-outlined ml-1 text-sm text-primary opacity-0 transition-all group-hover:opacity-100" aria-hidden="true">arrow_forward</span></Link></li>
-              <li><Link to="/movies" className="footer-link text-sm text-light-gray hover:text-primary">Movies</Link></li>
-              <li><Link to="/books" className="footer-link text-sm text-light-gray hover:text-primary">Books</Link></li>
-              <li><Link to="/electronics" className="footer-link text-sm text-light-gray hover:text-primary">Electronics</Link></li>
-              <li><Link to="/wishlist" className="footer-link text-sm text-light-gray hover:text-primary">Wishlist</Link></li>
+              <li><Link to="/" className="footer-link text-sm text-light-gray hover:text-primary">{t('nav.home')} <span className="material-symbols-outlined ml-1 text-sm text-primary opacity-0 transition-all group-hover:opacity-100" aria-hidden="true">arrow_forward</span></Link></li>
+              <li><Link to="/movies" className="footer-link text-sm text-light-gray hover:text-primary">{t('nav.movies')}</Link></li>
+              <li><Link to="/books" className="footer-link text-sm text-light-gray hover:text-primary">{t('nav.books')}</Link></li>
+              <li><Link to="/electronics" className="footer-link text-sm text-light-gray hover:text-primary">{t('nav.electronics')}</Link></li>
+              <li><Link to="/wishlist" className="footer-link text-sm text-light-gray hover:text-primary">{t('nav.wishlist')}</Link></li>
             </ul>
           </div>
 
           <div className="footer-reveal min-w-0" style={{ '--footer-delay': '200ms' } as CSSProperties}>
-            <h3 className="mb-5 font-heading text-xs font-bold uppercase tracking-wider text-secondary">Support</h3>
+            <h3 className="mb-5 font-heading text-xs font-bold uppercase tracking-wider text-secondary">{t('footer.support')}</h3>
             <ul className="space-y-3.5">
-              <li><Link to="/contact" className="footer-link text-sm text-light-gray hover:text-primary">Help Center</Link></li>
-              <li><Link to="/contact" className="footer-link text-sm text-light-gray hover:text-primary">Contact Us</Link></li>
+              <li><Link to="/contact" className="footer-link text-sm text-light-gray hover:text-primary">{t('footer.links.helpCenter')}</Link></li>
+              <li><Link to="/contact" className="footer-link text-sm text-light-gray hover:text-primary">{t('footer.links.contactUs')}</Link></li>
             </ul>
 
           </div>
           <div className="footer-reveal min-w-0" style={{ '--footer-delay': '20ms' } as CSSProperties}>
 
-            <h3 className="mb-5 font-heading text-xs font-bold uppercase tracking-wider text-secondary">Company</h3>
+            <h3 className="mb-5 font-heading text-xs font-bold uppercase tracking-wider text-secondary">{t('footer.company')}</h3>
             <ul className="space-y-3.5">
-              <li><Link to="/contact" className="footer-link text-sm text-light-gray hover:text-primary">About Us</Link></li>
-              <li><Link to="/contact" className="footer-link text-sm text-light-gray hover:text-primary">Privacy Policy</Link></li>
-              <li><Link to="/contact" className="footer-link text-sm text-light-gray hover:text-primary">Terms of Service</Link></li>
+              <li><Link to="/contact" className="footer-link text-sm text-light-gray hover:text-primary">{t('footer.links.about')}</Link></li>
+              <li><Link to="/contact" className="footer-link text-sm text-light-gray hover:text-primary">{t('footer.privacy')}</Link></li>
+              <li><Link to="/contact" className="footer-link text-sm text-light-gray hover:text-primary">{t('footer.terms')}</Link></li>
               <li>
                 <a href="https://github.com/Abrham-Asrat/ahaduCenter/blob/main/LICENSE" target="_blank" rel="noopener noreferrer" className="footer-link text-sm text-light-gray hover:text-primary">
                   MIT License
@@ -68,7 +68,7 @@ const Footer = () => {
           </div>
 
           <div className="footer-reveal min-w-0" style={{ '--footer-delay': '300ms' } as CSSProperties}>
-            <h3 className="mb-5 font-heading text-xs font-bold uppercase tracking-wider text-secondary">Stay connected</h3>
+            <h3 className="mb-5 font-heading text-xs font-bold uppercase tracking-wider text-secondary">{t('footer.stayConnected')}</h3>
             <Link to="/contact" className="mb-6 inline-flex items-center gap-2.5 text-xs text-light-gray transition-colors hover:text-white">
               <span className="material-symbols-outlined text-base text-primary" aria-hidden="true">location_on</span>
               Mizan, Ethiopia
@@ -79,7 +79,7 @@ const Footer = () => {
         </div>
 
         <div className="w-full border-t border-white/[0.08]" />
-        <p className="fon text-white/50 text-end">&copy; 2026 Ahadu Center. All rights reserved.</p>
+        <p className="fon text-white/50 text-end">{t('footer.copyright', { year: currentYear })}</p>
 
       </div>
     </footer>

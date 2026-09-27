@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "test": "vitest --run",
     "test:watch": "vitest",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "validate:i18n": "node scripts/validate-translations.js"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.1",
