@@ -125,10 +125,10 @@ body[data-layout='public-nav'] html {
   }
 }
 
-.animate-fade-in {
+/* .animate-fade-in {
   opacity: 1;
   transform: none;
-}
+} */
 
 .animate-slide-up {
   animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
@@ -168,7 +168,7 @@ body[data-layout='public-nav'] html {
   }
 }
 
-.animate-filter-backdrop {
+/* .animate-filter-backdrop {
   animation: filterBackdrop 180ms ease-out both;
 }
 
@@ -178,7 +178,7 @@ body[data-layout='public-nav'] html {
 
 .animate-filter-drawer {
   animation: filterDrawerIn 220ms ease-out both;
-}
+} */
 
 /* Legacy camelCase alias for fadeIn */
 .animate-fadeIn {

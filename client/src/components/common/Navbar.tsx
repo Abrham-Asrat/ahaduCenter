@@ -57,7 +57,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="fixed inset-x-0 top-0 z-50 w-full bg-surface-container/80 backdrop-blur-xl border-b border-white/10 shadow-xl transition-colors animate-nav-drop md:block">
+      <nav className="fixed inset-x-0 top-0 z-50 w-full bg-surface-container/80 backdrop-blur-xl border-b border-white/10 shadow-xl transition-colors  md:block">
         <div className="grid grid-cols-[1fr_1fr] md:grid-cols-[1fr_auto_1fr] items-center justify-items-strech px-4 sm:px-6 md:px-8 py-3 max-w-7xl mx-auto min-h-[4.25rem]">
           {/* Brand Logo */}
           <Link to="/" aria-label="AhaduCenter home" className="logo-light-sweep  flex items-center justify-self-start">
@@ -150,7 +150,7 @@ const Navbar = () => {
 
                   {/* User Profile Dropdown Menu */}
                   {isProfileOpen && (
-                    <div className="absolute right-0 mt-3 w-72 glass-panel rounded-2xl p-4 border border-white/10 shadow-2xl z-50 animate-fade-in">
+                    <div className="absolute right-0 mt-3 w-72 glass-panel rounded-2xl p-4 border border-white/10 shadow-2xl z-50 ">
                       {/* User Info Header */}
                       <div className="flex items-center gap-3 pb-3 border-b border-white/10 mb-3">
                         <div className="w-11 h-11 rounded-full bg-primary text-black font-black flex items-center justify-center text-base shadow-lg">
@@ -264,7 +264,7 @@ const Navbar = () => {
       </nav>
 
       {/* Bottom Navigation (Mobile Specific - Includes 5 items: Home, Movies, Tech, Books, About) */}
-      <nav className="fixed inset-x-0 bottom-0 z-50 w-full bg-surface-container-lowest/95 backdrop-blur-xl border-t border-white/5 md:hidden animate-nav-rise" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
+      <nav className="fixed inset-x-0 bottom-0 z-50 w-full bg-surface-container-lowest/95 backdrop-blur-xl border-t border-white/5 md:hidden" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
         <div className="grid grid-cols-5 items-center gap-1 px-2 py-2.5 min-h-16">
           <Link to="/" className={`mobile-nav-link ${isActive('/') ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-primary'}`}>
             <span className="material-symbols-outlined" style={{ fontVariationSettings: isActive('/') ? "'FILL' 1" : "'FILL' 0" }}>home</span>
