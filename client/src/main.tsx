@@ -6,6 +6,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { store } from './redux/store';
 import App from './App';
 import './index.css';
+import './i18n/config'; // Initialize i18n
 
 const rootElement = document.getElementById('root');
 
