@@ -266,7 +266,6 @@ export interface MovieQuery {
   q?: string;
   country?: string;
   genre?: string;
-  genres?: string;
   contentType?: string;
 }
 

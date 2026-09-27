@@ -9,7 +9,6 @@ import Filters, { type FilterGroup, type FilterValues } from '../components/comm
 import MovieCard from '../components/movie/MovieCard';
 import Pagination from '../components/common/Pagination';
 import type { Movie, MovieQuery } from '../types';
-import type { ChangeEvent } from 'react';
 
 /**
  * MovieCenterPage Component
@@ -32,6 +31,7 @@ const MovieCenterPage = () => {
   });
   const [activeTab, setActiveTab] = useState('All');
   const [currentPage, setCurrentPage] = useState(1);
+  const [filterResetKey, setFilterResetKey] = useState(0);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [, setActiveTrailer] = useState<Movie | null>(null);
   const [, setToastMessage] = useState<string | null>(null);
@@ -85,7 +85,7 @@ const MovieCenterPage = () => {
     setCurrentPage(1);
   };
 
-  
+
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -176,6 +176,7 @@ const MovieCenterPage = () => {
             {/* Sidebar filters (desktop) */}
             <aside className="hidden md:block w-60 flex-shrink-0">
               <Filters
+                key={`desktop-${filterResetKey}`}
                 groups={filterGroups}
                 searchLabel="Search Title"
                 searchPlaceholder="Search movies..."
@@ -186,7 +187,7 @@ const MovieCenterPage = () => {
             {/* Catalog Grid */}
             <div className="flex-grow flex flex-col justify-between pt-2">
               <div>
-        
+
                 {/* Error banner */}
                 {error && (
                   <div className="glass-panel rounded-xl border border-red-500/30 bg-red-500/5 p-5 mb-6 flex items-center justify-between gap-4">
@@ -225,6 +226,7 @@ const MovieCenterPage = () => {
                         setFilters({ genres: [], contentType: 'All', searchQuery: '', country: 'All' });
                         setActiveTab('All');
                         setCurrentPage(1);
+                        setFilterResetKey((key) => key + 1);
                       }}
                       className="bg-primary text-black px-6 py-2.5 rounded-lg font-bold hover:shadow-[0_0_15px_rgba(16,185,129,0.5)] transition-all"
                     >
@@ -256,7 +258,7 @@ const MovieCenterPage = () => {
               {!loading && pagination.totalPages > 1 && (
                 <div className="mt-8">
                   <Pagination
-                    currentPage={pagination.currentPage}
+                    currentPage={pagination.page}
                     totalPages={pagination.totalPages}
                     onPageChange={handlePageChange}
                   />
@@ -280,15 +282,16 @@ const MovieCenterPage = () => {
               onClick={(event) => event.stopPropagation()}
             >
               <div className="flex justify-between items-center mb-4">
-                <h3 className="text-xl font-bold text-white">Filter Books</h3>
+                <h3 className="text-xl font-bold text-white">Filter Movies</h3>
                 <button onClick={() => setShowMobileFilters(false)} className="text-on-surface-variant hover:text-white">
                   <span className="material-symbols-outlined">close</span>
                 </button>
               </div>
               <Filters
+                key={`mobile-${filterResetKey}`}
                 groups={filterGroups}
                 searchLabel="Search Title"
-                searchPlaceholder="Search Books..."
+                searchPlaceholder="Search movies..."
                 onFilterChange={handleFilterChange}
               />
               <button

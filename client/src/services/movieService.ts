@@ -1,9 +1,10 @@
 // API operations for movies, reviews, and movie requests.
 import API from './api';
+import type { MovieQuery } from '../types';
 
 export const movieService = {
   // GET /api/movies?q=&genre=&country=&page=&limit=
-  getMovies: (params: object = {}) =>
+  getMovies: (params: MovieQuery = {}) =>
     API.get('/movies', { params }).then((r) => r.data),
 
   // GET /api/movies/:id
