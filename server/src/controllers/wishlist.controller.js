@@ -91,6 +91,7 @@ function buildResponseItem(doc, itemType, wishId, addedAt) {
 
   return {
     id:           wishId.toString(),
+    itemId:       id,
     type:         itemType,
     title,
     imageUrl,

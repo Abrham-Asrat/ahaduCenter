@@ -108,33 +108,33 @@ const BookDetailPage = () => {
   // The API returns snake_case/camelCase fields; map to what BookInfoSection expects
   const bookData: Book | null = book
     ? {
-        id: book._id || book.id,
-        title: book.title,
-        author: book.author,
-        publisher: book.publisher || 'Ahadu Press',
-        year: book.publishedYear ? String(book.publishedYear) : typeof book.year === 'string' || typeof book.year === 'number' ? book.year : undefined,
-        isbn: book.isbn,
-        rating: book.rating || 0,
-        reviews: typeof book.reviewCount === 'number' ? book.reviewCount : reviews.length,
-        description: book.description,
-        availableCopies: typeof book.availableCopies === 'number'
-          ? book.availableCopies
-          : typeof book.available_copies === 'number' ? book.available_copies : 0,
-        location: book.location || 'Main Branch',
-        price: book.price || 0,
-        coverUrl: book.coverImage || book.coverUrl,
-        availability: book.availability,
-        format: book.format,
-        pages: book.pages,
-        language: book.language,
-        publicationDate: book.publishedYear
-          ? String(book.publishedYear)
-          : book.publicationDate || '',
-        dimensions: book.dimensions || '',
-        about: book.about || '',
-        authorInfo: book.authorInfo || '',
-        borrowingPolicy: book.borrowingPolicy || 'Standard lending period is 14 days.',
-      }
+      id: book._id || book.id,
+      title: book.title,
+      author: book.author,
+      publisher: book.publisher || 'Ahadu Press',
+      year: book.publishedYear ? String(book.publishedYear) : typeof book.year === 'string' || typeof book.year === 'number' ? book.year : undefined,
+      isbn: book.isbn,
+      rating: book.rating || 0,
+      reviews: typeof book.reviewCount === 'number' ? book.reviewCount : reviews.length,
+      description: book.description,
+      availableCopies: typeof book.availableCopies === 'number'
+        ? book.availableCopies
+        : typeof book.available_copies === 'number' ? book.available_copies : 0,
+      location: book.location || 'Main Branch',
+      price: book.price || 0,
+      coverUrl: book.coverImage || book.coverUrl,
+      availability: book.availability,
+      format: book.format,
+      pages: book.pages,
+      language: book.language,
+      publicationDate: book.publishedYear
+        ? String(book.publishedYear)
+        : book.publicationDate || '',
+      dimensions: book.dimensions || '',
+      about: book.about || '',
+      authorInfo: book.authorInfo || '',
+      borrowingPolicy: book.borrowingPolicy || 'Standard lending period is 14 days.',
+    }
     : null;
 
   // Map Redux reviews to ReviewsCommentsSection shape
@@ -172,120 +172,120 @@ const BookDetailPage = () => {
   return (
     <>
       <Navbar />
-    <div className="min-h-screen bg-background text-on-background flex flex-col relative animate-fade-in">
+      <div className="min-h-screen bg-background text-on-background flex flex-col relative animate-fade-in">
 
-      {/* Toast Notification */}
-      {toastMessage && (
-        <div className="fixed bottom-24 right-8 z-50 bg-surface-container border border-primary/50 text-white px-5 py-3.5 rounded-xl shadow-2xl flex items-center gap-3 animate-bounce">
-          <span className="material-symbols-outlined text-primary">check_circle</span>
-          <span className="text-sm font-semibold">{toastMessage}</span>
-        </div>
-      )}
-
-      <main className="flex-grow  pb-12 px-6 max-w-7xl mx-auto w-full">
-        {/* Breadcrumbs */}
-        <div className="hidden md:flex items-center gap-2 text-sm text-on-surface-variant mb-6 font-medium">
-          <a href="/books" className="hover:text-primary transition-colors">Books</a>
-          <span className="material-symbols-outlined text-[16px]">chevron_right</span>
-          {bookData && (
-            <>
-              <a href="/books" className="hover:text-primary transition-colors">
-                {bookData.category || 'Category'}
-              </a>
-              <span className="material-symbols-outlined text-[16px]">chevron_right</span>
-              <span className="text-white font-semibold">{bookData.title}</span>
-            </>
-          )}
-        </div>
-
-        {/* Error banner */}
-        {error && !loading && (
-          <div className="glass-panel rounded-xl border border-red-500/30 bg-red-500/5 p-5 mb-6 flex items-center gap-3">
-            <span className="material-symbols-outlined text-red-400">error</span>
-            <p className="text-sm text-red-300">{error}</p>
-          </div>
-        )}
-
-        {/* Server action feedback banners */}
-        {actionMessage && (
-          <div className="glass-panel rounded-xl border border-primary/30 bg-primary/5 p-4 mb-6 flex items-center gap-3">
+        {/* Toast Notification */}
+        {toastMessage && (
+          <div className="fixed bottom-24 right-8 z-50 bg-surface-container border border-primary/50 text-white px-5 py-3.5 rounded-xl shadow-2xl flex items-center gap-3 animate-bounce">
             <span className="material-symbols-outlined text-primary">check_circle</span>
-            <p className="text-sm text-primary font-medium">{actionMessage}</p>
-          </div>
-        )}
-        {actionError && (
-          <div className="glass-panel rounded-xl border border-red-500/30 bg-red-500/5 p-4 mb-6 flex items-center gap-3">
-            <span className="material-symbols-outlined text-red-400">error</span>
-            <p className="text-sm text-red-300">{actionError}</p>
+            <span className="text-sm font-semibold">{toastMessage}</span>
           </div>
         )}
 
-        {/* Main two-column layout */}
-        {loading && !bookData ? (
-          <DetailSkeleton />
-        ) : bookData ? (
-          <>
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start mb-12">
-              {/* Left column: cover */}
-              <div className="md:col-span-4">
-                <BookCoverCard book={bookData} />
-              </div>
+        <main className="flex-grow  pb-12 px-6 max-w-7xl mx-auto w-full">
+          {/* Breadcrumbs */}
+          <div className="hidden md:flex items-center gap-2 text-sm text-on-surface-variant mb-6 font-medium">
+            <a href="/books" className="hover:text-primary transition-colors">Books</a>
+            <span className="material-symbols-outlined text-[16px]">chevron_right</span>
+            {bookData && (
+              <>
+                <a href="/books" className="hover:text-primary transition-colors">
+                  {bookData.category || 'Category'}
+                </a>
+                <span className="material-symbols-outlined text-[16px]">chevron_right</span>
+                <span className="text-white font-semibold">{bookData.title}</span>
+              </>
+            )}
+          </div>
 
-              {/* Right column: info and tabs */}
-              <div className="md:col-span-8 flex flex-col gap-6">
-                <BookInfoSection
-                  book={bookData}
-                  onShowToast={showToast}
-                  onBorrow={handleBorrow}
-                  onReserve={handleReserve}
-                />
-                <BookDetailTabs book={bookData} />
-              </div>
+          {/* Error banner */}
+          {error && !loading && (
+            <div className="glass-panel rounded-xl border border-red-500/30 bg-red-500/5 p-5 mb-6 flex items-center gap-3">
+              <span className="material-symbols-outlined text-red-400">error</span>
+              <p className="text-sm text-red-300">{error}</p>
             </div>
+          )}
 
-            {/* Reader Reviews & Comments */}
-            <ReviewsCommentsSection
-              title="Reader Reviews & Discussion"
-              initialReviews={mappedReviews}
-              onSubmitReview={token ? handleSubmitReview : undefined}
-              isAuthenticated={!!token}
-            />
+          {/* Server action feedback banners */}
+          {actionMessage && (
+            <div className="glass-panel rounded-xl border border-primary/30 bg-primary/5 p-4 mb-6 flex items-center gap-3">
+              <span className="material-symbols-outlined text-primary">check_circle</span>
+              <p className="text-sm text-primary font-medium">{actionMessage}</p>
+            </div>
+          )}
+          {actionError && (
+            <div className="glass-panel rounded-xl border border-red-500/30 bg-red-500/5 p-4 mb-6 flex items-center gap-3">
+              <span className="material-symbols-outlined text-red-400">error</span>
+              <p className="text-sm text-red-300">{actionError}</p>
+            </div>
+          )}
 
-            {/* Related books — using books from the store as a simple related list */}
-            <RelatedBooks books={[]} />
-          </>
-        ) : null}
-      </main>
+          {/* Main two-column layout */}
+          {loading && !bookData ? (
+            <DetailSkeleton />
+          ) : bookData ? (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start mb-12">
+                {/* Left column: cover */}
+                <div className="md:col-span-4">
+                  <BookCoverCard book={{ ...bookData, _id: id }} />
+                </div>
 
-      {/* Mobile sticky bottom action bar */}
-      {bookData && (
-        <div className="md:hidden fixed bottom-0 left-0 w-full glass-panel border-t border-white/10 p-4 z-40 rounded-t-2xl shadow-2xl">
-          <div className="flex gap-3">
-            <button
-              onClick={handleBorrow}
-              disabled={loading}
-              className="flex-1 bg-primary text-black py-3 rounded-xl font-bold flex items-center justify-center gap-2 text-xs uppercase disabled:opacity-50"
-            >
-              <span className="material-symbols-outlined">book</span>
-              Borrow Now
-            </button>
-            <button
-              onClick={handleReserve}
-              disabled={loading}
-              className="flex-1 bg-transparent border border-secondary text-secondary py-3 rounded-xl font-bold flex items-center justify-center gap-2 text-xs uppercase disabled:opacity-50"
-            >
-              <span className="material-symbols-outlined">bookmark_add</span>
-              Reserve
-            </button>
+                {/* Right column: info and tabs */}
+                <div className="md:col-span-8 flex flex-col gap-6">
+                  <BookInfoSection
+                    book={bookData}
+                    onShowToast={showToast}
+                    onBorrow={handleBorrow}
+                    onReserve={handleReserve}
+                  />
+                  <BookDetailTabs book={bookData} />
+                </div>
+              </div>
+
+              {/* Reader Reviews & Comments */}
+              <ReviewsCommentsSection
+                title="Reader Reviews & Discussion"
+                initialReviews={mappedReviews}
+                onSubmitReview={token ? handleSubmitReview : undefined}
+                isAuthenticated={!!token}
+              />
+
+              {/* Related books — using books from the store as a simple related list */}
+              <RelatedBooks books={[]} />
+            </>
+          ) : null}
+        </main>
+
+        {/* Mobile sticky bottom action bar */}
+        {bookData && (
+          <div className="md:hidden fixed bottom-0 left-0 w-full glass-panel border-t border-white/10 p-4 z-40 rounded-t-2xl shadow-2xl">
+            <div className="flex gap-3">
+              <button
+                onClick={handleBorrow}
+                disabled={loading}
+                className="flex-1 bg-primary text-black py-3 rounded-xl font-bold flex items-center justify-center gap-2 text-xs uppercase disabled:opacity-50"
+              >
+                <span className="material-symbols-outlined">book</span>
+                Borrow Now
+              </button>
+              <button
+                onClick={handleReserve}
+                disabled={loading}
+                className="flex-1 bg-transparent border border-secondary text-secondary py-3 rounded-xl font-bold flex items-center justify-center gap-2 text-xs uppercase disabled:opacity-50"
+              >
+                <span className="material-symbols-outlined">bookmark_add</span>
+                Reserve
+              </button>
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Add bottom padding for mobile so content isn't hidden */}
-      <div className="md:hidden h-28" />
+        {/* Add bottom padding for mobile so content isn't hidden */}
+        <div className="md:hidden h-28" />
 
-      {/* <Footer /> */}
-    </div>
+        {/* <Footer /> */}
+      </div>
     </>
   );
 };

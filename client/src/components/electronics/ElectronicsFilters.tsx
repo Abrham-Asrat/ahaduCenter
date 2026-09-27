@@ -8,6 +8,10 @@ type ElectronicsFilterState = {
   maxPrice: number;
 };
 
+const MIN_PRICE = 0;
+const MAX_PRICE = 150000;
+const PRICE_STEP = 1000;
+
 interface ElectronicsFiltersProps {
   onFilterChange?: (filters: ElectronicsFilterState) => void;
 }
@@ -26,11 +30,10 @@ const ElectionicsFilters = ({ onFilterChange }: ElectronicsFiltersProps) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedConditions, setSelectedConditions] = useState('All');
   const [selectedBrands, setSelectedBrands] = useState('All');
-  const [minPrice, setMinPrice] = useState('');
-  const [maxPrice, setMaxPrice] = useState('');
+  const [priceRange, setPriceRange] = useState({ min: MIN_PRICE, max: MAX_PRICE });
 
-  const brandType = ['All', 'Apple ', 'Dell', 'Samsung', 'Hp', 'sony'];
-  const conditions = ['All', 'New', 'Used', 'slightly-used'];
+  const brandType = ['All', 'Apple', 'Dell', 'Samsung', 'Hp', 'sony'];
+  const conditions = ['All', 'New', 'Used', 'Refurbished'];
 
   const triggerChange = (updated: Partial<ElectronicsFilterState>) => {
     if (onFilterChange) {
@@ -38,8 +41,8 @@ const ElectionicsFilters = ({ onFilterChange }: ElectronicsFiltersProps) => {
         conditions: selectedConditions === 'All' ? [] : [selectedConditions],
         brands: selectedBrands === 'All' ? [] : [selectedBrands],
         searchQuery,
-        minPrice: minPrice ? Number(minPrice) : 0,
-        maxPrice: maxPrice ? Number(maxPrice) : 150000,
+        minPrice: priceRange.min,
+        maxPrice: priceRange.max,
         ...updated,
       });
     }
@@ -63,13 +66,12 @@ const ElectionicsFilters = ({ onFilterChange }: ElectronicsFiltersProps) => {
     triggerChange({ conditions: conditions === 'All' ? [] : [conditions] });
   };
 
-  const handlePriceChange = (kind: 'min' | 'max', value: string) => {
-    if (kind === 'min') setMinPrice(value);
-    else setMaxPrice(value);
-    triggerChange({
-      minPrice: kind === 'min' ? (value ? Number(value) : 0) : minPrice ? Number(minPrice) : 0,
-      maxPrice: kind === 'max' ? (value ? Number(value) : 150000) : maxPrice ? Number(maxPrice) : 150000,
-    });
+  const handlePriceChange = (kind: 'min' | 'max', value: number) => {
+    const nextRange = kind === 'min'
+      ? { min: Math.min(value, priceRange.max - PRICE_STEP), max: priceRange.max }
+      : { min: priceRange.min, max: Math.max(value, priceRange.min + PRICE_STEP) };
+    setPriceRange(nextRange);
+    triggerChange({ minPrice: nextRange.min, maxPrice: nextRange.max });
   };
 
 
@@ -77,18 +79,17 @@ const ElectionicsFilters = ({ onFilterChange }: ElectronicsFiltersProps) => {
     setSearchQuery('');
     setSelectedConditions('All');
     setSelectedBrands('All');
-    setMinPrice('');
-    setMaxPrice('');
+    setPriceRange({ min: MIN_PRICE, max: MAX_PRICE });
     triggerChange({
       conditions: [],
       brands: [],
       searchQuery: '',
-      minPrice: 0,
-      maxPrice: 150000,
+      minPrice: MIN_PRICE,
+      maxPrice: MAX_PRICE,
     });
   };
 
-  const hasActiveFilters = selectedConditions !== 'All' || searchQuery !== '' || selectedBrands !== 'All' || minPrice !== '' || maxPrice !== '';
+  const hasActiveFilters = selectedConditions !== 'All' || searchQuery !== '' || selectedBrands !== 'All' || priceRange.min > MIN_PRICE || priceRange.max < MAX_PRICE;
 
   return (
     <div className="glass-panel rounded-xl p-6 sticky top-[150px] shadow-xl">
@@ -118,7 +119,7 @@ const ElectionicsFilters = ({ onFilterChange }: ElectronicsFiltersProps) => {
             type="text"
             value={searchQuery}
             onChange={handleSearchChange}
-            placeholder="Search Electronics s..."
+            placeholder="Search electronics..."
             className="w-full bg-surface-container border border-white/10 rounded-lg pl-9 pr-3 py-2 text-sm text-white focus:border-primary outline-none transition-all"
           />
           <span className="material-symbols-outlined text-on-surface-variant text-lg absolute left-2.5 top-2.5 pointer-events-none">
@@ -145,15 +146,7 @@ const ElectionicsFilters = ({ onFilterChange }: ElectronicsFiltersProps) => {
         </select>
       </div>
 
-      <div className="mb-6">
-        <label className="block text-xs uppercase tracking-wider text-on-surface-variant mb-2 font-semibold">
-          Price Range
-        </label>
-        <div className="grid grid-cols-2 gap-2">
-          <input type="number" min="0" value={minPrice} onChange={(e) => handlePriceChange('min', e.target.value)} placeholder="Min" aria-label="Minimum price" className="w-full bg-surface-container border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-primary outline-none" />
-          <input type="number" min="0" value={maxPrice} onChange={(e) => handlePriceChange('max', e.target.value)} placeholder="Max" aria-label="Maximum price" className="w-full bg-surface-container border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-primary outline-none" />
-        </div>
-      </div>
+      
 
       {/* Content Type Filter Group */}
       <div className="mb-6">
@@ -171,6 +164,43 @@ const ElectionicsFilters = ({ onFilterChange }: ElectronicsFiltersProps) => {
             </option>
           ))}
         </select>
+      </div>
+
+      {/* Price Range */}
+      <div className="mb-6">
+        <label className="block text-xs uppercase tracking-wider text-on-surface-variant mb-2 font-semibold">
+          Price Range
+        </label>
+        <div className="mb-2 flex items-center justify-between text-sm font-semibold text-white" aria-live="polite">
+          <span>${priceRange.min.toLocaleString()}</span>
+          <span>${priceRange.max.toLocaleString()}</span>
+        </div>
+        <div className="relative h-6" style={{ '--price-min': `${(priceRange.min / MAX_PRICE) * 100}%`, '--price-max': `${(priceRange.max / MAX_PRICE) * 100}%` } as React.CSSProperties}>
+          <div className="absolute inset-x-0 top-1/2 h-1 -translate-y-1/2 rounded-full bg-white/15" />
+          <div className="absolute top-1/2 h-1 -translate-y-1/2 rounded-full bg-primary" style={{ left: `var(--price-min)`, right: `calc(100% - var(--price-max))` }} />
+          <input
+            type="range"
+            min={MIN_PRICE}
+            max={MAX_PRICE}
+            step={PRICE_STEP}
+            value={priceRange.min}
+            onChange={(event) => handlePriceChange('min', event.currentTarget.valueAsNumber)}
+            aria-label="Minimum price"
+            className="price-range-slider"
+            style={{ zIndex: priceRange.min > MAX_PRICE / 2 ? 5 : 3 }}
+          />
+          <input
+            type="range"
+            min={MIN_PRICE}
+            max={MAX_PRICE}
+            step={PRICE_STEP}
+            value={priceRange.max}
+            onChange={(event) => handlePriceChange('max', event.currentTarget.valueAsNumber)}
+            aria-label="Maximum price"
+            className="price-range-slider"
+            style={{ zIndex: priceRange.max < MAX_PRICE / 2 ? 5 : 4 }}
+          />
+        </div>
       </div>
     </div>
   );

@@ -24,20 +24,38 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import * as fc from 'fast-check';
+import { Provider } from 'react-redux';
+import { MemoryRouter } from 'react-router-dom';
 
 import BookCoverCard from '../components/book/BookCoverCard';
+import { store } from '../redux/store';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Shared test fixture
 // ─────────────────────────────────────────────────────────────────────────────
 
 const mockBook = {
+    id: 'book-1',
     coverUrl: 'https://example.com/cover.jpg',
     title: 'Test Book',
     availability: 'Available',
 };
 
-const renderCard = () => render(<BookCoverCard book={mockBook} />);
+const renderCard = () => render(
+    <Provider store={store}>
+        <MemoryRouter>
+            <BookCoverCard book={mockBook} />
+        </MemoryRouter>
+    </Provider>
+);
+
+beforeEach(() => {
+    store.dispatch({
+        type: 'auth/googleLogin/fulfilled',
+        payload: { token: 'test-token', user: { name: 'Test User', email: 'test@example.com' } },
+    });
+    store.dispatch({ type: 'wishlist/fetchWishlist/fulfilled', payload: [] });
+});
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Task 11.1 — Property 3: Save toggle is an involution
@@ -52,7 +70,7 @@ describe('BookCoverCard Save toggle — Property 3 (Validates: Requirements 4.2)
                 // fast-check runs this property numRuns times, each in a fresh render.
                 fc.constant(null),
                 (_) => {
-                    const { getByRole, unmount } = render(<BookCoverCard book={mockBook} />);
+                    const { getByRole, unmount } = renderCard();
 
                     const saveButton = getByRole('button', { name: /save|unsave/i });
 
@@ -105,7 +123,7 @@ describe('BookCoverCard Zoom toggle — Property 4 (Validates: Requirements 4.3)
             fc.property(
                 fc.constant(null),
                 (_) => {
-                    const { getByRole, getByAltText, unmount } = render(<BookCoverCard book={mockBook} />);
+                    const { getByRole, getByAltText, unmount } = renderCard();
 
                     const zoomButton = getByRole('button', { name: /zoom/i });
                     const coverImg = getByAltText(mockBook.title);
@@ -181,16 +199,10 @@ describe('BookCoverCard Share button (Validates: Requirements 4.1)', () => {
     });
 });
 
-describe('BookCoverCard QR button (Validates: Requirements 4.4)', () => {
-    it('shows "QR Code coming soon" toast when QR button is clicked', async () => {
+describe('BookCoverCard QR button', () => {
+    it('does not render a QR action without a supported QR destination', () => {
         renderCard();
 
-        const qrButton = screen.getByRole('button', { name: /qr code/i });
-        fireEvent.click(qrButton);
-
-        await waitFor(() => {
-            expect(screen.getByRole('status')).toBeInTheDocument();
-            expect(screen.getByRole('status')).toHaveTextContent('QR Code coming soon');
-        });
+        expect(screen.queryByRole('button', { name: /qr code/i })).not.toBeInTheDocument();
     });
 });

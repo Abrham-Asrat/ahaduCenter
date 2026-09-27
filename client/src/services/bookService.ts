@@ -1,9 +1,10 @@
 // API operations for book catalog, borrowing, reservations, and reviews.
 import API from './api';
+import type { BookQuery } from '../types';
 
 export const bookService = {
   // GET /api/books?q=&category=&availability=&format=&language=&page=&limit=
-  getBooks: (params: object = {}) =>
+  getBooks: (params: BookQuery = {}) =>
     API.get('/books', { params }).then((r) => r.data),
 
   // GET /api/books/:id

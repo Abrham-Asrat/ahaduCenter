@@ -1,5 +1,7 @@
-import { useState } from 'react';
 import { ArrowRight, BookOpen, Heart, Star } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { addWishlistItem, removeWishlistItem } from '../../redux/slices/wishlistSlice';
 import type { Book } from '../../types';
 
 interface BookCardProps {
@@ -8,9 +10,37 @@ interface BookCardProps {
 }
 
 const BookCard = ({ book, onQuickAction }: BookCardProps) => {
-  const [isLiked, setIsLiked] = useState(false);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const { token } = useAppSelector((state) => state.auth);
+  const wishlistItems = useAppSelector((state) => state.wishlist.items);
+  const bookId = book._id || book.id || '';
+  const isLiked = wishlistItems.some((item) => item.itemId === bookId || item.id === bookId);
   const image = book.coverUrl || book.coverImage || 'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=900&q=80';
   const status = book.availability === 'available' ? 'Available' : 'Borrowed';
+
+  const handleWishlistToggle = () => {
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+
+    if (!bookId) return;
+
+    if (isLiked) {
+      dispatch(removeWishlistItem(bookId));
+    } else {
+      dispatch(
+        addWishlistItem({
+          itemId: bookId,
+          itemType: 'Book',
+          title: book.title,
+          imageUrl: book.coverUrl || book.coverImage,
+          category: book.category,
+        })
+      );
+    }
+  };
 
   return (
     <article className="h-full overflow-hidden rounded-2xl border border-white/10 bg-card-surface/60 p-2 shadow-[0_20px_45px_rgba(15,23,42,0.25)] transition-transform duration-300 hover:-translate-y-1 sm:rounded-[26px] sm:p-3">
@@ -30,7 +60,7 @@ const BookCard = ({ book, onQuickAction }: BookCardProps) => {
 
           <button
             type="button"
-            onClick={() => setIsLiked((liked) => !liked)}
+            onClick={handleWishlistToggle}
             className="flex items-center justify-center  border-none  text-white sm:right-3 sm:top-3"
             aria-label={isLiked ? `Remove ${book.title} from wishlist` : `Save ${book.title} to wishlist`}
           >

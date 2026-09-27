@@ -1,4 +1,7 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { addWishlistItem, removeWishlistItem } from '../../redux/slices/wishlistSlice';
 import type { Book } from '../../types';
 
 interface BookCoverCardProps {
@@ -6,11 +9,16 @@ interface BookCoverCardProps {
 }
 
 const BookCoverCard = ({ book }: BookCoverCardProps) => {
-  const [isSaved, setIsSaved] = useState(false);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const { token } = useAppSelector((state) => state.auth);
+  const wishlistItems = useAppSelector((state) => state.wishlist.items);
   const [isZoomed, setIsZoomed] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
 
   const title = book.title || 'Book';
+  const bookId = book._id || book.id || '';
+  const isSaved = wishlistItems.some((item) => item.itemId === bookId || item.id === bookId);
   const imageUrl =
     book.coverUrl ||
     book.coverImage ||
@@ -25,8 +33,27 @@ const BookCoverCard = ({ book }: BookCoverCardProps) => {
     }
   };
 
-  const handleQr = () => {
-    setToast('QR Code coming soon');
+  const handleSave = () => {
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+
+    if (!bookId) return;
+
+    if (isSaved) {
+      dispatch(removeWishlistItem(bookId));
+    } else {
+      dispatch(
+        addWishlistItem({
+          itemId: bookId,
+          itemType: 'Book',
+          title: book.title,
+          imageUrl: book.coverUrl || book.coverImage,
+          category: book.category,
+        })
+      );
+    }
   };
 
   return (
@@ -46,7 +73,7 @@ const BookCoverCard = ({ book }: BookCoverCardProps) => {
           <button
             type="button"
             aria-label={isSaved ? 'Unsave' : 'Save'}
-            onClick={() => setIsSaved((prev) => !prev)}
+            onClick={handleSave}
             className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-dark-bg/80 text-white backdrop-blur-sm"
           >
             <span className="material-symbols-outlined text-lg">{isSaved ? 'bookmark_added' : 'bookmark'}</span>
@@ -70,14 +97,6 @@ const BookCoverCard = ({ book }: BookCoverCardProps) => {
           className="flex-1 rounded-xl border border-white/10 bg-surface-container px-4 py-3 text-sm font-semibold text-white hover:border-primary/40"
         >
           Share
-        </button>
-        <button
-          type="button"
-          aria-label="QR Code"
-          onClick={handleQr}
-          className="flex-1 rounded-xl border border-white/10 bg-surface-container px-4 py-3 text-sm font-semibold text-white hover:border-primary/40"
-        >
-          QR Code
         </button>
       </div>
 

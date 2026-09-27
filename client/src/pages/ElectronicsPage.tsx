@@ -32,14 +32,17 @@ const ElectronicsPage = () => {
     conditions: string[];
     brands: string[];
     searchQuery: string;
+    minPrice: number;
     maxPrice: number;
   }>({
     conditions: [],
     brands: [],
     searchQuery: '',
+    minPrice: 0,
     maxPrice: 150000,
   });
   const [currentPage, setCurrentPage] = useState(1);
+  const [filterResetKey, setFilterResetKey] = useState(0);
 
   const [, setToastMessage] = useState<string | null>(null);
   const [wishlistIds, setWishlistIds] = useState<string[]>([]);
@@ -63,7 +66,8 @@ const ElectronicsPage = () => {
       params.condition = filterState.conditions.join(',');
     if (filterState.brands && filterState.brands.length > 0)
       params.brand = filterState.brands.join(',');
-    if (filterState.maxPrice && filterState.maxPrice < 150000)
+    if (filterState.minPrice > 0) params.minPrice = filterState.minPrice;
+    if (filterState.maxPrice < 150000)
       params.maxPrice = filterState.maxPrice;
 
     // Sort param mapping
@@ -130,9 +134,10 @@ const ElectronicsPage = () => {
 
   const handleResetFilters = () => {
     setActiveCategory('All');
-    setFilterState({ conditions: [], brands: [], searchQuery: '', maxPrice: 150000 });
+    setFilterState({ conditions: [], brands: [], searchQuery: '', minPrice: 0, maxPrice: 150000 });
     setSortOption('Featured');
     setCurrentPage(1);
+    setFilterResetKey((key) => key + 1);
   };
 
   // ── Loading skeleton ──────────────────────────────────────────────────────────
@@ -162,7 +167,7 @@ const ElectronicsPage = () => {
 
             {/* Sidebar filters (desktop) */}
             <aside className="hidden md:block w-full md:w-64 flex-shrink-0">
-              <ElectronicsFilters onFilterChange={handleFilterChange} />
+              <ElectronicsFilters key={`desktop-${filterResetKey}`} onFilterChange={handleFilterChange} />
             </aside>
 
             {/* Product grid area */}
@@ -244,7 +249,7 @@ const ElectronicsPage = () => {
               {!loading && pagination.totalPages > 1 && (
                 <div className="mt-8">
                   <Pagination
-                    currentPage={pagination.currentPage}
+                    currentPage={pagination.page}
                     totalPages={pagination.totalPages}
                     onPageChange={handlePageChange}
                   />
@@ -275,7 +280,7 @@ const ElectronicsPage = () => {
                     <span className="material-symbols-outlined">close</span>
                   </button>
                 </div>
-                <ElectronicsFilters onFilterChange={handleFilterChange} />
+                <ElectronicsFilters key={`mobile-${filterResetKey}`} onFilterChange={handleFilterChange} />
               </div>
               <button
                 onClick={() => setShowMobileFilters(false)}

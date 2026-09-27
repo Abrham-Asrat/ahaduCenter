@@ -26,7 +26,7 @@ const BookCenterPage = () => {
 
   // ── Local UI state ───────────────────────────────────────────────────────────
   const [activeCategory, setActiveCategory] = useState('All Categories');
-  
+
   const [filterState, setFilterState] = useState<{
     searchQuery: string;
     availability: string[];
@@ -39,6 +39,7 @@ const BookCenterPage = () => {
     language: 'All Languages',
   });
   const [currentPage, setCurrentPage] = useState(1);
+  const [filterResetKey, setFilterResetKey] = useState(0);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
 
   const categories = [
@@ -53,11 +54,11 @@ const BookCenterPage = () => {
   ];
 
   const filterGroups: FilterGroup[] = [
-    { key: 'availability', label: 'Availability', options: ['All', 'Available', 'Reserved'] },
+    { key: 'availability', label: 'Availability', options: ['All', 'Available', 'Borrowed', 'Reserved'] },
+    { key: 'format', label: 'Format', options: ['All Formats', 'Paperback', 'Hardcover'], defaultValue: 'All Formats' },
     { key: 'language', label: 'Languages', options: ['All Languages', 'English', 'Amharic'] },
   ];
 
-  // ── Build query params from local filter/sort state ──────────────────────────
   const buildParams = useCallback((): BookQuery => {
     const params: BookQuery = { page: currentPage, limit: 12 };
 
@@ -67,10 +68,8 @@ const BookCenterPage = () => {
     if (filterState.language !== 'All Languages') params.language = filterState.language;
     if (filterState.format.length > 0) params.format = filterState.format.join(',');
 
-
-
     return params;
-  }, [activeCategory, filterState,currentPage]);
+  }, [activeCategory, filterState, currentPage]);
 
   // ── Fetch on mount and whenever filters / page change ────────────────────────
   useEffect(() => {
@@ -83,6 +82,7 @@ const BookCenterPage = () => {
       ...prev,
       searchQuery: newFilters.searchQuery,
       availability: Array.isArray(newFilters.availability) ? newFilters.availability : [],
+      format: Array.isArray(newFilters.format) ? newFilters.format : [],
       language:
         Array.isArray(newFilters.language) && newFilters.language.length > 0
           ? newFilters.language[0] ?? 'All Languages'
@@ -96,7 +96,7 @@ const BookCenterPage = () => {
     setCurrentPage(1);
   };
 
- 
+
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -108,11 +108,8 @@ const BookCenterPage = () => {
   };
 
   const handleQuickAction = (book: Book) => {
-    if (book.availability === 'available') {
-      navigate(`/book-confirm?action=borrow&id=${book._id || book.id}`);
-    } else if (book.availability === 'reserved' || book.availability === 'borrowed') {
-      navigate(`/book-confirm?action=reserve&id=${book._id || book.id}`);
-    }
+    const bookId = book._id || book.id;
+    if (bookId) navigate(`/books/${bookId}`);
   };
 
   // ── Loading skeleton ─────────────────────────────────────────────────────────
@@ -146,6 +143,7 @@ const BookCenterPage = () => {
             {/* Sidebar filters (desktop) */}
             <aside className="hidden md:block w-60 flex-shrink-0">
               <Filters
+                key={`desktop-${filterResetKey}`}
                 groups={filterGroups}
                 searchLabel="Search Title"
                 searchPlaceholder="Search Books..."
@@ -155,7 +153,7 @@ const BookCenterPage = () => {
 
             {/* Book grid area */}
             <div className="flex-1 pt-2">
-              
+
 
               {/* Error banner */}
               {error && (
@@ -193,6 +191,7 @@ const BookCenterPage = () => {
                     onClick={() => {
                       setActiveCategory('All Categories');
                       setFilterState({ searchQuery: '', availability: [], format: [], language: 'All Languages' });
+                      setFilterResetKey((key) => key + 1);
                       setCurrentPage(1);
                     }}
                     className="bg-primary text-black px-6 py-2.5 rounded-lg font-bold hover:shadow-[0_0_15px_rgba(16,185,129,0.4)] transition-all text-sm"
@@ -217,7 +216,7 @@ const BookCenterPage = () => {
                   {/* Pagination */}
                   {pagination.totalPages > 1 && (
                     <Pagination
-                      currentPage={pagination.currentPage}
+                      currentPage={pagination.page}
                       totalPages={pagination.totalPages}
                       onPageChange={handlePageChange}
                     />
@@ -247,6 +246,7 @@ const BookCenterPage = () => {
                 </button>
               </div>
               <Filters
+                key={`mobile-${filterResetKey}`}
                 groups={filterGroups}
                 searchLabel="Search Title"
                 searchPlaceholder="Search Books..."
