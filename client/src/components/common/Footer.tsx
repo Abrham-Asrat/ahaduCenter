@@ -1,7 +1,11 @@
 import { type CSSProperties } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const Footer = () => {
+  const { t } = useTranslation();
+  const currentYear = new Date().getFullYear();
+
   return (
     <footer className="relative mt-20 w-full overflow-hidden border-t border-white/5 bg-dark-bg pb-8 pt-14 text-white sm:pt-16">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(rgba(212,175,55,0.12)_1px,transparent_1px)] bg-[length:24px_24px] opacity-40" />
@@ -19,7 +23,7 @@ const Footer = () => {
                 <span className="bg-gradient-to-r from-primary via-emerald-300 to-secondary bg-clip-text font-heading text-2xl font-bold text-transparent">Ahadu Center</span>
               </Link>
               <p className="mb-5 max-w-xs text-sm font-light leading-relaxed text-light-gray text-center">
-                Your gateway to movies, tech, and books, all in one place.
+                {t('footer.tagline')}
               </p>
               <p className="inline-flex max-w-full flex-wrap items-center gap-x-2 gap-y-1 border border-white/[0.08] bg-white/[0.03] px-2.5 py-1 text-xs text-light-gray">
                 <span aria-hidden="true">ET</span>
@@ -30,7 +34,7 @@ const Footer = () => {
           </div>
 
           <div className="footer-reveal min-w-0" style={{ '--footer-delay': '150ms' } as CSSProperties}>
-            <h3 className="mb-5 font-heading text-xs font-bold uppercase tracking-wider text-secondary">Quick links</h3>
+            <h3 className="mb-5 font-heading text-xs font-bold uppercase tracking-wider text-secondary">{t('footer.quickLinks')}</h3>
             <ul className="space-y-3.5">
               <li><Link to="/" className="footer-link text-sm text-light-gray hover:text-primary">Home <span className="material-symbols-outlined ml-1 text-sm text-primary opacity-0 transition-all group-hover:opacity-100" aria-hidden="true">arrow_forward</span></Link></li>
               <li><Link to="/movies" className="footer-link text-sm text-light-gray hover:text-primary">Movies</Link></li>
@@ -46,10 +50,10 @@ const Footer = () => {
               <li><Link to="/contact" className="footer-link text-sm text-light-gray hover:text-primary">Help Center</Link></li>
               <li><Link to="/contact" className="footer-link text-sm text-light-gray hover:text-primary">Contact Us</Link></li>
             </ul>
-            
+
           </div>
           <div className="footer-reveal min-w-0" style={{ '--footer-delay': '20ms' } as CSSProperties}>
-           
+
             <h3 className="mb-5 font-heading text-xs font-bold uppercase tracking-wider text-secondary">Company</h3>
             <ul className="space-y-3.5">
               <li><Link to="/contact" className="footer-link text-sm text-light-gray hover:text-primary">About Us</Link></li>

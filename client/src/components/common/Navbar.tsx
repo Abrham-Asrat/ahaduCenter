@@ -232,7 +232,7 @@ const Navbar = () => {
                           className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-error bg-error/10 hover:bg-error/20 transition-all font-bold text-xs uppercase cursor-pointer"
                         >
                           <span className="material-symbols-outlined text-base">logout</span>
-                          Sign Out
+                          {t('nav.logout')}
                         </button>
                       </div>
                     </div>
@@ -250,12 +250,12 @@ const Navbar = () => {
                 <div className="hidden md:flex gap-3">
                   <Link to="/login">
                     <button className="px-4 py-2 border border-white/20 rounded-xl text-xs uppercase font-extrabold text-white hover:bg-white/10 transition-all cursor-pointer">
-                      Sign In
+                      {t('nav.signIn')}
                     </button>
                   </Link>
                   <Link to="/register">
                     <button className="px-4 py-2 bg-primary text-black rounded-xl text-xs uppercase font-extrabold hover:shadow-[0_0_15px_rgba(16,185,129,0.5)] transition-all cursor-pointer">
-                      Sign Up
+                      {t('nav.signUp')}
                     </button>
                   </Link>
                 </div>
@@ -273,26 +273,26 @@ const Navbar = () => {
         <div className="grid grid-cols-5 items-center gap-1 px-2 py-2.5 min-h-16">
           <Link to="/" className={`mobile-nav-link ${isActive('/') ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-primary'}`}>
             <span className="material-symbols-outlined" style={{ fontVariationSettings: isActive('/') ? "'FILL' 1" : "'FILL' 0" }}>home</span>
-            <span className="text-[10px] uppercase tracking-wider font-semibold mt-1">Home</span>
+            <span className="text-[10px] uppercase tracking-wider font-semibold mt-1">{t('nav.home')}</span>
           </Link>
           <Link to="/movies" className={`mobile-nav-link ${isActive('/movies') ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-primary'}`}>
             <span className="material-symbols-outlined" style={{ fontVariationSettings: isActive('/movies') ? "'FILL' 1" : "'FILL' 0" }}>movie</span>
-            <span className="text-[10px] uppercase tracking-wider font-semibold mt-1">Movies</span>
+            <span className="text-[10px] uppercase tracking-wider font-semibold mt-1">{t('nav.movies')}</span>
           </Link>
           {/* Search Trigger */}
           <Link to="/search" className={`mobile-nav-link ${isActive('/search') ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-primary'}`}>
             <span className="material-symbols-outlined" style={{ fontVariationSettings: isActive('/search') ? "'FILL' 1" : "'FILL' 0" }}>search</span>
-            <span className="text-[10px] uppercase tracking-wider font-semibold mt-1">Search</span>
+            <span className="text-[10px] uppercase tracking-wider font-semibold mt-1">{t('common.search')}</span>
           </Link>
 
 
           <Link to="/electronics" className={`mobile-nav-link ${isActive('/electronics') ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-primary'}`}>
             <span className="material-symbols-outlined" style={{ fontVariationSettings: isActive('/electronics') ? "'FILL' 1" : "'FILL' 0" }}>devices</span>
-            <span className="text-[10px] uppercase tracking-wider font-semibold mt-1">Tech</span>
+            <span className="text-[10px] uppercase tracking-wider font-semibold mt-1">{t('nav.tech')}</span>
           </Link>
           <Link to="/books" className={`mobile-nav-link ${isActive('/books') ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-primary'}`}>
             <span className="material-symbols-outlined" style={{ fontVariationSettings: isActive('/books') ? "'FILL' 1" : "'FILL' 0" }}>menu_book</span>
-            <span className="text-[10px] uppercase tracking-wider font-semibold mt-1">Books</span>
+            <span className="text-[10px] uppercase tracking-wider font-semibold mt-1">{t('nav.books')}</span>
           </Link>
 
         </div>
