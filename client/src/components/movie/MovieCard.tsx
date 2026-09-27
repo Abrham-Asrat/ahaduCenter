@@ -1,8 +1,13 @@
 // src/components/movie/MovieCard.jsx
 import type { MouseEvent } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { addWishlistItem, removeWishlistItem } from '../../redux/slices/wishlistSlice';
+import {
+  addWishlistItem,
+  normalizeWishlistId,
+  removeWishlistItem,
+  wishlistItemMatches,
+} from '../../redux/slices/wishlistSlice';
 import type { Movie } from '../../types';
 
 interface MovieCardProps {
@@ -24,12 +29,13 @@ interface MovieCardProps {
  */
 const MovieCard = ({ movie, onPlayTrailer, onToggleBookmark, isBookmarked: initialBookmarked = false }: MovieCardProps) => {
   const dispatch = useAppDispatch();
-  const wishlistItems = useAppSelector((s) => s.wishlist?.items ?? []);
+  const navigate = useNavigate();
+  const { token } = useAppSelector((s) => s.auth);
+  const { items: wishlistItems, loading: wishlistLoading, pendingByItem } = useAppSelector((s) => s.wishlist);
 
   const movieId = movie.id || movie._id || '';
-  const isBookmarked = wishlistItems.some(
-    (item) => item.id === movieId || item.itemId === movieId
-  ) || initialBookmarked;
+  const isBookmarked = wishlistItems.some((item) => wishlistItemMatches(item, movieId)) || initialBookmarked;
+  const isPending = (pendingByItem?.[normalizeWishlistId(movieId)] ?? 0) > 0;
 
   const handlePlayTrailer = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -42,6 +48,12 @@ const MovieCard = ({ movie, onPlayTrailer, onToggleBookmark, isBookmarked: initi
   const handleBookmark = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+    if (!movieId || isPending) return;
+
     const newState = !isBookmarked;
     if (newState) {
       dispatch(
@@ -112,6 +124,7 @@ const MovieCard = ({ movie, onPlayTrailer, onToggleBookmark, isBookmarked: initi
             {/* Bookmark button */}
             <button
               onClick={handleBookmark}
+              disabled={isPending || (wishlistLoading && wishlistItems.length === 0)}
               title={isBookmarked ? "Remove from Wishlist" : "Save to Wishlist"}
               className={`w-11 h-11 rounded-full glass-panel flex items-center justify-center hover:scale-110 active:scale-95 transition-all cursor-pointer ${isBookmarked
                 ? 'text-secondary border-secondary bg-secondary/20 shadow-[0_0_15px_rgba(233,195,73,0.5)]'

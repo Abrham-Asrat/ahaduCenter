@@ -7,6 +7,7 @@ interface WishlistState {
   items: WishlistItem[];
   loading: boolean;
   error: string | null;
+  pendingByItem: Record<string, number>;
 }
 
 interface WishlistPayload {
@@ -18,6 +19,17 @@ interface WishlistPayload {
 }
 
 let wishlistSnapshot: WishlistItem[] = [];
+
+export const normalizeWishlistId = (value: unknown) => String(value ?? '').trim();
+
+export const wishlistItemMatches = (item: WishlistItem, itemId: string) => {
+  const targetId = normalizeWishlistId(itemId);
+  const sourceId = normalizeWishlistId(item.itemId);
+  if (sourceId && sourceId === targetId) return true;
+
+  const match = item.link?.match(/^\/(?:books|movies|electronics)\/([^/?#]+)/);
+  return Boolean(match?.[1] && decodeURIComponent(match[1]) === targetId);
+};
 
 export const fetchWishlist = createAsyncThunk(
   'wishlist/fetchWishlist',
@@ -38,7 +50,7 @@ export const addWishlistItem = createAsyncThunk(
       const currentList = await userService.getWishlist();
       const currentItems = Array.isArray(currentList) ? currentList : (currentList?.items ?? []);
       const alreadySaved = currentItems.some(
-        (item: WishlistItem) => item.itemId === payload.itemId || item.id === payload.itemId
+        (item: WishlistItem) => wishlistItemMatches(item, payload.itemId)
       );
 
       if (alreadySaved) return currentItems;
@@ -54,6 +66,13 @@ export const addWishlistItem = createAsyncThunk(
       }
       return rejectWithValue(typeof err === 'string' ? err : 'Failed to add item to wishlist');
     }
+  },
+  {
+    condition: (payload, { getState }) => {
+      const state = getState() as { wishlist?: { pendingByItem?: Record<string, number> } };
+      const itemId = normalizeWishlistId(payload.itemId);
+      return Boolean(itemId) && (state.wishlist?.pendingByItem?.[itemId] ?? 0) === 0;
+    },
   }
 );
 
@@ -73,6 +92,7 @@ const initialState: WishlistState = {
   items: [],
   loading: false,
   error: null,
+  pendingByItem: {},
 };
 
 export const wishlistSlice = createSlice({
@@ -109,16 +129,22 @@ export const wishlistSlice = createSlice({
           addedAt: new Date().toISOString(),
         };
         state.items.unshift(optimisticEntry);
+        const itemId = normalizeWishlistId(arg?.itemId);
+        state.pendingByItem[itemId] = (state.pendingByItem[itemId] ?? 0) + 1;
         state.loading = true;
         state.error = null;
       })
       .addCase(addWishlistItem.fulfilled, (state, action) => {
+        const itemId = normalizeWishlistId(action.meta.arg.itemId);
+        state.pendingByItem[itemId] = Math.max(0, (state.pendingByItem[itemId] ?? 1) - 1);
         state.loading = false;
         if (Array.isArray(action.payload)) {
           state.items = action.payload;
         }
       })
       .addCase(addWishlistItem.rejected, (state, action) => {
+        const itemId = normalizeWishlistId(action.meta.arg.itemId);
+        state.pendingByItem[itemId] = Math.max(0, (state.pendingByItem[itemId] ?? 1) - 1);
         state.items = wishlistSnapshot;
         state.loading = false;
         state.error = typeof action.payload === 'string' ? action.payload : null;
@@ -129,15 +155,21 @@ export const wishlistSlice = createSlice({
         wishlistSnapshot = JSON.parse(JSON.stringify(state.items));
         const targetId = action.meta.arg;
         state.items = state.items.filter(
-          (item) => item.id !== targetId && item.itemId !== targetId
+          (item) => !wishlistItemMatches(item, targetId)
         );
+        const itemId = normalizeWishlistId(targetId);
+        state.pendingByItem[itemId] = (state.pendingByItem[itemId] ?? 0) + 1;
         state.loading = true;
         state.error = null;
       })
-      .addCase(removeWishlistItem.fulfilled, (state) => {
+      .addCase(removeWishlistItem.fulfilled, (state, action) => {
+        const itemId = normalizeWishlistId(action.meta.arg);
+        state.pendingByItem[itemId] = Math.max(0, (state.pendingByItem[itemId] ?? 1) - 1);
         state.loading = false;
       })
       .addCase(removeWishlistItem.rejected, (state, action) => {
+        const itemId = normalizeWishlistId(action.meta.arg);
+        state.pendingByItem[itemId] = Math.max(0, (state.pendingByItem[itemId] ?? 1) - 1);
         state.items = wishlistSnapshot;
         state.loading = false;
         state.error = typeof action.payload === 'string' ? action.payload : null;

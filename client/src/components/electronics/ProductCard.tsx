@@ -1,4 +1,12 @@
-import { Eye, Heart, Plus, Star } from 'lucide-react';
+import { Eye, GitCompare, Heart, Plus, Star } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import {
+  addWishlistItem,
+  normalizeWishlistId,
+  removeWishlistItem,
+  wishlistItemMatches,
+} from '../../redux/slices/wishlistSlice';
 import type { Product } from '../../types';
 
 interface ProductCardProps {
@@ -13,11 +21,41 @@ const ProductCard = ({
   product,
   isWishlisted = false,
   onAddToCart,
-  onToggleWishlist
+  onCompare,
+  onToggleWishlist,
 }: ProductCardProps) => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const { token } = useAppSelector((state) => state.auth);
+  const { items: wishlistItems, loading: wishlistLoading, pendingByItem } = useAppSelector((state) => state.wishlist);
   const productId = product._id || product.id || 'product';
   const image = product.imageUrl || product.images?.[0] || 'https://via.placeholder.com/600x400/0f172a/ffffff?text=Product';
   const title = product.title || product.name || 'Product';
+  const isSaved = wishlistItems.some((item) => wishlistItemMatches(item, productId)) || isWishlisted;
+  const isPending = (pendingByItem?.[normalizeWishlistId(productId)] ?? 0) > 0;
+
+  const handleWishlistToggle = () => {
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+    if (!productId || isPending) return;
+
+    if (isSaved) {
+      dispatch(removeWishlistItem(productId));
+    } else {
+      dispatch(
+        addWishlistItem({
+          itemId: productId,
+          itemType: 'Product',
+          title,
+          imageUrl: image,
+          category: product.category,
+        })
+      );
+    }
+    onToggleWishlist?.(product, !isSaved);
+  };
 
   return (
     <article className="min-w-0 overflow-hidden rounded-[26px] border border-white/10 bg-card-surface/60 p-3 shadow-[0_20px_45px_rgba(15,23,42,0.25)] transition-transform duration-300 hover:-translate-y-1">
@@ -33,11 +71,12 @@ const ProductCard = ({
         </a>
         <button
           type="button"
-          onClick={() => onToggleWishlist?.(product, !isWishlisted)}
+          onClick={handleWishlistToggle}
+          disabled={isPending || (wishlistLoading && wishlistItems.length === 0)}
           className="absolute left-3 top-3 flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-dark-bg/50 text-white backdrop-blur-sm"
           aria-label={isWishlisted ? `Remove ${title} from wishlist` : `Save ${title} to wishlist`}
         >
-          <Heart size={16} className={isWishlisted ? 'fill-primary text-primary' : ''} />
+          <Heart size={16} className={isSaved ? 'fill-primary text-primary' : ''} />
         </button>
       </div>
 
@@ -65,7 +104,16 @@ const ProductCard = ({
             )}
           </div>
 
-          <div className="ml-auto flex shrink-0 items-center justify-between-">
+          <div className="ml-auto flex shrink-0 items-center gap-2">
+            <button
+              type="button"
+              onClick={() => onCompare?.(product)}
+              className="inline-flex items-center gap-1.5 rounded-xl border border-white/10 px-3 py-2 text-sm font-semibold text-white transition-colors hover:border-primary/50 hover:text-primary"
+              aria-label={`Compare ${title}`}
+            >
+              <GitCompare size={16} />
+              Compare
+            </button>
 
             <button
               type="button"

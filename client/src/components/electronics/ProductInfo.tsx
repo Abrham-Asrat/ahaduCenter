@@ -1,4 +1,4 @@
-import { ArrowRight, CheckCircle2, ShieldCheck, Star } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Heart, Star } from 'lucide-react';
 
 interface ProductInfoProps {
   product: {
@@ -12,19 +12,25 @@ interface ProductInfoProps {
     reviews?: number;
     description?: string;
     highlights?: string[];
+    id?: string;
   };
   onShowToast?: (msg: string) => void;
   onConfirmPickUp?: (quantity?: number) => void;
   orderLoading?: boolean;
   orderError?: string | null;
+  isWishlisted?: boolean;
+  onToggleWishlist?: () => void;
+  wishlistLoading?: boolean;
 }
 
 const ProductInfo = ({
   product,
-  onShowToast,
   onConfirmPickUp,
   orderLoading = false,
   orderError,
+  isWishlisted = false,
+  onToggleWishlist,
+  wishlistLoading = false,
 }: ProductInfoProps) => {
   const title = product.title || product.name || 'Product';
   const price = product.price ?? 0;
@@ -87,11 +93,12 @@ const ProductInfo = ({
 
         <button
           type="button"
-          onClick={() => onShowToast?.('Added to wishlist')}
-          className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-white transition-colors hover:border-primary/50 hover:text-primary"
+          onClick={onToggleWishlist}
+          disabled={wishlistLoading}
+          className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-white transition-colors hover:border-primary/50 hover:text-primary disabled:opacity-60"
         >
-          <ShieldCheck size={16} />
-          Secure checkout
+          <Heart size={16} className={isWishlisted ? 'fill-primary text-primary' : ''} />
+          {isWishlisted ? 'Remove from wishlist' : 'Save to wishlist'}
         </button>
       </div>
 

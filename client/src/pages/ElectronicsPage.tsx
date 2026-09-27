@@ -2,6 +2,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { fetchProducts } from '../redux/slices/productSlice';
+import { fetchWishlist } from '../redux/slices/wishlistSlice';
 import Navbar from '../components/common/Navbar';
 import SubNav from '../components/common/SubNav';
 // import SortingFilter from '../components/common/SortingFilter';
@@ -24,6 +25,7 @@ const ElectronicsPage = () => {
 
   // ── Redux state ──────────────────────────────────────────────────────────────
   const { products, loading, error, pagination } = useAppSelector((s) => s.product);
+  const { token } = useAppSelector((s) => s.auth);
 
   // ── Local UI state ───────────────────────────────────────────────────────────
   const [activeCategory, setActiveCategory] = useState('All');
@@ -45,8 +47,6 @@ const ElectronicsPage = () => {
   const [filterResetKey, setFilterResetKey] = useState(0);
 
   const [, setToastMessage] = useState<string | null>(null);
-  const [wishlistIds, setWishlistIds] = useState<string[]>([]);
-
   const [showMobileFilters, setShowMobileFilters] = useState(false);
 
   const showToast = (msg: string) => {
@@ -84,6 +84,10 @@ const ElectronicsPage = () => {
     dispatch(fetchProducts(buildParams()));
   }, [dispatch, buildParams]);
 
+  useEffect(() => {
+    if (token) dispatch(fetchWishlist());
+  }, [dispatch, token]);
+
   // ── Control change handlers ───────────────────────────────────────────────────
   const handleFilterChange = (newFilters: Partial<typeof filterState>) => {
     setFilterState((prev) => ({ ...prev, ...newFilters }));
@@ -119,17 +123,6 @@ const ElectronicsPage = () => {
   const handleCompare = (product: Product) => {
     showToast(`"${product.name}" added to product comparison!`);
     setTimeout(() => navigate('/compare'), 1200);
-  };
-
-  const handleToggleWishlist = (product: Product, isSaved: boolean) => {
-    const productId = product._id || product.id || '';
-    if (isSaved) {
-      setWishlistIds((prev) => [...prev, productId]);
-      showToast(`"${product.name}" saved to wishlist!`);
-    } else {
-      setWishlistIds((prev) => prev.filter((id) => id !== productId));
-      showToast(`"${product.name}" removed from wishlist.`);
-    }
   };
 
   const handleResetFilters = () => {
@@ -235,10 +228,8 @@ const ElectronicsPage = () => {
                     >
                       <ProductCard
                         product={product}
-                        isWishlisted={wishlistIds.includes(product._id || product.id || '')}
                         onAddToCart={handleAddToCart}
                         onCompare={handleCompare}
-                        onToggleWishlist={handleToggleWishlist}
                       />
                     </div>
                   ))}

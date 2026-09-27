@@ -9,6 +9,7 @@ import ProductSpecs from '../components/electronics/ProductSpecs';
 import SimilarProducts from '../components/electronics/SimilarProducts';
 import Footer from '../components/common/Footer';
 import { fetchProduct, fetchProducts } from '../redux/slices/productSlice';
+import { addWishlistItem, fetchWishlist, removeWishlistItem, wishlistItemMatches } from '../redux/slices/wishlistSlice';
 import { orderService } from '../services/orderService';
 import type { Product } from '../types';
 
@@ -27,6 +28,8 @@ const ProductDetailPage = () => {
   const dispatch = useAppDispatch();
 
   const { selectedProduct, products, loading, error } = useAppSelector((s) => s.product);
+  const { token } = useAppSelector((s) => s.auth);
+  const { items: wishlistItems, pendingByItem } = useAppSelector((s) => s.wishlist);
 
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [orderLoading, setOrderLoading] = useState(false);
@@ -72,6 +75,10 @@ const ProductDetailPage = () => {
     }
   }, [id, dispatch]);
 
+  useEffect(() => {
+    if (token) dispatch(fetchWishlist());
+  }, [dispatch, token]);
+
   // When selectedProduct is loaded and has a category, fetch similar products
   useEffect(() => {
     if (selectedProduct && selectedProduct.category) {
@@ -109,23 +116,23 @@ const ProductDetailPage = () => {
     }
 
     return {
-      id:            p._id || p.id || '',
-      title:         p.title || p.name || '',
-      name:          p.name || '',
-      brand:         p.brand || '',
-      condition:     p.condition || 'New',
-      images:        Array.isArray(p.images) && p.images.length > 0 ? p.images : [
+      id: p._id || p.id || '',
+      title: p.title || p.name || '',
+      name: p.name || '',
+      brand: p.brand || '',
+      condition: p.condition || 'New',
+      images: Array.isArray(p.images) && p.images.length > 0 ? p.images : [
         'https://via.placeholder.com/600x400/1d3557/ffffff?text=No+Image',
       ],
-      rating:        typeof p.rating === 'number' ? p.rating : 0,
-      reviews:       p.reviewCount || 0,
-      price:         p.price || 0,
+      rating: typeof p.rating === 'number' ? p.rating : 0,
+      reviews: p.reviewCount || 0,
+      price: p.price || 0,
       originalPrice: p.originalPrice || undefined,
-      discount:      p.discount || undefined,
-      description:   p.description || '',
-      highlights:    Array.isArray(p.highlights) ? p.highlights : [],
+      discount: p.discount || undefined,
+      description: p.description || '',
+      highlights: Array.isArray(p.highlights) ? p.highlights : [],
       specifications: specs,
-      category:      p.category || '',
+      category: p.category || '',
     };
   };
 
@@ -135,18 +142,43 @@ const ProductDetailPage = () => {
     return products
       .filter((p) => (p._id || p.id) !== currentId)
       .map((p) => ({
-        id:       p._id || p.id || '',
-        title:    p.title || p.name || '',
-        name:     p.name || '',
-        brand:    p.brand || '',
+        id: p._id || p.id || '',
+        title: p.title || p.name || '',
+        name: p.name || '',
+        brand: p.brand || '',
         imageUrl: Array.isArray(p.images) && p.images.length > 0
           ? p.images[0]
           : 'https://via.placeholder.com/600x400/1d3557/ffffff?text=No+Image',
-        price:    p.price || 0,
+        price: p.price || 0,
       }));
   };
 
   const product = buildProductProps(selectedProduct);
+  const productId = product?.id || '';
+  const isWishlisted = wishlistItems.some((item) => wishlistItemMatches(item, productId));
+  const wishlistLoading = (pendingByItem?.[productId] ?? 0) > 0;
+
+  const handleToggleWishlist = () => {
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+    if (!productId || wishlistLoading || !product) return;
+
+    if (isWishlisted) {
+      dispatch(removeWishlistItem(productId));
+    } else {
+      dispatch(
+        addWishlistItem({
+          itemId: productId,
+          itemType: 'Product',
+          title: product.title,
+          imageUrl: product.images[0],
+          category: product.category,
+        })
+      );
+    }
+  };
   const similarProducts = buildSimilarProducts();
 
   // ── Render helpers ────────────────────────────────────────────────────────
@@ -187,106 +219,109 @@ const ProductDetailPage = () => {
   return (
     <>
       <Navbar />
-    <div className="min-h-screen bg-background text-on-background flex flex-col relative animate-fade-in">
+      <div className="min-h-screen bg-background text-on-background flex flex-col relative animate-fade-in">
 
-      {/* Toast Notification */}
-      {toastMessage && (
-        <div className="fixed bottom-24 right-8 z-50 bg-surface-container border border-primary/50 text-white px-5 py-3.5 rounded-xl shadow-2xl flex items-center gap-3 animate-bounce">
-          <span className="material-symbols-outlined text-primary">check_circle</span>
-          <span className="text-sm font-semibold">{toastMessage}</span>
-        </div>
-      )}
+        {/* Toast Notification */}
+        {toastMessage && (
+          <div className="fixed bottom-24 right-8 z-50 bg-surface-container border border-primary/50 text-white px-5 py-3.5 rounded-xl shadow-2xl flex items-center gap-3 animate-bounce">
+            <span className="material-symbols-outlined text-primary">check_circle</span>
+            <span className="text-sm font-semibold">{toastMessage}</span>
+          </div>
+        )}
 
-      <main className="flex-grow">
-        {loading && !selectedProduct && renderSkeleton()}
-        {!loading && error && renderError()}
+        <main className="flex-grow">
+          {loading && !selectedProduct && renderSkeleton()}
+          {!loading && error && renderError()}
 
-        {product && (
-          <>
-            {/* Breadcrumbs (desktop) */}
-            <div className="max-w-7xl mx-auto px-6 mb-6 hidden md:flex items-center gap-2 text-sm text-on-surface-variant">
-              <a href="/" className="hover:text-primary transition-colors">Home</a>
-              <span className="material-symbols-outlined text-sm">chevron_right</span>
-              <a href="/electronics" className="hover:text-primary transition-colors">Electronics</a>
-              <span className="material-symbols-outlined text-sm">chevron_right</span>
-              <span className="text-white font-semibold">{product.name}</span>
-            </div>
-
-            {/* Product hero section */}
-            <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
-              {/* Gallery */}
-              <div className="lg:col-span-7">
-                <ProductGallery product={product} />
+          {product && (
+            <>
+              {/* Breadcrumbs (desktop) */}
+              <div className="max-w-7xl mx-auto px-6 mb-6 hidden md:flex items-center gap-2 text-sm text-on-surface-variant">
+                <a href="/" className="hover:text-primary transition-colors">Home</a>
+                <span className="material-symbols-outlined text-sm">chevron_right</span>
+                <a href="/electronics" className="hover:text-primary transition-colors">Electronics</a>
+                <span className="material-symbols-outlined text-sm">chevron_right</span>
+                <span className="text-white font-semibold">{product.name}</span>
               </div>
-              {/* Info */}
-              <div className="lg:col-span-5">
-                <ProductInfo
-                  product={product}
-                  onShowToast={showToast}
-                  onConfirmPickUp={handlePlaceOrder}
-                  orderLoading={orderLoading}
-                  orderError={orderError}
+
+              {/* Product hero section */}
+              <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
+                {/* Gallery */}
+                <div className="lg:col-span-7">
+                  <ProductGallery product={product} />
+                </div>
+                {/* Info */}
+                <div className="lg:col-span-5">
+                  <ProductInfo
+                    product={product}
+                    onShowToast={showToast}
+                    onConfirmPickUp={handlePlaceOrder}
+                    orderLoading={orderLoading}
+                    orderError={orderError}
+                    isWishlisted={isWishlisted}
+                    onToggleWishlist={handleToggleWishlist}
+                    wishlistLoading={wishlistLoading}
+                  />
+                </div>
+              </div>
+
+              {/* Specs tabs/accordion */}
+              <div className="max-w-7xl mx-auto px-6 mb-12">
+                <ProductSpecs
+                  specifications={product.specifications}
+                  description={product.description ?? ''}
                 />
               </div>
-            </div>
 
-            {/* Specs tabs/accordion */}
-            <div className="max-w-7xl mx-auto px-6 mb-12">
-              <ProductSpecs
-                specifications={product.specifications}
-                description={product.description ?? ''}
-              />
-            </div>
-
-            {/* Similar products — only render if we have results */}
-            {similarProducts.length > 0 && (
-              <div className="max-w-7xl mx-auto px-6">
-                <SimilarProducts products={similarProducts} />
-              </div>
-            )}
-          </>
-        )}
-      </main>
-
-      {/* Mobile fixed bottom action bar */}
-      {product && (
-        <div className="md:hidden fixed bottom-0 w-full glass-panel border-t border-white/10 p-4 z-40 pb-6 rounded-t-2xl shadow-2xl">
-          <div className="flex gap-3">
-            <button
-              onClick={() => showToast('Opening seller chat inquiry...')}
-              className="w-12 h-12 flex-shrink-0 rounded-xl border border-secondary/50 text-secondary flex items-center justify-center bg-surface-container/50 active:scale-95 transition-transform"
-            >
-              <span className="material-symbols-outlined">chat_bubble</span>
-            </button>
-            <button
-              onClick={() => handlePlaceOrder(1)}
-              disabled={orderLoading}
-              className="flex-1 bg-primary text-black font-extrabold rounded-xl flex items-center justify-center gap-2 active:scale-95 transition-transform uppercase tracking-wider text-xs disabled:opacity-60 disabled:cursor-not-allowed"
-            >
-              {orderLoading ? (
-                <>
-                  <span className="animate-spin material-symbols-outlined text-[18px]">progress_activity</span>
-                  Placing Order…
-                </>
-              ) : (
-                <>
-                  <span className="material-symbols-outlined">storefront</span>
-                  Confirm Pick-Up
-                </>
+              {/* Similar products — only render if we have results */}
+              {similarProducts.length > 0 && (
+                <div className="max-w-7xl mx-auto px-6">
+                  <SimilarProducts products={similarProducts} />
+                </div>
               )}
-            </button>
-          </div>
-          {orderError && (
-            <p className="mt-2 text-center text-xs text-error font-semibold">{orderError}</p>
+            </>
           )}
-        </div>
-      )}
+        </main>
 
-      {/* Add bottom padding for mobile so content isn't hidden behind fixed bar */}
-      <div className="md:hidden h-20" />
+        {/* Mobile fixed bottom action bar */}
+        {product && (
+          <div className="md:hidden fixed bottom-0 w-full glass-panel border-t border-white/10 p-4 z-40 pb-6 rounded-t-2xl shadow-2xl">
+            <div className="flex gap-3">
+              <button
+                onClick={() => showToast('Opening seller chat inquiry...')}
+                className="w-12 h-12 flex-shrink-0 rounded-xl border border-secondary/50 text-secondary flex items-center justify-center bg-surface-container/50 active:scale-95 transition-transform"
+              >
+                <span className="material-symbols-outlined">chat_bubble</span>
+              </button>
+              <button
+                onClick={() => handlePlaceOrder(1)}
+                disabled={orderLoading}
+                className="flex-1 bg-primary text-black font-extrabold rounded-xl flex items-center justify-center gap-2 active:scale-95 transition-transform uppercase tracking-wider text-xs disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                {orderLoading ? (
+                  <>
+                    <span className="animate-spin material-symbols-outlined text-[18px]">progress_activity</span>
+                    Placing Order…
+                  </>
+                ) : (
+                  <>
+                    <span className="material-symbols-outlined">storefront</span>
+                    Confirm Pick-Up
+                  </>
+                )}
+              </button>
+            </div>
+            {orderError && (
+              <p className="mt-2 text-center text-xs text-error font-semibold">{orderError}</p>
+            )}
+          </div>
+        )}
 
-      <Footer />
-    </div>
+        {/* Add bottom padding for mobile so content isn't hidden behind fixed bar */}
+        <div className="md:hidden h-20" />
+
+        <Footer />
+      </div>
     </>
   );
 };

@@ -40,7 +40,7 @@ describe('Pagination and Slices Property-Based Tests', () => {
         fc.record({ itemId: fc.string(), itemType: fc.constantFrom('Book', 'Movie', 'Product') }),
         fc.string({ minLength: 1 }),
         (initialItems, newItem, errorMsg) => {
-          const initialState = { items: initialItems, loading: false, error: null };
+          const initialState = { items: initialItems, loading: false, error: null, pendingByItem: {} };
 
           // Simulate pending (optimistic addition)
           const pendingAction = { type: addWishlistItem.pending.type, meta: { arg: newItem } };

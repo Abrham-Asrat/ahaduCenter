@@ -2,6 +2,7 @@ import { ArrowRight, BookOpen, Heart, Star } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { addWishlistItem, removeWishlistItem } from '../../redux/slices/wishlistSlice';
+import { normalizeWishlistId, wishlistItemMatches } from '../../redux/slices/wishlistSlice';
 import type { Book } from '../../types';
 
 interface BookCardProps {
@@ -13,9 +14,10 @@ const BookCard = ({ book, onQuickAction }: BookCardProps) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { token } = useAppSelector((state) => state.auth);
-  const { items: wishlistItems, loading: wishlistLoading } = useAppSelector((state) => state.wishlist);
+  const { items: wishlistItems, loading: wishlistLoading, pendingByItem } = useAppSelector((state) => state.wishlist);
   const bookId = book._id || book.id || '';
-  const isLiked = wishlistItems.some((item) => item.itemId === bookId || item.id === bookId);
+  const isLiked = wishlistItems.some((item) => wishlistItemMatches(item, bookId));
+  const isPending = (pendingByItem?.[normalizeWishlistId(bookId)] ?? 0) > 0;
   const image = book.coverUrl || book.coverImage || 'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=900&q=80';
   const availability = book.availability?.toLowerCase();
   const status = availability === 'borrowed'
@@ -66,7 +68,7 @@ const BookCard = ({ book, onQuickAction }: BookCardProps) => {
           <button
             type="button"
             onClick={handleWishlistToggle}
-            disabled={wishlistLoading && wishlistItems.length === 0}
+            disabled={isPending || (wishlistLoading && wishlistItems.length === 0)}
             className="flex items-center justify-center  border-none  text-white sm:right-3 sm:top-3"
             aria-label={isLiked ? `Remove ${book.title} from wishlist` : `Save ${book.title} to wishlist`}
           >
