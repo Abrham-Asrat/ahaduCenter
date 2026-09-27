@@ -70,6 +70,7 @@ describe('BookCoverCard Save toggle — Property 3 (Validates: Requirements 4.2)
                 // fast-check runs this property numRuns times, each in a fresh render.
                 fc.constant(null),
                 (_) => {
+                    store.dispatch({ type: 'wishlist/fetchWishlist/fulfilled', payload: [] });
                     const { getByRole, unmount } = renderCard();
 
                     const saveButton = getByRole('button', { name: /save|unsave/i });

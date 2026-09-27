@@ -9,6 +9,7 @@ import {
   fetchBookReviews,
   createBookReview,
 } from '../redux/slices/bookSlice';
+import { fetchWishlist } from '../redux/slices/wishlistSlice';
 import Navbar from '../components/common/Navbar';
 import BookCoverCard from '../components/book/BookCoverCard';
 import BookInfoSection from '../components/book/BookInfoSection';
@@ -51,6 +52,10 @@ const BookDetailPage = () => {
       dispatch(fetchBookReviews(id));
     }
   }, [dispatch, id]);
+
+  useEffect(() => {
+    if (token) dispatch(fetchWishlist());
+  }, [dispatch, token]);
 
   // ── Borrow handler ───────────────────────────────────────────────────────────
   const handleBorrow = async () => {

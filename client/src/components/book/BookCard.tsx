@@ -13,11 +13,16 @@ const BookCard = ({ book, onQuickAction }: BookCardProps) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { token } = useAppSelector((state) => state.auth);
-  const wishlistItems = useAppSelector((state) => state.wishlist.items);
+  const { items: wishlistItems, loading: wishlistLoading } = useAppSelector((state) => state.wishlist);
   const bookId = book._id || book.id || '';
   const isLiked = wishlistItems.some((item) => item.itemId === bookId || item.id === bookId);
   const image = book.coverUrl || book.coverImage || 'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=900&q=80';
-  const status = book.availability === 'available' ? 'Available' : 'Borrowed';
+  const availability = book.availability?.toLowerCase();
+  const status = availability === 'borrowed'
+    ? 'Borrowed'
+    : availability === 'reserved'
+      ? 'Reserved'
+      : 'Available';
 
   const handleWishlistToggle = () => {
     if (!token) {
@@ -61,6 +66,7 @@ const BookCard = ({ book, onQuickAction }: BookCardProps) => {
           <button
             type="button"
             onClick={handleWishlistToggle}
+            disabled={wishlistLoading && wishlistItems.length === 0}
             className="flex items-center justify-center  border-none  text-white sm:right-3 sm:top-3"
             aria-label={isLiked ? `Remove ${book.title} from wishlist` : `Save ${book.title} to wishlist`}
           >

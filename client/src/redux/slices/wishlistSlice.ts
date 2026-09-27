@@ -35,11 +35,23 @@ export const addWishlistItem = createAsyncThunk(
   'wishlist/addWishlistItem',
   async (payload: WishlistPayload, { rejectWithValue }) => {
     try {
+      const currentList = await userService.getWishlist();
+      const currentItems = Array.isArray(currentList) ? currentList : (currentList?.items ?? []);
+      const alreadySaved = currentItems.some(
+        (item: WishlistItem) => item.itemId === payload.itemId || item.id === payload.itemId
+      );
+
+      if (alreadySaved) return currentItems;
+
       await userService.addToWishlist(payload);
       // Re-fetch to ensure complete item metadata is populated from backend
       const updatedList = await userService.getWishlist();
       return updatedList;
     } catch (err) {
+      if (typeof err === 'string' && /already in your wishlist/i.test(err)) {
+        const updatedList = await userService.getWishlist();
+        return updatedList;
+      }
       return rejectWithValue(typeof err === 'string' ? err : 'Failed to add item to wishlist');
     }
   }

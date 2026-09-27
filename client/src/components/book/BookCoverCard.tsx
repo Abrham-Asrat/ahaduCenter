@@ -12,7 +12,7 @@ const BookCoverCard = ({ book }: BookCoverCardProps) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { token } = useAppSelector((state) => state.auth);
-  const wishlistItems = useAppSelector((state) => state.wishlist.items);
+  const { items: wishlistItems, loading: wishlistLoading } = useAppSelector((state) => state.wishlist);
   const [isZoomed, setIsZoomed] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
 
@@ -74,6 +74,7 @@ const BookCoverCard = ({ book }: BookCoverCardProps) => {
             type="button"
             aria-label={isSaved ? 'Unsave' : 'Save'}
             onClick={handleSave}
+            disabled={wishlistLoading && wishlistItems.length === 0}
             className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-dark-bg/80 text-white backdrop-blur-sm"
           >
             <span className="material-symbols-outlined text-lg">{isSaved ? 'bookmark_added' : 'bookmark'}</span>

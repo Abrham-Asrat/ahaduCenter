@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 import MobileFilterButton from '../components/common/MobileFilterButton';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { fetchBooks } from '../redux/slices/bookSlice';
+import { fetchWishlist } from '../redux/slices/wishlistSlice';
 import Navbar from '../components/common/Navbar';
 import SubNav from '../components/common/SubNav';
 import Filters, { type FilterGroup, type FilterValues } from '../components/common/Filters';
@@ -23,6 +24,7 @@ const BookCenterPage = () => {
 
   // ── Redux state ──────────────────────────────────────────────────────────────
   const { books, loading, error, pagination } = useAppSelector((s) => s.book);
+  const { token } = useAppSelector((s) => s.auth);
 
   // ── Local UI state ───────────────────────────────────────────────────────────
   const [activeCategory, setActiveCategory] = useState('All Categories');
@@ -75,6 +77,10 @@ const BookCenterPage = () => {
   useEffect(() => {
     dispatch(fetchBooks(buildParams()));
   }, [dispatch, buildParams]);
+
+  useEffect(() => {
+    if (token) dispatch(fetchWishlist());
+  }, [dispatch, token]);
 
   // Reset to page 1 when filters/sort change (but not when currentPage changes)
   const handleFilterChange = (newFilters: FilterValues) => {
