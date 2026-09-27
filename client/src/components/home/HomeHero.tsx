@@ -1,29 +1,31 @@
 import { Link } from 'react-router-dom';
-import { useAppSelector} from '../../redux/hooks';
+import { useTranslation } from 'react-i18next';
+import { useAppSelector } from '../../redux/hooks';
 import type { RootState } from '../../redux/store';
 
 const HomeHero = () => {
-   // Auth state from Redux store
-    const {token} = useAppSelector((state: RootState) => state.auth);
+  const { t } = useTranslation();
+  // Auth state from Redux store
+  const { token } = useAppSelector((state: RootState) => state.auth);
   return (
     <section className="relative overflow-hidden bg-surface-container-lowest">
       <div className="flex flex-col items-center px-6 pb-8 py-4 text-center md:hidden">
         <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-surface-container-high px-4 text-[12px] font-semibold text-primary shadow-sm">
           <span>🇪🇹</span>
-          <span>From Mizan Teferi with Love</span>
+          <span>{t('home.heroBadgeMobile')}</span>
         </div>
         <h1 className="mb-3 max-w-[340px] text-[36px] font-extrabold leading-[44px] tracking-[-0.02em] text-on-surface">
-          Movies. Books. Electronics.{' '}
-          <span className="bg-gradient-to-r from-primary via-primary-fixed to-secondary bg-clip-text text-transparent">All in One Place.</span>
+          {t('home.heroTitle')}{' '}
+          <span className="bg-gradient-to-r from-primary via-primary-fixed to-secondary bg-clip-text text-transparent">{t('home.heroTitleBreak')}</span>
         </h1>
-        <p className="mb-6 max-w-[320px] text-base leading-6 text-on-surface-variant">Discover, borrow, and shop from the heart of Mizan Teferi.</p>
+        <p className="mb-6 max-w-[320px] text-base leading-6 text-on-surface-variant">{t('home.heroSubtitle')}</p>
         <div className="mb-8 flex w-full flex-col gap-2">
           <Link to="/movies" className="inline-flex h-14 items-center justify-center gap-2 rounded-full bg-primary px-6 text-base font-bold text-on-primary-container shadow-[0_8px_24px_rgba(245,158,11,0.28)] active:scale-[0.98]">
-            <span>Explore Catalog</span>
+            <span>{t('home.ctaExplore')}</span>
             <span className="material-symbols-outlined text-xl">arrow_forward</span>
           </Link>
           <Link to="/register" className="inline-flex h-14 items-center justify-center gap-2 rounded-full bg-surface-container-highest px-6 text-base font-semibold text-on-surface transition-colors hover:bg-surface-bright active:scale-[0.98]">
-            <span>Sign Up Free</span>
+            <span>{t('home.ctaSignUp')}</span>
             <span className="material-symbols-outlined text-lg">person_add</span>
           </Link>
         </div>
@@ -31,15 +33,15 @@ const HomeHero = () => {
           <div className="mb-3 flex items-center justify-between border-b border-white/5 pb-2">
             <div className="flex items-center gap-2">
               <span className="h-2.5 w-2.5 rounded-full bg-secondary shadow-[0_0_8px_rgba(78,222,163,0.8)]" />
-              <span className="text-[11px] font-bold uppercase tracking-[0.08em] text-on-surface-variant">Top Spotlight Curations</span>
+              <span className="text-[11px] font-bold uppercase tracking-[0.08em] text-on-surface-variant">{t('home.spotlightTitle')}</span>
             </div>
-            <span className="rounded-full bg-surface-container px-2 py-0.5 text-[11px] font-bold text-primary">Addis Hub</span>
+            <span className="rounded-full bg-surface-container px-2 py-0.5 text-[11px] font-bold text-primary">{t('home.spotlightBadge')}</span>
           </div>
           <div className="grid grid-cols-3 gap-2">
             {[
-              { title: 'Gondar Epic', type: 'Film', image: 'https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=500&q=80', icon: 'movie', color: 'bg-primary text-on-primary' },
-              { title: 'Lore & Tales', type: 'Literature', image: 'https://images.unsplash.com/photo-1524578271613-d550eacf6090?auto=format&fit=crop&w=500&q=80', icon: 'menu_book', color: 'bg-tertiary-container text-on-tertiary-container' },
-              { title: 'Zenith Pro', type: 'Audio', image: 'https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=500&q=80', icon: 'headphones', color: 'bg-secondary-container text-on-secondary-container' },
+              { title: t('home.cards.gondarEpic'), type: t('home.cards.gondarEpicType'), image: 'https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=500&q=80', icon: 'movie', color: 'bg-primary text-on-primary' },
+              { title: t('home.cards.loreTales'), type: t('home.cards.loreTalesType'), image: 'https://images.unsplash.com/photo-1524578271613-d550eacf6090?auto=format&fit=crop&w=500&q=80', icon: 'menu_book', color: 'bg-tertiary-container text-on-tertiary-container' },
+              { title: t('home.cards.zenithPro'), type: t('home.cards.zenithProType'), image: 'https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=500&q=80', icon: 'headphones', color: 'bg-secondary-container text-on-secondary-container' },
             ].map((item) => (
               <div key={item.title} className="flex min-w-0 flex-col items-center rounded-xl bg-surface-container-lowest p-2 text-center">
                 <div className="relative mb-1.5 aspect-[2/3] w-full overflow-hidden rounded-lg">
@@ -76,13 +78,13 @@ const HomeHero = () => {
             <p className="max-w-xl text-lg leading-relaxed text-on-surface-variant lg:text-[18px] lg:leading-[28px]">
               Discover, borrow, and shop — from the heart of Mizan Teferi. An authentic cultural sanctuary where indigenous storytelling harmonizes with world-class gear.
             </p>
-            {token?( <div className="flex w-full flex-wrap items-center gap-4 sm:w-auto">
+            {token ? (<div className="flex w-full flex-wrap items-center gap-4 sm:w-auto">
               <Link to="/movies" className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-8 py-3.5 text-lg font-bold text-on-primary-container shadow-[0_12px_36px_-8px_rgba(245,158,11,0.4)] transition-all duration-200 hover:scale-[1.02]">
                 <span>Explore Catalog</span>
                 <span className="material-symbols-outlined text-lg">arrow_forward</span>
               </Link>
-              
-            </div>):( <div className="flex w-full flex-wrap items-center gap-4 sm:w-auto">
+
+            </div>) : (<div className="flex w-full flex-wrap items-center gap-4 sm:w-auto">
               <Link to="/movies" className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-8 py-3.5 text-lg font-bold text-on-primary-container shadow-[0_12px_36px_-8px_rgba(245,158,11,0.4)] transition-all duration-200 hover:scale-[1.02]">
                 <span>Explore Catalog</span>
                 <span className="material-symbols-outlined text-lg">arrow_forward</span>
@@ -92,7 +94,7 @@ const HomeHero = () => {
                 <span className="material-symbols-outlined text-lg">person_add</span>
               </Link>
             </div>)}
-           
+
 
             <div className="flex items-center gap-4">
               <div className="flex -space-x-2.5 overflow-hidden">

@@ -46,32 +46,54 @@
     "about": "About Us"
   },
   "home": {
-    "heroBadge": "From Mizan Teferi with Love",
+    "heroBadge": "From the Heart of Mizan Teferi",
     "heroBadgeMobile": "From Mizan Teferi with Love",
     "heroTitle": "Movies. Books. Electronics.",
-    "heroTitleHighlight": "All in One Place.",
+    "heroTitleBreak": "All in One Place.",
     "heroSubtitle": "Discover, borrow, and shop from the heart of Mizan Teferi.",
     "heroSubtitleDesktop": "Discover, borrow, and shop — from the heart of Mizan Teferi. An authentic cultural sanctuary where indigenous storytelling harmonizes with world-class gear.",
     "ctaExplore": "Explore Catalog",
     "ctaSignUp": "Sign Up Free",
-    "ctaStartExploring": "Start Exploring",
-    "ctaWatchShowreel": "Watch Showreel",
+    "ratingText": "{{rating}}/5 from {{count}}+ members",
     "spotlightTitle": "Top Spotlight Curations",
     "spotlightBadge": "Addis Hub",
-    "categories": {
-      "title": "What We Offer",
-      "movies": "Movie Center",
-      "moviesDesc": "Request the latest films or discover cultural classics from Ethiopia and beyond.",
-      "books": "Book Library",
-      "booksDesc": "Borrow physical editions, purchase academic literature, or access digital translations delivered straight to Bole or Kazanchis.",
-      "electronics": "Electronics Hub",
-      "electronicsDesc": "Shop trusted laptops, smartphones, and accessories — vetted by Ahadu, delivered within Addis Ababa."
+    "cards": {
+      "gondarEpic": "Gondar Epic",
+      "gondarEpicType": "Film",
+      "loreTales": "Lore & Tales",
+      "loreTalesType": "Literature",
+      "zenithPro": "Zenith Pro",
+      "zenithProType": "Audio",
+      "echoes": "Echoes of Entoto",
+      "echoesBadge": "4K Premiere",
+      "echoesSubtitle": "Cinema • 2h 08m",
+      "zenithProFull": "Zenith Pro Studio ANC",
+      "zenithStatus": "In Stock • Addis Escrow",
+      "fethaTitle": "Fetha Nagast",
+      "fethaSeries": "Ancient Wisdom Series",
+      "fethaDesc": "The Law of Kings. Collector bilingual Ge'ez & English annotated translation.",
+      "fethaAction": "Borrow or Buy"
     },
     "stats": {
-      "movies": "Movies",
-      "books": "Books",
-      "products": "Products",
-      "users": "Happy Users"
+      "movies": "Movies & Short Films",
+      "books": "Books & Manuscripts",
+      "products": "Verified Tech Products",
+      "users": "Happy Members"
+    },
+    "categories": {
+      "title": "Curated Collections",
+      "subtitle": "A seamless unification of visual cinema, ancestral and contemporary literature, and vetted consumer technology.",
+      "department": "Departments",
+      "movieCenter": "Movie Center",
+      "movieTag": "Cinema Hub",
+      "movieDesc": "Stream Ethiopian blockbusters, award-winning indie cinema, and global 4K releases with native subtitle tracks.",
+      "bookSanctum": "Book Sanctum",
+      "bookTag": "Library & Shop",
+      "bookDesc": "Borrow physical editions, purchase academic literature, or access digital translations delivered straight to Bole or Kazanchis.",
+      "techMarketplace": "Tech Marketplace",
+      "techTag": "Verified Tech",
+      "techDesc": "Inspected gadgets, developer workstations, and premium audio backed by our Addis escrow guarantee and local warranties.",
+      "explore": "Explore"
     },
     "testimonials": {
       "title": "What Our Community Says"

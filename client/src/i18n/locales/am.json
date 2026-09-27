@@ -46,32 +46,54 @@
     "about": "ስለ እኛ"
   },
   "home": {
-    "heroBadge": "ከሚዛን ተፈሪ ጋር ፍቅር",
+    "heroBadge": "ከሚዛን ተፈሪ ልብ",
     "heroBadgeMobile": "ከሚዛን ተፈሪ ጋር ፍቅር",
     "heroTitle": "ፊልሞች። መጽሐፍት። ኤሌክትሮኒክስ።",
-    "heroTitleHighlight": "ሁሉም በአንድ ቦታ።",
+    "heroTitleBreak": "ሁሉም በአንድ ቦታ።",
     "heroSubtitle": "ከሚዛን ተፈሪ ልብ ይግለጡ፣ ይበደሩ እና ይግዙ።",
     "heroSubtitleDesktop": "ይግለጡ፣ ይበደሩ እና ይግዙ — ከሚዛን ተፈሪ ልብ። የአገር ውስጥ ታሪክ መናገር ከአለም አቀፍ መሳሪያዎች ጋር የሚስማማበት እውነተኛ የባህል መቅደስ።",
     "ctaExplore": "ካታሎግ ይመልከቱ",
     "ctaSignUp": "በነጻ ይመዝገቡ",
-    "ctaStartExploring": "መመልከት ይጀምሩ",
-    "ctaWatchShowreel": "ሾውሪል ይመልከቱ",
+    "ratingText": "{{rating}}/5 ከ {{count}}+ አባላት",
     "spotlightTitle": "ከፍተኛ የብርሃን ስብስቦች",
     "spotlightBadge": "አዲስ ሀብ",
-    "categories": {
-      "title": "እኛ የምናቀርበው",
-      "movies": "የፊልም ማእከል",
-      "moviesDesc": "የቅርብ ጊዜ ፊልሞችን ይጠይቁ ወይም ከኢትዮጵያ እና ከዚያ በላይ ባህላዊ ክላሲኮችን ያግኙ።",
-      "books": "የመጽሐፍ ቤተ-መጻህፍት",
-      "booksDesc": "አካላዊ እትሞችን ይበድሩ፣ የአካዳሚክ ሥነ-ጽሑፍን ይግዙ ወይም ወደ ቦሌ ወይም ካዛንቺስ የሚደርሱ ዲጂታል ትርጉሞችን ያግኙ።",
-      "electronics": "የኤሌክትሮኒክስ ማዕከል",
-      "electronicsDesc": "በአሁዱ የተፈተኑ እና በአዲስ አበባ ውስጥ የሚደርሱ አስተማማኝ ላፕቶፖች፣ ስማርትፎኖች እና አክሰሰሪዎች ይግዙ።"
+    "cards": {
+      "gondarEpic": "የጎንደር ኤፒክ",
+      "gondarEpicType": "ፊልም",
+      "loreTales": "ታሪኮች እና ተረቶች",
+      "loreTalesType": "ሥነ-ጽሑፍ",
+      "zenithPro": "ዜኒት ፕሮ",
+      "zenithProType": "ኦዲዮ",
+      "echoes": "የእንቶቶ ማስተጋባቶች",
+      "echoesBadge": "4K ፕሪሚየር",
+      "echoesSubtitle": "ሲኒማ • 2ሰ 08ደ",
+      "zenithProFull": "ዜኒት ፕሮ ስቱዲዮ ANC",
+      "zenithStatus": "በእቃ ክምችት • አዲስ ኤስክሮው",
+      "fethaTitle": "ፈታ ነገስት",
+      "fethaSeries": "የጥንት ጥበብ ተከታታይ",
+      "fethaDesc": "የነገሥታት ሕግ። የሁለት ቋንቋ ግእዝ እና እንግሊዝኛ የተገልፀ ትርጉም።",
+      "fethaAction": "ይበድሩ ወይም ይግዙ"
     },
     "stats": {
-      "movies": "ፊልሞች",
-      "books": "መጽሐፍት",
-      "products": "ምርቶች",
-      "users": "ደስተኛ ተጠቃሚዎች"
+      "movies": "ፊልሞች እና አጭር ፊልሞች",
+      "books": "መጽሐፍት እና የእጅ ጽሑፎች",
+      "products": "የተረጋገጡ የቴክ ምርቶች",
+      "users": "ደስተኛ አባላት"
+    },
+    "categories": {
+      "title": "የተደረደሩ ስብስቦች",
+      "subtitle": "የእይታ ሲኒማ፣ የአባቶች እና ዘመናዊ ሥነ-ጽሑፍ እና የተረጋገጠ የሸማች ቴክኖሎጂ ወግ አጥለው የተዋሃዱ።",
+      "department": "ክፍሎች",
+      "movieCenter": "የፊልም ማዕከል",
+      "movieTag": "የሲኒማ ማዕከል",
+      "movieDesc": "የኢትዮጵያ ብሎክባስተሮችን፣ የተሸለሙ ገለልተኛ ሲኒማዎችን እና ከአገር በቀል የንዑስ ርዕስ ትራኮች ጋር ዓለም አቀፍ 4K ልቀቶችን ያስተላልፉ።",
+      "bookSanctum": "የመጽሐፍ መቅደስ",
+      "bookTag": "ቤተ-መጻህፍት እና ሱቅ",
+      "bookDesc": "አካላዊ እትሞችን ይበድሩ፣ የአካዳሚክ ሥነ-ጽሑፍን ይግዙ ወይም በቀጥታ ወደ ቦሌ ወይም ካዛንቺስ የሚደርሱ ዲጂታል ትርጉሞችን ያግኙ።",
+      "techMarketplace": "የቴክ ገበያ",
+      "techTag": "የተረጋገጠ ቴክ",
+      "techDesc": "በእኛ የአዲስ አበባ ኤስክሮው ዋስትና እና የአገር ውስጥ ዋስትናዎች የተደገፉ የተመረመሩ ጋጄቶች፣ የገንቢ የስራ ጣቢያዎች እና ከፍተኛ ኦዲዮ።",
+      "explore": "ይመልከቱ"
     },
     "testimonials": {
       "title": "ማህበረሰባችን የሚለው"
