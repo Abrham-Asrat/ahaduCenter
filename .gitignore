@@ -7,7 +7,7 @@ node_modules/
 .env.local
 .env.development.local
 .env.production.local
-
+.kiro/
 # Build output
 dist/
 build/
