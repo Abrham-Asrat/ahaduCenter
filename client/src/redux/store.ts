@@ -6,6 +6,7 @@ import bookReducer from './slices/bookSlice';
 import wishlistReducer from './slices/wishlistSlice';
 import notificationReducer from './slices/notificationSlice';
 import adminReducer from './slices/adminSlice';
+import languageReducer from './slices/languageSlice';
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
     wishlist: wishlistReducer,
     notification: notificationReducer,
     admin: adminReducer,
+    language: languageReducer,
   },
 });
 

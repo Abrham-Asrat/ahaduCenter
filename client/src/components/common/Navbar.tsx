@@ -4,6 +4,8 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '../../redux/hooks';
 import { logoutAction } from '../../redux/slices/authSlice';
 import type { RootState } from '../../redux/store';
+import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from './LanguageSwitcher';
 
 /**
  * Navbar Component
@@ -20,6 +22,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const dropdownRef = useRef<HTMLDivElement | null>(null);
+  const { t } = useTranslation();
 
   // Auth state from Redux store
   const { token, user } = useAppSelector((state: RootState) => state.auth);
@@ -29,10 +32,10 @@ const Navbar = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   // Theme state: dark vs light
-  
+
 
   // Sync theme with HTML root class
-  
+
   // Close dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -77,7 +80,7 @@ const Navbar = () => {
                 : 'text-on-surface-variant hover:text-primary'
                 }`}
             >
-              Movies
+              {t('nav.movies')}
             </Link>
             <Link
               to="/electronics"
@@ -86,7 +89,7 @@ const Navbar = () => {
                 : 'text-on-surface-variant hover:text-primary'
                 }`}
             >
-              Electronics
+              {t('nav.electronics')}
             </Link>
             <Link
               to="/books"
@@ -95,7 +98,7 @@ const Navbar = () => {
                 : 'text-on-surface-variant hover:text-primary'
                 }`}
             >
-              Books
+              {t('nav.books')}
             </Link>
             <Link
               to="/contact"
@@ -104,12 +107,14 @@ const Navbar = () => {
                 : 'text-on-surface-variant hover:text-primary'
                 }`}
             >
-              Contact Us
+              {t('nav.contact')}
             </Link>
           </div>
 
           {/* Right Action Icons & Controls */}
-          <div className="ml-auto flex items-center md:justify-self-end">
+          <div className="ml-auto flex items-center gap-3 md:justify-self-end">
+            {/* Language Switcher */}
+            <LanguageSwitcher />
 
 
             {token ? (
@@ -132,9 +137,9 @@ const Navbar = () => {
                   <button
                     onClick={() => setIsProfileOpen(!isProfileOpen)}
                     aria-expanded={isProfileOpen}
-                    aria-label="User Profile Menu"
+                    aria-label={t('nav.profile')}
                     className="flex items-center gap-2 p-1 rounded-full border-2 border-primary/50 hover:border-primary transition-all cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primary bg-surface-container-high"
-                    title="User Profile Menu"
+                    title={t('nav.profile')}
                   >
                     <div className="w-9 h-9 rounded-full bg-gradient-to-br from-primary/30 via-secondary/20 to-surface-container-high border border-white/20 flex items-center justify-center font-black text-white text-sm relative">
                       <span>{user?.name ? user.name.slice(0, 2).toUpperCase() : 'U'}</span>
@@ -160,7 +165,7 @@ const Navbar = () => {
                           <h4 className="text-white font-extrabold text-sm truncate">{user?.name || 'User'}</h4>
                           <p className="text-xs text-on-surface-variant truncate">{user?.email || ''}</p>
                           <span className="inline-block mt-1 bg-primary/15 text-primary border border-primary/30 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase">
-                            {user?.role === 'admin' ? 'Admin' : 'Verified Member'}
+                            {user?.role === 'admin' ? t('user.adminBadge') : t('user.verifiedMember')}
                           </span>
                         </div>
                       </div>
@@ -173,10 +178,10 @@ const Navbar = () => {
                           className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-on-surface-variant hover:text-white hover:bg-white/5 transition-colors"
                         >
                           <span className="material-symbols-outlined text-lg text-primary">person</span>
-                          Edit Profile / Account
+                          {t('nav.editProfile')}
                         </Link>
 
-                     
+
 
                         <Link
                           to="/borrowing-history"
@@ -184,7 +189,7 @@ const Navbar = () => {
                           className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-on-surface-variant hover:text-white hover:bg-white/5 transition-colors"
                         >
                           <span className="material-symbols-outlined text-lg text-purple-400">auto_stories</span>
-                          Book Borrowing History
+                          {t('nav.borrowingHistory')}
                         </Link>
 
                         <Link
@@ -193,7 +198,7 @@ const Navbar = () => {
                           className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-on-surface-variant hover:text-white hover:bg-white/5 transition-colors"
                         >
                           <span className="material-symbols-outlined text-lg text-error">favorite</span>
-                          Saved Wishlist
+                          {t('nav.savedWishlist')}
                         </Link>
 
                         <Link
@@ -204,7 +209,7 @@ const Navbar = () => {
                           <span className="material-symbols-outlined text-lg text-yellow-400 relative">
                             notifications
                           </span>
-                          <span className="flex-1">Notifications</span>
+                          <span className="flex-1">{t('nav.notifications')}</span>
                           {unreadCount > 0 && (
                             <span className="ml-auto bg-error text-white text-[10px] font-black px-1.5 py-0.5 rounded-full">
                               {unreadCount > 9 ? '9+' : unreadCount}
@@ -215,7 +220,7 @@ const Navbar = () => {
 
 
                         <Link to="/contact" onClick={() => setIsProfileOpen(false)} className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-on-surface-variant hover:text-white hover:bg-white/5 transition-colors">
-                          <span className="material-symbols-outlined" style={{ fontVariationSettings: isActive('/contact') ? "'FILL' 1" : "'FILL' 0" }}>info</span>About Us
+                          <span className="material-symbols-outlined" style={{ fontVariationSettings: isActive('/contact') ? "'FILL' 1" : "'FILL' 0" }}>info</span>{t('nav.about')}
                         </Link>
 
                       </div>
@@ -227,7 +232,7 @@ const Navbar = () => {
                           className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-error bg-error/10 hover:bg-error/20 transition-all font-bold text-xs uppercase cursor-pointer"
                         >
                           <span className="material-symbols-outlined text-base">logout</span>
-                          Sign Out
+                          {t('nav.logout')}
                         </button>
                       </div>
                     </div>
@@ -245,12 +250,12 @@ const Navbar = () => {
                 <div className="hidden md:flex gap-3">
                   <Link to="/login">
                     <button className="px-4 py-2 border border-white/20 rounded-xl text-xs uppercase font-extrabold text-white hover:bg-white/10 transition-all cursor-pointer">
-                      Sign In
+                      {t('nav.signIn')}
                     </button>
                   </Link>
                   <Link to="/register">
                     <button className="px-4 py-2 bg-primary text-black rounded-xl text-xs uppercase font-extrabold hover:shadow-[0_0_15px_rgba(16,185,129,0.5)] transition-all cursor-pointer">
-                      Sign Up
+                      {t('nav.signUp')}
                     </button>
                   </Link>
                 </div>
@@ -268,26 +273,26 @@ const Navbar = () => {
         <div className="grid grid-cols-5 items-center gap-1 px-2 py-2.5 min-h-16">
           <Link to="/" className={`mobile-nav-link ${isActive('/') ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-primary'}`}>
             <span className="material-symbols-outlined" style={{ fontVariationSettings: isActive('/') ? "'FILL' 1" : "'FILL' 0" }}>home</span>
-            <span className="text-[10px] uppercase tracking-wider font-semibold mt-1">Home</span>
+            <span className="text-[10px] uppercase tracking-wider font-semibold mt-1">{t('nav.home')}</span>
           </Link>
           <Link to="/movies" className={`mobile-nav-link ${isActive('/movies') ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-primary'}`}>
             <span className="material-symbols-outlined" style={{ fontVariationSettings: isActive('/movies') ? "'FILL' 1" : "'FILL' 0" }}>movie</span>
-            <span className="text-[10px] uppercase tracking-wider font-semibold mt-1">Movies</span>
+            <span className="text-[10px] uppercase tracking-wider font-semibold mt-1">{t('nav.movies')}</span>
           </Link>
           {/* Search Trigger */}
           <Link to="/search" className={`mobile-nav-link ${isActive('/search') ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-primary'}`}>
             <span className="material-symbols-outlined" style={{ fontVariationSettings: isActive('/search') ? "'FILL' 1" : "'FILL' 0" }}>search</span>
-            <span className="text-[10px] uppercase tracking-wider font-semibold mt-1">Search</span>
+            <span className="text-[10px] uppercase tracking-wider font-semibold mt-1">{t('common.search')}</span>
           </Link>
 
 
           <Link to="/electronics" className={`mobile-nav-link ${isActive('/electronics') ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-primary'}`}>
             <span className="material-symbols-outlined" style={{ fontVariationSettings: isActive('/electronics') ? "'FILL' 1" : "'FILL' 0" }}>devices</span>
-            <span className="text-[10px] uppercase tracking-wider font-semibold mt-1">Tech</span>
+            <span className="text-[10px] uppercase tracking-wider font-semibold mt-1">{t('nav.tech')}</span>
           </Link>
           <Link to="/books" className={`mobile-nav-link ${isActive('/books') ? 'text-primary font-bold' : 'text-on-surface-variant hover:text-primary'}`}>
             <span className="material-symbols-outlined" style={{ fontVariationSettings: isActive('/books') ? "'FILL' 1" : "'FILL' 0" }}>menu_book</span>
-            <span className="text-[10px] uppercase tracking-wider font-semibold mt-1">Books</span>
+            <span className="text-[10px] uppercase tracking-wider font-semibold mt-1">{t('nav.books')}</span>
           </Link>
 
         </div>

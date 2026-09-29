@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { adminLoginThunk } from '../redux/slices/authSlice';
 import type { RootState } from '../redux/store';
 
 const AdminLoginPage = () => {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { loading, error } = useAppSelector((state: RootState) => state.auth);
@@ -24,8 +26,8 @@ const AdminLoginPage = () => {
     <div className="flex min-h-screen items-center justify-center bg-[#070B14] px-4 py-10">
       <div className="w-full max-w-md rounded-2xl border border-white/10 bg-[#0B0F19] p-6 shadow-2xl md:p-8">
         <div className="mb-8 text-center">
-          <p className="mb-2 text-xs font-bold uppercase tracking-[0.22em] text-primary">Admin access</p>
-          <h1 className="text-3xl font-extrabold text-white">Admin Login</h1>
+          <p className="mb-2 text-xs font-bold uppercase tracking-[0.22em] text-primary">{t('auth.adminAccess')}</p>
+          <h1 className="text-3xl font-extrabold text-white">{t('auth.adminLogin')}</h1>
         </div>
 
         {error && (
@@ -38,7 +40,7 @@ const AdminLoginPage = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label htmlFor="admin-email" className="mb-2 block text-xs font-bold uppercase tracking-wider text-on-surface-variant">
-              Admin email
+              {t('auth.adminEmail')}
             </label>
             <input
               id="admin-email"
@@ -47,21 +49,23 @@ const AdminLoginPage = () => {
               onChange={(event) => setEmail(event.target.value)}
               placeholder="admin@ahadu.test"
               required
+              aria-label={t('auth.emailLabel')}
               className="w-full rounded-xl border border-white/10 bg-[#0B0F19] px-4 py-3 text-sm text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
             />
           </div>
 
           <div>
             <label htmlFor="admin-password" className="mb-2 block text-xs font-bold uppercase tracking-wider text-on-surface-variant">
-              Password
+              {t('auth.password')}
             </label>
             <input
               id="admin-password"
               type="password"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
-              placeholder="Enter password"
+              placeholder={t('auth.passwordPlaceholder')}
               required
+              aria-label={t('auth.password')}
               className="w-full rounded-xl border border-white/10 bg-[#0B0F19] px-4 py-3 text-sm text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
             />
           </div>
@@ -69,15 +73,16 @@ const AdminLoginPage = () => {
           <button
             type="submit"
             disabled={loading}
+            aria-label={loading ? t('auth.signingIn') : t('auth.signIn')}
             className="w-full rounded-xl bg-primary py-3 text-sm font-bold uppercase tracking-wider text-black disabled:opacity-60"
           >
-            {loading ? 'Signing in...' : 'Login'}
+            {loading ? t('auth.signingIn') : t('nav.login')}
           </button>
         </form>
 
         <div className="mt-6 text-center">
-          <Link to="/login" className="text-xs font-semibold text-primary hover:underline">
-            Back to user login
+          <Link to="/login" className="text-xs font-semibold text-primary hover:underline" aria-label={t('auth.backToUserLogin')}>
+            {t('auth.backToUserLogin')}
           </Link>
         </div>
       </div>

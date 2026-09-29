@@ -1,9 +1,11 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { resendVerificationThunk, verifyEmailThunk } from '../redux/slices/authSlice';
 
 const VerifyEmailPage = () => {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token');
@@ -20,23 +22,23 @@ const VerifyEmailPage = () => {
       if (!active) return;
       if (verifyEmailThunk.fulfilled.match(result)) {
         setStatus('success');
-        setMessage('Your email has been verified. You can now sign in with Google.');
+        setMessage(t('auth.verifyEmailPage.messageSuccess'));
       } else {
         setStatus('error');
-        setMessage(typeof result.payload === 'string' ? result.payload : 'This verification link is invalid or has expired.');
+        setMessage(typeof result.payload === 'string' ? result.payload : t('auth.verifyEmailPage.messageInvalid'));
       }
     });
 
     return () => { active = false; };
-  }, [dispatch, token]);
+  }, [dispatch, token, t]);
 
   const handleResend = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const result = await dispatch(resendVerificationThunk(email));
     if (resendVerificationThunk.fulfilled.match(result)) {
-      setMessage('If an account requires verification, a new email has been sent.');
+      setMessage(t('auth.verifyEmailPage.messageResent'));
     } else {
-      setMessage(typeof result.payload === 'string' ? result.payload : 'Unable to resend the verification email.');
+      setMessage(typeof result.payload === 'string' ? result.payload : t('auth.verifyEmailPage.messageResendFailed'));
     }
   };
 
@@ -47,24 +49,24 @@ const VerifyEmailPage = () => {
           {status === 'success' ? 'verified' : status === 'error' ? 'error' : 'mail'}
         </span>
         <h1 className="mb-3 text-2xl font-bold text-white">
-          {status === 'verifying' ? 'Verifying your email' : status === 'success' ? 'Email verified' : 'Check your email'}
+          {status === 'verifying' ? t('auth.verifyEmailPage.titleVerifying') : status === 'success' ? t('auth.verifyEmailPage.titleSuccess') : t('auth.verifyEmailPage.titleReady')}
         </h1>
         <p className="mb-6 text-sm text-on-surface-variant">
-          {message || (status === 'verifying' ? 'Please wait while we confirm your email address.' : 'Open the verification link we sent to finish creating your account.')}
+          {message || (status === 'verifying' ? t('auth.verifyEmailPage.messageVerifying') : t('auth.verifyEmailPage.messageReady'))}
         </p>
 
         {status === 'success' ? (
-          <Link to="/login" className="block rounded-xl bg-primary px-4 py-3 text-sm font-bold uppercase tracking-wider text-black">Continue to Google sign-in</Link>
+          <Link to="/login" className="block rounded-xl bg-primary px-4 py-3 text-sm font-bold uppercase tracking-wider text-black">{t('auth.verifyEmailPage.continueButton')}</Link>
         ) : (
           <form onSubmit={handleResend} className="space-y-3 text-left">
-            <label htmlFor="verification-email" className="block text-xs font-bold uppercase tracking-wider text-on-surface-variant">Email address</label>
+            <label htmlFor="verification-email" className="block text-xs font-bold uppercase tracking-wider text-on-surface-variant">{t('auth.verifyEmailPage.emailLabel')}</label>
             <input id="verification-email" type="email" value={email} onChange={(event) => setEmail(event.target.value)} required className="w-full rounded-xl border border-white/10 bg-[#0B0F19] px-4 py-3 text-sm text-white focus:border-primary focus:outline-none" />
             <button type="submit" disabled={loading} className="w-full rounded-xl bg-primary px-4 py-3 text-sm font-bold uppercase tracking-wider text-black disabled:opacity-60">
-              {loading ? 'Sending...' : 'Resend verification email'}
+              {loading ? t('auth.verifyEmailPage.sending') : t('auth.verifyEmailPage.resendButton')}
             </button>
           </form>
         )}
-        <Link to="/login" className="mt-5 block text-sm font-semibold text-primary hover:underline">Back to sign in</Link>
+        <Link to="/login" className="mt-5 block text-sm font-semibold text-primary hover:underline">{t('auth.verifyEmailPage.backToSignIn')}</Link>
       </section>
     </main>
   );

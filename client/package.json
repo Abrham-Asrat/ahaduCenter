@@ -10,15 +10,19 @@
     "preview": "vite preview",
     "test": "vitest --run",
     "test:watch": "vitest",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "validate:i18n": "node scripts/validate-translations.js"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.1",
     "axios": "^1.6.7",
+    "i18next": "^26.4.2",
+    "i18next-browser-languagedetector": "^8.2.1",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.330.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-i18next": "^17.0.15",
     "react-redux": "^9.1.0",
     "react-router-dom": "^6.30.4"
   },

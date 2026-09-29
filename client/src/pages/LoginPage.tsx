@@ -1,6 +1,7 @@
 // src/pages/LoginPage.jsx
 import { useCallback, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { loginThunk, resendVerificationThunk } from '../redux/slices/authSlice';
 import GoogleSignInButton from '../components/common/GoogleSignInButton';
@@ -13,6 +14,7 @@ type LoginPageProps = {
 const ADMIN_EMAILS = new Set(['admin@ahadu.test', 'admin@ahaducenter.com']);
 
 const LoginPage = ({ onClose }: LoginPageProps) => {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { loading, error } = useAppSelector((state: RootState) => state.auth);
@@ -61,15 +63,15 @@ const LoginPage = ({ onClose }: LoginPageProps) => {
           type="button"
           onClick={handleClose}
           className="absolute top-3 right-3 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-surface-container text-on-surface-variant transition hover:border-primary hover:text-primary"
-          aria-label="Close sign in"
+          aria-label={t('common.close')}
         >
           <span className="material-symbols-outlined">close</span>
         </button>
 
         <div className="glass-panel rounded-2xl border border-white/10 p-6 shadow-2xl md:p-8">
           <div className="mb-8 text-center">
-            <h1 className="mb-2 text-3xl font-extrabold text-white">Welcome Back</h1>
-            <p className="text-sm text-on-surface-variant">Sign in securely with your Google account</p>
+            <h1 className="mb-2 text-3xl font-extrabold text-white">{t('auth.loginTitle')}</h1>
+            <p className="text-sm text-on-surface-variant">{t('auth.loginSubtitle')}</p>
           </div>
 
           {error && (
@@ -81,14 +83,14 @@ const LoginPage = ({ onClose }: LoginPageProps) => {
 
           <div className="mb-5">
             <label htmlFor="login-email" className="mb-2 block text-xs font-bold uppercase tracking-wider text-on-surface-variant">
-              Registered Email Address
+              {t('auth.emailLabel')}
             </label>
             <input
               id="login-email"
               type="email"
               value={verificationEmail}
               onChange={(event) => setVerificationEmail(event.target.value)}
-              placeholder="you@example.com"
+              placeholder={t('auth.emailPlaceholder')}
               className="w-full rounded-xl border border-white/10 bg-[#0B0F19] px-4 py-3 text-sm text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
             />
             <button
@@ -97,7 +99,7 @@ const LoginPage = ({ onClose }: LoginPageProps) => {
               disabled={loading || !verificationEmail}
               className="mt-2 text-xs font-semibold text-primary disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {loading ? 'Sending verification email...' : 'Resend verification email'}
+              {loading ? t('auth.sendingVerification') : t('auth.resendVerification')}
             </button>
           </div>
 
@@ -107,22 +109,22 @@ const LoginPage = ({ onClose }: LoginPageProps) => {
               onClick={handleManualLogin}
               className="w-full rounded-xl bg-primary px-4 py-3 text-sm font-bold uppercase tracking-[0.18em] text-black transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              Login
+              {t('nav.login')}
             </button>
             <GoogleSignInButton onCredential={handleCredential} />
           </div>
 
           <div className="my-6 flex items-center gap-3">
             <div className="h-[1px] flex-grow bg-white/10" />
-            <span className="text-xs uppercase text-on-surface-variant">Or continue with</span>
+            <span className="text-xs uppercase text-on-surface-variant">{t('common.or')} {t('nav.signIn').toLowerCase()}</span>
             <div className="h-[1px] flex-grow bg-white/10" />
           </div>
 
           <div className="mt-6 text-center">
             <p className="text-xs text-on-surface-variant">
-              Don't have an account?{' '}
+              {t('auth.noAccount')}{' '}
               <Link to="/register" className="font-bold text-primary hover:underline">
-                Create Account
+                {t('auth.createAccount')}
               </Link>
             </p>
           </div>

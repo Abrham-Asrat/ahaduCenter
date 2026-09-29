@@ -1,13 +1,16 @@
+import { useTranslation } from 'react-i18next';
 import { testimonials } from './homeData';
 
 const HomeTestimonials = () => {
+  const { t } = useTranslation();
+
   return (
     <section className="bg-surface px-6 py-10 md:py-20 lg:px-12">
       <div className="mx-auto flex max-w-7xl flex-col gap-12">
         <div className="flex flex-col items-start gap-2 text-left md:items-center md:text-center">
-          <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-secondary">Community Voices</span>
-          <h2 className="text-4xl font-extrabold tracking-[-0.02em] text-on-surface">Loved by Thousands</h2>
-          <p className="hidden max-w-lg text-base text-on-surface-variant md:block">Real stories from our community in Mizan Teferi and beyond.</p>
+          <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-secondary">{t('home.testimonials.badge')}</span>
+          <h2 className="text-4xl font-extrabold tracking-[-0.02em] text-on-surface">{t('home.testimonials.title')}</h2>
+          <p className="hidden max-w-lg text-base text-on-surface-variant md:block">{t('home.testimonials.subtitle')}</p>
         </div>
 
         <div className="flex gap-4 overflow-x-auto pb-2 md:grid md:grid-cols-3 md:gap-6">

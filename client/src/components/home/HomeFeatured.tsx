@@ -1,17 +1,20 @@
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { featuredItems } from './homeData';
 
 const HomeFeatured = () => {
+  const { t } = useTranslation();
+
   return (
     <section className="bg-surface px-6 py-10 md:py-20 lg:px-12">
       <div className="mx-auto flex max-w-7xl flex-col gap-10">
         <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
           <div>
-            <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary">Handpicked</span>
-            <h2 className="mt-1 text-[28px] font-extrabold leading-9 tracking-[-0.015em] text-on-surface md:text-4xl">Featured This Week</h2>
-            <p className="mt-1 hidden text-base text-on-surface-variant md:block">Hand-picked releases and verified gear trending across Mizan Teferi.</p>
+            <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary">{t('home.featured.badge')}</span>
+            <h2 className="mt-1 text-[28px] font-extrabold leading-9 tracking-[-0.015em] text-on-surface md:text-4xl">{t('home.featured.title')}</h2>
+            <p className="mt-1 hidden text-base text-on-surface-variant md:block">{t('home.featured.subtitle')}</p>
           </div>
-          
+
         </div>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:gap-8">
@@ -28,7 +31,7 @@ const HomeFeatured = () => {
                   className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                 />
                 <div className="absolute left-2 top-2 rounded-full bg-secondary-container px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.08em] text-on-secondary">
-                  {item.type}
+                  {t(`home.featured.types.${item.type.toLowerCase()}`)}
                 </div>
               </div>
 
@@ -48,22 +51,22 @@ const HomeFeatured = () => {
                 </div>
 
                 <div className="flex items-center justify-between pt-2">
-                  <span className="truncate text-sm font-bold text-primary md:text-lg">{item.price ?? 'Stream Available'}</span>
+                  <span className="truncate text-sm font-bold text-primary md:text-lg">{item.price ?? t('home.featured.streamAvailable')}</span>
                   <Link to={item.to} className="inline-flex h-8 shrink-0 items-center gap-1.5 rounded-full bg-primary px-3 text-xs font-bold text-on-primary-container shadow-sm transition-all hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary md:h-auto md:px-5 md:py-2 md:text-sm">
                     {item.type === 'Movie' ? (
                       <>
                         <span className="material-symbols-outlined text-base" style={{ fontVariationSettings: 'FILL 1' }}>play_arrow</span>
-                        <span>{item.button}</span>
+                        <span>{t('home.featured.buttons.watch')}</span>
                       </>
                     ) : item.type === 'Electronics' ? (
                       <>
                         <span className="material-symbols-outlined text-base">add_shopping_cart</span>
-                        <span>{item.button}</span>
+                        <span>{t('home.featured.buttons.order')}</span>
                       </>
                     ) : (
                       <>
                         <span className="material-symbols-outlined text-base">shopping_bag</span>
-                        <span>{item.button}</span>
+                        <span>{t('home.featured.buttons.getBook')}</span>
                       </>
                     )}
                   </Link>
@@ -75,7 +78,7 @@ const HomeFeatured = () => {
 
         <div className="flex justify-center pt-2 md:pt-4">
           <Link to="/search" className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-surface-container-high px-6 py-3.5 text-base font-bold text-primary transition-all hover:bg-surface-bright focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary md:w-auto md:rounded-full md:px-10 md:text-lg">
-            <span>View All Featured (48+)</span>
+            <span>{t('home.featured.viewAllFeatured')}</span>
             <span className="material-symbols-outlined text-lg">arrow_forward</span>
           </Link>
         </div>

@@ -13,6 +13,8 @@ dist/
 build/
 dist-extract/
 
+.kiro/
+
 # Docker MongoDB data
 mongo_data/
 
