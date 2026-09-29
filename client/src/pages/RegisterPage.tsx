@@ -1,6 +1,7 @@
 // src/pages/RegisterPage.jsx
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { registerThunk, googleRegisterThunk, clearAuthError } from '../redux/slices/authSlice';
 import GoogleSignInButton from '../components/common/GoogleSignInButton';

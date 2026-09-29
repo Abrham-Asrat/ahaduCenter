@@ -72,7 +72,8 @@
       "fethaTitle": "Fetha Nagast",
       "fethaSeries": "Ancient Wisdom Series",
       "fethaDesc": "The Law of Kings. Collector bilingual Ge'ez & English annotated translation.",
-      "fethaAction": "Borrow or Buy"
+      "fethaAction": "Borrow or Buy",
+      "fethaBadge": "Archival Relic"
     },
     "stats": {
       "movies": "Movies & Short Films",
@@ -96,10 +97,26 @@
       "explore": "Explore"
     },
     "testimonials": {
-      "title": "What Our Community Says"
+      "badge": "Community Voices",
+      "title": "Loved by Thousands",
+      "subtitle": "Real stories from our community in Mizan Teferi and beyond."
     },
     "featured": {
-      "title": "Featured This Week"
+      "badge": "Handpicked",
+      "title": "Featured This Week",
+      "subtitle": "Hand-picked releases and verified gear trending across Mizan Teferi.",
+      "streamAvailable": "Stream Available",
+      "viewAllFeatured": "View All Featured (48+)",
+      "types": {
+        "movie": "Movie",
+        "book": "Book",
+        "electronics": "Electronics"
+      },
+      "buttons": {
+        "watch": "Watch",
+        "order": "Order",
+        "getBook": "Get Book"
+      }
     }
   },
   "auth": {

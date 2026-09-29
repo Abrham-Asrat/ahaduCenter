@@ -1,6 +1,7 @@
 // src/pages/LoginPage.jsx
 import { useCallback, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { loginThunk, resendVerificationThunk } from '../redux/slices/authSlice';
 import GoogleSignInButton from '../components/common/GoogleSignInButton';
