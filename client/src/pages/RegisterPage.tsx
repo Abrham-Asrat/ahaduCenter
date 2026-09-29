@@ -27,6 +27,7 @@ type RegisterPageProps = {
  * - Responsive layout
  */
 const RegisterPage = ({ onClose }: RegisterPageProps) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { loading, error } = useAppSelector((state: RootState) => state.auth);
@@ -82,7 +83,7 @@ const RegisterPage = ({ onClose }: RegisterPageProps) => {
           type="button"
           onClick={handleClose}
           className="absolute top-3 right-3 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-surface-container text-on-surface-variant transition hover:border-primary hover:text-primary"
-          aria-label="Close sign up"
+          aria-label={t('common.close')}
         >
           <span className="material-symbols-outlined">close</span>
         </button>
@@ -91,14 +92,14 @@ const RegisterPage = ({ onClose }: RegisterPageProps) => {
           <div className="absolute left-0 top-0 h-[1px] w-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
           <div className="mb-8 text-center">
-            <h2 className="mb-2 text-3xl font-bold text-white">Create Account</h2>
-            <p className="text-sm text-on-surface-variant">Join Ahadu Center to explore movies, electronics, and books</p>
+            <h2 className="mb-2 text-3xl font-bold text-white">{t('auth.registerTitle')}</h2>
+            <p className="text-sm text-on-surface-variant">{t('auth.registerSubtitle')}</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label htmlFor="fullName" className="mb-2 block text-xs font-bold uppercase tracking-wider text-on-surface-variant">
-                Full Name
+                {t('auth.fullName')}
               </label>
               <div className="relative">
                 <span className="material-symbols-outlined pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-on-surface-variant">
@@ -110,7 +111,7 @@ const RegisterPage = ({ onClose }: RegisterPageProps) => {
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   className="w-full rounded-xl border border-white/10 bg-[#0B0F19] py-3 pl-10 pr-4 text-sm font-medium text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                  placeholder="Enter your full name"
+                  placeholder={t('auth.fullNamePlaceholder')}
                   required
                 />
               </div>
@@ -118,7 +119,7 @@ const RegisterPage = ({ onClose }: RegisterPageProps) => {
 
             <div>
               <label htmlFor="email" className="mb-2 block text-xs font-bold uppercase tracking-wider text-on-surface-variant">
-                Email Address
+                {t('auth.emailLabel')}
               </label>
               <div className="relative">
                 <span className="material-symbols-outlined pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-on-surface-variant">
@@ -130,7 +131,7 @@ const RegisterPage = ({ onClose }: RegisterPageProps) => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full rounded-xl border border-white/10 bg-[#0B0F19] py-3 pl-10 pr-4 text-sm font-medium text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                  placeholder="Enter your email"
+                  placeholder={t('auth.emailPlaceholder')}
                   required
                 />
               </div>
@@ -151,22 +152,22 @@ const RegisterPage = ({ onClose }: RegisterPageProps) => {
               {loading && (
                 <span className="material-symbols-outlined animate-spin text-[18px]">progress_activity</span>
               )}
-              {loading ? 'Creating Account...' : 'Create Account'}
+              {loading ? t('auth.creatingAccount') : t('auth.createAccount')}
             </button>
           </form>
 
           <div className="my-6 flex items-center gap-3">
             <div className="h-[1px] flex-grow bg-white/10" />
-            <span className="text-xs uppercase text-on-surface-variant">Or continue with</span>
+            <span className="text-xs uppercase text-on-surface-variant">{t('auth.orContinueWith')}</span>
             <div className="h-[1px] flex-grow bg-white/10" />
           </div>
 
           <GoogleSignInButton onCredential={handleGoogleCredential} />
 
           <p className="mt-6 text-center text-sm text-on-surface-variant">
-            Already have an account?{' '}
+            {t('auth.haveAccount')}{' '}
             <Link to="/login" className="font-semibold text-secondary transition-colors hover:text-secondary-fixed">
-              Login
+              {t('auth.signIn')}
             </Link>
           </p>
         </div>
