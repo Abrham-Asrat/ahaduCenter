@@ -1,6 +1,7 @@
 // src/components/movie/RelatedMoviesCarousel.jsx
 
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import type { Movie } from '../../types';
 
 interface RelatedMoviesCarouselProps {
@@ -21,15 +22,18 @@ interface RelatedMoviesCarouselProps {
  * - Hover effects
  */
 const RelatedMoviesCarousel = ({ movies }: RelatedMoviesCarouselProps) => {
+    const { t } = useTranslation();
+
     return (
         <section className="max-w-7xl mx-auto px-4 md:px-8 py-12 border-t border-white/5">
-            <h2 className="text-2xl md:text-3xl font-bold text-white mb-8">You Might Also Like</h2>
-            <div className="flex gap-6 overflow-x-auto hide-scrollbar pb-4">
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-8">{t('movies.detail.youMightAlsoLike')}</h2>
+            <div className="flex gap-6 overflow-x-auto hide-scrollbar pb-4" role="list" aria-label={t('movies.detail.youMightAlsoLike')}>
                 {movies.map((movie) => (
                     <Link
                         key={movie.id}
                         to={`/movies/${movie.id}`}
                         className="min-w-[200px] md:min-w-[250px] glass-panel rounded-xl overflow-hidden group cursor-pointer flex-shrink-0 hover:-translate-y-1 transition-transform duration-200"
+                        aria-label={`${movie.title}`}
                     >
                         <div className="relative w-full aspect-[2/3] overflow-hidden">
                             <img
