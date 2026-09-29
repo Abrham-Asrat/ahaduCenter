@@ -212,6 +212,13 @@
     "linkCopied": "Movie detail link copied to clipboard!",
     "emptyState": "No movies found",
     "emptyStateHint": "Check back soon for new releases!",
+    "detail": {
+      "officialTrailer": "Official Trailer",
+      "storyline": "Storyline",
+      "viewerReviews": "Viewer Reviews & Discussions",
+      "youMightAlsoLike": "You Might Also Like",
+      "retry": "Retry"
+    },
     "request": {
       "title": "Movie Requests",
       "submitRequest": "Submit Request",
