@@ -1,6 +1,7 @@
 // src/components/admin/AdminLayout.jsx
 import { useState, type ChangeEvent, type ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 /**
  * AdminLayout Component
@@ -19,6 +20,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const location = useLocation();
+    const { t } = useTranslation();
 
     const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(e.target.value);
@@ -26,10 +28,10 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
 
     // Sidebar navigation items
     const navItems = [
-        { label: 'Dashboard', icon: 'dashboard', path: '/admin' },
-        { label: 'Movies', icon: 'movie', path: '/admin/movies' },
-        { label: 'Electronics', icon: 'devices', path: '/admin/electronics' },
-        { label: 'Books', icon: 'menu_book', path: '/admin/books' },
+        { label: t('nav.dashboard'), icon: 'dashboard', path: '/admin' },
+        { label: t('nav.movies'), icon: 'movie', path: '/admin/movies' },
+        { label: t('nav.electronics'), icon: 'devices', path: '/admin/electronics' },
+        { label: t('nav.books'), icon: 'menu_book', path: '/admin/books' },
     ];
 
     const isActive = (path: string) => {
@@ -86,7 +88,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
 
                     <Link to="/" className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-error hover:bg-error/10 transition-all text-xs uppercase tracking-wider font-bold">
                         <span className="material-symbols-outlined text-lg">logout</span>
-                        <span>Exit Admin</span>
+                        <span>{t('common.back')}</span>
                     </Link>
                 </div>
             </aside>
@@ -105,7 +107,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
                         <span className="material-symbols-outlined text-on-surface-variant text-base">search</span>
                         <input
                             type="text"
-                            placeholder="Search admin records, commands..."
+                            placeholder={t('common.search')}
                             className="bg-transparent border-none outline-none text-sm text-white w-full placeholder-gray-500"
                             value={searchQuery}
                             onChange={handleSearch}
@@ -116,7 +118,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
                     <div className="ml-auto flex min-w-0 items-center gap-2 sm:gap-4">
                         <div className="hidden items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-bold uppercase text-primary sm:flex">
                             <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-                            System Active
+                            {t('common.yes')}
                         </div>
                         <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-surface-container-high bg-gradient-to-br from-primary/20 to-secondary/20 text-sm font-bold text-white">
                             AD

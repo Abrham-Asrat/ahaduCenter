@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import AdminLayout from '../../components/admin/AdminLayout';
 import { fetchAdminStats, fetchRecentActivity } from '../../redux/slices/adminSlice';
+import { useTranslation } from 'react-i18next';
 
 /**
  * AdminDashboardPage Component
@@ -12,6 +13,7 @@ import { fetchAdminStats, fetchRecentActivity } from '../../redux/slices/adminSl
  */
 const AdminDashboardPage = () => {
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
   const { stats: adminStats, recentActivity, loading, error } = useAppSelector((s) => s.admin);
 
   useEffect(() => {
@@ -22,21 +24,21 @@ const AdminDashboardPage = () => {
   // Derived stats data
   const stats = [
     {
-      label: 'Total Movies',
+      label: `${t('admin.movies')} (${t('admin.table.year')})`,
       value: adminStats?.movies ?? adminStats?.totalMovies ?? '0',
       icon: 'movie',
       color: 'text-primary',
       glow: 'bg-primary/10',
     },
     {
-      label: 'Total Electronics',
+      label: t('admin.electronics'),
       value: adminStats?.products ?? adminStats?.totalProducts ?? '0',
       icon: 'devices',
       color: 'text-secondary',
       glow: 'bg-secondary/10',
     },
     {
-      label: 'Total Books',
+      label: t('admin.books'),
       value: adminStats?.books ?? adminStats?.totalBooks ?? '0',
       icon: 'menu_book',
       color: 'text-tertiary',
@@ -54,7 +56,7 @@ const AdminDashboardPage = () => {
         {/* Header */}
         <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-4">
           <div>
-            <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-2">Inventory Overview</h2>
+            <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-2">{t('admin.title')}</h2>
             <p className="text-lg text-on-surface-variant">Manage the Ahadu Center physical store catalog.</p>
           </div>
         </div>
@@ -93,19 +95,19 @@ const AdminDashboardPage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-4">
           <Link to="/admin/movies" className="glass-panel rounded-2xl p-6 flex flex-col items-center justify-center text-center border border-white/10 hover:border-primary hover:bg-primary/5 transition-all shadow-xl cursor-pointer">
             <span className="material-symbols-outlined text-4xl text-primary mb-3">add_circle</span>
-            <h3 className="text-xl font-bold text-white">Manage Movies</h3>
+            <h3 className="text-xl font-bold text-white">{t('admin.movies')}</h3>
             <p className="text-sm text-on-surface-variant mt-2">Add, edit, or remove movies from the catalog.</p>
           </Link>
 
           <Link to="/admin/electronics" className="glass-panel rounded-2xl p-6 flex flex-col items-center justify-center text-center border border-white/10 hover:border-secondary hover:bg-secondary/5 transition-all shadow-xl cursor-pointer">
             <span className="material-symbols-outlined text-4xl text-secondary mb-3">devices</span>
-            <h3 className="text-xl font-bold text-white">Manage Electronics</h3>
+            <h3 className="text-xl font-bold text-white">{t('admin.electronics')}</h3>
             <p className="text-sm text-on-surface-variant mt-2">Add, edit, or remove tech products.</p>
           </Link>
 
           <Link to="/admin/books" className="glass-panel rounded-2xl p-6 flex flex-col items-center justify-center text-center border border-white/10 hover:border-tertiary hover:bg-tertiary/5 transition-all shadow-xl cursor-pointer">
             <span className="material-symbols-outlined text-4xl text-tertiary mb-3">menu_book</span>
-            <h3 className="text-xl font-bold text-white">Manage Books</h3>
+            <h3 className="text-xl font-bold text-white">{t('admin.books')}</h3>
             <p className="text-sm text-on-surface-variant mt-2">Add, edit, or remove books from the library.</p>
           </Link>
         </div>

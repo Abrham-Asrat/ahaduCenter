@@ -9,6 +9,7 @@ import {
     updateBook,
     deleteBook,
 } from '../../redux/slices/adminSlice';
+import { useTranslation } from 'react-i18next';
 
 type BookFormData = {
     title: string;
@@ -36,6 +37,7 @@ interface BookModalProps {
 
 const AdminManageBooksPage = () => {
     const dispatch = useAppDispatch();
+    const { t } = useTranslation();
     const { books, error } = useAppSelector((s) => s.admin);
 
     const [activeTab, setActiveTab] = useState('Inventory');
@@ -134,7 +136,7 @@ const AdminManageBooksPage = () => {
             {/* Page header */}
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
                 <div>
-                    <h2 className="text-3xl md:text-5xl font-bold text-white mb-2">Manage Books</h2>
+                    <h2 className="text-3xl md:text-5xl font-bold text-white mb-2">{t('admin.books')}</h2>
                     <p className="text-on-surface-variant">Manage inventory, borrowing, reservations, and sales.</p>
                 </div>
                 <button
@@ -142,7 +144,7 @@ const AdminManageBooksPage = () => {
                     className="bg-primary text-black px-6 py-3 rounded-lg flex items-center justify-center gap-2 hover:shadow-[0_0_20px_rgba(16,185,129,0.5)] transition-all font-bold text-xs uppercase tracking-wider cursor-pointer self-start sm:self-auto"
                 >
                     <span className="material-symbols-outlined text-lg">add_circle</span>
-                    Add New Book
+                    {t('admin.addBook')}
                 </button>
             </div>
 
