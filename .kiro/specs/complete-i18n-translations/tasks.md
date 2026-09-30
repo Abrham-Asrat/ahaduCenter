@@ -214,7 +214,7 @@ This plan systematically translates all 70 remaining React components in the Aha
     - Replace details and tab labels with "books.detail.*" keys
     - _Requirements: 5.3_
   
-  - [-] 8.7 Translate RelatedBooks.tsx
+  - [x] 8.7 Translate RelatedBooks.tsx
     - Import useTranslation hook
     - Replace section header with "books.detail.*" keys
     - _Requirements: 5.3_
@@ -243,7 +243,7 @@ This plan systematically translates all 70 remaining React components in the Aha
   - Ensure all tests pass, ask the user if questions arise.
 
 - [ ] 10. Translate Electronics feature components (Priority 6)
-  - [~] 10.1 Translate ProductCard.tsx
+  - [-] 10.1 Translate ProductCard.tsx
     - Import useTranslation hook
     - Replace price label with "electronics.card.*" keys
     - Translate stock status (In Stock, Out of Stock)
@@ -251,25 +251,25 @@ This plan systematically translates all 70 remaining React components in the Aha
     - Translate discount badge (Sale)
     - _Requirements: 6.1_
   
-  - [~] 10.2 Translate ElectronicsFilters.tsx
+  - [-] 10.2 Translate ElectronicsFilters.tsx
     - Import useTranslation hook
     - Replace filter options with "electronics.filters.*" keys
     - _Requirements: 6.3_
   
-  - [~] 10.3 Translate ElectronicsPage.tsx
+  - [-] 10.3 Translate ElectronicsPage.tsx
     - Import useTranslation hook
     - Replace page title with "electronics.page.*" keys
     - Translate category tabs (All, Laptops, Phones, Accessories)
     - Translate sort options and banner text
     - _Requirements: 6.4_
   
-  - [~] 10.4 Translate ProductDetailPage.tsx
+  - [-] 10.4 Translate ProductDetailPage.tsx
     - Import useTranslation hook
     - Replace tabs and labels with "electronics.detail.*" keys
     - Translate purchase actions
     - _Requirements: 6.5_
   
-  - [~] 10.5 Translate ProductInfo.tsx, ProductGallery.tsx, and ProductSpecs.tsx
+  - [-] 10.5 Translate ProductInfo.tsx, ProductGallery.tsx, and ProductSpecs.tsx
     - Import useTranslation hook in all three components
     - Replace spec labels with "electronics.specs.*" keys
     - Translate spec section title (Technical Specifications)

@@ -1,4 +1,5 @@
 import { Eye, GitCompare, Heart, Plus, Star } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import {
@@ -24,6 +25,7 @@ const ProductCard = ({
   onCompare,
   onToggleWishlist,
 }: ProductCardProps) => {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { token } = useAppSelector((state) => state.auth);
@@ -63,8 +65,8 @@ const ProductCard = ({
         <img src={image} alt={title} className="aspect-[4/3] w-full object-cover" />
         <a
           href={`/electronics/${productId}`}
-          aria-label={`View details for ${title}`}
-          title="View details"
+          aria-label={t('electronics.viewDetailsAria', { title })}
+          title={t('electronics.viewDetailsTitle')}
           className="absolute right-3 bottom-3 z-10 inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-dark-bg/10 text-white backdrop-blur-sm transition-colors hover:bg-white/10 hover:text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
         >
           <Eye size={18} aria-hidden="true" />
@@ -74,7 +76,7 @@ const ProductCard = ({
           onClick={handleWishlistToggle}
           disabled={isPending || (wishlistLoading && wishlistItems.length === 0)}
           className="absolute left-3 top-3 flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-dark-bg/50 text-white backdrop-blur-sm"
-          aria-label={isWishlisted ? `Remove ${title} from wishlist` : `Save ${title} to wishlist`}
+          aria-label={isSaved ? t('electronics.removeFromWishlistAria', { title }) : t('electronics.addToWishlistAria', { title })}
         >
           <Heart size={16} className={isSaved ? 'fill-primary text-primary' : ''} />
         </button>
@@ -82,8 +84,8 @@ const ProductCard = ({
 
       <div className="mt-4 space-y-3 px-1 pb-1">
         <div className="flex min-w-0 flex-wrap items-center justify-between gap-x-3 gap-y-1 text-xs uppercase tracking-[0.18em] text-light-gray">
-          <span className="min-w-0 max-w-full truncate">{product.brand || 'Premium'}</span>
-          <span className="shrink-0">{product.condition || 'New'}</span>
+          <span className="min-w-0 max-w-full truncate">{product.brand || t('electronics.defaultBrand')}</span>
+          <span className="shrink-0">{product.condition || t('electronics.conditionNew')}</span>
         </div>
 
         <div>
@@ -92,7 +94,7 @@ const ProductCard = ({
             <Star size={14} className="fill-primary text-primary" />
             <span>{product.rating ?? 4.8}</span>
             <span>•</span>
-            <span>{product.reviews ?? 128} reviews</span>
+            <span>{product.reviews ?? 128} {t('electronics.reviews')}</span>
           </div>
         </div>
 
@@ -109,10 +111,10 @@ const ProductCard = ({
               type="button"
               onClick={() => onCompare?.(product)}
               className="inline-flex items-center gap-1.5 rounded-xl border border-white/10 px-3 py-2 text-sm font-semibold text-white transition-colors hover:border-primary/50 hover:text-primary"
-              aria-label={`Compare ${title}`}
+              aria-label={t('electronics.compareAria', { title })}
             >
               <GitCompare size={16} />
-              Compare
+              {t('electronics.compare')}
             </button>
 
             <button
@@ -121,7 +123,7 @@ const ProductCard = ({
               className="inline-flex items-center gap-2 rounded-xl bg-primary px-3 py-2 text-sm font-semibold text-slate-950 transition-opacity hover:opacity-90"
             >
               <Plus size={16} />
-              Add
+              {t('electronics.addButton')}
             </button>
           </div>
         </div>

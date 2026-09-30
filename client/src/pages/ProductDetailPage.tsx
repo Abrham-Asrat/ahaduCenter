@@ -1,6 +1,7 @@
 // src/pages/ProductDetailPage.jsx
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import Navbar from '../components/common/Navbar';
 import ProductGallery from '../components/electronics/ProductGallery';
@@ -23,6 +24,7 @@ import type { Product } from '../types';
  *   and passes results (excluding current product) to SimilarProducts
  */
 const ProductDetailPage = () => {
+  const { t } = useTranslation();
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -62,7 +64,7 @@ const ProductDetailPage = () => {
     } catch (err) {
       const message = err && typeof err === 'object' && 'message' in err && typeof err.message === 'string'
         ? err.message
-        : 'Failed to place order. Please try again.';
+        : t('errors.generic');
       setOrderError(typeof err === 'string' ? err : message);
       setOrderLoading(false);
     }
@@ -203,15 +205,15 @@ const ProductDetailPage = () => {
   const renderError = () => (
     <div className="max-w-7xl mx-auto px-6 py-24 flex flex-col items-center gap-4 text-center">
       <span className="material-symbols-outlined text-5xl text-error">error</span>
-      <h2 className="text-2xl font-bold text-white">Failed to load product</h2>
+      <h2 className="text-2xl font-bold text-white">{t('errors.generic')}</h2>
       <p className="text-on-surface-variant">
-        {error || 'An unexpected error occurred.'}
+        {error || t('errors.tryAgain')}
       </p>
       <button
         onClick={() => navigate('/electronics')}
         className="mt-4 px-6 py-3 bg-primary text-black font-bold rounded-xl hover:shadow-[0_0_15px_rgba(16,185,129,0.4)] transition-all"
       >
-        Back to Electronics
+        {t('common.back')} {t('nav.electronics')}
       </button>
     </div>
   );
@@ -237,9 +239,9 @@ const ProductDetailPage = () => {
             <>
               {/* Breadcrumbs (desktop) */}
               <div className="max-w-7xl mx-auto px-6 mb-6 hidden md:flex items-center gap-2 text-sm text-on-surface-variant">
-                <a href="/" className="hover:text-primary transition-colors">Home</a>
+                <a href="/" className="hover:text-primary transition-colors">{t('nav.home')}</a>
                 <span className="material-symbols-outlined text-sm">chevron_right</span>
-                <a href="/electronics" className="hover:text-primary transition-colors">Electronics</a>
+                <a href="/electronics" className="hover:text-primary transition-colors">{t('nav.electronics')}</a>
                 <span className="material-symbols-outlined text-sm">chevron_right</span>
                 <span className="text-white font-semibold">{product.name}</span>
               </div>
@@ -288,8 +290,9 @@ const ProductDetailPage = () => {
           <div className="md:hidden fixed bottom-0 w-full glass-panel border-t border-white/10 p-4 z-40 pb-6 rounded-t-2xl shadow-2xl">
             <div className="flex gap-3">
               <button
-                onClick={() => showToast('Opening seller chat inquiry...')}
+                onClick={() => showToast(t('toasts.openingChat'))}
                 className="w-12 h-12 flex-shrink-0 rounded-xl border border-secondary/50 text-secondary flex items-center justify-center bg-surface-container/50 active:scale-95 transition-transform"
+                aria-label={t('toasts.openingChat')}
               >
                 <span className="material-symbols-outlined">chat_bubble</span>
               </button>
@@ -301,12 +304,12 @@ const ProductDetailPage = () => {
                 {orderLoading ? (
                   <>
                     <span className="animate-spin material-symbols-outlined text-[18px]">progress_activity</span>
-                    Placing Order…
+                    {t('common.pleaseWait')}
                   </>
                 ) : (
                   <>
                     <span className="material-symbols-outlined">storefront</span>
-                    Confirm Pick-Up
+                    {t('common.confirm')}
                   </>
                 )}
               </button>

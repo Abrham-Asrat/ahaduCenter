@@ -389,6 +389,29 @@
     "compare": "Compare Products",
     "emptyState": "No products found",
     "emptyStateHint": "Try adjusting your filters or browse categories.",
+    "page": {
+      "categories": {
+        "all": "All",
+        "laptops": "Laptops",
+        "phones": "Phones",
+        "audio": "Audio",
+        "accessories": "Accessories"
+      },
+      "filterTech": "Filter Tech",
+      "applyFilters": "Apply Filters",
+      "resetFilters": "Reset Filters",
+      "noProductsFound": "No Products Found",
+      "noProductsHint": "We couldn't find any electronics matching your current search and filter criteria.",
+      "addedToCart": "\"{{name}}\" reserved for in-store inquiry! Visit our physical location.",
+      "addedToCompare": "\"{{name}}\" added to product comparison!",
+      "errorLoading": "Failed to load products. Please try again.",
+      "sortOptions": {
+        "featured": "Featured",
+        "priceLowHigh": "Price: Low to High",
+        "priceHighLow": "Price: High to Low",
+        "rating": "Rating"
+      }
+    },
     "confirmation": {
       "title": "Order Confirmed",
       "orderDetails": "Order Details",

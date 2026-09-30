@@ -324,6 +324,29 @@
     "compare": "ምርቶችን አነጻጽር",
     "emptyState": "ምንም ምርቶች አልተገኙም",
     "emptyStateHint": "ማጣሪያዎችን ማስተካከል ይሞክሩ ወይም ምድቦችን ይመልከቱ።",
+    "page": {
+      "categories": {
+        "all": "ሁሉም",
+        "laptops": "ላፕቶፖች",
+        "phones": "ስልኮች",
+        "audio": "ድምጽ",
+        "accessories": "መለዋወጫዎች"
+      },
+      "filterTech": "ቴክኖሎጂ አጣራ",
+      "applyFilters": "ማጣሪያዎችን ተግብር",
+      "resetFilters": "ማጣሪያዎችን ዳግም አስጀምር",
+      "noProductsFound": "ምንም ምርቶች አልተገኙም",
+      "noProductsHint": "የእርስዎን የአሁኑን ፍለጋ እና የማጣሪያ መስፈርቶች የሚያሟላ ምንም ኤሌክትሮኒክስ ማግኘት አልቻልንም።",
+      "addedToCart": "\"{{name}}\" ለመደብር ውስጥ ጥያቄ ተይዟል! የእኛን የአካል ቦታ ይጎብኙ።",
+      "addedToCompare": "\"{{name}}\" ወደ ምርት ማነጻጸሪያ ተጨምሯል!",
+      "errorLoading": "ምርቶችን መጫን አልተሳካም። እባክዎ እንደገና ይሞክሩ።",
+      "sortOptions": {
+        "featured": "ተለይተው የቀረቡ",
+        "priceLowHigh": "ዋጋ፡ ዝቅተኛ ወደ ከፍተኛ",
+        "priceHighLow": "ዋጋ፡ ከፍተኛ ወደ ዝቅተኛ",
+        "rating": "ደረጃ"
+      }
+    },
     "confirmation": {
       "title": "ትዕዛዝ ተረጋግጧል",
       "orderDetails": "የትዕዛዝ ዝርዝሮች",

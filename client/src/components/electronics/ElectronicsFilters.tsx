@@ -1,4 +1,5 @@
 import { useState, type ChangeEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 
 type ElectronicsFilterState = {
   conditions: string[];
@@ -25,6 +26,7 @@ interface ElectronicsFiltersProps {
  * - onFilterChange: Callback function triggered when any filter updates
  */
 const ElectionicsFilters = ({ onFilterChange }: ElectronicsFiltersProps) => {
+  const { t } = useTranslation();
   // const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
   // const [contentType, setContentType] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
@@ -32,8 +34,13 @@ const ElectionicsFilters = ({ onFilterChange }: ElectronicsFiltersProps) => {
   const [selectedBrands, setSelectedBrands] = useState('All');
   const [priceRange, setPriceRange] = useState({ min: MIN_PRICE, max: MAX_PRICE });
 
-  const brandType = ['All', 'Apple', 'Dell', 'Samsung', 'Hp', 'sony'];
-  const conditions = ['All', 'New', 'Used', 'Refurbished'];
+  const brandType = [t('filters.all', { label: '' }).trim() || 'All', 'Apple', 'Dell', 'Samsung', 'Hp', 'sony'];
+  const conditions = [
+    t('filters.all', { label: '' }).trim() || 'All',
+    t('electronics.conditionNew'),
+    t('electronics.conditionUsed'),
+    'Refurbished'
+  ];
 
   const triggerChange = (updated: Partial<ElectronicsFilterState>) => {
     if (onFilterChange) {
@@ -146,7 +153,7 @@ const ElectionicsFilters = ({ onFilterChange }: ElectronicsFiltersProps) => {
         </select>
       </div>
 
-      
+
 
       {/* Content Type Filter Group */}
       <div className="mb-6">

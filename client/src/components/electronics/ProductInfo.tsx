@@ -1,4 +1,5 @@
 import { ArrowRight, CheckCircle2, Heart, Star } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface ProductInfoProps {
   product: {
@@ -32,16 +33,17 @@ const ProductInfo = ({
   onToggleWishlist,
   wishlistLoading = false,
 }: ProductInfoProps) => {
-  const title = product.title || product.name || 'Product';
+  const { t } = useTranslation();
+  const title = product.title || product.name || t('electronics.product');
   const price = product.price ?? 0;
   const originalPrice = product.originalPrice ?? 0;
 
   return (
     <div className="rounded-[28px] border border-white/10 bg-card-surface/60 p-6 shadow-[0_25px_80px_rgba(15,23,42,0.35)]">
       <div className="flex items-center justify-between gap-3 text-xs uppercase tracking-[0.2em] text-primary">
-        <span>{product.brand || 'Premium pick'}</span>
+        <span>{product.brand || t('electronics.premiumPick')}</span>
         <span className="rounded-full border border-primary/20 bg-primary/10 px-2 py-1 text-[10px]">
-          {product.condition || 'New'}
+          {product.condition || t('electronics.conditionNew')}
         </span>
       </div>
 
@@ -53,7 +55,7 @@ const ProductInfo = ({
           <span>{product.rating ?? 4.8}</span>
         </div>
         <span>•</span>
-        <span>{product.reviews ?? 128} reviews</span>
+        <span>{t('electronics.reviewsCount', { count: product.reviews ?? 128 })}</span>
       </div>
 
       <div className="mt-6 flex items-end gap-3">
@@ -64,14 +66,14 @@ const ProductInfo = ({
       </div>
 
       <p className="mt-5 text-sm leading-7 text-on-surface-variant">
-        {product.description || 'A thoughtfully selected product designed for quality and convenience.'}
+        {product.description || t('electronics.defaultProductDescription')}
       </p>
 
       <div className="mt-6 space-y-3">
         {(product.highlights && product.highlights.length > 0 ? product.highlights : [
-          'Premium quality craftsmanship',
-          'Fast delivery and secure checkout',
-          'Built for everyday convenience',
+          t('electronics.highlight1'),
+          t('electronics.highlight2'),
+          t('electronics.highlight3'),
         ]).map((item) => (
           <div key={item} className="flex items-start gap-3 text-sm text-white/90">
             <CheckCircle2 size={18} className="mt-0.5 text-primary" />
@@ -87,7 +89,7 @@ const ProductInfo = ({
           disabled={orderLoading}
           className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-slate-950 transition-opacity hover:opacity-90 disabled:opacity-70"
         >
-          {orderLoading ? 'Processing...' : 'Reserve for Pick-Up'}
+          {orderLoading ? t('electronics.processing') : t('electronics.reservePickUp')}
           <ArrowRight size={16} />
         </button>
 
@@ -98,7 +100,7 @@ const ProductInfo = ({
           className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-white transition-colors hover:border-primary/50 hover:text-primary disabled:opacity-60"
         >
           <Heart size={16} className={isWishlisted ? 'fill-primary text-primary' : ''} />
-          {isWishlisted ? 'Remove from wishlist' : 'Save to wishlist'}
+          {isWishlisted ? t('electronics.removeFromWishlist') : t('electronics.addToWishlist')}
         </button>
       </div>
 

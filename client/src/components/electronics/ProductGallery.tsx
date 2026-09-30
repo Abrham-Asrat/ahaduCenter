@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface ProductGalleryProps {
   product: {
@@ -10,6 +11,7 @@ interface ProductGalleryProps {
 }
 
 const ProductGallery = ({ product }: ProductGalleryProps) => {
+  const { t } = useTranslation();
   const images = product.images && product.images.length > 0
     ? product.images
     : [product.imageUrl || 'https://via.placeholder.com/800x600/0f172a/ffffff?text=Product'];
@@ -25,7 +27,7 @@ const ProductGallery = ({ product }: ProductGalleryProps) => {
       <div className="overflow-hidden rounded-[22px] border border-white/10 bg-surface-container">
         <img
           src={selectedImage}
-          alt={product.title || product.name || 'Product image'}
+          alt={product.title || product.name || t('electronics.productImage')}
           className="aspect-[4/3] max-h-[520px] w-full object-cover"
         />
       </div>
@@ -41,7 +43,7 @@ const ProductGallery = ({ product }: ProductGalleryProps) => {
               : 'border-white/10 bg-surface-container hover:border-primary/40'
               }`}
           >
-            <img src={image} alt={`${product.title || product.name || 'Product'} view ${index + 1}`} className="h-20 w-full object-cover" />
+            <img src={image} alt={t('electronics.productView', { name: product.title || product.name || t('electronics.product'), number: index + 1 })} className="h-20 w-full object-cover" />
           </button>
         ))}
       </div>
