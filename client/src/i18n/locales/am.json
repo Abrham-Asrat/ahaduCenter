@@ -20,7 +20,13 @@
     "and": "እና",
     "submit": "አስገባ",
     "send": "ላክ",
-    "pleaseWait": "እባክዎ ይጠብቁ..."
+    "pleaseWait": "እባክዎ ይጠብቁ...",
+    "pagination": {
+      "previous": "ቀዳሚ ገጽ",
+      "next": "ቀጣይ ገጽ",
+      "pageInfo": "ገጽ {{current}} ከ {{total}}",
+      "goToPage": "ወደ ገጽ {{page}} ሂድ"
+    }
   },
   "nav": {
     "home": "መነሻ",
@@ -561,9 +567,18 @@
     "yourReview": "የእርስዎ ግምገማ",
     "submit": "አስገባ",
     "signInPrompt": "ግምገማ ለመተው እባክዎ ይግቡ።",
+    "signInLink": "ይግቡ",
     "thankYou": "እናመሰግናለን! ግምገማዎ ታትሟል።",
     "failed": "ግምገማ ማስገባት አልተሳካም። እባክዎ እንደገና ይሞክሩ።",
-    "helpful": "ጠቃሚ"
+    "helpful": "ጠቃሚ",
+    "communityPrompt": "ሌሎች አባላት ምን እንደሚያስቡ ይመልከቱ እና የእርስዎን ልምድ ያጋሩ!",
+    "averageRatingLabel": "አማካይ ደረጃ፡",
+    "leaveReview": "ግምገማ ይተዉ",
+    "yourRatingLabel": "የእርስዎ ደረጃ፡",
+    "namePlaceholder": "ስምዎ (አማራጭ)",
+    "commentPlaceholder": "ስለዚህ ዕቃ ሌሎችን ለመርዳት ሃሳብዎን ያጋሩ...",
+    "postReview": "ግምገማ ይለጥፉ",
+    "communityRatings": "የማህበረሰብ ደረጃዎች እና ግምገማዎች ({{count}})"
   },
   "language": {
     "label": "ቋንቋ",
@@ -619,12 +634,18 @@
     "applyFilters": "ማጣሪያዎች ተግብር",
     "clearFilters": "ማጣሪያዎች አጽዳ",
     "showing": "{{count}} ውጤቶችን በማሳየት ላይ",
+    "showingOf": "{{count}} ከ {{total}} {{label}} በማሳየት ላይ",
     "select": "{{label}} ይምረጡ",
     "selected": "{{count}} ተመርጠዋል ({{items}})",
     "all": "ሁሉም {{label}}",
     "allCategories": "ሁሉም ምድቦች",
     "borrowed": "ተበዳሪ",
-    "reserved": "ተቦዳይ"
+    "reserved": "ተቦዳይ",
+    "mobileButton": {
+      "label": "ማጣሪያዎች",
+      "activeCount": "{{count}} ንቁ",
+      "ariaLabel": "ማጣሪያዎችን ክፈት"
+    }
   },
   "user": {
     "profile": "መገለጫ",

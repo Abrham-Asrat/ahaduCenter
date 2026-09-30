@@ -1,4 +1,6 @@
-// src/components/common/Pagination.jsx
+// src/components/common/Pagination.tsx
+import { useTranslation } from 'react-i18next';
+
 interface PaginationProps {
   currentPage?: number;
   totalPages?: number;
@@ -22,6 +24,7 @@ interface PaginationProps {
  * - Active page highlighted with primary color
  */
 const Pagination = ({ currentPage = 1, totalPages = 5, onPageChange }: PaginationProps) => {
+  const { t } = useTranslation();
 
   // Generate page numbers array (simplified - just show 1-3 + ellipsis + last)
   const getPageNumbers = () => {
@@ -34,11 +37,15 @@ const Pagination = ({ currentPage = 1, totalPages = 5, onPageChange }: Paginatio
   const pages = getPageNumbers();
 
   return (
-    <div className="mt-8 flex justify-center items-center gap-2">
+    <div
+      className="mt-8 flex justify-center items-center gap-2"
+      aria-label={t('common.pagination.pageInfo', { current: currentPage, total: totalPages })}
+    >
       {/* Previous button */}
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
+        aria-label={t('common.pagination.previous')}
         className="w-10 h-10 rounded glass-panel flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:border-white/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
       >
         <span className="material-symbols-outlined">chevron_left</span>
@@ -54,9 +61,11 @@ const Pagination = ({ currentPage = 1, totalPages = 5, onPageChange }: Paginatio
           <button
             key={page}
             onClick={() => onPageChange(page as number)}
+            aria-label={t('common.pagination.goToPage', { page })}
+            aria-current={currentPage === page ? 'page' : undefined}
             className={`w-10 h-10 rounded text-sm transition-all ${currentPage === page
-                ? 'bg-primary-container text-white shadow-[0_0_15px_rgba(16,185,129,0.4)]'
-                : 'glass-panel text-on-surface-variant hover:text-on-surface hover:border-white/30'
+              ? 'bg-primary-container text-white shadow-[0_0_15px_rgba(16,185,129,0.4)]'
+              : 'glass-panel text-on-surface-variant hover:text-on-surface hover:border-white/30'
               }`}
           >
             {page}
@@ -68,6 +77,7 @@ const Pagination = ({ currentPage = 1, totalPages = 5, onPageChange }: Paginatio
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
+        aria-label={t('common.pagination.next')}
         className="w-10 h-10 rounded glass-panel flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:border-white/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
       >
         <span className="material-symbols-outlined">chevron_right</span>

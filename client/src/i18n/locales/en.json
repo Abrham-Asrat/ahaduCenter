@@ -699,12 +699,18 @@
     "applyFilters": "Apply Filters",
     "clearFilters": "Clear Filters",
     "showing": "Showing {{count}} results",
+    "showingOf": "Showing {{count}} of {{total}} {{label}}",
     "select": "Select {{label}}",
     "selected": "{{count}} Selected ({{items}})",
     "all": "All {{label}}",
     "allCategories": "All Categories",
     "borrowed": "Borrowed",
-    "reserved": "Reserved"
+    "reserved": "Reserved",
+    "mobileButton": {
+      "label": "Filters",
+      "activeCount": "{{count}} active",
+      "ariaLabel": "Open filters"
+    }
   },
   "user": {
     "profile": "Profile",
