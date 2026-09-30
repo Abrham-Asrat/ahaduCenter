@@ -6,6 +6,7 @@ import Footer from '../components/common/Footer';
 import { searchService } from '../services/searchService';
 import type { SearchResult } from '../types';
 import MobileFilterButton from '../components/common/MobileFilterButton';
+import { useTranslation } from 'react-i18next';
 
 /**
  * SearchResultsPage Component
@@ -14,6 +15,7 @@ import MobileFilterButton from '../components/common/MobileFilterButton';
  * Includes full filtering, sorting, tab switching, and card navigation.
  */
 const SearchResultsPage = () => {
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const searchQuery = searchParams.get('q') || '';
@@ -58,7 +60,7 @@ const SearchResultsPage = () => {
         }
       } catch (err) {
         if (!cancelled) {
-          setError(typeof err === 'string' ? err : 'Search failed. Please try again.');
+          setError(typeof err === 'string' ? err : t('common.error'));
         }
       } finally {
         if (!cancelled) setLoading(false);
@@ -107,10 +109,10 @@ const SearchResultsPage = () => {
   }, [results]);
 
   const tabs = [
-    { key: 'all', label: 'All Results', count: counts.all },
-    { key: 'movies', label: 'Movies', count: counts.movies },
-    { key: 'electronics', label: 'Electronics', count: counts.electronics },
-    { key: 'books', label: 'Books', count: counts.books },
+    { key: 'all', label: t('search.tabs.all'), count: counts.all },
+    { key: 'movies', label: t('search.tabs.movies'), count: counts.movies },
+    { key: 'electronics', label: t('search.tabs.products'), count: counts.electronics },
+    { key: 'books', label: t('search.tabs.books'), count: counts.books },
   ];
 
   const genres = ['Sci-Fi', 'Action', 'Drama'];
@@ -126,17 +128,17 @@ const SearchResultsPage = () => {
             <div>
               <h1 className="text-2xl md:text-3xl font-bold text-white">
                 {searchQuery ? (
-                  <>Showing results for <span className="text-primary">"{searchQuery}"</span></>
+                  <>{t('search.resultsFor', { query: searchQuery })}</>
                 ) : (
-                  <>All Catalog Items</>
+                  <>{t('search.title')}</>
                 )}
               </h1>
               <p className="text-sm text-on-surface-variant mt-1">
-                Found {filteredResults.length} matching item{filteredResults.length !== 1 ? 's' : ''}
+                {t('search.resultsFor', { query: `${filteredResults.length}` })}
               </p>
             </div>
             <div className="flex w-full flex-wrap items-center gap-3 md:w-auto">
-              <span className="text-sm text-on-surface-variant">Sort by:</span>
+              <span className="text-sm text-on-surface-variant">{t('common.search')}:</span>
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
@@ -184,12 +186,12 @@ const SearchResultsPage = () => {
             {/* Filter Sidebar (desktop) */}
             <aside className="hidden md:block w-64 flex-shrink-0 glass-panel rounded-xl p-5 flex flex-col gap-6 sticky top-24">
               <div className="flex items-center justify-between border-b border-white/10 pb-3">
-                <h2 className="text-xl font-semibold text-white">Filters</h2>
+                <h2 className="text-xl font-semibold text-white">{t('common.search')}</h2>
                 <button
                   onClick={handleClearFilters}
                   className="text-xs uppercase text-primary hover:underline cursor-pointer"
                 >
-                  Clear All
+                  {t('common.delete')}
                 </button>
               </div>
 
@@ -253,15 +255,15 @@ const SearchResultsPage = () => {
               ) : filteredResults.length === 0 ? (
                 <div className="glass-panel rounded-xl p-12 text-center flex flex-col items-center justify-center min-h-[300px]">
                   <span className="material-symbols-outlined text-5xl text-on-surface-variant mb-4">search_off</span>
-                  <h3 className="text-xl font-bold text-white mb-2">No Matching Results Found</h3>
+                  <h3 className="text-xl font-bold text-white mb-2">{t('search.noResults')}</h3>
                   <p className="text-on-surface-variant text-sm mb-6 max-w-md">
-                    Try adjusting your search keywords, clearing active category filters, or browsing our primary catalogs below.
+                    {t('search.noResultsHint')}
                   </p>
                   <button
                     onClick={handleClearFilters}
                     className="bg-primary text-black font-bold text-xs uppercase px-6 py-2.5 rounded-xl cursor-pointer"
                   >
-                    Reset Filters
+                    {t('common.retry')}
                   </button>
                 </div>
               ) : (
@@ -324,7 +326,7 @@ const SearchResultsPage = () => {
                               onClick={(e) => e.stopPropagation()}
                               className="text-primary hover:text-primary-fixed transition-colors flex items-center gap-1 text-xs uppercase font-extrabold"
                             >
-                              {type === 'Product' || type === 'Electronics' ? 'View Tech' : 'Details'}
+                              {type === 'Product' || type === 'Electronics' ? t('nav.electronics') : t('common.viewAll')}
                               <span className="material-symbols-outlined text-sm">arrow_forward</span>
                             </Link>
                           </div>
@@ -352,13 +354,13 @@ const SearchResultsPage = () => {
             <div className="relative bg-surface-container-highest w-full rounded-t-xl p-4 pb-[calc(2rem+env(safe-area-inset-bottom))] shadow-lg z-10 sm:p-6">
               <div className="w-12 h-1.5 bg-white/20 rounded-full mx-auto mb-6" />
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold text-white">Filters</h2>
-                <button onClick={handleClearFilters} className="text-primary text-sm font-bold">Reset</button>
+                <h2 className="text-2xl font-bold text-white">{t('common.search')}</h2>
+                <button onClick={handleClearFilters} className="text-primary text-sm font-bold">{t('common.retry')}</button>
               </div>
 
               {/* Price range */}
               <div className="mb-6">
-                <h3 className="text-xs uppercase tracking-wider text-on-surface-variant mb-3">Price Range ($)</h3>
+                <h3 className="text-xs uppercase tracking-wider text-on-surface-variant mb-3">{t('electronics.price')}</h3>
                 <div className="flex gap-4">
                   <input
                     type="number"
@@ -381,7 +383,7 @@ const SearchResultsPage = () => {
                 className="w-full bg-primary text-black font-extrabold text-xs uppercase tracking-widest py-3 rounded-xl transition-all cursor-pointer"
                 onClick={() => setShowFilters(false)}
               >
-                Apply Filters
+                {t('common.submit')}
               </button>
             </div>
           </div>

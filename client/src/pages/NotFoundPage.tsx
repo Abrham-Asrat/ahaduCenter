@@ -1,8 +1,10 @@
 // src/pages/NotFoundPage.jsx
 import { useState, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const NotFoundPage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -26,10 +28,10 @@ const NotFoundPage = () => {
             404
           </h1>
 
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Page Not Found</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">{t('search.noResults')}</h2>
 
           <p className="text-lg text-on-surface-variant max-w-2xl mx-auto mb-8">
-            The page you're looking for doesn't exist, has been moved, or is temporarily unavailable.
+            {t('search.noResultsHint')}
           </p>
 
           {/* Functional search bar */}
@@ -38,7 +40,7 @@ const NotFoundPage = () => {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search movies, electronics, books..."
+              placeholder={t('nav.searchPlaceholder')}
               className="w-full bg-background border border-white/10 rounded-full py-3 pl-4 pr-12 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-200"
             />
             <button
@@ -53,19 +55,19 @@ const NotFoundPage = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto mb-8">
             <Link to="/" className="bg-primary text-black px-4 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 hover:shadow-[0_0_20px_rgba(16,185,129,0.5)] transition-all">
               <span className="material-symbols-outlined">home</span>
-              Back to Home
+              {t('nav.home')}
             </Link>
             <Link to="/movies" className="border border-white/20 text-white px-4 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 hover:border-secondary hover:text-secondary transition-all">
               <span className="material-symbols-outlined">movie</span>
-              Browse Movies
+              {t('nav.movies')}
             </Link>
             <Link to="/electronics" className="border border-white/20 text-white px-4 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 hover:border-secondary hover:text-secondary transition-all">
               <span className="material-symbols-outlined">devices</span>
-              Shop Electronics
+              {t('nav.electronics')}
             </Link>
             <Link to="/books" className="border border-white/20 text-white px-4 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 hover:border-secondary hover:text-secondary transition-all">
               <span className="material-symbols-outlined">menu_book</span>
-              Explore Books
+              {t('nav.books')}
             </Link>
           </div>
 
