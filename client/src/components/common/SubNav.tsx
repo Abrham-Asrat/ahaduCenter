@@ -1,5 +1,6 @@
 // src/components/common/SubNav.jsx
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 type SubNavProps = {
   tabs?: string[];
@@ -24,8 +25,17 @@ type SubNavProps = {
  * - Active tab highlighted with primary color
  */
 const SubNav = ({ tabs, onTabChange }: SubNavProps) => {
+  const { t } = useTranslation();
+
   // Default tabs if none provided
-  const defaultTabs = ['All', 'Latest', 'Trending', 'Coming Soon', 'Featured', 'Recently Added'];
+  const defaultTabs = [
+    t('common.subNav.all'),
+    t('common.subNav.latest'),
+    t('common.subNav.trending'),
+    t('common.subNav.comingSoon'),
+    t('common.subNav.featured'),
+    t('common.subNav.recentlyAdded'),
+  ];
   const navTabs = tabs || defaultTabs;
 
   // State to track active tab

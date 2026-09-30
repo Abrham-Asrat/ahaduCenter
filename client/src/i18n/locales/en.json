@@ -26,6 +26,20 @@
       "next": "Next page",
       "pageInfo": "Page {{current}} of {{total}}",
       "goToPage": "Go to page {{page}}"
+    },
+    "heroSection": {
+      "title": "Movies, books, and electronics in one place.",
+      "subtitle": "Discover something new, find a story to borrow, or upgrade your everyday essentials.",
+      "exploreNow": "Explore Now",
+      "latestArrivals": "Latest Arrivals"
+    },
+    "subNav": {
+      "all": "All",
+      "latest": "Latest",
+      "trending": "Trending",
+      "comingSoon": "Coming Soon",
+      "featured": "Featured",
+      "recentlyAdded": "Recently Added"
     }
   },
   "nav": {
@@ -699,7 +713,7 @@
     "applyFilters": "Apply Filters",
     "clearFilters": "Clear Filters",
     "showing": "Showing {{count}} results",
-    "showingOf": "Showing {{count}} of {{total}} {{label}}",
+    "showingOf": "Showing <bold>{{count}}</bold> of <bold>{{total}}</bold> {{label}}",
     "select": "Select {{label}}",
     "selected": "{{count}} Selected ({{items}})",
     "all": "All {{label}}",

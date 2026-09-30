@@ -26,6 +26,20 @@
       "next": "ቀጣይ ገጽ",
       "pageInfo": "ገጽ {{current}} ከ {{total}}",
       "goToPage": "ወደ ገጽ {{page}} ሂድ"
+    },
+    "heroSection": {
+      "title": "ፊልሞች፣ መጽሐፍትና ኤሌክትሮኒክስ በአንድ ቦታ።",
+      "subtitle": "አዲስ ነገር ይግለጡ፣ ለመበደር ታሪክ ያግኙ ወይም ዕለታዊ አስፈላጊዎቻቸውን ያሻሽሉ።",
+      "exploreNow": "አሁን ያስሱ",
+      "latestArrivals": "የቅርብ ጊዜ ምርቶች"
+    },
+    "subNav": {
+      "all": "ሁሉም",
+      "latest": "የቅርብ ጊዜ",
+      "trending": "ዝነኛ",
+      "comingSoon": "በቅርቡ የሚመጣ",
+      "featured": "የተለዩ",
+      "recentlyAdded": "በቅርቡ የተጨመሩ"
     }
   },
   "nav": {
@@ -634,7 +648,7 @@
     "applyFilters": "ማጣሪያዎች ተግብር",
     "clearFilters": "ማጣሪያዎች አጽዳ",
     "showing": "{{count}} ውጤቶችን በማሳየት ላይ",
-    "showingOf": "{{count}} ከ {{total}} {{label}} በማሳየት ላይ",
+    "showingOf": "<bold>{{count}}</bold> ከ <bold>{{total}}</bold> {{label}} በማሳየት ላይ",
     "select": "{{label}} ይምረጡ",
     "selected": "{{count}} ተመርጠዋል ({{items}})",
     "all": "ሁሉም {{label}}",

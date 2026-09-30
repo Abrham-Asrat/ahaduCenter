@@ -182,12 +182,9 @@ const ReviewsCommentsSection = ({
         <div className="mb-6 p-4 bg-surface-container/40 rounded-xl border border-white/10 flex items-center gap-3 text-on-surface-variant text-sm">
           <span className="material-symbols-outlined">lock</span>
           <span>
-            {t('reviews.signInPrompt').replace(
-              t('reviews.signInLink'),
-              ''
-            ).split('')[0]}
+            {t('reviews.signInPrompt').split(t('reviews.signInLink'))[0]}
             <a href="/login" className="text-primary hover:underline">{t('reviews.signInLink')}</a>
-            {' '}{t('reviews.signInPrompt').split(t('reviews.signInLink'))[1] ?? ''}
+            {t('reviews.signInPrompt').split(t('reviews.signInLink'))[1] ?? ''}
           </span>
         </div>
       )}
@@ -290,8 +287,8 @@ const ReviewsCommentsSection = ({
                 onClick={() => handleLike(rev.id)}
                 aria-label={t('reviews.helpful')}
                 className={`flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg border transition-all cursor-pointer ${rev.liked
-                    ? 'bg-primary/10 border-primary/40 text-primary'
-                    : 'border-white/10 text-on-surface-variant hover:text-white hover:border-white/20'
+                  ? 'bg-primary/10 border-primary/40 text-primary'
+                  : 'border-white/10 text-on-surface-variant hover:text-white hover:border-white/20'
                   }`}
               >
                 <span className="material-symbols-outlined text-sm">thumb_up</span>

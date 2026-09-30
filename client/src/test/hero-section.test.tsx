@@ -25,6 +25,7 @@ vi.mock('../components/common/ShaderHero', () => ({
   default: () => <canvas data-testid="shader-hero" />,
 }));
 
+import '../i18n/config';
 import HeroSection from '../components/common/HeroSection';
 
 // ─────────────────────────────────────────────────────────────────────────────
