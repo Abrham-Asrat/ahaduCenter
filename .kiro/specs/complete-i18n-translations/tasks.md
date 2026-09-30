@@ -305,7 +305,7 @@ This plan systematically translates all 70 remaining React components in the Aha
   - Ensure all tests pass, ask the user if questions arise.
 
 - [ ] 12. Translate Common components (Priority 7)
-  - [-] 12.1 Translate ReviewsCommentsSection.tsx
+  - [x] 12.1 Translate ReviewsCommentsSection.tsx
     - Import useTranslation hook
     - Replace section header with "reviews.*" keys
     - Translate sort options (Most Recent, Highest Rated)
@@ -314,39 +314,39 @@ This plan systematically translates all 70 remaining React components in the Aha
     - Translate review form labels (Rating, Comment, Submit)
     - _Requirements: 7.1_
   
-  - [-] 12.2 Translate Pagination.tsx
+  - [x] 12.2 Translate Pagination.tsx
     - Import useTranslation hook
     - Replace navigation labels with "common.pagination.*" keys
     - Translate page info (Page {{current}} of {{total}})
     - Add aria-labels (Go to page {{page}}, Previous page, Next page)
     - _Requirements: 7.2_
   
-  - [-] 12.3 Translate Filters.tsx and SortingFilter.tsx
+  - [x] 12.3 Translate Filters.tsx and SortingFilter.tsx
     - Import useTranslation hook in both components
     - Replace filter controls with "filters.*" keys
     - Translate sort label (Sort by)
     - Translate sort options (Newest First, Oldest First, Name A-Z, Name Z-A, Price Low to High, Price High to Low)
     - _Requirements: 7.3, 7.4_
   
-  - [-] 12.4 Translate MobileFilterButton.tsx
+  - [x] 12.4 Translate MobileFilterButton.tsx
     - Import useTranslation hook
     - Replace button label with "filters.mobileButton.*" keys
     - Translate active filter count ({{count}} active)
     - Add aria-label (Open filters)
     - _Requirements: 7.3_
   
-  - [-] 12.5 Translate SubNav.tsx and HeroSection.tsx
+  - [x] 12.5 Translate SubNav.tsx and HeroSection.tsx
     - Import useTranslation hook in both components
     - Replace navigation and hero text with appropriate namespace keys
     - Handle any breadcrumb navigation
     - _Requirements: 7.5_
   
-  - [~] 12.6 Translate BentoGrid.tsx
+  - [-] 12.6 Translate BentoGrid.tsx
     - Import useTranslation hook
     - Replace any grid labels or empty states
     - _Requirements: 7.5_
   
-  - [~] 12.7 Translate ScrollToTop.tsx
+  - [-] 12.7 Translate ScrollToTop.tsx
     - Import useTranslation hook
     - Add aria-label for button (Scroll to top)
     - Add title attribute if present
