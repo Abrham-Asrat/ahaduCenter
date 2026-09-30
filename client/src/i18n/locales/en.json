@@ -20,7 +20,13 @@
     "and": "and",
     "submit": "Submit",
     "send": "Send",
-    "pleaseWait": "Please wait..."
+    "pleaseWait": "Please wait...",
+    "pagination": {
+      "previous": "Previous page",
+      "next": "Next page",
+      "pageInfo": "Page {{current}} of {{total}}",
+      "goToPage": "Go to page {{page}}"
+    }
   },
   "nav": {
     "home": "Home",
@@ -626,9 +632,18 @@
     "yourReview": "Your Review",
     "submit": "Submit",
     "signInPrompt": "Please sign in to leave a review.",
+    "signInLink": "sign in",
     "thankYou": "Thank you! Your review has been published.",
     "failed": "Failed to submit review. Please try again.",
-    "helpful": "Helpful"
+    "helpful": "Helpful",
+    "communityPrompt": "See what fellow members think and share your own experience!",
+    "averageRatingLabel": "Average Rating:",
+    "leaveReview": "Leave a Review",
+    "yourRatingLabel": "Your Rating:",
+    "namePlaceholder": "Your Name (Optional)",
+    "commentPlaceholder": "Share your thoughts about this item to help others...",
+    "postReview": "Post Review",
+    "communityRatings": "Community Ratings & Reviews ({{count}})"
   },
   "language": {
     "label": "Language",
