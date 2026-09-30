@@ -137,6 +137,42 @@
         "order": "Order",
         "getBook": "Get Book"
       }
+    },
+    "bentoGrid": {
+      "exploreLabel": "Explore",
+      "collectionsTitle": "Curated collections",
+      "collectionsSubtitle": "Browse our hand-selected favorites across entertainment, technology, and stories.",
+      "cards": {
+        "cinematicTitle": "Cinematic Masterpieces",
+        "cinematicSubtitle": "Award-winning stories and cult classics",
+        "cinematicBadge": "New arrivals",
+        "techTitle": "Next-gen tech",
+        "techSubtitle": "Upgrade your setup",
+        "techBadge": "Trending",
+        "bestsellersTitle": "Bestsellers",
+        "bestsellersSubtitle": "Stories that stay with you",
+        "bestsellersBadge": "Editor choice"
+      },
+      "community": {
+        "label": "Community",
+        "title": "Join the Community",
+        "description": "Get early access to exclusive drops, member pricing, and standout picks.",
+        "cta": "Get started"
+      },
+      "whyUs": {
+        "label": "Why us",
+        "title": "Designed for modern discovery"
+      },
+      "features": {
+        "curatedTitle": "Curated quality",
+        "curatedDesc": "Every title is selected for quality, style, and long-term value.",
+        "discoveryTitle": "Seamless discovery",
+        "discoveryDesc": "Browse movies, books, and devices without friction or clutter.",
+        "recommendationsTitle": "Smart recommendations",
+        "recommendationsDesc": "Explore collections built around your interests and habits.",
+        "trustTitle": "Trust & comfort",
+        "trustDesc": "A polished shopping journey with secure, dependable service."
+      }
     }
   },
   "auth": {
