@@ -1,5 +1,6 @@
 // src/pages/BookCenterPage.jsx
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import MobileFilterButton from '../components/common/MobileFilterButton';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { fetchBooks } from '../redux/slices/bookSlice';
@@ -19,6 +20,7 @@ import type { Book, BookQuery } from '../types';
  * Wired to Redux store — dispatches fetchBooks on mount and on filter/page change.
  */
 const BookCenterPage = () => {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -45,20 +47,46 @@ const BookCenterPage = () => {
   const [showMobileFilters, setShowMobileFilters] = useState(false);
 
   const categories = [
-    'All Categories',
-    'Fiction',
-    'History',
-    'Biography',
-    'Technology',
-    'Business',
-    'Science',
-    'Language',
+    t('filters.allCategories') || 'All Categories',
+    t('books.categories.fiction') || 'Fiction',
+    t('books.categories.history') || 'History',
+    t('books.categories.biography') || 'Biography',
+    t('books.categories.technology') || 'Technology',
+    t('books.categories.business') || 'Business',
+    t('books.categories.science') || 'Science',
+    t('books.categories.language') || 'Language',
   ];
 
   const filterGroups: FilterGroup[] = [
-    { key: 'availability', label: 'Availability', options: ['All', 'Available', 'Borrowed', 'Reserved'] },
-    { key: 'format', label: 'Format', options: ['All Formats', 'Paperback', 'Hardcover'], defaultValue: 'All Formats' },
-    { key: 'language', label: 'Languages', options: ['All Languages', 'English', 'Amharic'] },
+    {
+      key: 'availability',
+      label: t('filters.availability') || 'Availability',
+      options: [
+        t('filters.all') || 'All',
+        t('books.available') || 'Available',
+        t('filters.borrowed') || 'Borrowed',
+        t('filters.reserved') || 'Reserved'
+      ]
+    },
+    {
+      key: 'format',
+      label: t('books.format') || 'Format',
+      options: [
+        t('books.formats.all') || 'All Formats',
+        t('books.formats.paperback') || 'Paperback',
+        t('books.formats.hardcover') || 'Hardcover'
+      ],
+      defaultValue: t('books.formats.all') || 'All Formats'
+    },
+    {
+      key: 'language',
+      label: t('books.languages') || 'Languages',
+      options: [
+        t('books.languages.all') || 'All Languages',
+        t('books.languages.english') || 'English',
+        t('books.languages.amharic') || 'Amharic'
+      ]
+    },
   ];
 
   const buildParams = useCallback((): BookQuery => {
@@ -151,8 +179,8 @@ const BookCenterPage = () => {
               <Filters
                 key={`desktop-${filterResetKey}`}
                 groups={filterGroups}
-                searchLabel="Search Title"
-                searchPlaceholder="Search Books..."
+                searchLabel={t('books.searchLabel') || 'Search Title'}
+                searchPlaceholder={t('books.searchPlaceholder') || 'Search Books...'}
                 onFilterChange={handleFilterChange}
               />
             </aside>
@@ -172,7 +200,7 @@ const BookCenterPage = () => {
                     onClick={handleRetry}
                     className="text-xs font-bold uppercase tracking-wider text-primary border border-primary/40 px-4 py-2 rounded-lg hover:bg-primary/10 transition-colors flex-shrink-0"
                   >
-                    Retry
+                    {t('common.retry')}
                   </button>
                 </div>
               )}
@@ -189,9 +217,9 @@ const BookCenterPage = () => {
                   <span className="material-symbols-outlined text-6xl text-on-surface-variant/40 mb-3">
                     menu_book
                   </span>
-                  <h3 className="text-2xl font-bold text-white mb-2">No Books Found</h3>
+                  <h3 className="text-2xl font-bold text-white mb-2">{t('books.emptyState')}</h3>
                   <p className="text-on-surface-variant text-sm mb-6 max-w-md mx-auto">
-                    We couldn&apos;t find any books matching your selected filters.
+                    {t('books.emptyStateHint')}
                   </p>
                   <button
                     onClick={() => {
@@ -202,7 +230,7 @@ const BookCenterPage = () => {
                     }}
                     className="bg-primary text-black px-6 py-2.5 rounded-lg font-bold hover:shadow-[0_0_15px_rgba(16,185,129,0.4)] transition-all text-sm"
                   >
-                    Reset Filters
+                    {t('filters.clearFilters')}
                   </button>
                 </div>
               ) : (
@@ -246,23 +274,23 @@ const BookCenterPage = () => {
               onClick={(event) => event.stopPropagation()}
             >
               <div className="flex justify-between items-center mb-4">
-                <h3 className="text-xl font-bold text-white">Filter Books</h3>
-                <button onClick={() => setShowMobileFilters(false)} className="text-on-surface-variant hover:text-white">
+                <h3 className="text-xl font-bold text-white">{t('books.filterBooks') || 'Filter Books'}</h3>
+                <button onClick={() => setShowMobileFilters(false)} className="text-on-surface-variant hover:text-white" aria-label={t('common.close')}>
                   <span className="material-symbols-outlined">close</span>
                 </button>
               </div>
               <Filters
                 key={`mobile-${filterResetKey}`}
                 groups={filterGroups}
-                searchLabel="Search Title"
-                searchPlaceholder="Search Books..."
+                searchLabel={t('books.searchLabel') || 'Search Title'}
+                searchPlaceholder={t('books.searchPlaceholder') || 'Search Books...'}
                 onFilterChange={handleFilterChange}
               />
               <button
                 className="w-full mt-6 bg-primary text-black font-bold py-3 rounded-xl uppercase text-xs tracking-wider"
                 onClick={() => setShowMobileFilters(false)}
               >
-                Apply Filters
+                {t('filters.applyFilters')}
               </button>
             </div>
           </div>

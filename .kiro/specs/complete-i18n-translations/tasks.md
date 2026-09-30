@@ -175,26 +175,26 @@ This plan systematically translates all 70 remaining React components in the Aha
   - Ensure all tests pass, ask the user if questions arise.
 
 - [ ] 8. Translate Book feature components (Priority 5)
-  - [~] 8.1 Translate BookCard.tsx
+  - [x] 8.1 Translate BookCard.tsx
     - Import useTranslation hook
     - Replace author label with "books.card.*" keys (By)
     - Translate availability status (Available, Borrowed)
     - Translate action buttons (Borrow, View Details)
     - _Requirements: 5.1_
   
-  - [~] 8.2 Translate BookCoverCard.tsx
+  - [x] 8.2 Translate BookCoverCard.tsx
     - Import useTranslation hook
     - Replace overlay text with "books.card.*" keys
     - _Requirements: 5.2_
   
-  - [~] 8.3 Translate BookFilters.tsx
+  - [-] 8.3 Translate BookFilters.tsx
     - Import useTranslation hook
     - Replace filter categories with "books.filters.*" keys
     - Translate Clear/Apply buttons
     - Translate sort options
     - _Requirements: 5.4_
   
-  - [~] 8.4 Translate BookCenterPage.tsx
+  - [x] 8.4 Translate BookCenterPage.tsx
     - Import useTranslation hook
     - Replace page title with "books.center.*" keys
     - Translate section headers and navigation
@@ -202,30 +202,30 @@ This plan systematically translates all 70 remaining React components in the Aha
     - Translate search placeholder
     - _Requirements: 5.5_
   
-  - [~] 8.5 Translate BookDetailPage.tsx
+  - [x] 8.5 Translate BookDetailPage.tsx
     - Import useTranslation hook
     - Replace book information labels with "books.detail.*" keys
     - Translate action buttons
     - Translate tabs if present
     - _Requirements: 5.6_
   
-  - [~] 8.6 Translate BookInfoSection.tsx and BookDetailTabs.tsx
+  - [-] 8.6 Translate BookInfoSection.tsx and BookDetailTabs.tsx
     - Import useTranslation hook in both components
     - Replace details and tab labels with "books.detail.*" keys
     - _Requirements: 5.3_
   
-  - [~] 8.7 Translate RelatedBooks.tsx
+  - [-] 8.7 Translate RelatedBooks.tsx
     - Import useTranslation hook
     - Replace section header with "books.detail.*" keys
     - _Requirements: 5.3_
   
-  - [~] 8.8 Translate BookConfirmPage.tsx
+  - [-] 8.8 Translate BookConfirmPage.tsx
     - Import useTranslation hook
     - Replace confirmation details with "books.confirm.*" keys
     - Translate action buttons
     - _Requirements: 5.7_
   
-  - [~] 8.9 Translate BorrowingHistoryPage.tsx
+  - [-] 8.9 Translate BorrowingHistoryPage.tsx
     - Import useTranslation hook
     - Replace page title with "books.history.*" keys
     - Translate table headers (Book Title, Borrowed Date, Return Date, Status)

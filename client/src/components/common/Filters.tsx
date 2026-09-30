@@ -1,4 +1,5 @@
 import { useState, type ChangeEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export type FilterGroup = {
   key: string;
@@ -23,9 +24,10 @@ interface FiltersProps {
 const Filters = ({
   groups,
   onFilterChange,
-  searchLabel = 'Search',
-  searchPlaceholder = 'Search...',
+  searchLabel,
+  searchPlaceholder,
 }: FiltersProps) => {
+  const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedValues, setSelectedValues] = useState<Record<string, string[]>>(() =>
     Object.fromEntries(
@@ -36,6 +38,10 @@ const Filters = ({
     )
   );
   const [openGroup, setOpenGroup] = useState<string | null>(null);
+
+  // Use translation keys with fallback to props
+  const effectiveSearchLabel = searchLabel ?? t('common.search');
+  const effectiveSearchPlaceholder = searchPlaceholder ?? t('search.placeholder');
 
   const triggerChange = (values: Record<string, string[]>, nextSearchQuery = searchQuery) => {
     const filters = groups.reduce<Record<string, string[]>>((result, group) => {
@@ -101,28 +107,28 @@ const Filters = ({
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-2">
           <span className="material-symbols-outlined text-primary">tune</span>
-          <h2 className="text-xl font-bold text-white">Filters</h2>
+          <h2 className="text-xl font-bold text-white">{t('filters.filters')}</h2>
         </div>
         {hasActiveFilters && (
           <button
             onClick={handleClearAll}
             className="text-xs text-secondary hover:underline cursor-pointer font-semibold transition-colors"
           >
-            Clear All
+            {t('filters.clearFilters')}
           </button>
         )}
       </div>
 
       <div className="mb-6">
         <label className="block text-xs uppercase tracking-wider text-on-surface-variant mb-2 font-semibold">
-          {searchLabel}
+          {effectiveSearchLabel}
         </label>
         <div className="relative">
           <input
             type="text"
             value={searchQuery}
             onChange={handleSearchChange}
-            placeholder={searchPlaceholder}
+            placeholder={effectiveSearchPlaceholder}
             className="w-full bg-surface-container border border-white/10 rounded-lg pl-9 pr-3 py-2 text-sm text-white focus:border-primary outline-none transition-all"
           />
           <span className="material-symbols-outlined text-on-surface-variant text-lg absolute left-2.5 top-2.5 pointer-events-none">
@@ -133,7 +139,9 @@ const Filters = ({
 
       {groups.map((group) => {
         const values = selectedValues[group.key] ?? [];
-        const selectedLabel = values.length === 0 ? `Select ${group.label}` : `${values.length} Selected (${values.join(', ')})`;
+        const selectedLabel = values.length === 0
+          ? t('filters.select', { label: group.label })
+          : t('filters.selected', { count: values.length, items: values.join(', ') });
 
         return (
           <div className="mb-6 relative" key={group.key}>
@@ -179,7 +187,7 @@ const Filters = ({
               >
                 {group.options.map((option) => (
                   <option key={option} value={option} className="bg-surface-container-high text-white">
-                    {option === (group.defaultValue ?? group.options[0]) ? `All ${group.label}` : option}
+                    {option === (group.defaultValue ?? group.options[0]) ? t('filters.all', { label: group.label }) : option}
                   </option>
                 ))}
               </select>

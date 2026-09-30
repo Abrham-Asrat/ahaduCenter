@@ -1,6 +1,7 @@
 // src/pages/BookConfirmPage.jsx
 import { useState, useEffect, type FormEvent } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { fetchBook } from '../redux/slices/bookSlice';
 import { bookService } from '../services/bookService';
@@ -24,6 +25,7 @@ import type { BookActionResult } from '../types';
  *   error    → error message shown, form stays visible for retry
  */
 const BookConfirmPage = () => {
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const action = searchParams.get('action') || 'borrow';
   const bookId = searchParams.get('id') || '';
@@ -55,7 +57,7 @@ const BookConfirmPage = () => {
     }
     : {
       id: bookId,
-      title: 'Loading…',
+      title: t('common.loading'),
       author: '',
       coverUrl: '',
       price: 0,
@@ -64,14 +66,14 @@ const BookConfirmPage = () => {
 
   // ── Labels ───────────────────────────────────────────────────────────────────
   const actionTitle = {
-    borrow: 'Confirm Borrowing',
-    reserve: 'Confirm Reservation',
-  }[action] || 'Confirm';
+    borrow: t('books.confirm.title'),
+    reserve: t('books.confirm.reservationTitle'),
+  }[action] || t('common.confirm');
 
   const successTitle = {
-    borrow: 'Borrowing Confirmed!',
-    reserve: 'Reservation Placed!',
-  }[action] || 'Success!';
+    borrow: t('books.confirm.borrowSuccess'),
+    reserve: t('books.confirm.reserveSuccess'),
+  }[action] || t('toasts.success');
 
   // ── Handle confirm ───────────────────────────────────────────────────────────
   const handleConfirm = async (e: FormEvent<HTMLFormElement>) => {
@@ -82,7 +84,7 @@ const BookConfirmPage = () => {
     try {
       const bookId = book.id;
       if (!bookId) {
-        throw new Error('Book ID is missing');
+        throw new Error(t('books.confirm.errors.missingId'));
       }
       let result;
       if (action === 'borrow') {
@@ -93,7 +95,7 @@ const BookConfirmPage = () => {
       setServerResult(result);
       setConfirmState('success');
     } catch (err) {
-      const msg = typeof err === 'string' ? err : 'Something went wrong. Please try again.';
+      const msg = typeof err === 'string' ? err : t('errors.generic');
       setConfirmError(msg);
       setConfirmState('error');
     }
@@ -171,13 +173,13 @@ const BookConfirmPage = () => {
                 <div className="w-full bg-surface-container/50 rounded-xl border border-white/10 p-4 mb-6 text-left flex flex-col gap-3">
                   {confirmationId && (
                     <div className="flex justify-between items-center py-1 border-b border-white/5">
-                      <span className="text-xs text-on-surface-variant uppercase tracking-wider">Confirmation ID</span>
+                      <span className="text-xs text-on-surface-variant uppercase tracking-wider">{t('books.confirm.confirmationId')}</span>
                       <span className="text-xs font-mono text-primary">{confirmationId}</span>
                     </div>
                   )}
                   {action === 'borrow' && dueDate && (
                     <div className="flex justify-between items-center py-1 border-b border-white/5">
-                      <span className="text-on-surface-variant text-sm">Due Date</span>
+                      <span className="text-on-surface-variant text-sm">{t('books.dueDate')}</span>
                       <span className="text-white font-bold text-sm">
                         {new Date(dueDate).toLocaleDateString('en-US', {
                           month: 'long', day: 'numeric', year: 'numeric',
@@ -187,7 +189,7 @@ const BookConfirmPage = () => {
                   )}
                   {action === 'reserve' && expiryDate && (
                     <div className="flex justify-between items-center py-1 border-b border-white/5">
-                      <span className="text-on-surface-variant text-sm">Reservation Expires</span>
+                      <span className="text-on-surface-variant text-sm">{t('books.confirm.reservationExpires')}</span>
                       <span className="text-white font-bold text-sm">
                         {new Date(expiryDate).toLocaleDateString('en-US', {
                           month: 'long', day: 'numeric', year: 'numeric',
@@ -196,7 +198,7 @@ const BookConfirmPage = () => {
                     </div>
                   )}
                   <div className="flex justify-between items-center py-1">
-                    <span className="text-on-surface-variant text-sm">Pickup Location</span>
+                    <span className="text-on-surface-variant text-sm">{t('books.confirm.pickupLocation')}</span>
                     <span className="text-white font-semibold text-sm text-right max-w-[60%]">{pickupLocation}</span>
                   </div>
                 </div>
@@ -205,8 +207,8 @@ const BookConfirmPage = () => {
                 {!dueDate && !expiryDate && (
                   <p className="text-on-surface-variant text-sm mb-4">
                     {action === 'borrow'
-                      ? 'Your borrowing request has been confirmed.'
-                      : "Your reservation is placed. We'll hold the book for you."}
+                      ? t('books.confirm.borrowConfirmedMessage')
+                      : t('books.confirm.reserveConfirmedMessage')}
                   </p>
                 )}
 
@@ -216,13 +218,13 @@ const BookConfirmPage = () => {
                     to="/borrowing-history"
                     className="w-full py-3 rounded-lg text-xs uppercase tracking-wider text-primary border border-primary hover:bg-primary/10 transition-colors text-center"
                   >
-                    View Borrowing History
+                    {t('books.confirm.viewHistory')}
                   </Link>
                   <Link
                     to="/books"
                     className="w-full py-3 rounded-lg text-xs uppercase tracking-wider text-on-surface-variant hover:text-white hover:bg-white/5 transition-colors text-center"
                   >
-                    Back to Book Center
+                    {t('books.confirm.backToBooks')}
                   </Link>
                 </div>
               </div>
@@ -247,9 +249,9 @@ const BookConfirmPage = () => {
             <div className="w-full max-w-[520px]">
               {/* Breadcrumbs */}
               <nav className="mb-4 text-sm text-on-surface-variant flex items-center gap-1">
-                <Link to="/" className="hover:text-primary">Home</Link>
+                <Link to="/" className="hover:text-primary">{t('nav.home')}</Link>
                 <span className="material-symbols-outlined text-sm">chevron_right</span>
-                <Link to="/books" className="hover:text-primary">Books</Link>
+                <Link to="/books" className="hover:text-primary">{t('nav.books')}</Link>
                 <span className="material-symbols-outlined text-sm">chevron_right</span>
                 <span className="truncate max-w-[140px]">{book.title}</span>
               </nav>
@@ -265,7 +267,7 @@ const BookConfirmPage = () => {
                     onClick={handleRetry}
                     className="text-xs font-bold uppercase tracking-wider text-primary border border-primary/40 px-3 py-1.5 rounded-lg hover:bg-primary/10 transition-colors flex-shrink-0"
                   >
-                    Retry
+                    {t('common.retry')}
                   </button>
                 </div>
               )}

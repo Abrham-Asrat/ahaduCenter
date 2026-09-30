@@ -316,8 +316,37 @@
     "share": "Share",
     "qrCode": "QR Code",
     "linkCopied": "Link copied to clipboard",
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out",
     "emptyState": "No books found",
     "emptyStateHint": "Try adjusting your filters or check back later.",
+    "searchLabel": "Search Title",
+    "searchPlaceholder": "Search Books...",
+    "filterBooks": "Filter Books",
+    "format": "Format",
+    "languages": "Languages",
+    "categories": {
+      "fiction": "Fiction",
+      "history": "History",
+      "biography": "Biography",
+      "technology": "Technology",
+      "business": "Business",
+      "science": "Science",
+      "language": "Language"
+    },
+    "formats": {
+      "all": "All Formats",
+      "paperback": "Paperback",
+      "hardcover": "Hardcover"
+    },
+    "languages": {
+      "all": "All Languages",
+      "english": "English",
+      "amharic": "Amharic"
+    },
+    "borrowSuccess": "Borrow confirmed! Please pick up your book at the library.",
+    "reserveSuccess": "Reservation placed! We'll hold the book for you.",
+    "readerReviews": "Reader Reviews & Discussion",
     "confirm": {
       "title": "Confirm Borrowing",
       "reservationExpires": "Reservation Expires",
@@ -562,7 +591,13 @@
     "rating": "Rating",
     "applyFilters": "Apply Filters",
     "clearFilters": "Clear Filters",
-    "showing": "Showing {{count}} results"
+    "showing": "Showing {{count}} results",
+    "select": "Select {{label}}",
+    "selected": "{{count}} Selected ({{items}})",
+    "all": "All {{label}}",
+    "allCategories": "All Categories",
+    "borrowed": "Borrowed",
+    "reserved": "Reserved"
   },
   "user": {
     "profile": "Profile",

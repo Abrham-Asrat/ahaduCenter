@@ -251,8 +251,37 @@
     "share": "አጋራ",
     "qrCode": "QR ኮድ",
     "linkCopied": "አገናኝ ወደ ቅንጥብ ቦርድ ተቀድቷል",
+    "zoomIn": "አቅርብ",
+    "zoomOut": "አራቅ",
     "emptyState": "ምንም መጽሐፍት አልተገኙም",
     "emptyStateHint": "ማጣሪያዎችን ማስተካከል ይሞክሩ ወይም በኋላ ይመለሱ።",
+    "searchLabel": "ርዕስ ይፈልጉ",
+    "searchPlaceholder": "መጽሐፍትን ፈልግ...",
+    "filterBooks": "መጽሐፍት አጣራ",
+    "format": "ቅርጸት",
+    "languages": "ቋንቋዎች",
+    "categories": {
+      "fiction": "ልብ ወለድ",
+      "history": "ታሪክ",
+      "biography": "ሕይወት ታሪክ",
+      "technology": "ቴክኖሎጂ",
+      "business": "ንግድ",
+      "science": "ሳይንስ",
+      "language": "ቋንቋ"
+    },
+    "formats": {
+      "all": "ሁሉም ቅርጸቶች",
+      "paperback": "ወረቀት ሽፋን",
+      "hardcover": "ጠንካራ ሽፋን"
+    },
+    "languages": {
+      "all": "ሁሉም ቋንቋዎች",
+      "english": "እንግሊዝኛ",
+      "amharic": "አማርኛ"
+    },
+    "borrowSuccess": "መበደር ተረጋግጧል! እባክዎን መጽሐፉን ከቤተ-መጽሐፍት ይውሰዱ።",
+    "reserveSuccess": "ቦዳይ ተደርጓል! መጽሐፉን ለእርስዎ እንይዛለን።",
+    "readerReviews": "የአንባቢዎች ግምገማዎች እና ውይይት",
     "confirm": {
       "title": "መበደርን አረጋግጥ",
       "reservationExpires": "ቦዳይ የሚያልቅበት ጊዜ",
@@ -497,7 +526,13 @@
     "rating": "ደረጃ",
     "applyFilters": "ማጣሪያዎች ተግብር",
     "clearFilters": "ማጣሪያዎች አጽዳ",
-    "showing": "{{count}} ውጤቶችን በማሳየት ላይ"
+    "showing": "{{count}} ውጤቶችን በማሳየት ላይ",
+    "select": "{{label}} ይምረጡ",
+    "selected": "{{count}} ተመርጠዋል ({{items}})",
+    "all": "ሁሉም {{label}}",
+    "allCategories": "ሁሉም ምድቦች",
+    "borrowed": "ተበዳሪ",
+    "reserved": "ተቦዳይ"
   },
   "user": {
     "profile": "መገለጫ",

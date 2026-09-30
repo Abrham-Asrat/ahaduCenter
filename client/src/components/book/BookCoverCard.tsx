@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { addWishlistItem, normalizeWishlistId, removeWishlistItem, wishlistItemMatches } from '../../redux/slices/wishlistSlice';
 import type { Book } from '../../types';
@@ -9,6 +10,7 @@ interface BookCoverCardProps {
 }
 
 const BookCoverCard = ({ book }: BookCoverCardProps) => {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { token } = useAppSelector((state) => state.auth);
@@ -28,9 +30,9 @@ const BookCoverCard = ({ book }: BookCoverCardProps) => {
   const handleShare = async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);
-      setToast('Link copied to clipboard');
+      setToast(t('books.linkCopied'));
     } catch {
-      setToast('Link copied to clipboard');
+      setToast(t('books.linkCopied'));
     }
   };
 
@@ -67,13 +69,13 @@ const BookCoverCard = ({ book }: BookCoverCardProps) => {
         />
 
         <div className="absolute left-6 top-6 rounded-full bg-dark-bg/80 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-primary">
-          {book.availability || 'Available'}
+          {book.availability || t('books.available')}
         </div>
 
         <div className="absolute right-6 top-6 flex gap-2">
           <button
             type="button"
-            aria-label={isSaved ? 'Unsave' : 'Save'}
+            aria-label={isSaved ? t('wishlist.remove') : t('common.save')}
             onClick={handleSave}
             disabled={isPending || (wishlistLoading && wishlistItems.length === 0)}
             className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-dark-bg/80 text-white backdrop-blur-sm"
@@ -82,7 +84,7 @@ const BookCoverCard = ({ book }: BookCoverCardProps) => {
           </button>
           <button
             type="button"
-            aria-label={isZoomed ? 'Zoom out' : 'Zoom in'}
+            aria-label={isZoomed ? t('books.zoomOut') : t('books.zoomIn')}
             onClick={() => setIsZoomed((prev) => !prev)}
             className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-dark-bg/80 text-white backdrop-blur-sm"
           >
@@ -94,11 +96,11 @@ const BookCoverCard = ({ book }: BookCoverCardProps) => {
       <div className="flex items-center gap-3">
         <button
           type="button"
-          aria-label="Share"
+          aria-label={t('books.share')}
           onClick={handleShare}
           className="flex-1 rounded-xl border border-white/10 bg-surface-container px-4 py-3 text-sm font-semibold text-white hover:border-primary/40"
         >
-          Share
+          {t('books.share')}
         </button>
       </div>
 

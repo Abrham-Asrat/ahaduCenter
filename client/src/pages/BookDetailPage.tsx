@@ -1,6 +1,7 @@
 // src/pages/BookDetailPage.jsx
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
   fetchBook,
@@ -30,6 +31,7 @@ const BookDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
 
   // ── Redux state ──────────────────────────────────────────────────────────────
   const { selectedBook: book, reviews, loading, error } = useAppSelector((s) => s.book);
@@ -70,11 +72,11 @@ const BookDetailPage = () => {
       const msg =
         result?.message ||
         result?.data?.message ||
-        `Borrow confirmed! Please pick up your book at the library.`;
+        t('books.borrowSuccess');
       setActionMessage(msg);
       showToast(msg);
     } catch (err) {
-      const errMsg = typeof err === 'string' ? err : 'Failed to borrow. Please try again.';
+      const errMsg = typeof err === 'string' ? err : t('errors.generic');
       setActionError(errMsg);
       showToast(errMsg);
     }
@@ -93,11 +95,11 @@ const BookDetailPage = () => {
       const msg =
         result?.message ||
         result?.data?.message ||
-        `Reservation placed! We'll hold the book for you.`;
+        t('books.reserveSuccess');
       setActionMessage(msg);
       showToast(msg);
     } catch (err) {
-      const errMsg = typeof err === 'string' ? err : 'Failed to reserve. Please try again.';
+      const errMsg = typeof err === 'string' ? err : t('errors.generic');
       setActionError(errMsg);
       showToast(errMsg);
     }
@@ -190,12 +192,12 @@ const BookDetailPage = () => {
         <main className="flex-grow  pb-12 px-6 max-w-7xl mx-auto w-full">
           {/* Breadcrumbs */}
           <div className="hidden md:flex items-center gap-2 text-sm text-on-surface-variant mb-6 font-medium">
-            <a href="/books" className="hover:text-primary transition-colors">Books</a>
+            <a href="/books" className="hover:text-primary transition-colors">{t('nav.books')}</a>
             <span className="material-symbols-outlined text-[16px]">chevron_right</span>
             {bookData && (
               <>
                 <a href="/books" className="hover:text-primary transition-colors">
-                  {bookData.category || 'Category'}
+                  {bookData.category || t('books.category')}
                 </a>
                 <span className="material-symbols-outlined text-[16px]">chevron_right</span>
                 <span className="text-white font-semibold">{bookData.title}</span>
@@ -250,7 +252,7 @@ const BookDetailPage = () => {
 
               {/* Reader Reviews & Comments */}
               <ReviewsCommentsSection
-                title="Reader Reviews & Discussion"
+                title={t('books.readerReviews')}
                 initialReviews={mappedReviews}
                 onSubmitReview={token ? handleSubmitReview : undefined}
                 isAuthenticated={!!token}
@@ -272,7 +274,7 @@ const BookDetailPage = () => {
                 className="flex-1 bg-primary text-black py-3 rounded-xl font-bold flex items-center justify-center gap-2 text-xs uppercase disabled:opacity-50"
               >
                 <span className="material-symbols-outlined">book</span>
-                Borrow Now
+                {t('books.borrow')}
               </button>
               <button
                 onClick={handleReserve}
@@ -280,7 +282,7 @@ const BookDetailPage = () => {
                 className="flex-1 bg-transparent border border-secondary text-secondary py-3 rounded-xl font-bold flex items-center justify-center gap-2 text-xs uppercase disabled:opacity-50"
               >
                 <span className="material-symbols-outlined">bookmark_add</span>
-                Reserve
+                {t('books.reserve')}
               </button>
             </div>
           </div>

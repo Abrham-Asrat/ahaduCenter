@@ -1,5 +1,6 @@
 import { ArrowRight, BookOpen, Heart, Star } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { addWishlistItem, removeWishlistItem } from '../../redux/slices/wishlistSlice';
 import { normalizeWishlistId, wishlistItemMatches } from '../../redux/slices/wishlistSlice';
@@ -11,6 +12,7 @@ interface BookCardProps {
 }
 
 const BookCard = ({ book, onQuickAction }: BookCardProps) => {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { token } = useAppSelector((state) => state.auth);
@@ -21,10 +23,10 @@ const BookCard = ({ book, onQuickAction }: BookCardProps) => {
   const image = book.coverUrl || book.coverImage || 'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=900&q=80';
   const availability = book.availability?.toLowerCase();
   const status = availability === 'borrowed'
-    ? 'Borrowed'
+    ? t('books.unavailable')
     : availability === 'reserved'
-      ? 'Reserved'
-      : 'Available';
+      ? t('books.reserve')
+      : t('books.available');
 
   const handleWishlistToggle = () => {
     if (!token) {
@@ -70,7 +72,7 @@ const BookCard = ({ book, onQuickAction }: BookCardProps) => {
             onClick={handleWishlistToggle}
             disabled={isPending || (wishlistLoading && wishlistItems.length === 0)}
             className="flex items-center justify-center  border-none  text-white sm:right-3 sm:top-3"
-            aria-label={isLiked ? `Remove ${book.title} from wishlist` : `Save ${book.title} to wishlist`}
+            aria-label={isLiked ? t('electronics.removeFromWishlist') : t('electronics.addToWishlist')}
           >
             <Heart size={16} className={isLiked ? 'fill-primary text-primary' : ''} />
           </button>
@@ -86,14 +88,14 @@ const BookCard = ({ book, onQuickAction }: BookCardProps) => {
             <Star size={14} className="fill-primary text-primary" />
             <span>{book.rating ?? 4.8}</span>
             <span>•</span>
-            <span className="break-words">{book.reviews ?? 128} reviews</span>
+            <span className="break-words">{book.reviews ?? 128} {t('books.reviews')}</span>
           </div>
         </div>
 
         <div className="mt-auto flex flex-col items-stretch gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-3">
           <div>
 
-            <div className="text-xs text-on-surface-variant sm:text-sm">{book.availableCopies ?? 3} copies</div>
+            <div className="text-xs text-on-surface-variant sm:text-sm">{book.availableCopies ?? 3} {t('books.copies')}</div>
           </div>
 
           <button
@@ -102,7 +104,7 @@ const BookCard = ({ book, onQuickAction }: BookCardProps) => {
             className="inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-primary px-2.5 py-2 text-xs font-semibold text-slate-950 transition-opacity hover:opacity-90 sm:w-auto sm:gap-2 sm:px-3 sm:text-sm"
           >
             <BookOpen size={16} />
-            View
+            {t('books.history.viewDetails')}
             <ArrowRight size={16} />
           </button>
         </div>
