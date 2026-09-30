@@ -1,78 +1,83 @@
+import { useTranslation } from 'react-i18next';
 import { ArrowRight, MonitorSmartphone, ShieldCheck, Sparkles, TrendingUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-const collectionCards = [
-    {
-        title: 'Cinematic Masterpieces',
-        subtitle: 'Award-winning stories and cult classics',
-        href: '/movies',
-        image:
-            "url('https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=1200&q=80')",
-        className: 'md:col-span-2 md:row-span-2 min-h-[360px] md:min-h-[440px]',
-        badge: 'New arrivals',
-    },
-    {
-        title: 'Next-gen tech',
-        subtitle: 'Upgrade your setup',
-        href: '/electronics',
-        image:
-            "url('https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=900&q=80')",
-        className: 'min-h-[220px] md:min-h-[260px]',
-        badge: 'Trending',
-    },
-    {
-        title: 'Bestsellers',
-        subtitle: 'Stories that stay with you',
-        href: '/books',
-        image:
-            "url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=900&q=80')",
-        className: 'min-h-[220px] md:min-h-[260px]',
-        badge: 'Editor choice',
-    },
-];
-
-const features = [
-    {
-        title: 'Curated quality',
-        description: 'Every title is selected for quality, style, and long-term value.',
-        icon: Sparkles,
-    },
-    {
-        title: 'Seamless discovery',
-        description: 'Browse movies, books, and devices without friction or clutter.',
-        icon: MonitorSmartphone,
-    },
-    {
-        title: 'Smart recommendations',
-        description: 'Explore collections built around your interests and habits.',
-        icon: TrendingUp,
-    },
-    {
-        title: 'Trust & comfort',
-        description: 'A polished shopping journey with secure, dependable service.',
-        icon: ShieldCheck,
-    },
-];
-
 const BentoGrid = () => {
+    const { t } = useTranslation();
+
+    const collectionCards = [
+        {
+            title: t('home.bentoGrid.cards.cinematicTitle'),
+            subtitle: t('home.bentoGrid.cards.cinematicSubtitle'),
+            href: '/movies',
+            image:
+                "url('https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=1200&q=80')",
+            className: 'md:col-span-2 md:row-span-2 min-h-[360px] md:min-h-[440px]',
+            badge: t('home.bentoGrid.cards.cinematicBadge'),
+        },
+        {
+            title: t('home.bentoGrid.cards.techTitle'),
+            subtitle: t('home.bentoGrid.cards.techSubtitle'),
+            href: '/electronics',
+            image:
+                "url('https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=900&q=80')",
+            className: 'min-h-[220px] md:min-h-[260px]',
+            badge: t('home.bentoGrid.cards.techBadge'),
+        },
+        {
+            title: t('home.bentoGrid.cards.bestsellersTitle'),
+            subtitle: t('home.bentoGrid.cards.bestsellersSubtitle'),
+            href: '/books',
+            image:
+                "url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=900&q=80')",
+            className: 'min-h-[220px] md:min-h-[260px]',
+            badge: t('home.bentoGrid.cards.bestsellersBadge'),
+        },
+    ];
+
+    const features = [
+        {
+            title: t('home.bentoGrid.features.curatedTitle'),
+            description: t('home.bentoGrid.features.curatedDesc'),
+            icon: Sparkles,
+        },
+        {
+            title: t('home.bentoGrid.features.discoveryTitle'),
+            description: t('home.bentoGrid.features.discoveryDesc'),
+            icon: MonitorSmartphone,
+        },
+        {
+            title: t('home.bentoGrid.features.recommendationsTitle'),
+            description: t('home.bentoGrid.features.recommendationsDesc'),
+            icon: TrendingUp,
+        },
+        {
+            title: t('home.bentoGrid.features.trustTitle'),
+            description: t('home.bentoGrid.features.trustDesc'),
+            icon: ShieldCheck,
+        },
+    ];
+
     return (
         <section className="mx-auto max-w-7xl px-4 pb-16 pt-6 sm:px-6 lg:px-20 lg:pb-24">
             <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                 <div>
-                    <p className="text-xs font-medium uppercase tracking-[0.24em] text-primary">Explore</p>
+                    <p className="text-xs font-medium uppercase tracking-[0.24em] text-primary">
+                        {t('home.bentoGrid.exploreLabel')}
+                    </p>
                     <h2 className="mt-2 text-3xl font-bold tracking-[-0.04em] text-white sm:text-4xl">
-                        Curated collections
+                        {t('home.bentoGrid.collectionsTitle')}
                     </h2>
                 </div>
                 <p className="max-w-xl text-sm text-on-surface-variant sm:text-base">
-                    Browse our hand-selected favorites across entertainment, technology, and stories.
+                    {t('home.bentoGrid.collectionsSubtitle')}
                 </p>
             </div>
 
             <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
                 {collectionCards.map((card) => (
                     <Link
-                        key={card.title}
+                        key={card.href}
                         to={card.href}
                         className={`group relative overflow-hidden rounded-[28px] border border-white/10 bg-card-surface/60 shadow-[0_20px_55px_rgba(15,23,42,0.35)] transition-transform duration-300 hover:-translate-y-1 ${card.className}`}
                     >
@@ -96,14 +101,18 @@ const BentoGrid = () => {
                     className="group relative flex min-h-[220px] flex-col justify-between overflow-hidden rounded-[28px] border border-primary/20 bg-gradient-premium p-6 shadow-[0_20px_55px_rgba(16,185,129,0.12)] transition-transform duration-300 hover:-translate-y-1 md:col-span-2 xl:col-span-1"
                 >
                     <div>
-                        <p className="text-xs font-medium uppercase tracking-[0.2em] text-primary">Community</p>
-                        <h3 className="mt-4 text-2xl font-semibold text-white">Join the Community</h3>
+                        <p className="text-xs font-medium uppercase tracking-[0.2em] text-primary">
+                            {t('home.bentoGrid.community.label')}
+                        </p>
+                        <h3 className="mt-4 text-2xl font-semibold text-white">
+                            {t('home.bentoGrid.community.title')}
+                        </h3>
                     </div>
                     <p className="mt-4 max-w-sm text-sm text-on-surface-variant">
-                        Get early access to exclusive drops, member pricing, and standout picks.
+                        {t('home.bentoGrid.community.description')}
                     </p>
                     <div className="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white">
-                        Get started
+                        {t('home.bentoGrid.community.cta')}
                         <ArrowRight size={16} />
                     </div>
                 </Link>
@@ -112,9 +121,11 @@ const BentoGrid = () => {
             <div className="mt-14">
                 <div className="mb-6 flex items-center justify-between gap-3">
                     <div>
-                        <p className="text-xs font-medium uppercase tracking-[0.24em] text-primary">Why us</p>
+                        <p className="text-xs font-medium uppercase tracking-[0.24em] text-primary">
+                            {t('home.bentoGrid.whyUs.label')}
+                        </p>
                         <h3 className="mt-2 text-2xl font-bold tracking-[-0.04em] text-white sm:text-3xl">
-                            Designed for modern discovery
+                            {t('home.bentoGrid.whyUs.title')}
                         </h3>
                     </div>
                 </div>

@@ -304,7 +304,7 @@ This plan systematically translates all 70 remaining React components in the Aha
   - Run validation script: `npm run validate:i18n`
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 12. Translate Common components (Priority 7)
+- [x] 12. Translate Common components (Priority 7)
   - [x] 12.1 Translate ReviewsCommentsSection.tsx
     - Import useTranslation hook
     - Replace section header with "reviews.*" keys
@@ -341,19 +341,19 @@ This plan systematically translates all 70 remaining React components in the Aha
     - Handle any breadcrumb navigation
     - _Requirements: 7.5_
   
-  - [-] 12.6 Translate BentoGrid.tsx
+  - [x] 12.6 Translate BentoGrid.tsx
     - Import useTranslation hook
     - Replace any grid labels or empty states
     - _Requirements: 7.5_
   
-  - [-] 12.7 Translate ScrollToTop.tsx
+  - [x] 12.7 Translate ScrollToTop.tsx
     - Import useTranslation hook
     - Add aria-label for button (Scroll to top)
     - Add title attribute if present
     - _Requirements: 7.5_
 
 - [ ] 13. Translate Dashboard and User pages (Priority 8)
-  - [~] 13.1 Translate UserDashboardPage.tsx
+  - [-] 13.1 Translate UserDashboardPage.tsx
     - Import useTranslation hook and useSelector for language
     - Replace welcome message with "dashboard.*" keys (Welcome back, {{name}}!)
     - Translate section headers (Recent Activity, Quick Actions, Your Statistics)
@@ -363,7 +363,7 @@ This plan systematically translates all 70 remaining React components in the Aha
     - Add date formatting for recent activity timestamps
     - _Requirements: 8.1, 8.5, 15.1, 15.2_
   
-  - [~] 13.2 Translate WishlistPage.tsx
+  - [-] 13.2 Translate WishlistPage.tsx
     - Import useTranslation hook
     - Replace page title with "wishlist.*" keys
     - Translate tab labels (All, Movies, Books, Electronics)
@@ -372,7 +372,7 @@ This plan systematically translates all 70 remaining React components in the Aha
     - Translate item count ({{count}} items)
     - _Requirements: 8.2, 8.6_
   
-  - [~] 13.3 Translate NotificationsPage.tsx
+  - [-] 13.3 Translate NotificationsPage.tsx
     - Import useTranslation hook and useSelector for language
     - Replace page title with "notifications.*" keys
     - Translate filter tabs (All, Unread, Read)
@@ -382,7 +382,7 @@ This plan systematically translates all 70 remaining React components in the Aha
     - Add date formatting for notification timestamps
     - _Requirements: 8.3, 15.1, 15.2_
   
-  - [~] 13.4 Translate ContactPage.tsx
+  - [-] 13.4 Translate ContactPage.tsx
     - Import useTranslation hook
     - Replace form fields with "contact.*" keys
     - Translate instructions and submit button

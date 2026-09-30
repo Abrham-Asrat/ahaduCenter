@@ -137,6 +137,42 @@
         "order": "ይዘዙ",
         "getBook": "መጽሐፍ ያግኙ"
       }
+    },
+    "bentoGrid": {
+      "exploreLabel": "ያስሱ",
+      "collectionsTitle": "የተደረደሩ ስብስቦች",
+      "collectionsSubtitle": "በመዝናኛ፣ ቴክኖሎጂ እና ታሪኮች ላይ የእኛን በእጅ የተለዩ ምርጫዎች ያስሱ።",
+      "cards": {
+        "cinematicTitle": "ሲኒማቲክ ድንቅ ስራዎች",
+        "cinematicSubtitle": "ሽልማት ያሸነፉ ታሪኮች እና ወርቃማ ክላሲኮች",
+        "cinematicBadge": "አዲስ መምጣቶች",
+        "techTitle": "የቀጣይ ትውልድ ቴክ",
+        "techSubtitle": "ማዋቀርዎን ያሻሽሉ",
+        "techBadge": "ዝነኛ",
+        "bestsellersTitle": "ምርጥ ሻጮች",
+        "bestsellersSubtitle": "ከእርስዎ ጋር የሚቆዩ ታሪኮች",
+        "bestsellersBadge": "የአርታኢ ምርጫ"
+      },
+      "community": {
+        "label": "ማህበረሰብ",
+        "title": "ማህበረሰቡን ይቀላቀሉ",
+        "description": "ለልዩ ምርቶች ቀዳሚ ዕድል፣ የአባልነት ዋጋ እና ጎልቶ የሚታዩ ምርጫዎች ያግኙ።",
+        "cta": "ጀምር"
+      },
+      "whyUs": {
+        "label": "ለምን እኛ",
+        "title": "ለዘመናዊ ግኝት የተነደፈ"
+      },
+      "features": {
+        "curatedTitle": "የተደረደረ ጥራት",
+        "curatedDesc": "እያንዳንዱ ርዕስ ለጥራት፣ ለስታይልና ለረጅም ጊዜ ዋጋ ተመርጧል።",
+        "discoveryTitle": "ቀላል ግኝት",
+        "discoveryDesc": "ፊልሞችን፣ መጽሐፍትን እና መሳሪያዎችን ያለምንም እንቅፋት ወይም ትርምስ ያስሱ።",
+        "recommendationsTitle": "ብልህ ምክሮች",
+        "recommendationsDesc": "በፍላጎቶችዎ እና ልምዶችዎ ዙሪያ የተገነቡ ስብስቦችን ያስሱ።",
+        "trustTitle": "መተማመን እና ምቾት",
+        "trustDesc": "ከደህንነቱ የተጠበቀ፣ አስተማማኝ አገልግሎት ጋር የተቀናጀ ግዢ ጉዞ።"
+      }
     }
   },
   "auth": {
