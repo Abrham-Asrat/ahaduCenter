@@ -6,10 +6,11 @@ import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import { movieService } from '../services/movieService';
 import type { MovieRequest } from '../types';
+import { formatShortDate } from '../utils/i18nFormat';
 
 const MovieRequestPage = () => {
   const location = useLocation();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   // Toast state
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -63,7 +64,7 @@ const MovieRequestPage = () => {
       // API may return { data: [...] } or a raw array
       setRequests(Array.isArray(data) ? data : (data?.data ?? []));
     } catch (err) {
-      setFetchError(typeof err === 'string' ? err : 'Failed to load your requests.');
+      setFetchError(typeof err === 'string' ? err : t('movies.request.historyLoadError'));
     } finally {
       setLoadingRequests(false);
     }
@@ -98,11 +99,11 @@ const MovieRequestPage = () => {
       await movieService.submitMovieRequest(payload);
       // Clear form on success and re-fetch the list
       setFormData({ title: '', type: 'Movie', year: '', genre: '', details: '' });
-      showToast(`Request for "${payload.title}" submitted successfully!`, 'success');
+      showToast(t('movies.request.successMessage', { title: payload.title }), 'success');
       await fetchRequests();
     } catch (err) {
       // Show server error without clearing form
-      const message = typeof err === 'string' ? err : 'Failed to submit request. Please try again.';
+      const message = typeof err === 'string' ? err : t('movies.request.errorMessage');
       setSubmitError(message);
       showToast(message, 'error');
     } finally {
@@ -116,10 +117,10 @@ const MovieRequestPage = () => {
       await movieService.cancelMovieRequest(reqId);
       // Remove entry on success
       setRequests((prev) => prev.filter((r) => (r._id ?? r.id) !== reqId));
-      showToast(`Request for "${title}" was canceled.`, 'success');
+      showToast(t('movies.request.cancelSuccess', { title }), 'success');
     } catch (err) {
       // Show error, retain entry
-      const message = typeof err === 'string' ? err : 'Failed to cancel request. Please try again.';
+      const message = typeof err === 'string' ? err : t('movies.request.cancelError');
       showToast(message, 'error');
     } finally {
       setCancellingIds((prev) => {
@@ -144,11 +145,7 @@ const MovieRequestPage = () => {
     date: r.date
       ? r.date
       : r.createdAt
-        ? new Date(r.createdAt).toLocaleDateString('en-US', {
-          month: 'short',
-          day: 'numeric',
-          year: 'numeric',
-        })
+        ? formatShortDate(r.createdAt, i18n.language)
         : '—',
     status: r.status
       ? r.status.charAt(0).toUpperCase() + r.status.slice(1)
@@ -196,7 +193,7 @@ const MovieRequestPage = () => {
               <div className="flex justify-between items-center mb-4 pb-3 border-b border-white/10">
                 <h3 className="text-xl font-bold text-white flex items-center gap-2">
                   <span className="material-symbols-outlined text-primary">description</span>
-                  <span>Request Details</span>
+                  <span>{t('movies.request.modalTitle')}</span>
                 </h3>
                 <button
                   onClick={() => setSelectedRequestModal(null)}
@@ -207,29 +204,29 @@ const MovieRequestPage = () => {
               </div>
               <div className="space-y-3 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-on-surface-variant">Request ID:</span>
+                  <span className="text-on-surface-variant">{t('movies.request.modalRequestId')}</span>
                   <span className="font-semibold text-white">#{selectedRequestModal.id}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-on-surface-variant">Title:</span>
+                  <span className="text-on-surface-variant">{t('movies.request.modalTitle2')}</span>
                   <span className="font-semibold text-white">{selectedRequestModal.title}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-on-surface-variant">Type & Year:</span>
+                  <span className="text-on-surface-variant">{t('movies.request.modalTypeYear')}</span>
                   <span className="text-white">{selectedRequestModal.type} ({selectedRequestModal.year})</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-on-surface-variant">Genre:</span>
+                  <span className="text-on-surface-variant">{t('movies.request.modalGenre')}</span>
                   <span className="text-white">{selectedRequestModal.genre}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-on-surface-variant">Status:</span>
+                  <span className="text-on-surface-variant">{t('movies.request.modalStatus')}</span>
                   <span className={`px-2 py-0.5 rounded text-xs border ${getStatusBadge(selectedRequestModal.status || 'Pending')}`}>
                     {selectedRequestModal.status}
                   </span>
                 </div>
                 <div className="pt-2 border-t border-white/10">
-                  <span className="text-on-surface-variant block mb-1">Additional Details:</span>
+                  <span className="text-on-surface-variant block mb-1">{t('movies.request.modalDetails')}</span>
                   <p className="text-gray-300 bg-background/60 p-3 rounded-lg text-xs leading-relaxed">
                     {selectedRequestModal.details}
                   </p>
@@ -239,7 +236,7 @@ const MovieRequestPage = () => {
                 onClick={() => setSelectedRequestModal(null)}
                 className="w-full mt-5 bg-surface-variant text-white py-2 rounded-lg font-semibold hover:bg-white/20 transition-all"
               >
-                Close
+                {t('movies.request.modalClose')}
               </button>
             </div>
           </div>
@@ -249,9 +246,9 @@ const MovieRequestPage = () => {
           {/* Header */}
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-8">
             <div>
-              <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">Request a Movie</h1>
+              <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">{t('movies.request.pageTitle')}</h1>
               <p className="text-lg text-on-surface-variant max-w-2xl">
-                Can't find a movie or series? Let us know and we'll try to get it for you.
+                {t('movies.request.pageSubtitle')}
               </p>
             </div>
             <button
@@ -259,7 +256,7 @@ const MovieRequestPage = () => {
               className="border border-secondary text-secondary px-6 py-2.5 rounded-lg hover:bg-secondary/10 hover:shadow-[0_0_15px_rgba(212,175,55,0.3)] transition-all text-xs uppercase tracking-wider flex items-center gap-2 font-bold"
             >
               <span className="material-symbols-outlined text-sm">history</span>
-              View My Requests ({loadingRequests ? '…' : requests.length})
+              {t('movies.request.viewMyRequests')} ({loadingRequests ? '…' : requests.length})
             </button>
           </div>
 
@@ -267,12 +264,12 @@ const MovieRequestPage = () => {
           <div className="glass-panel rounded-xl p-6 max-w-[600px] mb-12 shadow-2xl">
             <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
               <span className="material-symbols-outlined text-primary">add_circle</span>
-              <span>Tell Us What You're Looking For</span>
+              <span>{t('movies.request.formTitle')}</span>
             </h2>
             <form onSubmit={handleSubmit} className="space-y-5">
               <div>
                 <label className="block text-xs uppercase text-on-surface-variant mb-2 font-semibold">
-                  Movie/Series Title <span className="text-primary">*</span>
+                  {t('movies.request.titleLabel')} <span className="text-primary">{t('movies.request.titleRequired')}</span>
                 </label>
                 <input
                   type="text"
@@ -280,63 +277,63 @@ const MovieRequestPage = () => {
                   value={formData.title}
                   onChange={handleChange}
                   className="w-full bg-background border border-white/10 rounded-lg px-4 py-2.5 text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
-                  placeholder="Enter full title (e.g. Inception)"
+                  placeholder={t('movies.request.titlePlaceholder')}
                   required
                 />
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs uppercase text-on-surface-variant mb-2 font-semibold">Type</label>
+                  <label className="block text-xs uppercase text-on-surface-variant mb-2 font-semibold">{t('movies.request.typeLabel')}</label>
                   <select
                     name="type"
                     value={formData.type}
                     onChange={handleChange}
                     className="w-full bg-background border border-white/10 rounded-lg px-4 py-2.5 text-white focus:border-primary outline-none cursor-pointer"
                   >
-                    <option>Movie</option>
-                    <option>TV Series</option>
-                    <option>Mini Series</option>
-                    <option>Season Collection</option>
+                    <option value="Movie">{t('movies.request.typeMovie')}</option>
+                    <option value="TV Series">{t('movies.request.typeTvSeries')}</option>
+                    <option value="Mini Series">{t('movies.request.typeMiniSeries')}</option>
+                    <option value="Season Collection">{t('movies.request.typeSeasonCollection')}</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs uppercase text-on-surface-variant mb-2 font-semibold">Release Year</label>
+                  <label className="block text-xs uppercase text-on-surface-variant mb-2 font-semibold">{t('movies.request.yearLabel')}</label>
                   <input
                     type="number"
                     name="year"
                     value={formData.year}
                     onChange={handleChange}
                     className="w-full bg-background border border-white/10 rounded-lg px-4 py-2.5 text-white focus:border-primary outline-none"
-                    placeholder="e.g. 2024"
+                    placeholder={t('movies.request.yearPlaceholder')}
                   />
                 </div>
               </div>
               <div>
-                <label className="block text-xs uppercase text-on-surface-variant mb-2 font-semibold">Genre</label>
+                <label className="block text-xs uppercase text-on-surface-variant mb-2 font-semibold">{t('movies.request.genreLabel')}</label>
                 <select
                   name="genre"
                   value={formData.genre}
                   onChange={handleChange}
                   className="w-full bg-background border border-white/10 rounded-lg px-4 py-2.5 text-white focus:border-primary outline-none cursor-pointer"
                 >
-                  <option value="">Select a genre</option>
-                  <option>Sci-Fi</option>
-                  <option>Action</option>
-                  <option>Drama</option>
-                  <option>Thriller</option>
-                  <option>Horror</option>
-                  <option>Comedy</option>
+                  <option value="">{t('movies.request.genreSelectPlaceholder')}</option>
+                  <option>{t('movies.request.genreSciFi')}</option>
+                  <option>{t('movies.request.genreAction')}</option>
+                  <option>{t('movies.request.genreDrama')}</option>
+                  <option>{t('movies.request.genreThriller')}</option>
+                  <option>{t('movies.request.genreHorror')}</option>
+                  <option>{t('movies.request.genreComedy')}</option>
                 </select>
               </div>
               <div>
-                <label className="block text-xs uppercase text-on-surface-variant mb-2 font-semibold">Additional Details</label>
+                <label className="block text-xs uppercase text-on-surface-variant mb-2 font-semibold">{t('movies.request.detailsLabel')}</label>
                 <textarea
                   name="details"
                   value={formData.details}
                   onChange={handleChange}
                   rows={3}
                   className="w-full bg-background border border-white/10 rounded-lg px-4 py-2.5 text-white focus:border-primary outline-none resize-none"
-                  placeholder="Any specific actors, directors, audio language, or quality requirement?"
+                  placeholder={t('movies.request.detailsPlaceholder')}
                 />
               </div>
               {submitError && (
@@ -353,12 +350,12 @@ const MovieRequestPage = () => {
                 {submitting ? (
                   <>
                     <span className="material-symbols-outlined animate-spin text-xl">progress_activity</span>
-                    Submitting…
+                    {t('movies.request.submitting')}
                   </>
                 ) : (
                   <>
                     <span className="material-symbols-outlined">send</span>
-                    Submit Request
+                    {t('movies.request.submitButton')}
                   </>
                 )}
               </button>
@@ -368,9 +365,9 @@ const MovieRequestPage = () => {
           {/* History */}
           <div id="my-requests">
             <div className="flex items-center gap-3 mb-6">
-              <h3 className="text-2xl font-bold text-white">My Previous Requests</h3>
+              <h3 className="text-2xl font-bold text-white">{t('movies.request.historyTitle')}</h3>
               <span className="bg-primary/20 text-primary border border-primary/30 px-3 py-1 rounded-full text-xs font-bold uppercase">
-                {loadingRequests ? '…' : requests.length} Total
+                {t('movies.request.historyTotal', { count: loadingRequests ? '…' : requests.length })}
               </span>
             </div>
             <div className="glass-panel rounded-xl overflow-hidden shadow-2xl">
@@ -378,7 +375,7 @@ const MovieRequestPage = () => {
               {loadingRequests && (
                 <div className="flex items-center justify-center gap-3 py-16 text-on-surface-variant">
                   <span className="material-symbols-outlined animate-spin text-2xl text-primary">progress_activity</span>
-                  <span className="text-sm">Loading your requests…</span>
+                  <span className="text-sm">{t('movies.request.historyLoading')}</span>
                 </div>
               )}
 
@@ -391,7 +388,7 @@ const MovieRequestPage = () => {
                     onClick={fetchRequests}
                     className="text-xs text-primary underline hover:no-underline"
                   >
-                    Try again
+                    {t('movies.request.historyRetry')}
                   </button>
                 </div>
               )}
@@ -400,7 +397,7 @@ const MovieRequestPage = () => {
               {!loadingRequests && !fetchError && requests.length === 0 && (
                 <div className="flex flex-col items-center gap-3 py-16 text-center px-6">
                   <span className="material-symbols-outlined text-4xl text-on-surface-variant">movie_filter</span>
-                  <p className="text-on-surface-variant text-sm">You haven't made any requests yet.</p>
+                  <p className="text-on-surface-variant text-sm">{t('movies.request.historyEmpty')}</p>
                 </div>
               )}
 

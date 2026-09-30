@@ -9,6 +9,7 @@ import Filters, { type FilterGroup, type FilterValues } from '../components/comm
 import MovieCard from '../components/movie/MovieCard';
 import Pagination from '../components/common/Pagination';
 import type { Movie, MovieQuery } from '../types';
+import { useTranslation } from 'react-i18next';
 
 /**
  * MovieCenterPage Component
@@ -18,6 +19,7 @@ import type { Movie, MovieQuery } from '../types';
  */
 const MovieCenterPage = () => {
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
 
   // ── Redux state ──────────────────────────────────────────────────────────────
   const { movies, loading, error, pagination } = useAppSelector((s) => s.movie);
@@ -38,9 +40,9 @@ const MovieCenterPage = () => {
   const [bookmarkedIds, setBookmarkedIds] = useState<string[]>([]);
 
   const filterGroups: FilterGroup[] = [
-    { key: 'genres', label: 'Genre', options: ['Action', 'Comedy', 'Drama', 'Sci-Fi', 'Thriller', 'Horror', 'Adventure'], multiSelect: true },
-    { key: 'country', label: 'Country', options: ['All', 'Ethiopia', 'USA', 'UK', 'Korea', 'Japan'] },
-    { key: 'contentType', label: 'Content Type', options: ['All', 'Movie', 'TV Series'] },
+    { key: 'genres', label: t('movies.genre'), options: ['Action', 'Comedy', 'Drama', 'Sci-Fi', 'Thriller', 'Horror', 'Adventure'], multiSelect: true },
+    { key: 'country', label: t('admin.table.category'), options: ['All', 'Ethiopia', 'USA', 'UK', 'Korea', 'Japan'] },
+    { key: 'contentType', label: t('electronics.product'), options: ['All', 'Movie', 'TV Series'] },
   ];
 
   const showToast = (msg: string) => {
@@ -178,8 +180,8 @@ const MovieCenterPage = () => {
               <Filters
                 key={`desktop-${filterResetKey}`}
                 groups={filterGroups}
-                searchLabel="Search Title"
-                searchPlaceholder="Search movies..."
+                searchLabel={t('books.searchLabel')}
+                searchPlaceholder={t('nav.searchPlaceholder')}
                 onFilterChange={handleFilterChange}
               />
             </aside>
@@ -194,14 +196,14 @@ const MovieCenterPage = () => {
                     <div className="flex items-center gap-3">
                       <span className="material-symbols-outlined text-red-400">error</span>
                       <p className="text-sm text-red-300">
-                        {typeof error === 'string' ? error : 'Failed to load movies.'}
+                        {typeof error === 'string' ? error : t('common.error')}
                       </p>
                     </div>
                     <button
                       onClick={handleRetry}
                       className="text-xs font-bold uppercase tracking-wider text-primary border border-primary/40 px-4 py-2 rounded-lg hover:bg-primary/10 transition-colors flex-shrink-0"
                     >
-                      Retry
+                      {t('common.retry')}
                     </button>
                   </div>
                 )}
@@ -217,9 +219,9 @@ const MovieCenterPage = () => {
                   /* Empty state */
                   <div className="glass-panel p-12 text-center rounded-2xl my-8">
                     <span className="material-symbols-outlined text-5xl text-on-surface-variant mb-4">search_off</span>
-                    <h3 className="text-xl font-bold text-white mb-2">No Movies Found</h3>
+                    <h3 className="text-xl font-bold text-white mb-2">{t('movies.emptyState')}</h3>
                     <p className="text-on-surface-variant max-w-md mx-auto mb-6">
-                      We couldn&apos;t find any movies matching your current filter criteria. Try clearing some filters.
+                      {t('movies.emptyStateHint')}
                     </p>
                     <button
                       onClick={() => {
@@ -230,7 +232,7 @@ const MovieCenterPage = () => {
                       }}
                       className="bg-primary text-black px-6 py-2.5 rounded-lg font-bold hover:shadow-[0_0_15px_rgba(16,185,129,0.5)] transition-all"
                     >
-                      Reset All Filters
+                      {t('common.retry')}
                     </button>
                   </div>
                 ) : (
