@@ -616,10 +616,30 @@
   },
   "notifications": {
     "title": "ማሳወቂያዎች",
+    "subtitle": "ስለ አዲስ ምርቶች፣ ቅናሾች እና እንቅስቃሴዎ ወቅታዊ ይሁኑ።",
     "markAsRead": "እንደ ተነበበ አድርግ",
     "markAllAsRead": "ሁሉንም እንደ ተነበበ አድርግ",
+    "clearAll": "ሁሉንም አጥፋ",
+    "loadMore": "ተጨማሪ ጫን",
+    "retry": "እንደገና ሞክር",
     "emptyState": "ምንም ማሳወቂያዎች የሉም",
-    "emptyStateHint": "ሁሉንም ተከታትለዋል!"
+    "emptyStateHint": "ሁሉንም ተከታትለዋል!",
+    "noMoreNotifications": "ተጨማሪ ማሳወቂያዎች የሉም",
+    "tabs": {
+      "all": "ሁሉም",
+      "movies": "ፊልሞች",
+      "electronics": "ኤሌክትሮኒክስ",
+      "books": "መጻሕፍት",
+      "promotions": "ቅናሾች",
+      "orders": "ትዕዛዞች"
+    },
+    "toasts": {
+      "markedAllRead": "ሁሉም ማሳወቂያዎች እንደ ተነበቡ ተደርጓል።",
+      "failedMarkAllRead": "ሁሉንም እንደ ተነበበ ማድረግ አልተሳካም",
+      "cleared": "ሁሉም ማሳወቂያዎች ጸድተዋል።",
+      "failedClear": "ማሳወቂያዎችን ማጽዳት አልተሳካም",
+      "failedMarkRead": "ማሳወቂያውን እንደ ተነበበ ማድረግ አልተሳካም"
+    }
   },
   "contact": {
     "title": "አግኙን",
