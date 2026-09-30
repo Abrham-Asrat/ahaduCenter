@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { Movie } from '../../types';
+import { useTranslation } from 'react-i18next';
 
 interface MovieDetailHeroProps {
     movie: Movie;
@@ -22,6 +23,7 @@ interface MovieDetailHeroProps {
  */
 const MovieDetailHero = ({ movie, onShowToast }: MovieDetailHeroProps) => {
     const navigate = useNavigate();
+    const { t } = useTranslation();
     const [isSaved, setIsSaved] = useState(false);
 
     const handleRequestClick = () => {
@@ -32,7 +34,7 @@ const MovieDetailHero = ({ movie, onShowToast }: MovieDetailHeroProps) => {
         const next = !isSaved;
         setIsSaved(next);
         if (onShowToast) {
-            onShowToast(next ? `"${movie.title}" saved to Wishlist!` : `Removed "${movie.title}" from Wishlist.`);
+            onShowToast(next ? t('movies.saved') : t('movies.removed'));
         }
     };
 
@@ -41,7 +43,7 @@ const MovieDetailHero = ({ movie, onShowToast }: MovieDetailHeroProps) => {
             navigator.clipboard.writeText(window.location.href);
         }
         if (onShowToast) {
-            onShowToast("Movie detail link copied to clipboard!");
+            onShowToast(t('movies.linkCopied'));
         }
     };
 
@@ -98,7 +100,7 @@ const MovieDetailHero = ({ movie, onShowToast }: MovieDetailHeroProps) => {
                                 className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary-container px-5 py-2.5 font-semibold text-white shadow-lg transition-all hover:scale-105 active:scale-95 sm:w-auto"
                             >
                                 <span className="material-symbols-outlined text-xl">movie</span>
-                                <span>Request Movie</span>
+                                <span>{t('movies.requestMovie')}</span>
                             </button>
 
                             {/* Save button */}
@@ -112,7 +114,7 @@ const MovieDetailHero = ({ movie, onShowToast }: MovieDetailHeroProps) => {
                                 <span className="material-symbols-outlined text-xl" style={{ fontVariationSettings: isSaved ? "'FILL' 1" : "'FILL' 0" }}>
                                     {isSaved ? 'bookmark' : 'bookmark_add'}
                                 </span>
-                                <span className="hidden md:inline text-sm">{isSaved ? 'Saved' : 'Save'}</span>
+                                <span className="hidden md:inline text-sm">{isSaved ? t('movies.saved') : t('movies.save')}</span>
                             </button>
 
                             {/* Share button */}
@@ -121,7 +123,7 @@ const MovieDetailHero = ({ movie, onShowToast }: MovieDetailHeroProps) => {
                                 className="flex items-center gap-2 border border-white/20 text-white px-4 py-2.5 rounded-lg hover:bg-white/10 hover:scale-105 active:scale-95 transition-all font-semibold"
                             >
                                 <span className="material-symbols-outlined text-xl">share</span>
-                                <span className="hidden md:inline text-sm">Share</span>
+                                <span className="hidden md:inline text-sm">{t('movies.share')}</span>
                             </button>
                         </div>
                     </div>

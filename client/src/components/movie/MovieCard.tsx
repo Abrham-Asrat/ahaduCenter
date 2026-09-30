@@ -9,6 +9,7 @@ import {
   wishlistItemMatches,
 } from '../../redux/slices/wishlistSlice';
 import type { Movie } from '../../types';
+import { useTranslation } from 'react-i18next';
 
 interface MovieCardProps {
   movie: Movie;
@@ -29,6 +30,7 @@ interface MovieCardProps {
  */
 const MovieCard = ({ movie, onPlayTrailer, onToggleBookmark, isBookmarked: initialBookmarked = false }: MovieCardProps) => {
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { token } = useAppSelector((s) => s.auth);
   const { items: wishlistItems, loading: wishlistLoading, pendingByItem } = useAppSelector((s) => s.wishlist);
@@ -113,7 +115,7 @@ const MovieCard = ({ movie, onPlayTrailer, onToggleBookmark, isBookmarked: initi
             {/* Play Trailer button */}
             <button
               onClick={handlePlayTrailer}
-              title="Play Trailer"
+              title={t('movies.watchTrailer')}
               className="w-11 h-11 rounded-full bg-primary-container text-white flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-lg hover:shadow-[0_0_15px_rgba(16,185,129,0.8)] cursor-pointer"
             >
               <span className="material-symbols-outlined text-2xl" style={{ fontVariationSettings: "'FILL' 1" }}>
@@ -125,7 +127,7 @@ const MovieCard = ({ movie, onPlayTrailer, onToggleBookmark, isBookmarked: initi
             <button
               onClick={handleBookmark}
               disabled={isPending || (wishlistLoading && wishlistItems.length === 0)}
-              title={isBookmarked ? "Remove from Wishlist" : "Save to Wishlist"}
+              title={isBookmarked ? t('electronics.removeFromWishlist') : t('movies.save')}
               className={`w-11 h-11 rounded-full glass-panel flex items-center justify-center hover:scale-110 active:scale-95 transition-all cursor-pointer ${isBookmarked
                 ? 'text-secondary border-secondary bg-secondary/20 shadow-[0_0_15px_rgba(233,195,73,0.5)]'
                 : 'text-on-surface hover:text-secondary hover:border-secondary'

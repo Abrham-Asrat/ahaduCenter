@@ -1,4 +1,5 @@
 import type { Movie } from '../../types';
+import { useTranslation } from 'react-i18next';
 
 interface MovieInfoSidebarProps {
     movie: Movie;
@@ -20,6 +21,7 @@ interface MovieInfoSidebarProps {
  * - Sticky positioning on desktop
  */
 const MovieInfoSidebar = ({ movie }: MovieInfoSidebarProps) => {
+    const { t } = useTranslation();
     return (
         <div className="sticky top-[100px] flex flex-col gap-6">
             {/* Movie Details Card */}
@@ -43,19 +45,19 @@ const MovieInfoSidebar = ({ movie }: MovieInfoSidebarProps) => {
                 {/* Info List */}
                 <div className="flex flex-col gap-3">
                     <div className="flex justify-between border-b border-white/5 pb-3">
-                        <span className="text-on-surface-variant text-sm">Director</span>
+                        <span className="text-on-surface-variant text-sm">{t('movies.director')}</span>
                         <span className="text-white text-sm">{movie.director}</span>
                     </div>
                     <div className="flex justify-between border-b border-white/5 pb-3">
-                        <span className="text-on-surface-variant text-sm">Writers</span>
+                        <span className="text-on-surface-variant text-sm">{t('movies.detail.storyline')}</span>
                         <span className="text-white text-sm text-right">{movie.writers}</span>
                     </div>
                     <div className="flex justify-between border-b border-white/5 pb-3">
-                        <span className="text-on-surface-variant text-sm">Studio</span>
+                        <span className="text-on-surface-variant text-sm">{t('electronics.brand')}</span>
                         <span className="text-white text-sm">{movie.studio}</span>
                     </div>
                     <div className="flex justify-between pb-1">
-                        <span className="text-on-surface-variant text-sm">Release</span>
+                        <span className="text-on-surface-variant text-sm">{t('movies.releaseYear')}</span>
                         <span className="text-white text-sm">{movie.releaseDate}</span>
                     </div>
                 </div>

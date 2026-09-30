@@ -1,4 +1,5 @@
 import type { Movie } from '../../types';
+import { useTranslation } from 'react-i18next';
 
 interface CastSectionProps {
     cast: NonNullable<Movie['cast']>;
@@ -20,9 +21,10 @@ interface CastSectionProps {
  * - Name and role below each avatar
  */
 const CastSection = ({ cast }: CastSectionProps) => {
+    const { t } = useTranslation();
     return (
         <div className="glass-panel p-6 rounded-xl">
-            <h2 className="text-2xl font-semibold text-white mb-6">Cast</h2>
+            <h2 className="text-2xl font-semibold text-white mb-6">{t('movies.cast')}</h2>
             <div className="flex gap-6 overflow-x-auto hide-scrollbar pb-2">
                 {cast.map((actor) => (
                     <div key={actor.id} className="flex flex-col items-center min-w-[100px]">

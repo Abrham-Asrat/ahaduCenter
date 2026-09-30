@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, type ChangeEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 
 type MovieFilterState = {
   genres: string[];
@@ -20,6 +21,7 @@ interface MovieFiltersProps {
  * - onFilterChange: Callback function triggered when any filter updates
  */
 const MovieFilters = ({ onFilterChange }: MovieFiltersProps) => {
+  const { t } = useTranslation();
   const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
   // const [contentType, setContentType] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
@@ -109,14 +111,14 @@ const MovieFilters = ({ onFilterChange }: MovieFiltersProps) => {
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-2">
           <span className="material-symbols-outlined text-primary">tune</span>
-          <h2 className="text-xl font-bold text-white">Filters</h2>
+          <h2 className="text-xl font-bold text-white">{t('common.search')}</h2>
         </div>
         {hasActiveFilters && (
           <button
             onClick={handleClearAll}
             className="text-xs text-secondary hover:underline cursor-pointer font-semibold transition-colors"
           >
-            Clear All
+            {t('common.delete')}
           </button>
         )}
       </div>
@@ -124,14 +126,14 @@ const MovieFilters = ({ onFilterChange }: MovieFiltersProps) => {
       {/* Search Filter */}
       <div className="mb-6">
         <label className="block text-xs uppercase tracking-wider text-on-surface-variant mb-2 font-semibold">
-          Search Title
+          {t('books.searchLabel')}
         </label>
         <div className="relative">
           <input
             type="text"
             value={searchQuery}
             onChange={handleSearchChange}
-            placeholder="Search movies..."
+            placeholder={t('nav.searchPlaceholder')}
             className="w-full bg-surface-container border border-white/10 rounded-lg pl-9 pr-3 py-2 text-sm text-white focus:border-primary outline-none transition-all"
           />
           <span className="material-symbols-outlined text-on-surface-variant text-lg absolute left-2.5 top-2.5 pointer-events-none">
@@ -143,7 +145,7 @@ const MovieFilters = ({ onFilterChange }: MovieFiltersProps) => {
       {/* Country Filter */}
       <div className="mb-6">
         <label className="block text-xs uppercase tracking-wider text-on-surface-variant mb-2 font-semibold">
-          Country
+          {t('admin.table.category')}
         </label>
         <select
           value={selectedCountry}
@@ -152,7 +154,7 @@ const MovieFilters = ({ onFilterChange }: MovieFiltersProps) => {
         >
           {countries.map((c) => (
             <option key={c} value={c} className="bg-surface-container-high text-white">
-              {c === 'All' ? 'All Countries' : c}
+              {c === 'All' ? t('common.all') : c}
             </option>
           ))}
         </select>
@@ -161,7 +163,7 @@ const MovieFilters = ({ onFilterChange }: MovieFiltersProps) => {
       {/* Dropdown Menu with Checkboxes */}
       <div className="mb-6 relative" ref={genreDropdownRef}>
         <label className="block text-xs uppercase tracking-wider text-on-surface-variant mb-2 font-semibold">
-          Genre
+          {t('movies.genre')}
         </label>
 
         {/* Dropdown Trigger Button */}
@@ -172,8 +174,8 @@ const MovieFilters = ({ onFilterChange }: MovieFiltersProps) => {
         >
           <span className="truncate">
             {selectedGenres.length === 0
-              ? 'Select Genres'
-              : `${selectedGenres.length} Selected (${selectedGenres.join(', ')})`}
+              ? t('common.select', 'Select Genres')
+              : `${selectedGenres.length} ${t('common.selected', 'Selected')} (${selectedGenres.join(', ')})`}
           </span>
           <span
             className="material-symbols-outlined text-on-surface-variant text-sm transition-transform duration-200"
@@ -209,7 +211,7 @@ const MovieFilters = ({ onFilterChange }: MovieFiltersProps) => {
       {/* Content Type Filter Group */}
       <div className="mb-6">
         <label className="block text-xs uppercase tracking-wider text-on-surface-variant mb-2 font-semibold">
-          Content Type
+          {t('electronics.product')}
         </label>
         <select
           value={selectedContent}
@@ -218,7 +220,7 @@ const MovieFilters = ({ onFilterChange }: MovieFiltersProps) => {
         >
           {contents.map((c) => (
             <option key={c} value={c} className="bg-surface-container-high text-white">
-              {c === 'All' ? 'All Types' : c}
+              {c === 'All' ? t('common.all') : c}
             </option>
           ))}
         </select>
