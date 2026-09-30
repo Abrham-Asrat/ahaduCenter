@@ -382,7 +382,7 @@ This plan systematically translates all 70 remaining React components in the Aha
     - Add date formatting for notification timestamps
     - _Requirements: 8.3, 15.1, 15.2_
   
-  - [-] 13.4 Translate ContactPage.tsx
+  - [x] 13.4 Translate ContactPage.tsx
     - Import useTranslation hook
     - Replace form fields with "contact.*" keys
     - Translate instructions and submit button

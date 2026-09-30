@@ -6,7 +6,7 @@ Full internationalization (i18n) infrastructure has been successfully implemente
 
 - ✅ Complete i18n configuration with automatic language detection
 - ✅ Redux state management integration
-- ✅ 352+ translation keys in both languages
+- ✅ 724 translation keys in both languages
 - ✅ Language switcher component in navbar
 - ✅ Proper Amharic font support (Noto Sans Ethiopic)
 - ✅ Date formatting utilities
@@ -69,9 +69,9 @@ Full internationalization (i18n) infrastructure has been successfully implemente
 
 ### Locale Files
 
-- **Total translation keys**: 352 (per language)
-- **English (en.json)**: 352 keys, 100% complete
-- **Amharic (am.json)**: 352 keys, 100% complete
+- **Total translation keys**: 724 (per language)
+- **English (en.json)**: 724 keys, 100% structurally complete
+- **Amharic (am.json)**: 724 keys, 100% structurally complete
 - **Key structure validation**: ✅ PASSED (identical structures)
 
 ### Translation Coverage by Domain
@@ -102,16 +102,9 @@ Full internationalization (i18n) infrastructure has been successfully implemente
 
 ### Component Translation Status
 
-| Category | Total Files | Translated | Remaining | Progress |
-|----------|-------------|------------|-----------|----------|
-| Common Components | 15 | 2 | 13 | 13% |
-| Home Components | 8 | 0 | 8 | 0% |
-| Movie Components | 8 | 0 | 8 | 0% |
-| Book Components | 6 | 0 | 6 | 0% |
-| Electronics Components | 6 | 0 | 6 | 0% |
-| Pages | 24 | 0 | 24 | 0% |
-| Admin Pages | 5 | 0 | 5 | 0% |
-| **TOTAL** | **72** | **2** | **70** | **3%** |
+The major user-facing surfaces now use `useTranslation`, including home, authentication, common controls, dashboard, contact, notifications, wishlist, search/not-found, movie browsing/request/detail controls, and the admin shell and management headers. The remaining hardcoded strings are primarily CRUD modal field labels, legacy fallback messages, and some book/electronics edge states.
+
+Locale validation passes with identical 724-key structures. The production build succeeds. Full regression tests still contain unrelated baseline failures in animation/routing fixtures and missing purchase-history/test store setup, so those are not reported as i18n-complete.
 
 ---
 
