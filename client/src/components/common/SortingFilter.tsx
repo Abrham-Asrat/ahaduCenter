@@ -1,4 +1,4 @@
-import { useTranslation } from 'react-i18next';
+import { useTranslation, Trans } from 'react-i18next';
 
 interface SortingFilterProps {
   count: number;
@@ -27,18 +27,11 @@ const SortingFilter = ({
         {loading ? (
           <span className="inline-block h-4 w-32 animate-pulse rounded bg-surface-container" />
         ) : (
-          <>
-            {t('filters.showingOf', { count: '', total: '', label: itemLabel })
-              .split('')
-              .reduce<React.ReactNode[]>((_, __, ___, arr) => arr, [])
-            }
-            {/* Render as: Showing {count} of {total} {label} with bold numbers */}
-            {t('filters.showingOf').split('{{count}}')[0]}
-            <strong className="text-white">{count}</strong>
-            {t('filters.showingOf').split('{{count}}')[1]?.split('{{total}}')[0]}
-            <strong className="text-white">{total}</strong>
-            {t('filters.showingOf').split('{{total}}')[1]?.replace('{{label}}', itemLabel)}
-          </>
+          <Trans
+            i18nKey="filters.showingOf"
+            values={{ count, total, label: itemLabel }}
+            components={{ bold: <strong className="text-white" /> }}
+          />
         )}
       </span>
       <div className="flex items-center justify-between gap-2 sm:justify-end">
