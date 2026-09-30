@@ -157,7 +157,7 @@ const ProductComparisonPage = () => {
                               <button
                                 onClick={() => removeProduct(product.id)}
                                 className="absolute top-2 right-2 text-error p-1 rounded-full hover:bg-error/20 transition-colors cursor-pointer"
-                                title="Remove from comparison"
+                                title={t('electronics.comparison.removeFromComparison')}
                               >
                                 <span className="material-symbols-outlined text-base">close</span>
                               </button>
@@ -181,14 +181,14 @@ const ProductComparisonPage = () => {
                     <tbody>
                       {/* Brand */}
                       <tr className="hover:bg-white/5 transition-colors">
-                        <td className="p-4 bg-surface-container-high/90 border-b border-r border-white/10 text-xs font-bold uppercase text-on-surface-variant">Brand</td>
+                        <td className="p-4 bg-surface-container-high/90 border-b border-r border-white/10 text-xs font-bold uppercase text-on-surface-variant">{t('electronics.comparison.brand')}</td>
                         {products.map((product) => (
                           <td key={product.id} className="p-4 border-b border-white/10 font-semibold">{product.brand}</td>
                         ))}
                       </tr>
                       {/* Condition */}
                       <tr className="hover:bg-white/5 transition-colors">
-                        <td className="p-4 bg-surface-container-high/90 border-b border-r border-white/10 text-xs font-bold uppercase text-on-surface-variant">Condition</td>
+                        <td className="p-4 bg-surface-container-high/90 border-b border-r border-white/10 text-xs font-bold uppercase text-on-surface-variant">{t('electronics.comparison.condition')}</td>
                         {products.map((product) => (
                           <td key={product.id} className="p-4 border-b border-white/10">
                             <span className={`px-2.5 py-1 rounded-full text-xs font-bold uppercase ${product.condition === 'New'
@@ -202,21 +202,21 @@ const ProductComparisonPage = () => {
                       </tr>
                       {/* Key Specs */}
                       <tr className="hover:bg-white/5 transition-colors">
-                        <td className="p-4 bg-surface-container-high/90 border-b border-r border-white/10 text-xs font-bold uppercase text-on-surface-variant">Key Specs</td>
+                        <td className="p-4 bg-surface-container-high/90 border-b border-r border-white/10 text-xs font-bold uppercase text-on-surface-variant">{t('electronics.comparison.keySpecs')}</td>
                         {products.map((product) => (
                           <td key={product.id} className="p-4 border-b border-white/10 text-sm text-on-surface-variant">{product.specs}</td>
                         ))}
                       </tr>
                       {/* Warranty */}
                       <tr className="hover:bg-white/5 transition-colors">
-                        <td className="p-4 bg-surface-container-high/90 border-b border-r border-white/10 text-xs font-bold uppercase text-on-surface-variant">Warranty</td>
+                        <td className="p-4 bg-surface-container-high/90 border-b border-r border-white/10 text-xs font-bold uppercase text-on-surface-variant">{t('electronics.comparison.warranty')}</td>
                         {products.map((product) => (
                           <td key={product.id} className="p-4 border-b border-white/10 text-sm font-medium">{product.warranty}</td>
                         ))}
                       </tr>
                       {/* Availability */}
                       <tr className="hover:bg-white/5 transition-colors">
-                        <td className="p-4 bg-surface-container-high/90 border-b border-r border-white/10 text-xs font-bold uppercase text-on-surface-variant">Availability</td>
+                        <td className="p-4 bg-surface-container-high/90 border-b border-r border-white/10 text-xs font-bold uppercase text-on-surface-variant">{t('electronics.comparison.availability')}</td>
                         {products.map((product) => (
                           <td key={product.id} className={`p-4 border-b border-white/10 text-sm font-bold ${product.availability === 'In Stock' ? 'text-primary' : 'text-error'
                             }`}>
@@ -236,14 +236,14 @@ const ProductComparisonPage = () => {
                                   className="w-full bg-primary text-black py-2.5 rounded-lg text-xs uppercase font-extrabold tracking-wider hover:shadow-[0_0_15px_rgba(16,185,129,0.5)] transition-all flex items-center justify-center gap-2 cursor-pointer"
                                 >
                                   <span className="material-symbols-outlined text-sm">shopping_bag</span>
-                                  Buy Now
+                                  {t('electronics.comparison.buyNow')}
                                 </button>
                               ) : (
                                 <button
-                                  onClick={() => showToast(`Subscribed to back-in-stock alerts for "${product.name}".`)}
+                                  onClick={() => showToast(t('electronics.comparison.backInStockNotification', { name: product.name }))}
                                   className="w-full bg-surface-variant text-on-surface-variant border border-white/10 py-2.5 rounded-lg text-xs uppercase font-bold tracking-wider hover:text-white cursor-pointer"
                                 >
-                                  Notify Me
+                                  {t('electronics.comparison.notifyMe')}
                                 </button>
                               )}
                               <button
@@ -251,7 +251,7 @@ const ProductComparisonPage = () => {
                                 className="w-full border border-white/20 text-white py-2.5 rounded-lg text-xs uppercase font-bold tracking-wider hover:bg-white/10 transition-colors flex items-center justify-center gap-2 cursor-pointer"
                               >
                                 <span className="material-symbols-outlined text-sm">favorite</span>
-                                Add to Wishlist
+                                {t('electronics.comparison.addToWishlist')}
                               </button>
                             </div>
                           </td>
@@ -267,13 +267,13 @@ const ProductComparisonPage = () => {
                 {/* Sticky labels */}
                 <div className="sticky left-0 z-20 w-28 flex-shrink-0 bg-surface-container-high border-r border-white/10 flex flex-col sm:w-32">
                   <div className="min-h-40 border-b border-white/10 p-3 flex items-end">
-                    <span className="text-xs uppercase font-bold text-on-surface-variant">Features</span>
+                    <span className="text-xs uppercase font-bold text-on-surface-variant">{t('electronics.comparison.features')}</span>
                   </div>
-                  <div className="min-h-14 flex items-center px-3 border-b border-white/10 text-xs font-bold">Brand</div>
-                  <div className="min-h-14 flex items-center px-3 border-b border-white/10 bg-surface-container/30 text-xs font-bold">Condition</div>
-                  <div className="min-h-14 flex items-center px-3 border-b border-white/10 text-xs font-bold">Specs</div>
-                  <div className="min-h-14 flex items-center px-3 border-b border-white/10 bg-surface-container/30 text-xs font-bold">Warranty</div>
-                  <div className="min-h-14 flex items-center px-3 border-b border-white/10 text-xs font-bold">Availability</div>
+                  <div className="min-h-14 flex items-center px-3 border-b border-white/10 text-xs font-bold">{t('electronics.comparison.brand')}</div>
+                  <div className="min-h-14 flex items-center px-3 border-b border-white/10 bg-surface-container/30 text-xs font-bold">{t('electronics.comparison.condition')}</div>
+                  <div className="min-h-14 flex items-center px-3 border-b border-white/10 text-xs font-bold">{t('electronics.comparison.keySpecs')}</div>
+                  <div className="min-h-14 flex items-center px-3 border-b border-white/10 bg-surface-container/30 text-xs font-bold">{t('electronics.comparison.warranty')}</div>
+                  <div className="min-h-14 flex items-center px-3 border-b border-white/10 text-xs font-bold">{t('electronics.comparison.availability')}</div>
                   <div className="min-h-28 p-3" />
                 </div>
 
@@ -307,13 +307,13 @@ const ProductComparisonPage = () => {
                           onClick={() => handleBuyNow(product)}
                           className="w-full bg-primary text-black py-1.5 rounded text-xs font-bold uppercase"
                         >
-                          Buy Now
+                          {t('electronics.comparison.buyNow')}
                         </button>
                         <button
                           onClick={() => handleWishlist(product)}
                           className="w-full border border-white/20 text-white py-1.5 rounded text-xs uppercase"
                         >
-                          Wishlist
+                          {t('electronics.comparison.wishlist')}
                         </button>
                       </div>
                     </div>

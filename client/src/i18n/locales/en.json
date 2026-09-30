@@ -444,6 +444,27 @@
       "tracking": "Tracking Information",
       "continueShopping": "Continue Shopping"
     },
+    "orderConfirmation": {
+      "loadingOrder": "Loading your order details…",
+      "orderNotFound": "Order Not Found",
+      "backToElectronics": "Back to Electronics",
+      "successTitle": "In-Store Pick-Up Reserved!",
+      "successMessage": "Your items have been reserved at our physical store. Show your Pick-Up Pass when you arrive to collect them.",
+      "pickupPassLabel": "In-Store Reservation Pass",
+      "readyForPickup": "Ready for Pick-Up",
+      "orderIdLabel": "Order ID:",
+      "storeAddressLabel": "Physical Store Address",
+      "storeLocation": "Ahadu Center Hub, Bole Road (Next to Friendship HyperMarket), Addis Ababa, Ethiopia",
+      "operatingHoursLabel": "Operating Hours:",
+      "operatingHours": "Mon - Sat: 8:30 AM - 8:00 PM | Sun: 10:00 AM - 6:00 PM",
+      "pickupStatusLabel": "Pickup Status",
+      "pickupStatusMessage": "Your reservation is ready for pickup during the operating hours shown here.",
+      "reservedItemsTitle": "Reserved Items ({{count}})",
+      "noItemDetails": "No item details available.",
+      "quantityLabel": "Quantity:",
+      "printPassButton": "Save / Print Pick-Up Pass",
+      "continueShoppingButton": "Continue Browsing Hub"
+    },
     "comparison": {
       "title": "Compare Products",
       "subtitle": "Compare specifications and prices of selected electronics.",

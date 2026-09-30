@@ -379,6 +379,27 @@
       "tracking": "የመከታተያ መረጃ",
       "continueShopping": "ግዢ ይቀጥሉ"
     },
+    "orderConfirmation": {
+      "loadingOrder": "የእርስዎን የትዕዛዝ ዝርዝሮች በመጫን ላይ…",
+      "orderNotFound": "ትዕዛዝ አልተገኘም",
+      "backToElectronics": "ወደ ኤሌክትሮኒክስ ተመለስ",
+      "successTitle": "የመደብር ውስጥ መውሰጃ ተይዟል!",
+      "successMessage": "እቃዎችዎ በእኛ የአካል መደብር ተይዘዋል። ለመሰብሰብ ሲመጡ የእርስዎን የመውሰጃ ማለፊያ ያሳዩ።",
+      "pickupPassLabel": "የመደብር ውስጥ የማስያዣ ማለፊያ",
+      "readyForPickup": "ለመውሰድ ዝግጁ",
+      "orderIdLabel": "የትዕዛዝ መለያ፡",
+      "storeAddressLabel": "የአካል መደብር አድራሻ",
+      "storeLocation": "አሃዱ ሴንተር ሀብ፣ ቦሌ መንገድ (ከፍሬንድሺፕ ሀይፐርማርኬት አጠገብ)፣ አዲስ አበባ፣ ኢትዮጵያ",
+      "operatingHoursLabel": "የአሰራር ሰዓታት፡",
+      "operatingHours": "ሰኞ - ቅዳሜ፡ 8:30 ጥዋት - 8:00 ምሽት | እሑድ፡ 10:00 ጥዋት - 6:00 ምሽት",
+      "pickupStatusLabel": "የመውሰጃ ሁኔታ",
+      "pickupStatusMessage": "የእርስዎ ማስያዣ እዚህ በተመለከተው የአሰራር ሰዓታት ውስጥ ለመውሰድ ዝግጁ ነው።",
+      "reservedItemsTitle": "የተያዙ እቃዎች ({{count}})",
+      "noItemDetails": "የእቃ ዝርዝሮች የሉም።",
+      "quantityLabel": "ብዛት፡",
+      "printPassButton": "አስቀምጥ / የመውሰጃ ማለፊያን አትም",
+      "continueShoppingButton": "ማስሱን ይቀጥሉ"
+    },
     "comparison": {
       "title": "ምርቶችን አነጻጽር",
       "subtitle": "የተመረጡ የኤሌክትሮኒክስ ዕቃዎችን መግለጫዎች እና ዋጋዎችን ያነጻጽሩ።",
