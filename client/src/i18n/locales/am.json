@@ -491,17 +491,37 @@
     "wishlist": "ምርጫዎቼ",
     "notifications": "ማሳወቂያዎች",
     "recentActivity": "የቅርብ ጊዜ እንቅስቃሴ",
-    "editProfile": "መገለጫ አስተካክል",
+    "noRecentActivity": "ምንም የቅርብ ጊዜ እንቅስቃሴ አልተገኘም።",
+    "quickActions": "ፈጣን እርምጃዎች",
+    "browseMovies": "ፊልሞችን ያስሱ",
+    "shopElectronics": "ኤሌክትሮኒክስ ይግዙ",
+    "exploreBooks": "መጽሐፍትን ያስሱ",
+    "editProfile": "መገለጫ መረጃ አስተካክል",
+    "saving": "በማስቀመጥ ላይ…",
     "stats": {
       "totalBorrowed": "ጠቅላላ የተበደሩ",
       "activeOrders": "ንቁ ትዕዛዞች",
       "wishlistItems": "የምርጫ ዕቃዎች",
-      "unreadAlerts": "ያልተነበቡ ማንቂያዎች"
+      "unreadAlerts": "ያልተነበቡ ማንቂያዎች",
+      "favorites": "ምርጫዎች",
+      "purchases": "ግዢዎች",
+      "borrowed": "ተበዳሪ",
+      "requests": "ጥያቄዎች"
     },
     "profile": {
-      "memberSince": "ከዚያ ጀምሮ አባል",
+      "memberSince": "ከ {{date}} ጀምሮ አባል",
       "saveChanges": "ለውጦችን አስቀምጥ",
-      "updateSuccess": "መገለጫ በተሳካ ሁኔታ ተዘምኗል!"
+      "updateSuccess": "መገለጫ በተሳካ ሁኔታ ተዘምኗል!",
+      "fullName": "ሙሉ ስም",
+      "emailAddress": "የኢሜይል አድራሻ",
+      "phoneNumber": "የስልክ ቁጥር"
+    },
+    "nav": {
+      "overview": "አጠቃላይ እይታ",
+      "favorites": "ምርጫዎች",
+      "purchaseHistory": "የግዢ ታሪክ",
+      "borrowingHistory": "የመበደር ታሪክ",
+      "movieRequests": "የፊልም ጥያቄዎች"
     }
   },
   "wishlist": {

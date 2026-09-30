@@ -1,6 +1,7 @@
 // src/pages/UserDashboardPage.jsx
 import { useState, useEffect, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import { userService } from '../services/userService';
@@ -319,10 +320,10 @@ const UserDashboardPage = () => {
                     key={item.label}
                     to={item.path}
                     className={`flex items-center gap-4 px-4 py-2 rounded-lg transition-all ${item.danger
-                        ? 'text-error hover:bg-error/10'
-                        : item.active
-                          ? 'bg-primary/10 text-primary border-l-2 border-primary'
-                          : 'text-on-surface-variant hover:text-primary hover:bg-white/5'
+                      ? 'text-error hover:bg-error/10'
+                      : item.active
+                        ? 'bg-primary/10 text-primary border-l-2 border-primary'
+                        : 'text-on-surface-variant hover:text-primary hover:bg-white/5'
                       }`}
                   >
                     <span className="material-symbols-outlined">{item.icon}</span>
