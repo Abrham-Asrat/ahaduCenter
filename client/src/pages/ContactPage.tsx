@@ -3,6 +3,7 @@ import { useState, type ChangeEvent, type FormEvent } from 'react';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import { contactService } from '../services/contactService';
+import { useTranslation } from 'react-i18next';
 
 /**
  * ContactPage Component
@@ -11,6 +12,7 @@ import { contactService } from '../services/contactService';
  * social links, and FAQ section.
  */
 const ContactPage = () => {
+  const { t } = useTranslation();
   // Form state
   const [formData, setFormData] = useState({
     name: '',
@@ -46,7 +48,7 @@ const ContactPage = () => {
         message: formData.message,
       });
     } catch {
-      setError('We could not send your message. Please try again.');
+      setError(t('contact.errorMessage'));
       return;
     } finally {
       setLoading(false);
@@ -58,20 +60,20 @@ const ContactPage = () => {
   // FAQ data
   const faqs = [
     {
-      question: 'How do I borrow physical books or movies?',
-      answer: 'Members can reserve items online through their dashboard. Once confirmed, physical items can be picked up at the Bole Road center during regular business hours. A valid digital ID is required at pickup.',
+      question: t('contact.faq1Question'),
+      answer: t('contact.faq1Answer'),
     },
     {
-      question: 'Are the electronics available for purchase or rental?',
-      answer: 'Our electronics module primarily focuses on high-end rentals for professional projects and evaluations. However, selected exclusive devices are available for direct purchase by premium tier members.',
+      question: t('contact.faq2Question'),
+      answer: t('contact.faq2Answer'),
     },
     {
-      question: 'What is the return policy for borrowed media?',
-      answer: 'Standard media (Books and Movies) have a 14-day borrowing period. Electronics have a strict 7-day rental window. Late returns may incur a temporary suspension of borrowing privileges and a daily fee.',
+      question: t('contact.faq3Question'),
+      answer: t('contact.faq3Answer'),
     },
     {
-      question: 'Do you offer technical support for rented electronics?',
-      answer: 'Yes, our Support tab offers dedicated technical assistance for all rented equipment. You can also visit our help desk in-person for immediate troubleshooting.',
+      question: t('contact.faq4Question'),
+      answer: t('contact.faq4Answer'),
     },
   ];
 
@@ -93,14 +95,14 @@ const ContactPage = () => {
                 <div className="glass-panel rounded-xl p-6 md:p-8 border border-green-500/50 animate-fade-in flex flex-col items-center justify-center gap-6 text-center py-12">
                   <span className="material-symbols-outlined text-green-400 text-6xl">check_circle</span>
                   <div>
-                    <h2 className="text-2xl font-bold text-white mb-2">Message sent successfully!</h2>
-                    <p className="text-on-surface-variant">We've received your message and will get back to you shortly.</p>
+                    <h2 className="text-2xl font-bold text-white mb-2">{t('contact.successMessage')}</h2>
+                    <p className="text-on-surface-variant">{t('contact.successHint')}</p>
                   </div>
                   <button
                     onClick={() => setIsSubmitted(false)}
                     className="bg-primary text-black px-8 py-3 rounded-lg font-semibold hover:shadow-[0_0_20px_rgba(16,185,129,0.4)] transition-all cursor-pointer"
                   >
-                    Send Another
+                    {t('contact.sendAnother')}
                   </button>
                 </div>
               ) : (
@@ -108,7 +110,7 @@ const ContactPage = () => {
                 <div className="glass-panel rounded-xl p-6 md:p-8">
                   <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
                     <span className="material-symbols-outlined text-primary">mail</span>
-                    Send Us a Message
+                    {t('contact.sendUsMessage')}
                   </h2>
 
                   {/* Inline error banner */}
@@ -124,7 +126,7 @@ const ContactPage = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                       <div className="space-y-2">
                         <label htmlFor="name" className="block text-xs uppercase tracking-wider text-on-surface-variant font-bold">
-                          Full Name
+                          {t('contact.fullName')}
                         </label>
                         <input
                           id="name"
@@ -134,13 +136,13 @@ const ContactPage = () => {
                           onChange={handleInputChange}
                           disabled={loading}
                           className="w-full bg-[#0B0F19] border border-white/10 rounded-lg p-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-200"
-                          placeholder="Enter your name"
+                          placeholder={t('contact.namePlaceholder')}
                           required
                         />
                       </div>
                       <div className="space-y-2">
                         <label htmlFor="email" className="block text-xs uppercase tracking-wider text-on-surface-variant font-bold">
-                          Email Address
+                          {t('contact.emailAddress')}
                         </label>
                         <input
                           id="email"
@@ -150,7 +152,7 @@ const ContactPage = () => {
                           onChange={handleInputChange}
                           disabled={loading}
                           className="w-full bg-[#0B0F19] border border-white/10 rounded-lg p-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-200"
-                          placeholder="Enter your email"
+                          placeholder={t('contact.emailPlaceholder')}
                           required
                         />
                       </div>
@@ -159,7 +161,7 @@ const ContactPage = () => {
                     {/* Subject */}
                     <div className="space-y-2">
                       <label htmlFor="subject" className="block text-xs uppercase tracking-wider text-on-surface-variant font-bold">
-                        Subject Inquiry
+                        {t('contact.subjectInquiry')}
                       </label>
                       <select
                         id="subject"
@@ -170,18 +172,18 @@ const ContactPage = () => {
                         className="w-full bg-[#0B0F19] border border-white/10 rounded-lg p-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-200 appearance-none cursor-pointer"
                         required
                       >
-                        <option value="" disabled>Select an area of interest</option>
-                        <option value="movies">Cinematic Collection &amp; Movies</option>
-                        <option value="electronics">High-End Electronics</option>
-                        <option value="books">Literary Library &amp; Books</option>
-                        <option value="general">General Inquiry</option>
+                        <option value="" disabled>{t('contact.subjectPlaceholder')}</option>
+                        <option value="movies">{t('contact.subjectMovies')}</option>
+                        <option value="electronics">{t('contact.subjectElectronics')}</option>
+                        <option value="books">{t('contact.subjectBooks')}</option>
+                        <option value="general">{t('contact.subjectGeneral')}</option>
                       </select>
                     </div>
 
                     {/* Message */}
                     <div className="space-y-2">
                       <label htmlFor="message" className="block text-xs uppercase tracking-wider text-on-surface-variant font-bold">
-                        Your Message
+                        {t('contact.yourMessage')}
                       </label>
                       <textarea
                         id="message"
@@ -191,7 +193,7 @@ const ContactPage = () => {
                         onChange={handleInputChange}
                         disabled={loading}
                         className="w-full bg-[#0B0F19] border border-white/10 rounded-lg p-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-200 resize-none"
-                        placeholder="How can we assist you today?"
+                        placeholder={t('contact.messagePlaceholder')}
                         required
                       />
                     </div>
@@ -205,7 +207,7 @@ const ContactPage = () => {
                       {loading && (
                         <span className="w-4 h-4 border-2 border-black/40 border-t-black rounded-full animate-spin" />
                       )}
-                      {loading ? 'Sending…' : 'Send Message'}
+                      {loading ? t('contact.sending') : t('contact.sendMessage')}
                       {!loading && <span className="material-symbols-outlined text-sm">send</span>}
                     </button>
                   </form>
@@ -224,8 +226,8 @@ const ContactPage = () => {
                 <div className="absolute bottom-4 left-4 right-4 glass-panel p-4 rounded-lg flex flex-wrap items-center gap-3">
                   <span className="material-symbols-outlined text-secondary">location_on</span>
                   <div className="min-w-0 flex-1">
-                    <p className="text-white font-semibold">Ahadu Center HQ</p>
-                    <p className="text-sm text-on-surface-variant">Ahadu Center location</p>
+                    <p className="text-white font-semibold">{t('contact.locationName')}</p>
+                    <p className="text-sm text-on-surface-variant">{t('contact.locationAddress')}</p>
                   </div>
                   <a
                     href="https://www.google.com/maps/dir/?api=1&destination=6.9946333,35.590952"
@@ -234,7 +236,7 @@ const ContactPage = () => {
                     className="inline-flex shrink-0 items-center gap-2 rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-black transition-opacity hover:opacity-90"
                   >
                     <span className="material-symbols-outlined text-base">directions</span>
-                    Directions
+                    {t('contact.directions')}
                   </a>
                 </div>
               </div>
@@ -244,15 +246,15 @@ const ContactPage = () => {
             <div className="lg:col-span-4 flex flex-col gap-6">
               {/* About Card */}
               <div className="glass-panel rounded-xl p-6 md:p-8 hover:border-primary/50 transition-all">
-                <h3 className="text-xl font-bold text-primary mb-4 border-b border-white/10 pb-2">About Ahadu Center</h3>
+                <h3 className="text-xl font-bold text-primary mb-4 border-b border-white/10 pb-2">{t('contact.about')}</h3>
                 <p className="text-sm text-on-surface-variant mb-6 leading-relaxed">
-                  Ahadu Center is a premier destination curating an exclusive fusion of high-definition cinematic experiences, cutting-edge electronics, and an expansive literary library. Our mission is to elevate professional and personal discovery through unparalleled access to premium media and technology.
+                  {t('contact.aboutDescription')}
                 </p>
                 <div className="space-y-4">
                   <div className="flex items-start gap-3">
                     <span className="material-symbols-outlined text-secondary mt-1">call</span>
                     <div>
-                      <p className="text-xs uppercase text-on-surface-variant">Phone</p>
+                      <p className="text-xs uppercase text-on-surface-variant">{t('contact.phone')}</p>
                       <p className="text-white">+251 11 123 4567</p>
                     </div>
                   </div>
@@ -266,9 +268,9 @@ const ContactPage = () => {
                   <div className="flex items-start gap-3">
                     <span className="material-symbols-outlined text-secondary mt-1">schedule</span>
                     <div>
-                      <p className="text-xs uppercase text-on-surface-variant">Business Hours</p>
-                      <p className="text-white">Mon - Fri: 9:00 AM - 8:00 PM</p>
-                      <p className="text-sm text-on-surface-variant">Sat - Sun: 10:00 AM - 6:00 PM</p>
+                      <p className="text-xs uppercase text-on-surface-variant">{t('contact.businessHours')}</p>
+                      <p className="text-white">{t('contact.weekdayHours')}</p>
+                      <p className="text-sm text-on-surface-variant">{t('contact.weekendHours')}</p>
                     </div>
                   </div>
                 </div>
@@ -276,7 +278,7 @@ const ContactPage = () => {
 
               {/* Social Links Card */}
               <div className="glass-panel rounded-xl p-6 md:p-8 hover:border-primary/50 transition-all">
-                <h3 className="text-xl font-bold text-white mb-4">Connect With Us</h3>
+                <h3 className="text-xl font-bold text-white mb-4">{t('contact.connectWithUs')}</h3>
                 <div className="flex flex-wrap gap-3 mb-6">
                   {['language', 'share', 'forum', 'play_circle'].map((icon) => (
                     <a
