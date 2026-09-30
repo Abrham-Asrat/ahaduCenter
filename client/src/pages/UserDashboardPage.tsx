@@ -6,6 +6,7 @@ import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import { userService } from '../services/userService';
 import type { ActivityRecord, DashboardStats, DashboardUser } from '../types';
+import { formatMemberSince, formatShortDate } from '../utils/i18nFormat';
 
 /**
  * UserDashboardPage Component
@@ -110,6 +111,7 @@ const getActivityMeta = (activity: ActivityRecord) => {
 // ── Main Component ────────────────────────────────────────────────────────────
 
 const UserDashboardPage = () => {
+  const { t, i18n } = useTranslation();
   // ── Data state ──
   const [user, setUser] = useState<DashboardUser | null>(null);
   const [statsData, setStatsData] = useState<DashboardStats | null>(null);
@@ -158,7 +160,7 @@ const UserDashboardPage = () => {
         setActivities(Array.isArray(list) ? list : []);
       } catch (err) {
         if (!cancelled) {
-          setError(typeof err === 'string' ? err : 'Failed to load dashboard data. Please try again.');
+          setError(typeof err === 'string' ? err : t('common.error'));
         }
       } finally {
         if (!cancelled) setLoading(false);
@@ -173,7 +175,7 @@ const UserDashboardPage = () => {
   const displayName = user?.name ?? '';
   const displayEmail = user?.email ?? '';
   const displayMemberSince = user?.createdAt
-    ? new Date(user.createdAt).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+    ? formatMemberSince(user.createdAt, i18n.language)
     : (user?.memberSince ?? '');
   const displayInitials = displayName
     .split(' ')
@@ -183,25 +185,25 @@ const UserDashboardPage = () => {
   // ── Stats cards derived from statsData ──────────────────────────────────────
   const stats = [
     {
-      label: 'Favorites',
+      label: t('dashboard.stats.favorites'),
       value: statsData?.favorites ?? statsData?.wishlistCount ?? 0,
       icon: 'favorite',
       color: 'text-primary',
     },
     {
-      label: 'Purchases',
+      label: t('dashboard.stats.purchases'),
       value: statsData?.purchases ?? statsData?.orderCount ?? 0,
       icon: 'shopping_cart',
       color: 'text-primary',
     },
     {
-      label: 'Borrowed',
+      label: t('dashboard.stats.borrowed'),
       value: statsData?.borrowed ?? statsData?.borrowingCount ?? 0,
       icon: 'menu_book',
       color: 'text-primary',
     },
     {
-      label: 'Requests',
+      label: t('dashboard.stats.requests'),
       value: statsData?.requests ?? statsData?.movieRequestCount ?? 0,
       icon: 'movie',
       color: 'text-primary',
@@ -223,10 +225,10 @@ const UserDashboardPage = () => {
       const updatedUser = response?.user ?? response;
       setUser((prev) => ({ ...prev, ...updatedUser }));
       setIsEditModalOpen(false);
-      setToastMessage('Profile updated successfully!');
+      setToastMessage(t('dashboard.profile.updateSuccess'));
       setTimeout(() => setToastMessage(null), 3000);
     } catch (err) {
-      setSaveError(typeof err === 'string' ? err : 'Failed to update profile. Please try again.');
+      setSaveError(typeof err === 'string' ? err : t('common.error'));
     } finally {
       setIsSaving(false);
     }
@@ -239,13 +241,13 @@ const UserDashboardPage = () => {
 
   // ── Sidebar nav ────────────────────────────────────────────────────────────
   const navItems: Array<{ label: string; icon: string; path: string; active?: boolean; danger?: boolean }> = [
-    { label: 'Overview', icon: 'dashboard', active: true, path: '/account' },
-    { label: 'Favorites', icon: 'favorite', path: '/wishlist' },
-    { label: 'Purchase History', icon: 'receipt_long', path: '/purchase-history' },
-    { label: 'Borrowing History', icon: 'library_books', path: '/borrowing-history' },
-    { label: 'Movie Requests', icon: 'movie', path: '/movie-request' },
-    { label: 'Notifications', icon: 'notifications', path: '/notifications' },
-    { label: 'Contact', icon: 'contact_support', path: '/contact' },
+    { label: t('dashboard.nav.overview'), icon: 'dashboard', active: true, path: '/account' },
+    { label: t('dashboard.nav.favorites'), icon: 'favorite', path: '/wishlist' },
+    { label: t('dashboard.nav.purchaseHistory'), icon: 'receipt_long', path: '/purchase-history' },
+    { label: t('dashboard.nav.borrowingHistory'), icon: 'library_books', path: '/borrowing-history' },
+    { label: t('dashboard.nav.movieRequests'), icon: 'movie', path: '/movie-request' },
+    { label: t('nav.notifications'), icon: 'notifications', path: '/notifications' },
+    { label: t('nav.contact'), icon: 'contact_support', path: '/contact' },
   ];
 
   // ── Render ─────────────────────────────────────────────────────────────────
@@ -292,7 +294,7 @@ const UserDashboardPage = () => {
                     {displayMemberSince && (
                       <>
                         <span className="mx-2 opacity-50">|</span>
-                        Member since {displayMemberSince}
+                        {t('dashboard.profile.memberSince', { date: displayMemberSince })}
                       </>
                     )}
                   </p>
@@ -302,7 +304,7 @@ const UserDashboardPage = () => {
                       className="btn-secondary px-6 py-2.5 rounded-xl text-xs uppercase tracking-wider font-bold flex items-center gap-2 mx-auto md:mx-0 cursor-pointer"
                     >
                       <span className="material-symbols-outlined text-sm">edit</span>
-                      Edit Profile Information
+                      {t('dashboard.editProfile')}
                     </button>
                   </div>
                 </div>
@@ -362,10 +364,10 @@ const UserDashboardPage = () => {
               ) : (
                 <section className="glass-panel rounded-xl p-6 flex flex-col gap-4">
                   <h2 className="text-2xl font-semibold text-white border-b border-white/10 pb-3">
-                    Recent Activity
+                    {t('dashboard.recentActivity')}
                   </h2>
                   {activities.length === 0 ? (
-                    <p className="text-on-surface-variant text-sm py-4 text-center">No recent activity found.</p>
+                    <p className="text-on-surface-variant text-sm py-4 text-center">{t('dashboard.noRecentActivity')}</p>
                   ) : (
                     <div className="flex flex-col gap-3 mt-2">
                       {activities.map((activity, index) => {
@@ -385,11 +387,7 @@ const UserDashboardPage = () => {
                                   {activity.date
                                     ? activity.date
                                     : activity.createdAt
-                                      ? new Date(activity.createdAt).toLocaleDateString('en-US', {
-                                        month: 'short',
-                                        day: 'numeric',
-                                        year: 'numeric',
-                                      })
+                                      ? formatShortDate(activity.createdAt, i18n.language)
                                       : ''}
                                 </span>
                               </div>
@@ -407,7 +405,7 @@ const UserDashboardPage = () => {
 
               {/* Quick Actions */}
               <section>
-                <h3 className="text-2xl font-semibold text-white mb-4">Quick Actions</h3>
+                <h3 className="text-2xl font-semibold text-white mb-4">{t('dashboard.quickActions')}</h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <Link
                     to="/movies"
@@ -416,7 +414,7 @@ const UserDashboardPage = () => {
                     <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
                       <span className="material-symbols-outlined">theaters</span>
                     </div>
-                    <span className="font-semibold text-white">Browse Movies</span>
+                    <span className="font-semibold text-white">{t('dashboard.browseMovies')}</span>
                   </Link>
                   <Link
                     to="/electronics"
@@ -425,7 +423,7 @@ const UserDashboardPage = () => {
                     <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
                       <span className="material-symbols-outlined">devices</span>
                     </div>
-                    <span className="font-semibold text-white">Shop Electronics</span>
+                    <span className="font-semibold text-white">{t('dashboard.shopElectronics')}</span>
                   </Link>
                   <Link
                     to="/books"
@@ -434,7 +432,7 @@ const UserDashboardPage = () => {
                     <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
                       <span className="material-symbols-outlined">import_contacts</span>
                     </div>
-                    <span className="font-semibold text-white">Explore Books</span>
+                    <span className="font-semibold text-white">{t('dashboard.exploreBooks')}</span>
                   </Link>
                 </div>
               </section>
@@ -458,7 +456,7 @@ const UserDashboardPage = () => {
 
               <form onSubmit={handleSaveProfile} className="p-6 space-y-4">
                 <div>
-                  <label className="block text-xs uppercase text-on-surface-variant font-bold mb-2">Full Name</label>
+                  <label className="block text-xs uppercase text-on-surface-variant font-bold mb-2">{t('dashboard.profile.fullName')}</label>
                   <input
                     type="text"
                     value={editForm.name}
@@ -469,7 +467,7 @@ const UserDashboardPage = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs uppercase text-on-surface-variant font-bold mb-2">Email Address</label>
+                  <label className="block text-xs uppercase text-on-surface-variant font-bold mb-2">{t('dashboard.profile.emailAddress')}</label>
                   <input
                     type="email"
                     value={editForm.email}
@@ -480,7 +478,7 @@ const UserDashboardPage = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs uppercase text-on-surface-variant font-bold mb-2">Phone Number</label>
+                  <label className="block text-xs uppercase text-on-surface-variant font-bold mb-2">{t('dashboard.profile.phoneNumber')}</label>
                   <input
                     type="tel"
                     value={editForm.phone}
@@ -505,7 +503,7 @@ const UserDashboardPage = () => {
                     disabled={isSaving}
                     className="px-5 py-2.5 rounded-xl border border-secondary text-secondary font-bold text-xs uppercase cursor-pointer hover:bg-secondary/10 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    Cancel
+                    {t('common.cancel')}
                   </button>
                   <button
                     type="submit"
@@ -515,7 +513,7 @@ const UserDashboardPage = () => {
                     {isSaving && (
                       <span className="w-4 h-4 border-2 border-black/40 border-t-black rounded-full animate-spin" />
                     )}
-                    {isSaving ? 'Saving…' : 'Save Changes'}
+                    {isSaving ? t('dashboard.saving') : t('dashboard.profile.saveChanges')}
                   </button>
                 </div>
               </form>

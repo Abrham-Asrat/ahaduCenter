@@ -6,6 +6,7 @@ import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import { fetchWishlist, removeWishlistItem } from '../redux/slices/wishlistSlice';
 import type { WishlistItem } from '../types';
+import { useTranslation } from 'react-i18next';
 
 /**
  * WishlistPage Component
@@ -13,6 +14,7 @@ import type { WishlistItem } from '../types';
  * Displays all items saved by the user across Movies, Electronics, and Books.
  */
 const WishlistPage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
@@ -26,7 +28,7 @@ const WishlistPage = () => {
 
   const handleRemove = (id: string, title: string) => {
     dispatch(removeWishlistItem(id));
-    setToastMessage(`Removed "${title}" from wishlist.`);
+    setToastMessage(t('wishlist.removed', { title }));
     setTimeout(() => setToastMessage(null), 3000);
   };
 
@@ -43,10 +45,10 @@ const WishlistPage = () => {
   };
 
   const tabs = [
-    { key: 'all', label: 'All Items', count: wishlistItems.length },
-    { key: 'movies', label: 'Movies', count: wishlistItems.filter((i) => i.type === 'Movie').length },
-    { key: 'electronics', label: 'Electronics', count: wishlistItems.filter((i) => i.type === 'Product' || i.type === 'Electronics').length },
-    { key: 'books', label: 'Books', count: wishlistItems.filter((i) => i.type === 'Book').length },
+    { key: 'all', label: t('wishlist.tabs.all'), count: wishlistItems.length },
+    { key: 'movies', label: t('wishlist.tabs.movies'), count: wishlistItems.filter((i) => i.type === 'Movie').length },
+    { key: 'electronics', label: t('wishlist.tabs.products'), count: wishlistItems.filter((i) => i.type === 'Product' || i.type === 'Electronics').length },
+    { key: 'books', label: t('wishlist.tabs.books'), count: wishlistItems.filter((i) => i.type === 'Book').length },
   ];
 
   // Filter items based on active tab
@@ -96,7 +98,7 @@ const WishlistPage = () => {
                 onClick={() => dispatch(fetchWishlist())}
                 className="ml-auto text-xs underline font-bold cursor-pointer"
               >
-                Retry
+                {t('common.retry')}
               </button>
             </div>
           )}
@@ -109,8 +111,8 @@ const WishlistPage = () => {
                   key={tab.key}
                   onClick={() => setActiveTab(tab.key)}
                   className={`px-4 py-2 rounded-full text-sm whitespace-nowrap transition-all cursor-pointer ${activeTab === tab.key
-                      ? 'bg-primary text-black font-semibold'
-                      : 'bg-surface-container text-on-surface-variant border border-white/5 hover:border-white/20'
+                    ? 'bg-primary text-black font-semibold'
+                    : 'bg-surface-container text-on-surface-variant border border-white/5 hover:border-white/20'
                     }`}
                 >
                   {tab.label} ({tab.count})
@@ -175,7 +177,7 @@ const WishlistPage = () => {
                         <button
                           onClick={() => handleRemove(sourceId, title)}
                           className="w-10 h-10 rounded-full bg-surface-container border border-white/10 flex items-center justify-center text-white hover:text-error hover:border-error transition-colors cursor-pointer"
-                          title="Remove from wishlist"
+                          title={t('wishlist.remove')}
                         >
                           <span className="material-symbols-outlined">delete</span>
                         </button>
@@ -220,8 +222,8 @@ const WishlistPage = () => {
           {!loading && filteredItems.length === 0 && (
             <div className="text-center py-16">
               <span className="material-symbols-outlined text-6xl text-on-surface-variant/30">favorite_border</span>
-              <h2 className="text-2xl font-bold text-white mt-4">Your wishlist is empty</h2>
-              <p className="text-on-surface-variant mt-2">Save items you like to find them here later.</p>
+              <h2 className="text-2xl font-bold text-white mt-4">{t('wishlist.empty')}</h2>
+              <p className="text-on-surface-variant mt-2">{t('wishlist.emptyHint')}</p>
               <div className="flex gap-4 justify-center mt-6">
                 <Link to="/movies" className="bg-primary text-black px-6 py-2 rounded hover:shadow-lg transition-all">Browse Movies</Link>
                 <Link to="/electronics" className="border border-secondary text-secondary px-6 py-2 rounded hover:bg-secondary/10 transition-all">Shop Electronics</Link>
