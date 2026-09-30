@@ -276,18 +276,18 @@ This plan systematically translates all 70 remaining React components in the Aha
     - Translate spec labels (Brand, Model, Warranty, Color, Weight, Dimensions)
     - _Requirements: 6.2, 6.8_
   
-  - [~] 10.6 Translate SimilarProducts.tsx
+  - [-] 10.6 Translate SimilarProducts.tsx
     - Import useTranslation hook
     - Replace recommendation header with "electronics.detail.*" keys
     - _Requirements: 6.9_
   
-  - [~] 10.7 Translate ProductComparisonPage.tsx
+  - [-] 10.7 Translate ProductComparisonPage.tsx
     - Import useTranslation hook
     - Replace comparison criteria with "electronics.comparison.*" keys
     - Translate all comparison labels
     - _Requirements: 6.6_
   
-  - [~] 10.8 Translate OrderConfirmationPage.tsx
+  - [-] 10.8 Translate OrderConfirmationPage.tsx
     - Import useTranslation hook
     - Replace page title with "electronics.orderConfirmation.*" keys
     - Translate success message

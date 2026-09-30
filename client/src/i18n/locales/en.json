@@ -446,8 +446,30 @@
     },
     "comparison": {
       "title": "Compare Products",
+      "subtitle": "Compare specifications and prices of selected electronics.",
       "addProduct": "Add Product",
-      "remove": "Remove"
+      "remove": "Remove",
+      "backToElectronics": "Back to Electronics",
+      "clearComparison": "Clear Comparison",
+      "emptyStateTitle": "No products to compare",
+      "emptyStateDescription": "Add products from the Electronics Marketplace to compare their specs side-by-side.",
+      "browseElectronics": "Browse Electronics",
+      "features": "Features",
+      "removeFromComparison": "Remove from comparison",
+      "brand": "Brand",
+      "condition": "Condition",
+      "keySpecs": "Key Specs",
+      "warranty": "Warranty",
+      "availability": "Availability",
+      "buyNow": "Buy Now",
+      "notifyMe": "Notify Me",
+      "addToWishlist": "Add to Wishlist",
+      "removedFromComparison": "Removed \"{{name}}\" from comparison.",
+      "clearedComparison": "Cleared comparison list.",
+      "redirectingToCheckout": "Redirecting to checkout for \"{{name}}\"...",
+      "savedToWishlist": "\"{{name}}\" saved to wishlist!",
+      "backInStockNotification": "Subscribed to back-in-stock alerts for \"{{name}}\".",
+      "wishlist": "Wishlist"
     }
   },
   "dashboard": {

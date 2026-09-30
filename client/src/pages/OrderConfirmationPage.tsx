@@ -1,6 +1,7 @@
 // src/pages/OrderConfirmationPage.jsx
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { orderService } from '../services/orderService';
 import type { OrderConfirmationItem, OrderConfirmationOrder } from '../types';
 
@@ -13,6 +14,7 @@ import type { OrderConfirmationItem, OrderConfirmationOrder } from '../types';
  *   /order-confirmation/:id), fetches the order from the API using the route param.
  */
 const OrderConfirmationPage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
   const { id } = useParams();
@@ -49,7 +51,7 @@ const OrderConfirmationPage = () => {
       <div className="min-h-screen bg-background text-on-surface flex items-center justify-center px-4">
         <div className="flex flex-col items-center gap-4">
           <div className="w-12 h-12 rounded-full border-4 border-primary border-t-transparent animate-spin" />
-          <p className="text-on-surface-variant text-sm">Loading your order details…</p>
+          <p className="text-on-surface-variant text-sm">{t('electronics.orderConfirmation.loadingOrder')}</p>
         </div>
       </div>
     );
@@ -61,13 +63,13 @@ const OrderConfirmationPage = () => {
       <div className="min-h-screen bg-background text-on-surface flex items-center justify-center px-4">
         <div className="glass-panel rounded-2xl p-8 max-w-md text-center border border-red-500/20">
           <span className="material-symbols-outlined text-5xl text-red-400 mb-4 block">error</span>
-          <h2 className="text-xl font-bold text-white mb-2">Order Not Found</h2>
+          <h2 className="text-xl font-bold text-white mb-2">{t('electronics.orderConfirmation.orderNotFound')}</h2>
           <p className="text-on-surface-variant text-sm mb-6">{error}</p>
           <button
             onClick={() => navigate('/electronics')}
             className="bg-primary text-black px-6 py-3 rounded-xl font-bold text-sm uppercase tracking-wider hover:opacity-90 transition-opacity"
           >
-            Back to Electronics
+            {t('electronics.orderConfirmation.backToElectronics')}
           </button>
         </div>
       </div>
@@ -77,10 +79,8 @@ const OrderConfirmationPage = () => {
   // ── Derive display values from the real order object ─────────────────────────
   const orderId = order?._id ? `#AHADU-${order._id.toString().slice(-6).toUpperCase()}` : '—';
   const items = order?.items ?? [];
-  const storeLocation =
-    'Ahadu Center Hub, Bole Road (Next to Friendship HyperMarket), Addis Ababa, Ethiopia';
-  const operatingHours =
-    'Mon - Sat: 8:30 AM - 8:00 PM | Sun: 10:00 AM - 6:00 PM';
+  const storeLocation = t('electronics.orderConfirmation.storeLocation');
+  const operatingHours = t('electronics.orderConfirmation.operatingHours');
 
   return (
     <div className="min-h-screen bg-background text-on-surface flex flex-col items-center justify-center px-4 py-12 animate-fade-in">
@@ -97,11 +97,10 @@ const OrderConfirmationPage = () => {
             </span>
           </div>
           <h1 className="text-3xl md:text-5xl font-extrabold text-white mb-2">
-            In-Store Pick-Up Reserved!
+            {t('electronics.orderConfirmation.successTitle')}
           </h1>
           <p className="text-lg text-on-surface-variant max-w-lg">
-            Your items have been reserved at our physical store. Show your Pick-Up Pass
-            when you arrive to collect them.
+            {t('electronics.orderConfirmation.successMessage')}
           </p>
         </header>
 
@@ -114,7 +113,7 @@ const OrderConfirmationPage = () => {
               </div>
               <div>
                 <span className="text-xs uppercase tracking-widest text-primary font-extrabold block mb-1">
-                  In-Store Reservation Pass
+                  {t('electronics.orderConfirmation.pickupPassLabel')}
                 </span>
                 <h2 className="text-3xl font-black text-white tracking-wider">
                   {orderId}
@@ -124,10 +123,10 @@ const OrderConfirmationPage = () => {
 
             <div className="text-center md:text-right">
               <span className="bg-primary/20 text-primary border border-primary/40 px-4 py-1.5 rounded-full text-xs font-extrabold uppercase tracking-wider inline-block mb-1">
-                Ready for Pick-Up
+                {t('electronics.orderConfirmation.readyForPickup')}
               </span>
               <p className="text-xs text-on-surface-variant">
-                Order ID: <strong>{order?._id ?? '—'}</strong>
+                {t('electronics.orderConfirmation.orderIdLabel')} <strong>{order?._id ?? '—'}</strong>
               </p>
             </div>
           </div>
@@ -136,22 +135,22 @@ const OrderConfirmationPage = () => {
             <div>
               <h3 className="text-sm uppercase tracking-wider text-on-surface-variant font-bold mb-2 flex items-center gap-2">
                 <span className="material-symbols-outlined text-secondary text-base">location_on</span>
-                Physical Store Address
+                {t('electronics.orderConfirmation.storeAddressLabel')}
               </h3>
               <p className="text-sm text-white font-semibold leading-relaxed mb-2">
                 {storeLocation}
               </p>
               <p className="text-xs text-on-surface-variant">
-                <strong>Operating Hours:</strong> {operatingHours}
+                <strong>{t('electronics.orderConfirmation.operatingHoursLabel')}</strong> {operatingHours}
               </p>
             </div>
 
             <div className="bg-background/60 p-4 rounded-2xl border border-white/10 flex flex-col justify-center">
               <span className="text-xs uppercase text-on-surface-variant font-bold mb-2">
-                Pickup Status
+                {t('electronics.orderConfirmation.pickupStatusLabel')}
               </span>
               <p className="text-sm text-white leading-relaxed">
-                Your reservation is ready for pickup during the operating hours shown here.
+                {t('electronics.orderConfirmation.pickupStatusMessage')}
               </p>
             </div>
           </div>
@@ -161,17 +160,17 @@ const OrderConfirmationPage = () => {
         <div className="w-full glass-panel rounded-2xl p-6 border border-white/10 shadow-xl">
           <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
             <span className="material-symbols-outlined text-primary">shopping_bag</span>
-            Reserved Items ({items.length})
+            {t('electronics.orderConfirmation.reservedItemsTitle', { count: items.length })}
           </h2>
 
           {items.length === 0 ? (
-            <p className="text-on-surface-variant text-sm">No item details available.</p>
+            <p className="text-on-surface-variant text-sm">{t('electronics.orderConfirmation.noItemDetails')}</p>
           ) : (
             <div className="space-y-4">
               {items.map((item: OrderConfirmationItem, index: number) => {
                 // Support both populated `product` objects and plain strings/ids.
                 const productName =
-                  item?.product?.name ?? item?.productName ?? item?.name ?? 'Product';
+                  item?.product?.name ?? item?.productName ?? item?.name ?? t('electronics.product');
                 const imageUrl =
                   item?.product?.images?.[0] ??
                   item?.imageUrl ??
@@ -191,7 +190,7 @@ const OrderConfirmationPage = () => {
                     </div>
                     <div className="flex-grow">
                       <h3 className="text-white font-bold">{productName}</h3>
-                      <p className="text-xs text-on-surface-variant">Quantity: {quantity}</p>
+                      <p className="text-xs text-on-surface-variant">{t('electronics.orderConfirmation.quantityLabel')} {quantity}</p>
                     </div>
                   </div>
                 );
@@ -207,14 +206,14 @@ const OrderConfirmationPage = () => {
             className="bg-primary text-black px-6 py-3.5 rounded-xl font-bold hover:shadow-[0_0_20px_rgba(16,185,129,0.5)] transition-all flex items-center justify-center gap-2 text-xs uppercase tracking-wider cursor-pointer"
           >
             <span className="material-symbols-outlined text-base">print</span>
-            Save / Print Pick-Up Pass
+            {t('electronics.orderConfirmation.printPassButton')}
           </button>
           <button
             onClick={() => navigate('/electronics')}
             className="border border-white/20 text-white px-6 py-3.5 rounded-xl hover:bg-white/10 transition-all flex items-center justify-center gap-2 text-xs uppercase tracking-wider cursor-pointer font-bold"
           >
             <span className="material-symbols-outlined text-base">storefront</span>
-            Continue Browsing Hub
+            {t('electronics.orderConfirmation.continueShoppingButton')}
           </button>
         </div>
 

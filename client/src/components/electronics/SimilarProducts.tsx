@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import type { Product } from '../../types';
 
 interface SimilarProductsProps {
@@ -6,6 +7,8 @@ interface SimilarProductsProps {
 }
 
 const SimilarProducts = ({ products }: SimilarProductsProps) => {
+  const { t } = useTranslation();
+
   if (products.length === 0) {
     return null;
   }
@@ -14,9 +17,9 @@ const SimilarProducts = ({ products }: SimilarProductsProps) => {
     <section className="mb-12">
       <div className="mb-6 flex items-end justify-between gap-3">
         <div>
-          <p className="text-xs font-medium uppercase tracking-[0.24em] text-primary">More picks</p>
+          <p className="text-xs font-medium uppercase tracking-[0.24em] text-primary">{t('electronics.premiumPick')}</p>
           <h2 className="mt-2 text-2xl font-bold tracking-[-0.04em] text-white sm:text-3xl">
-            You may also like
+            {t('electronics.similarProducts')}
           </h2>
         </div>
       </div>
@@ -39,7 +42,7 @@ const SimilarProducts = ({ products }: SimilarProductsProps) => {
               <div className="mt-4 flex items-start justify-between gap-3">
                 <div>
                   <h3 className="text-lg font-semibold text-white">{title}</h3>
-                  <p className="mt-1 text-sm text-on-surface-variant">{product.brand || 'Featured item'}</p>
+                  <p className="mt-1 text-sm text-on-surface-variant">{product.brand || t('electronics.defaultBrand')}</p>
                 </div>
                 <span className="shrink-0 rounded-full bg-primary/10 px-2 py-1 text-xs font-semibold text-primary">
                   ${Number(product.price ?? 0).toLocaleString()}

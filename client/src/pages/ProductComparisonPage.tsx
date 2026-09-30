@@ -1,5 +1,6 @@
 // src/pages/ProductComparisonPage.jsx
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 type ComparisonProduct = {
   id: string | number;
   name: string;
@@ -23,6 +24,7 @@ import Footer from '../components/common/Footer';
  */
 const ProductComparisonPage = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const showToast = (msg: string) => {
@@ -73,21 +75,21 @@ const ProductComparisonPage = () => {
   const removeProduct = (id: string | number) => {
     const p = products.find((item) => item.id === id);
     setProducts(products.filter((p) => p.id !== id));
-    if (p) showToast(`Removed "${p.name}" from comparison.`);
+    if (p) showToast(t('electronics.comparison.removedFromComparison', { name: p.name }));
   };
 
   const clearAll = () => {
     setProducts([]);
-    showToast('Cleared comparison list.');
+    showToast(t('electronics.comparison.clearedComparison'));
   };
 
   const handleBuyNow = (product: ComparisonProduct) => {
-    showToast(`Redirecting to checkout for "${product.name}"...`);
+    showToast(t('electronics.comparison.redirectingToCheckout', { name: product.name }));
     setTimeout(() => navigate('/order-confirmation'), 1000);
   };
 
   const handleWishlist = (product: ComparisonProduct) => {
-    showToast(`"${product.name}" saved to wishlist!`);
+    showToast(t('electronics.comparison.savedToWishlist', { name: product.name }));
   };
 
   return (
@@ -107,13 +109,13 @@ const ProductComparisonPage = () => {
           {/* Page header */}
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-8">
             <div>
-              <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">Compare Products</h1>
-              <p className="text-lg text-on-surface-variant">Compare specifications and prices of selected electronics.</p>
+              <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">{t('electronics.comparison.title')}</h1>
+              <p className="text-lg text-on-surface-variant">{t('electronics.comparison.subtitle')}</p>
             </div>
             <div className="flex items-center gap-4">
               <Link to="/electronics" className="text-secondary hover:text-secondary-fixed transition-colors flex items-center gap-2 text-xs uppercase tracking-wider font-bold">
                 <span className="material-symbols-outlined text-sm">arrow_back</span>
-                Back to Electronics
+                {t('electronics.comparison.backToElectronics')}
               </Link>
               {products.length > 0 && (
                 <button
@@ -121,7 +123,7 @@ const ProductComparisonPage = () => {
                   className="text-error hover:bg-error/10 border border-error/30 px-4 py-2 rounded-lg transition-all flex items-center gap-2 text-xs uppercase tracking-wider font-bold cursor-pointer"
                 >
                   <span className="material-symbols-outlined text-sm">delete</span>
-                  Clear Comparison
+                  {t('electronics.comparison.clearComparison')}
                 </button>
               )}
             </div>
@@ -131,10 +133,10 @@ const ProductComparisonPage = () => {
           {products.length === 0 ? (
             <div className="glass-panel rounded-2xl text-center py-16 px-6 border border-white/10">
               <span className="material-symbols-outlined text-6xl text-on-surface-variant/30">compare_arrows</span>
-              <h2 className="text-2xl font-bold text-white mt-4">No products to compare</h2>
-              <p className="text-on-surface-variant mt-2 max-w-md mx-auto">Add products from the Electronics Marketplace to compare their specs side-by-side.</p>
+              <h2 className="text-2xl font-bold text-white mt-4">{t('electronics.comparison.emptyStateTitle')}</h2>
+              <p className="text-on-surface-variant mt-2 max-w-md mx-auto">{t('electronics.comparison.emptyStateDescription')}</p>
               <Link to="/electronics" className="inline-block mt-6 bg-primary text-black font-bold px-8 py-3 rounded-xl hover:shadow-[0_0_20px_rgba(16,185,129,0.5)] transition-all">
-                Browse Electronics
+                {t('electronics.comparison.browseElectronics')}
               </Link>
             </div>
           ) : (
@@ -146,7 +148,7 @@ const ProductComparisonPage = () => {
                     <thead>
                       <tr>
                         <th className="p-4 w-1/5 bg-surface-container-high/90 border-b border-r border-white/10">
-                          <span className="text-lg font-bold text-white">Features</span>
+                          <span className="text-lg font-bold text-white">{t('electronics.comparison.features')}</span>
                         </th>
                         {products.map((product) => (
                           <th key={product.id} className="p-4 border-b border-white/10 w-1/5 align-top">

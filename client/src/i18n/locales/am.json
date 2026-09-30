@@ -381,8 +381,30 @@
     },
     "comparison": {
       "title": "ምርቶችን አነጻጽር",
+      "subtitle": "የተመረጡ የኤሌክትሮኒክስ ዕቃዎችን መግለጫዎች እና ዋጋዎችን ያነጻጽሩ።",
       "addProduct": "ምርት ጨምር",
-      "remove": "አስወግድ"
+      "remove": "አስወግድ",
+      "backToElectronics": "ወደ ኤሌክትሮኒክስ ተመለስ",
+      "clearComparison": "ንፅፅርን አጽዳ",
+      "emptyStateTitle": "ለማነጻጸር ምርቶች የሉም",
+      "emptyStateDescription": "ዝርዝራቸውን አጠገብ-ለ-አጠገብ ለማነጻጸር ከኤሌክትሮኒክስ ገበያ ምርቶችን ይጨምሩ።",
+      "browseElectronics": "ኤሌክትሮኒክስ አስስ",
+      "features": "ባህሪያት",
+      "removeFromComparison": "ከንፅፅር ውስጥ አስወግድ",
+      "brand": "ምርት ስም",
+      "condition": "ሁኔታ",
+      "keySpecs": "ቁልፍ መግለጫዎች",
+      "warranty": "ዋስትና",
+      "availability": "መገኘት",
+      "buyNow": "አሁን ግዛ",
+      "notifyMe": "አሳውቀኝ",
+      "addToWishlist": "ወደ የምኞት ዝርዝር ጨምር",
+      "removedFromComparison": "\"{{name}}\" ከንፅፅር ተወግዷል።",
+      "clearedComparison": "የንፅፅር ዝርዝር ተጽድቷል።",
+      "redirectingToCheckout": "ለ \"{{name}}\" ወደ ማረጋገጫ እየተላከ ነው...",
+      "savedToWishlist": "\"{{name}}\" ወደ የምኞት ዝርዝር ተቀምጧል!",
+      "backInStockNotification": "ለ \"{{name}}\" እንደገና-በስቶክ-ውስጥ ማስታወቂያዎችን ተመዝግበዋል።",
+      "wishlist": "የምኞት ዝርዝር"
     }
   },
   "dashboard": {
