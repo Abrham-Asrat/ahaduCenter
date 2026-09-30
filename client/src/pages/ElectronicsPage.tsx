@@ -1,5 +1,6 @@
 // src/pages/ElectronicsPage.jsx
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { fetchProducts } from '../redux/slices/productSlice';
 import { fetchWishlist } from '../redux/slices/wishlistSlice';
@@ -20,6 +21,7 @@ import MobileFilterButton from '../components/common/MobileFilterButton';
  * Wired to Redux store — dispatches fetchProducts on mount and on filter/sort/page change.
  */
 const ElectronicsPage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
@@ -28,8 +30,8 @@ const ElectronicsPage = () => {
   const { token } = useAppSelector((s) => s.auth);
 
   // ── Local UI state ───────────────────────────────────────────────────────────
-  const [activeCategory, setActiveCategory] = useState('All');
-  const [sortOption, setSortOption] = useState('Featured');
+  const [activeCategory, setActiveCategory] = useState(t('electronics.page.categories.all'));
+  const [sortOption, setSortOption] = useState(t('electronics.page.sortOptions.featured'));
   const [filterState, setFilterState] = useState<{
     conditions: string[];
     brands: string[];
@@ -54,13 +56,20 @@ const ElectronicsPage = () => {
     setTimeout(() => setToastMessage(null), 3000);
   };
 
-  const categories = ['All', 'Laptops', 'Phones', 'Audio', 'Accessories'];
+  const categories = [
+    t('electronics.page.categories.all'),
+    t('electronics.page.categories.laptops'),
+    t('electronics.page.categories.phones'),
+    t('electronics.page.categories.audio'),
+    t('electronics.page.categories.accessories')
+  ];
 
   // ── Build query params from local filter/sort/page state ─────────────────────
   const buildParams = useCallback((): ProductQuery => {
     const params: ProductQuery = { page: currentPage, limit: 12 };
 
-    if (activeCategory && activeCategory !== 'All') params.category = activeCategory;
+    const allCategory = t('electronics.page.categories.all');
+    if (activeCategory && activeCategory !== allCategory) params.category = activeCategory;
     if (filterState.searchQuery) params.q = filterState.searchQuery;
     if (filterState.conditions && filterState.conditions.length > 0)
       params.condition = filterState.conditions.join(',');
@@ -71,13 +80,17 @@ const ElectronicsPage = () => {
       params.maxPrice = filterState.maxPrice;
 
     // Sort param mapping
-    if (sortOption === 'Price: Low to High') params.sort = 'price_asc';
-    else if (sortOption === 'Price: High to Low') params.sort = 'price_desc';
-    else if (sortOption === 'Rating') params.sort = 'rating';
+    const sortLowHigh = t('electronics.page.sortOptions.priceLowHigh');
+    const sortHighLow = t('electronics.page.sortOptions.priceHighLow');
+    const sortRating = t('electronics.page.sortOptions.rating');
+
+    if (sortOption === sortLowHigh) params.sort = 'price_asc';
+    else if (sortOption === sortHighLow) params.sort = 'price_desc';
+    else if (sortOption === sortRating) params.sort = 'rating';
     // 'Featured' is the default — no sort param needed
 
     return params;
-  }, [activeCategory, filterState, sortOption, currentPage]);
+  }, [activeCategory, filterState, sortOption, currentPage, t]);
 
   // ── Fetch on mount and whenever category/filters/sort/page change ─────────────
   useEffect(() => {
@@ -117,18 +130,18 @@ const ElectronicsPage = () => {
   };
 
   const handleAddToCart = (product: Product) => {
-    showToast(`"${product.name}" reserved for in-store inquiry! Visit our physical location.`);
+    showToast(t('electronics.page.addedToCart', { name: product.name }));
   };
 
   const handleCompare = (product: Product) => {
-    showToast(`"${product.name}" added to product comparison!`);
+    showToast(t('electronics.page.addedToCompare', { name: product.name }));
     setTimeout(() => navigate('/compare'), 1200);
   };
 
   const handleResetFilters = () => {
-    setActiveCategory('All');
+    setActiveCategory(t('electronics.page.categories.all'));
     setFilterState({ conditions: [], brands: [], searchQuery: '', minPrice: 0, maxPrice: 150000 });
-    setSortOption('Featured');
+    setSortOption(t('electronics.page.sortOptions.featured'));
     setCurrentPage(1);
     setFilterResetKey((key) => key + 1);
   };
@@ -181,14 +194,14 @@ const ElectronicsPage = () => {
                   <div className="flex items-center gap-3">
                     <span className="material-symbols-outlined text-red-400">error</span>
                     <p className="text-sm text-red-300">
-                      {typeof error === 'string' ? error : 'Failed to load products. Please try again.'}
+                      {typeof error === 'string' ? error : t('electronics.page.errorLoading')}
                     </p>
                   </div>
                   <button
                     onClick={handleRetry}
                     className="text-xs font-bold uppercase tracking-wider text-primary border border-primary/40 px-4 py-2 rounded-lg hover:bg-primary/10 transition-colors flex-shrink-0"
                   >
-                    Retry
+                    {t('common.retry')}
                   </button>
                 </div>
               )}
@@ -206,15 +219,15 @@ const ElectronicsPage = () => {
                   <span className="material-symbols-outlined text-6xl text-on-surface-variant/40 mb-3">
                     devices_off
                   </span>
-                  <h3 className="text-2xl font-bold text-white mb-2">No Products Found</h3>
+                  <h3 className="text-2xl font-bold text-white mb-2">{t('electronics.page.noProductsFound')}</h3>
                   <p className="text-on-surface-variant text-sm mb-6 max-w-md mx-auto">
-                    We couldn&apos;t find any electronics matching your current search and filter criteria.
+                    {t('electronics.page.noProductsHint')}
                   </p>
                   <button
                     onClick={handleResetFilters}
                     className="bg-primary text-black px-6 py-2.5 rounded-lg font-bold hover:shadow-[0_0_15px_rgba(16,185,129,0.4)] transition-all text-sm"
                   >
-                    Reset Filters
+                    {t('electronics.page.resetFilters')}
                   </button>
                 </div>
               ) : (
@@ -263,12 +276,12 @@ const ElectronicsPage = () => {
             <div className="w-full max-w-xs bg-background h-full p-6 overflow-y-auto border-l border-white/10 flex flex-col justify-between animate-filter-drawer" onClick={(event) => event.stopPropagation()}>
               <div>
                 <div className="flex justify-between items-center mb-6">
-                  <h3 className="text-xl font-bold text-white">Filter Tech</h3>
+                  <h3 className="text-xl font-bold text-white">{t('electronics.page.filterTech')}</h3>
                   <button
                     onClick={() => setShowMobileFilters(false)}
                     className="text-on-surface-variant hover:text-white"
                   >
-                    <span className="material-symbols-outlined">close</span>
+                    <span className="material-symbols-outlined">{t('common.close')}</span>
                   </button>
                 </div>
                 <ElectronicsFilters key={`mobile-${filterResetKey}`} onFilterChange={handleFilterChange} />
@@ -277,7 +290,7 @@ const ElectronicsPage = () => {
                 onClick={() => setShowMobileFilters(false)}
                 className="w-full bg-primary text-black font-bold py-3 rounded-xl mt-6 uppercase text-xs tracking-wider"
               >
-                Apply Filters
+                {t('electronics.page.applyFilters')}
               </button>
             </div>
           </div>

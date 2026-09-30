@@ -39,7 +39,7 @@ const ElectionicsFilters = ({ onFilterChange }: ElectronicsFiltersProps) => {
     t('filters.all', { label: '' }).trim() || 'All',
     t('electronics.conditionNew'),
     t('electronics.conditionUsed'),
-    'Refurbished'
+    t('electronics.conditionRefurbished')
   ];
 
   const triggerChange = (updated: Partial<ElectronicsFilterState>) => {
@@ -104,14 +104,14 @@ const ElectionicsFilters = ({ onFilterChange }: ElectronicsFiltersProps) => {
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-2">
           <span className="material-symbols-outlined text-primary">tune</span>
-          <h2 className="text-xl font-bold text-white">Filters</h2>
+          <h2 className="text-xl font-bold text-white">{t('filters.filters')}</h2>
         </div>
         {hasActiveFilters && (
           <button
             onClick={handleClearAll}
             className="text-xs text-secondary hover:underline cursor-pointer font-semibold transition-colors"
           >
-            Clear All
+            {t('filters.clearFilters')}
           </button>
         )}
       </div>
@@ -119,14 +119,14 @@ const ElectionicsFilters = ({ onFilterChange }: ElectronicsFiltersProps) => {
       {/* Search Filter */}
       <div className="mb-6">
         <label className="block text-xs uppercase tracking-wider text-on-surface-variant mb-2 font-semibold">
-          Search Title
+          {t('books.searchLabel')}
         </label>
         <div className="relative">
           <input
             type="text"
             value={searchQuery}
             onChange={handleSearchChange}
-            placeholder="Search electronics..."
+            placeholder={t('nav.searchPlaceholder')}
             className="w-full bg-surface-container border border-white/10 rounded-lg pl-9 pr-3 py-2 text-sm text-white focus:border-primary outline-none transition-all"
           />
           <span className="material-symbols-outlined text-on-surface-variant text-lg absolute left-2.5 top-2.5 pointer-events-none">
@@ -138,7 +138,7 @@ const ElectionicsFilters = ({ onFilterChange }: ElectronicsFiltersProps) => {
       {/* Conditions Filter */}
       <div className="mb-6">
         <label className="block text-xs uppercase tracking-wider text-on-surface-variant mb-2 font-semibold">
-          Conditions
+          {t('filters.condition')}
         </label>
         <select
           value={selectedConditions}
@@ -147,7 +147,7 @@ const ElectionicsFilters = ({ onFilterChange }: ElectronicsFiltersProps) => {
         >
           {conditions.map((c) => (
             <option key={c} value={c} className="bg-surface-container-high text-white">
-              {c === 'All' ? 'All' : c}
+              {c}
             </option>
           ))}
         </select>
@@ -158,7 +158,7 @@ const ElectionicsFilters = ({ onFilterChange }: ElectronicsFiltersProps) => {
       {/* Content Type Filter Group */}
       <div className="mb-6">
         <label className="block text-xs uppercase tracking-wider text-on-surface-variant mb-2 font-semibold">
-          Brands
+          {t('filters.brand')}
         </label>
         <select
           value={selectedBrands}
@@ -167,7 +167,7 @@ const ElectionicsFilters = ({ onFilterChange }: ElectronicsFiltersProps) => {
         >
           {brandType.map((c) => (
             <option key={c} value={c} className="bg-surface-container-high text-white">
-              {c === 'All' ? 'All Types' : c}
+              {c}
             </option>
           ))}
         </select>
@@ -176,7 +176,7 @@ const ElectionicsFilters = ({ onFilterChange }: ElectronicsFiltersProps) => {
       {/* Price Range */}
       <div className="mb-6">
         <label className="block text-xs uppercase tracking-wider text-on-surface-variant mb-2 font-semibold">
-          Price Range
+          {t('filters.priceRange')}
         </label>
         <div className="mb-2 flex items-center justify-between text-sm font-semibold text-white" aria-live="polite">
           <span>${priceRange.min.toLocaleString()}</span>
@@ -192,7 +192,7 @@ const ElectionicsFilters = ({ onFilterChange }: ElectronicsFiltersProps) => {
             step={PRICE_STEP}
             value={priceRange.min}
             onChange={(event) => handlePriceChange('min', event.currentTarget.valueAsNumber)}
-            aria-label="Minimum price"
+            aria-label={t('filters.priceRange')}
             className="price-range-slider"
             style={{ zIndex: priceRange.min > MAX_PRICE / 2 ? 5 : 3 }}
           />
@@ -203,7 +203,7 @@ const ElectionicsFilters = ({ onFilterChange }: ElectronicsFiltersProps) => {
             step={PRICE_STEP}
             value={priceRange.max}
             onChange={(event) => handlePriceChange('max', event.currentTarget.valueAsNumber)}
-            aria-label="Maximum price"
+            aria-label={t('filters.priceRange')}
             className="price-range-slider"
             style={{ zIndex: priceRange.max < MAX_PRICE / 2 ? 5 : 4 }}
           />
