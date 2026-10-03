@@ -36,7 +36,7 @@ const OrderConfirmationPage = () => {
         const data = await orderService.getOrder(id);
         setOrder(data);
       } catch (err) {
-        setError(typeof err === 'string' ? err : 'Failed to load order details.');
+        setError(typeof err === 'string' ? err : t('errors.generic'));
       } finally {
         setLoading(false);
       }

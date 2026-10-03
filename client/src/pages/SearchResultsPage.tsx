@@ -226,13 +226,13 @@ const SearchResultsPage = () => {
               <div className="flex flex-col gap-3 border-t border-white/5 pt-4">
                 <h3 className="text-lg font-semibold text-white flex items-center gap-2">
                   <span className="material-symbols-outlined text-secondary text-sm">devices</span>
-                  Electronics Price
+                  {t('filters.priceRange')}
                 </h3>
                 <div className="flex flex-col gap-2 pl-2">
                   <div className="flex items-center gap-2">
                     <input
                       type="number"
-                      placeholder="Min (ETB)"
+                      placeholder={t('filters.minimumPrice')}
                       value={priceMin}
                       onChange={(e) => setPriceMin(e.target.value)}
                       className="w-full bg-surface-container border border-white/10 rounded px-2 py-1 text-sm text-white focus:border-primary outline-none"
@@ -240,7 +240,7 @@ const SearchResultsPage = () => {
                     <span className="text-on-surface-variant">-</span>
                     <input
                       type="number"
-                      placeholder="Max (ETB)"
+                      placeholder={t('filters.maximumPrice')}
                       value={priceMax}
                       onChange={(e) => setPriceMax(e.target.value)}
                       className="w-full bg-surface-container border border-white/10 rounded px-2 py-1 text-sm text-white focus:border-primary outline-none"
@@ -370,14 +370,14 @@ const SearchResultsPage = () => {
                 <div className="flex gap-4">
                   <input
                     type="number"
-                    placeholder="Min"
+                    placeholder={t('filters.minimumPrice')}
                     value={priceMin}
                     onChange={(e) => setPriceMin(e.target.value)}
                     className="w-1/2 bg-surface border border-white/10 rounded p-2 text-white outline-none"
                   />
                   <input
                     type="number"
-                    placeholder="Max"
+                    placeholder={t('filters.maximumPrice')}
                     value={priceMax}
                     onChange={(e) => setPriceMax(e.target.value)}
                     className="w-1/2 bg-surface border border-white/10 rounded p-2 text-white outline-none"
