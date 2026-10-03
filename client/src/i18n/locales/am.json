@@ -380,7 +380,7 @@
     "searchPlaceholder": "መጽሐፍትን ፈልግ...",
     "filterBooks": "መጽሐፍት አጣራ",
     "format": "ቅርጸት",
-    "languages": "ቋንቋዎች",
+    "languageFilter": "ቋንቋዎች",
     "categories": {
       "fiction": "ልብ ወለድ",
       "history": "ታሪክ",
@@ -417,6 +417,19 @@
         "returned": "ተመልሷል",
         "overdue": "ዘግይቷል"
       },
+      "policy": "የመበደር መመሪያ",
+      "policyMessage": "መደበኛ የመበደር መመሪያ፦ የ14 ቀናት የመበደር ጊዜ፣ 2 ጊዜ ማደስ ይቻላል።",
+      "borrowDate": "የተበደረበት ቀን",
+      "returnedOn": "የተመለሰበት ቀን",
+      "renewalsLeft": "አድስ ({{count}} ቀርቷል)",
+      "returning": "በመመለስ ላይ…",
+      "renewing": "በማደስ ላይ…",
+      "returnSuccess": "\"{{title}}\" በተሳካ ሁኔታ ተመልሷል። እናመሰግናለን።",
+      "returnError": "መጽሐፉን መመለስ አልተሳካም። እባክዎ እንደገና ይሞክሩ።",
+      "renewSuccess": "የ\"{{title}}\" የመበደር ጊዜ ታድሷል። አዲሱ የመመለሻ ቀን፦ {{date}}።",
+      "renewError": "የመበደር ጊዜን ማደስ አልተሳካም። እባክዎ እንደገና ይሞክሩ።",
+      "newDueDate": "አዲስ የመመለሻ ቀን",
+      "redirectingToBook": "\"{{title}}\" በመክፈት ላይ…",
       "emptyState": "የመበደር ታሪክ የለም",
       "emptyStateHint": "መጽሐፍትን ሲበድሩ እዚህ ይታያሉ።",
       "viewDetails": "ዝርዝር ይመልከቱ",
@@ -587,6 +600,16 @@
       "purchaseHistory": "የግዢ ታሪክ",
       "borrowingHistory": "የመበደር ታሪክ",
       "movieRequests": "የፊልም ጥያቄዎች"
+    },
+    "purchaseHistoryPage": {
+      "title": "የግዢ ታሪክ",
+      "subtitle": "የቅርብ ጊዜ ትዕዛዞችዎን እና ሁኔታቸውን ይመልከቱ።",
+      "empty": "እስካሁን ምንም ግዢ የለም።",
+      "itemCount": "{{count}} እቃዎች",
+      "order": "ትዕዛዝ {{id}}",
+      "date": "የተደረገበት {{date}}",
+      "status": "{{status}}",
+      "total": "ጠቅላላ፦ {{amount}}"
     }
   },
   "wishlist": {
@@ -608,7 +631,17 @@
     "placeholder": "ፈልግ…",
     "noResults": "ምንም ውጤቶች አልተገኙም",
     "noResultsHint": "የተለየ ቁልፍ ቃል ይሞክሩ ወይም በምድብ ይመልከቱ።",
-    "resultsFor": "ለ \"{{query}}\" ውጤቶች",
+    "resultsFor": "ለ \"{{query}}\" {{count}} ውጤቶች",
+    "resultsCounter": "{{count}} ውጤቶች",
+    "filters": {
+      "title": "ውጤቶችን ያጣምሩ",
+      "movieGenres": "የፊልም ዘውጎች"
+    },
+    "sort": {
+      "relevance": "ተዛማጅነት",
+      "newest": "የቅርብ ጊዜ",
+      "priceLowToHigh": "ዋጋ (ከዝቅተኛ ወደ ከፍተኛ)"
+    },
     "tabs": {
       "all": "ሁሉም",
       "books": "መጽሐፍት",
@@ -662,8 +695,9 @@
     "company": "ኩባንያ",
     "stayConnected": "ተገናኝተው ይቆዩ",
     "newsletter": "ለመጽሔታችን ይመዝገቡ",
-    "newsletterPlaceholder": "ኢሜይልዎን ያስገቡ",
+    "newsletterPlaceholder": "ለመመዝገብ የኢሜይል አድራሻ",
     "subscribe": "ይመዝገቡ",
+    "subscribeSuccess": "ስለተመዘገቡ እናመሰግናለን!",
     "copyright": "© {{year}} አሁዱ ማዕከል። ሁሉም መብቶች የተጠበቁ ናቸው።",
     "privacy": "ግላዊነት",
     "terms": "ውሎች",
@@ -810,6 +844,17 @@
     "positive": "አዎንታዊ ቁጥር መሆን አለበት"
   },
   "errors": {
+    "notFound": {
+      "title": "ገጹ አልተገኘም",
+      "message": "የሚፈልጉት ገጽ አልተገኘም ወይም ተንቀሳቃሽ ነው።",
+      "goHome": "ወደ መነሻ",
+      "browseMovies": "ፊልሞች ይመልከቱ",
+      "browseBooks": "መጽሐፍት ይመልከቱ",
+      "contactSupport": "ድጋፍ ያግኙ",
+      "faq": "ተደጋጋሚ ጥያቄዎች",
+      "siteMap": "የጣቢያ ካርታ",
+      "customerSupport": "የደንበኛ ድጋፍ"
+    },
     "404": "404",
     "pageNotFound": "ገጽ አልተገኘም",
     "pageNotFoundDesc": "የሚፈልጉት ገጽ የለም።",
@@ -826,6 +871,8 @@
     "brand": "ምርት",
     "condition": "ሁኔታ",
     "priceRange": "የዋጋ ክልል",
+    "minimumPrice": "ዝቅተኛ ዋጋ",
+    "maximumPrice": "ከፍተኛ ዋጋ",
     "availability": "መገኘት",
     "year": "ዓመት",
     "rating": "ደረጃ",

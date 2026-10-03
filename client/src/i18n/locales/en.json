@@ -380,7 +380,7 @@
     "searchPlaceholder": "Search Books...",
     "filterBooks": "Filter Books",
     "format": "Format",
-    "languages": "Languages",
+    "languageFilter": "Languages",
     "categories": {
       "fiction": "Fiction",
       "history": "History",
@@ -417,6 +417,19 @@
         "returned": "Returned",
         "overdue": "Overdue"
       },
+      "policy": "Borrowing Policy",
+      "policyMessage": "Standard borrowing policy: 14 days lending period, 2 renewals permitted.",
+      "borrowDate": "Borrow Date",
+      "returnedOn": "Returned On",
+      "renewalsLeft": "Renew ({{count}} left)",
+      "returning": "Returning…",
+      "renewing": "Renewing…",
+      "returnSuccess": "\"{{title}}\" returned successfully. Thank you.",
+      "returnError": "Failed to return book. Please try again.",
+      "renewSuccess": "Lending period renewed for \"{{title}}\". New due date: {{date}}.",
+      "renewError": "Failed to renew borrowing. Please try again.",
+      "newDueDate": "new due date",
+      "redirectingToBook": "Opening \"{{title}}\"…",
       "emptyState": "No borrowing history",
       "emptyStateHint": "When you borrow books, they'll appear here.",
       "viewDetails": "View Details",
@@ -587,6 +600,16 @@
       "purchaseHistory": "Purchase History",
       "borrowingHistory": "Borrowing History",
       "movieRequests": "Movie Requests"
+    },
+    "purchaseHistoryPage": {
+      "title": "Purchase History",
+      "subtitle": "Review your recent orders and their status.",
+      "empty": "No purchases yet.",
+      "itemCount": "{{count}} items",
+      "order": "Order {{id}}",
+      "date": "Placed {{date}}",
+      "status": "{{status}}",
+      "total": "Total: {{amount}}"
     }
   },
   "wishlist": {
@@ -608,7 +631,17 @@
     "placeholder": "Search…",
     "noResults": "No results found",
     "noResultsHint": "Try a different keyword or browse by category.",
-    "resultsFor": "Results for \"{{query}}\"",
+    "resultsFor": "{{count}} results for \"{{query}}\"",
+    "resultsCounter": "{{count}} result(s)",
+    "filters": {
+      "title": "Refine Results",
+      "movieGenres": "Movie Genres"
+    },
+    "sort": {
+      "relevance": "Relevance",
+      "newest": "Newest",
+      "priceLowToHigh": "Price (Low to High)"
+    },
     "tabs": {
       "all": "All",
       "books": "Books",
@@ -662,8 +695,9 @@
     "company": "Company",
     "stayConnected": "Stay Connected",
     "newsletter": "Subscribe to our newsletter",
-    "newsletterPlaceholder": "Enter your email",
+    "newsletterPlaceholder": "Email address to subscribe",
     "subscribe": "Subscribe",
+    "subscribeSuccess": "Thanks for subscribing!",
     "copyright": "© {{year}} Ahadu Center. All rights reserved.",
     "privacy": "Privacy",
     "terms": "Terms",
@@ -810,6 +844,17 @@
     "positive": "Must be a positive number"
   },
   "errors": {
+    "notFound": {
+      "title": "Page Not Found",
+      "message": "The page you're looking for doesn't exist or has been moved.",
+      "goHome": "Go Home",
+      "browseMovies": "Browse Movies",
+      "browseBooks": "Browse Books",
+      "contactSupport": "Contact Support",
+      "faq": "FAQ",
+      "siteMap": "Site Map",
+      "customerSupport": "Customer Support"
+    },
     "404": "404",
     "pageNotFound": "Page Not Found",
     "pageNotFoundDesc": "The page you're looking for doesn't exist.",
@@ -826,6 +871,8 @@
     "brand": "Brand",
     "condition": "Condition",
     "priceRange": "Price Range",
+    "minimumPrice": "Minimum price",
+    "maximumPrice": "Maximum price",
     "availability": "Availability",
     "year": "Year",
     "rating": "Rating",
