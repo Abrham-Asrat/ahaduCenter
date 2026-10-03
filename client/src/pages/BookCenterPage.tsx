@@ -40,52 +40,54 @@ const BookCenterPage = () => {
     searchQuery: '',
     availability: [],
     format: [],
-    language: 'All Languages',
+    language: 'All',
   });
   const [currentPage, setCurrentPage] = useState(1);
   const [filterResetKey, setFilterResetKey] = useState(0);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
 
   const categories = [
-    t('filters.allCategories') || 'All Categories',
-    t('books.categories.fiction') || 'Fiction',
-    t('books.categories.history') || 'History',
-    t('books.categories.biography') || 'Biography',
-    t('books.categories.technology') || 'Technology',
-    t('books.categories.business') || 'Business',
-    t('books.categories.science') || 'Science',
-    t('books.categories.language') || 'Language',
+    { value: 'All Categories', label: t('filters.allCategories') },
+    { value: 'Fiction', label: t('books.categories.fiction') },
+    { value: 'History', label: t('books.categories.history') },
+    { value: 'Biography', label: t('books.categories.biography') },
+    { value: 'Technology', label: t('books.categories.technology') },
+    { value: 'Business', label: t('books.categories.business') },
+    { value: 'Science', label: t('books.categories.science') },
+    { value: 'Language', label: t('books.categories.language') },
   ];
 
   const filterGroups: FilterGroup[] = [
     {
       key: 'availability',
-      label: t('filters.availability') || 'Availability',
-      options: [
-        t('filters.all') || 'All',
-        t('books.available') || 'Available',
-        t('filters.borrowed') || 'Borrowed',
-        t('filters.reserved') || 'Reserved'
-      ]
+      label: t('filters.availability'),
+      options: ['All', 'Available', 'Borrowed', 'Reserved'],
+      optionLabels: {
+        Available: t('books.available'),
+        Borrowed: t('filters.borrowed'),
+        Reserved: t('filters.reserved'),
+      },
+      defaultValue: 'All',
     },
     {
       key: 'format',
-      label: t('books.format') || 'Format',
-      options: [
-        t('books.formats.all') || 'All Formats',
-        t('books.formats.paperback') || 'Paperback',
-        t('books.formats.hardcover') || 'Hardcover'
-      ],
-      defaultValue: t('books.formats.all') || 'All Formats'
+      label: t('books.format'),
+      options: ['All', 'Paperback', 'Hardcover'],
+      optionLabels: {
+        Paperback: t('books.formats.paperback'),
+        Hardcover: t('books.formats.hardcover'),
+      },
+      defaultValue: 'All',
     },
     {
       key: 'language',
-      label: t('books.languages') || 'Languages',
-      options: [
-        t('books.languages.all') || 'All Languages',
-        t('books.languages.english') || 'English',
-        t('books.languages.amharic') || 'Amharic'
-      ]
+      label: t('books.languageFilter'),
+      options: ['All', 'English', 'Amharic'],
+      optionLabels: {
+        English: t('books.languages.english'),
+        Amharic: t('books.languages.amharic'),
+      },
+      defaultValue: 'All',
     },
   ];
 
@@ -95,7 +97,7 @@ const BookCenterPage = () => {
     if (activeCategory !== 'All Categories') params.category = activeCategory;
     if (filterState.searchQuery) params.q = filterState.searchQuery;
     if (filterState.availability.length > 0) params.availability = filterState.availability.join(',');
-    if (filterState.language !== 'All Languages') params.language = filterState.language;
+    if (filterState.language !== 'All') params.language = filterState.language;
     if (filterState.format.length > 0) params.format = filterState.format.join(',');
 
     return params;
@@ -119,14 +121,16 @@ const BookCenterPage = () => {
       format: Array.isArray(newFilters.format) ? newFilters.format : [],
       language:
         Array.isArray(newFilters.language) && newFilters.language.length > 0
-          ? newFilters.language[0] ?? 'All Languages'
-          : 'All Languages',
+          ? newFilters.language[0] ?? 'All'
+          : 'All',
     }));
     setCurrentPage(1);
   };
 
-  const handleCategoryChange = (cat: string) => {
-    setActiveCategory(cat);
+  const handleCategoryChange = (categoryLabel: string) => {
+    const category = categories.find((option) => option.label === categoryLabel);
+    if (!category) return;
+    setActiveCategory(category.value);
     setCurrentPage(1);
   };
 
@@ -168,7 +172,7 @@ const BookCenterPage = () => {
         <main className="mx-auto w-full max-w-7xl flex-grow px-3 pt-4 sm:px-6 sm:pt-6 lg:px-8 md:pb-8">
           {/* Hero banner compact */}
           <SubNav
-            tabs={categories}
+            tabs={categories.map((category) => category.label)}
             onTabChange={handleCategoryChange}
           />
 
@@ -224,7 +228,7 @@ const BookCenterPage = () => {
                   <button
                     onClick={() => {
                       setActiveCategory('All Categories');
-                      setFilterState({ searchQuery: '', availability: [], format: [], language: 'All Languages' });
+                      setFilterState({ searchQuery: '', availability: [], format: [], language: 'All' });
                       setFilterResetKey((key) => key + 1);
                       setCurrentPage(1);
                     }}

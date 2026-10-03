@@ -17,7 +17,7 @@ import { formatShortDate } from '../utils/i18nFormat';
  */
 const BorrowingHistoryPage = () => {
   const { t } = useTranslation();
-  const language = useSelector((state: RootState) => state.language.language);
+  const language = useSelector((state: RootState) => state.language?.language ?? 'en');
   const navigate = useNavigate();
   const [activeFilter, setActiveFilter] = useState('All');
   const [borrowings, setBorrowings] = useState<Borrowing[]>([]);
@@ -71,18 +71,15 @@ const BorrowingHistoryPage = () => {
   }, [t]);
 
   const filters = [
-    { id: 'All', label: t('filters.all', { label: '' }).trim() || 'All' },
-    { id: 'Currently Borrowed', label: t('books.history.status.active') },
+    { id: 'All', label: t('common.all') },
+    { id: 'Active', label: t('books.history.status.active') },
     { id: 'Overdue', label: t('books.history.status.overdue') },
     { id: 'Returned', label: t('books.history.status.returned') }
   ];
 
   const filteredBorrowings = activeFilter === 'All'
     ? borrowings
-    : borrowings.filter((b) => {
-      if (activeFilter === 'Currently Borrowed') return b.status === 'Active';
-      return b.status === activeFilter;
-    });
+    : borrowings.filter((b) => b.status === activeFilter);
 
   const handleReturn = async (id: string, title: string) => {
     setActionLoadingId(id);
@@ -101,9 +98,9 @@ const BorrowingHistoryPage = () => {
           return b;
         })
       );
-      showToast(t('toasts.borrowSuccess').replace('borrowed', 'returned').replace('successfully', `"${title}" returned successfully! Thank you.`));
+      showToast(t('books.history.returnSuccess', { title }));
     } catch (err) {
-      showToast(typeof err === 'string' ? err : 'Failed to return book. Please try again.');
+      showToast(typeof err === 'string' ? err : t('books.history.returnError'));
     } finally {
       setActionLoadingId(null);
     }
@@ -128,11 +125,11 @@ const BorrowingHistoryPage = () => {
         })
       );
       const formattedDueDate = updatedRecord?.dueDate
-        ? new Date(updatedRecord.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-        : 'new due date';
-      showToast(`Lending period renewed for "${title}". New due date: ${formattedDueDate}.`);
+        ? formatShortDate(updatedRecord.dueDate, language)
+        : t('books.history.newDueDate');
+      showToast(t('books.history.renewSuccess', { title, date: formattedDueDate }));
     } catch (err) {
-      showToast(typeof err === 'string' ? err : 'Failed to renew borrowing. Please try again.');
+      showToast(typeof err === 'string' ? err : t('books.history.renewError'));
     } finally {
       setActionLoadingId(null);
     }
@@ -142,7 +139,7 @@ const BorrowingHistoryPage = () => {
     if (bookId) {
       navigate(`/books/${bookId}`);
     } else {
-      showToast(`Redirecting to book page for "${title}"...`);
+      showToast(t('books.history.redirectingToBook', { title }));
       navigate('/books');
     }
   };
@@ -163,11 +160,7 @@ const BorrowingHistoryPage = () => {
   const formatDate = (dateStr?: string) => {
     if (!dateStr) return '';
     try {
-      return new Date(dateStr).toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-      });
+      return formatShortDate(dateStr, language) || dateStr;
     } catch {
       return dateStr;
     }
@@ -190,15 +183,15 @@ const BorrowingHistoryPage = () => {
           {/* Header */}
           <header className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div>
-              <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">Borrowing History</h1>
-              <p className="text-lg text-on-surface-variant">Track your borrowed books, due dates, and return status.</p>
+              <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">{t('books.history.title')}</h1>
+              <p className="text-lg text-on-surface-variant">{t('books.history.subtitle')}</p>
             </div>
             <button
-              onClick={() => showToast('Standard borrowing policy: 14 days lending period, 2 renewals permitted.')}
+              onClick={() => showToast(t('books.history.policyMessage'))}
               className="text-secondary hover:text-secondary-fixed transition-colors text-xs uppercase tracking-wider flex items-center gap-2 font-bold cursor-pointer"
             >
               <span className="material-symbols-outlined text-sm">policy</span>
-              Borrowing Policy
+              {t('books.history.policy')}
             </button>
           </header>
 
@@ -211,7 +204,7 @@ const BorrowingHistoryPage = () => {
                 onClick={fetchBorrowings}
                 className="ml-auto text-xs underline font-bold cursor-pointer"
               >
-                Retry
+                {t('common.retry')}
               </button>
             </div>
           )}
@@ -220,14 +213,14 @@ const BorrowingHistoryPage = () => {
           <div className="flex gap-3 overflow-x-auto hide-scrollbar pb-4 mb-8">
             {filters.map((filter) => (
               <button
-                key={filter}
-                onClick={() => setActiveFilter(filter)}
-                className={`px-5 py-2.5 rounded-full text-xs uppercase tracking-wider whitespace-nowrap transition-all cursor-pointer ${activeFilter === filter
+                key={filter.id}
+                onClick={() => setActiveFilter(filter.id)}
+                className={`px-5 py-2.5 rounded-full text-xs uppercase tracking-wider whitespace-nowrap transition-all cursor-pointer ${activeFilter === filter.id
                   ? 'bg-primary text-black font-extrabold shadow-lg'
                   : 'glass-panel text-on-surface-variant border border-white/10 hover:border-primary hover:text-primary'
                   }`}
               >
-                {filter}
+                {filter.label}
               </button>
             ))}
           </div>
@@ -250,8 +243,8 @@ const BorrowingHistoryPage = () => {
             /* Empty state */
             <div className="glass-panel rounded-2xl text-center py-16 border border-white/10">
               <span className="material-symbols-outlined text-6xl text-on-surface-variant/30">menu_book</span>
-              <h2 className="text-2xl font-bold text-white mt-4">No borrowing history</h2>
-              <p className="text-on-surface-variant mt-2 text-sm">When you borrow books, they'll appear here.</p>
+              <h2 className="text-2xl font-bold text-white mt-4">{t('books.history.emptyState')}</h2>
+              <p className="text-on-surface-variant mt-2 text-sm">{t('books.history.emptyStateHint')}</p>
             </div>
           ) : (
             /* Borrowing cards */
@@ -287,23 +280,23 @@ const BorrowingHistoryPage = () => {
                               <span className={`w-1.5 h-1.5 rounded-full ${borrowing.status === 'Active' ? 'bg-primary' :
                                 borrowing.status === 'Overdue' ? 'bg-error' : 'bg-on-surface-variant'
                                 }`} />
-                              {borrowing.status}
+                              {t(`books.history.status.${borrowing.status.toLowerCase()}`, { defaultValue: borrowing.status })}
                             </span>
                           </div>
-                          <p className="text-on-surface-variant text-sm mb-4 font-medium">By {author}</p>
+                          <p className="text-on-surface-variant text-sm mb-4 font-medium">{t('books.by')} {author}</p>
                           <div className="grid grid-cols-2 gap-4 max-w-sm">
                             <div>
-                              <span className="block text-xs uppercase font-bold text-on-surface-variant/70 mb-1">Borrow Date</span>
+                              <span className="block text-xs uppercase font-bold text-on-surface-variant/70 mb-1">{t('books.history.borrowDate')}</span>
                               <span className="text-white font-semibold">{formatDate(borrowing.borrowDate)}</span>
                             </div>
                             {borrowing.returnDate ? (
                               <div>
-                                <span className="block text-xs uppercase font-bold text-on-surface-variant/70 mb-1">Returned On</span>
+                                <span className="block text-xs uppercase font-bold text-on-surface-variant/70 mb-1">{t('books.history.returnedOn')}</span>
                                 <span className="text-on-surface-variant font-semibold">{formatDate(borrowing.returnDate)}</span>
                               </div>
                             ) : (
                               <div>
-                                <span className="block text-xs uppercase font-bold text-on-surface-variant/70 mb-1">Due Date</span>
+                                <span className="block text-xs uppercase font-bold text-on-surface-variant/70 mb-1">{t('books.dueDate')}</span>
                                 <span className={`font-bold ${borrowing.status === 'Overdue' ? 'text-error' : 'text-white'}`}>
                                   {formatDate(borrowing.dueDate)}
                                 </span>
@@ -317,7 +310,7 @@ const BorrowingHistoryPage = () => {
                           <button
                             onClick={() => navigate(`/books/${bookId || id}`)}
                             className="p-2.5 rounded-xl glass-panel text-on-surface-variant hover:text-white transition-colors cursor-pointer"
-                            title="View Details"
+                            title={t('books.history.viewDetails')}
                           >
                             <span className="material-symbols-outlined text-lg">visibility</span>
                           </button>
@@ -329,7 +322,7 @@ const BorrowingHistoryPage = () => {
                                 disabled={isActionPending}
                                 className="border border-secondary text-secondary px-4 py-2 rounded-xl hover:bg-secondary/10 transition-all text-xs font-bold uppercase cursor-pointer disabled:opacity-50"
                               >
-                                {isActionPending ? 'Returning…' : 'Return'}
+                                {isActionPending ? t('books.history.returning') : t('books.return')}
                               </button>
                               {borrowing.renewalsLeft > 0 && (
                                 <button
@@ -337,7 +330,7 @@ const BorrowingHistoryPage = () => {
                                   disabled={isActionPending}
                                   className="border border-primary text-primary px-4 py-2 rounded-xl hover:bg-primary/10 transition-all text-xs font-bold uppercase cursor-pointer disabled:opacity-50"
                                 >
-                                  {isActionPending ? 'Renewing…' : `Renew (${borrowing.renewalsLeft} left)`}
+                                  {isActionPending ? t('books.history.renewing') : t('books.history.renewalsLeft', { count: borrowing.renewalsLeft })}
                                 </button>
                               )}
                             </>
@@ -349,7 +342,7 @@ const BorrowingHistoryPage = () => {
                               disabled={isActionPending}
                               className="border border-secondary text-secondary px-4 py-2 rounded-xl hover:bg-secondary/10 transition-all text-xs font-bold uppercase cursor-pointer disabled:opacity-50"
                             >
-                              {isActionPending ? 'Returning…' : 'Return'}
+                              {isActionPending ? t('books.history.returning') : t('books.return')}
                             </button>
                           )}
 
@@ -358,7 +351,7 @@ const BorrowingHistoryPage = () => {
                               onClick={() => handleBorrowAgain(title, bookId)}
                               className="border border-primary text-primary px-4 py-2 rounded-xl hover:bg-primary/10 transition-all text-xs font-bold uppercase cursor-pointer"
                             >
-                              Borrow Again
+                              {t('books.history.borrowAgain')}
                             </button>
                           )}
                         </div>
