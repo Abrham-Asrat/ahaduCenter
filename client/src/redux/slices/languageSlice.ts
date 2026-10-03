@@ -16,6 +16,11 @@ const initialState: LanguageState = {
   language: 'en',
 };
 
+const safeLanguage = (value?: string): Language => {
+  if (value === 'am') return 'am';
+  return 'en';
+};
+
 const languageSlice = createSlice({
   name: 'language',
   initialState,
@@ -31,7 +36,7 @@ const languageSlice = createSlice({
     },
     initializeLanguage: (state) => {
       // Initialize from i18next (which reads from localStorage/navigator)
-      const currentLang = i18n.language as Language;
+      const currentLang = safeLanguage(i18n.resolvedLanguage ?? i18n.language);
       state.language = currentLang;
     },
   },

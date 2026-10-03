@@ -23,7 +23,10 @@ interface UseLanguageReturn {
 export const useLanguage = (): UseLanguageReturn => {
   const dispatch = useAppDispatch();
   const { i18n } = useTranslation();
-  const language = useAppSelector((state) => state.language.language);
+  const language = useAppSelector((state) => {
+    const reduxLanguage = state && state.language ? (state.language.language as Language | undefined) : undefined;
+    return reduxLanguage ?? (i18n.resolvedLanguage as Language | undefined) ?? 'en';
+  });
 
   // Initialize language from i18next on mount
   useEffect(() => {
@@ -42,7 +45,7 @@ export const useLanguage = (): UseLanguageReturn => {
     setLanguage(newLang);
   }, [language, setLanguage]);
 
-  const languageName = LANGUAGE_NAMES[language];
+  const languageName = LANGUAGE_NAMES[language] ?? 'English';
 
   return {
     language,
