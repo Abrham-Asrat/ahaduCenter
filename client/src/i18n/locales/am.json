@@ -21,6 +21,7 @@
     "submit": "አስገባ",
     "send": "ላክ",
     "pleaseWait": "እባክዎ ይጠብቁ...",
+    "all": "ሁሉም",
     "pagination": {
       "previous": "ቀዳሚ ገጽ",
       "next": "ቀጣይ ገጽ",
@@ -273,7 +274,12 @@
       "storyline": "የታሪኩ መስመር",
       "viewerReviews": "የተመልካቾች ግምገማዎች እና ውይይቶች",
       "youMightAlsoLike": "እነዚህንም ሊወዱ ይችላሉ",
-      "retry": "እንደገና ሞክር"
+      "retry": "እንደገና ሞክር",
+      "screenshots": "ቅጽበታዊ ምስሎች",
+      "clickToEnlarge": "ለማስፋት ምስሉን ይጫኑ",
+      "screenshotAlt": "ቅጽበታዊ ምስል {{index}}",
+      "trailerVideo": "ትሬይለር እና ቪዲዮ",
+      "trailerThumbnailAlt": "የትሬይለር ድንክዬ"
     },
     "request": {
       "pageTitle": "ፊልም ይጠይቁ",
@@ -343,11 +349,13 @@
         "pending": "በመጠባበቅ ላይ",
         "approved": "ተቀባይነት አግኝቷል",
         "rejected": "ውድቅ ሆኗል"
-      }
+      },
+      "genreAdventure": "ጀብዱ"
     }
   },
   "books": {
     "title": "የመጽሐፍ ማዕከል",
+    "by": "በ",
     "borrow": "ይበድሩ",
     "return": "መልስ",
     "renew": "አድስ",
@@ -405,9 +413,21 @@
     "readerReviews": "የአንባቢዎች ግምገማዎች እና ውይይት",
     "confirm": {
       "title": "መበደርን አረጋግጥ",
+      "reservationTitle": "ቦዳይን አረጋግጥ",
       "reservationExpires": "ቦዳይ የሚያልቅበት ጊዜ",
       "confirmButton": "አረጋግጥ",
-      "terms": "በማረጋገጥ፣ መጽሐፉን በመመለሻ ቀን መመለስ ይስማማሉ።"
+      "terms": "በማረጋገጥ፣ መጽሐፉን በመመለሻ ቀን መመለስ ይስማማሉ።",
+      "errors": {
+        "missingId": "መጽሐፍ አልተገኘም። እባክዎ እንደገና ይሞክሩ።"
+      },
+      "borrowSuccess": "መጽሐፉ በተሳካ ሁኔታ ተበድሯል!",
+      "reserveSuccess": "መጽሐፉ በተሳካ ሁኔታ ተጠብቋል!",
+      "confirmationId": "የማረጋገጫ መታወቂያ",
+      "pickupLocation": "የመቀበያ ቦታ",
+      "borrowConfirmedMessage": "ብድርዎ ተረጋግጧል። መጽሐፉን ለመውሰድ ቤተ መጻሕፍቱን ይጎብኙ።",
+      "reserveConfirmedMessage": "ማስያዝዎ ተረጋግጧል። ጊዜው ከማለፉ በፊት ቤተ መጻሕፍቱን ይጎብኙ።",
+      "viewHistory": "የብድር ታሪክ ይመልከቱ",
+      "backToBooks": "ወደ መጻሕፍት ተመለስ"
     },
     "history": {
       "title": "የመበደር ታሪክ",
@@ -434,7 +454,13 @@
       "emptyStateHint": "መጽሐፍትን ሲበድሩ እዚህ ይታያሉ።",
       "viewDetails": "ዝርዝር ይመልከቱ",
       "borrowAgain": "እንደገና ይበድሩ"
-    }
+    },
+    "borrowNow": "አሁን ያውሱ",
+    "buyButton": "ይግዙ",
+    "defaultDescription": "ለዚህ መጽሐፍ መግለጫ አልተገኘም።",
+    "formatHardcover": "ጠንካራ ሽፋን",
+    "languageEnglish": "እንግሊዝኛ",
+    "featured": "ተለይቶ የቀረበ"
   },
   "electronics": {
     "title": "የኤሌክትሮኒክስ ማዕከል",
@@ -668,6 +694,17 @@
     "addProduct": "ምርት ጨምር",
     "actions": "እርምጃዎች",
     "status": "ሁኔታ",
+    "dashboard": {
+      "subtitle": "የአሃዱ ማዕከል የፊዚካል መደብር ካታሎግ ያስተዳድሩ።",
+      "recentAdditions": "የቅርብ ጊዜ ጭማሪዎች",
+      "recentLabel": "የቅርብ ጊዜ",
+      "manageMoviesDesc": "ፊልሞችን ከካታሎጉ ጨምሩ፣ አስተካክሉ ወይም ያስወጡ።",
+      "manageElectronicsDesc": "የቴክ ምርቶችን ጨምሩ፣ አስተካክሉ ወይም ያስወጡ።",
+      "manageBooksDesc": "መጽሐፍትን ከቤተ-መጽሐፍቱ ጨምሩ፣ አስተካክሉ ወይም ያስወጡ።",
+      "noRecentMovies": "ምንም የቅርብ ጊዜ ፊልም ጭማሪዎች የሉም",
+      "noRecentElectronics": "ምንም የቅርብ ጊዜ ኤሌክትሮኒክስ ጭማሪዎች የሉም",
+      "noRecentBooks": "ምንም የቅርብ ጊዜ መጽሐፍ ጭማሪዎች የሉም"
+    },
     "table": {
       "title": "ርዕስ",
       "name": "ስም",
@@ -686,7 +723,64 @@
       "rejected": "ውድቅ ሆኗል",
       "approve": "ተቀበል",
       "reject": "ውድቅ አድርግ"
-    }
+    },
+    "manageMovies": {
+      "pageTitle": "ፊልሞችን አስተዳድር",
+      "pageSubtitle": "የፊልም ይዘትን ጨምር፣ አስተካክል፣ ሰርዝ እና አደራጅ።",
+      "searchPlaceholder": "ፊልሞችን ፈልግ…",
+      "filterAllGenres": "ሁሉም ዘውጎች",
+      "filterAllCountries": "ሁሉም አገሮች",
+      "filterAllStatus": "ሁሉም ሁኔታዎች",
+      "filterAvailable": "ይገኛል",
+      "filterComingSoon": "በቅርቡ ይመጣል",
+      "colPoster": "ፖስተር",
+      "colTitleDirector": "ርዕስ / ዳይሬክተር",
+      "colGenre": "ዘውግ",
+      "colCountry": "አገር",
+      "colYear": "ዓመት",
+      "colStatus": "ሁኔታ",
+      "colActions": "እርምጃዎች",
+      "statusAvailable": "ይገኛል",
+      "statusComingSoon": "በቅርቡ ይመጣል",
+      "editTitle": "ፊልም አስተካክል",
+      "addTitle": "አዲስ ፊልም ጨምር",
+      "photoLabel": "ፖስተር እና ቅጽበታዊ ምስሎች",
+      "photoHint": "(አማራጭ፣ እስከ 5)",
+      "photoMaxHint": "የመጀመሪያው ምስል ፖስተር ይሆናል። ከፍተኛ 5 ፎቶዎች።",
+      "addPhotoButton": "ፎቶ ጨምር",
+      "fieldTitle": "ርዕስ",
+      "fieldDirector": "ዳይሬክተር",
+      "fieldCast": "ተዋናዮች",
+      "fieldSynopsis": "አጠቃላይ እይታ",
+      "fieldGenre": "ዘውግ",
+      "fieldCountry": "አገር",
+      "fieldYear": "ዓመት",
+      "fieldDuration": "ርዝመት (ደቂቃ)",
+      "fieldType": "ዓይነት",
+      "fieldRating": "ደረጃ (0–10)",
+      "fieldStatus": "ሁኔታ",
+      "fieldTrailerUrl": "የትሬይለር አድራሻ (YouTube embed)",
+      "fieldTitlePlaceholder": "የፊልም ርዕስ",
+      "fieldDirectorPlaceholder": "የዳይሬክተር ስም",
+      "fieldCastPlaceholder": "ለምሳሌ ተዋናይ አ፣ ተዋናይ ለ፣ ተዋናይ ሐ",
+      "fieldSynopsisPlaceholder": "አጭር የፊልም አጠቃላይ እይታ…",
+      "fieldYearPlaceholder": "2024",
+      "fieldDurationPlaceholder": "2ሰ 15ደ",
+      "fieldRatingPlaceholder": "8.5",
+      "fieldStatusPlaceholder": "YYYY-MM-DD",
+      "fieldTrailerUrlPlaceholder": "https://www.youtube.com/embed/…",
+      "editButton": "አስተካክል",
+      "deleteButton": "ሰርዝ",
+      "cancelButton": "ሰርዝ",
+      "saveChangesButton": "ለውጦችን አስቀምጥ",
+      "addMovieButton": "ፊልም ጨምር",
+      "deleteConfirm": "ይህን ፊልም ይሰርዙ?",
+      "failedDelete": "ፊልምን መሰረዝ አልተሳካም",
+      "failedSave": "ፊልምን ማስቀመጥ አልተሳካም"
+    },
+    "deleteProductConfirm": "ይህን ምርት መሰረዝ ይፈልጋሉ?",
+    "electronicsSubtitle": "የቴክ ምርቶችን እና ክምችትን ያስተዳድሩ።",
+    "searchProducts": "ምርቶችን ይፈልጉ…"
   },
   "footer": {
     "tagline": "ወደ ፊልሞች፣ ቴክኖሎጂ እና መጽሐፍት የእርስዎ መግቢያ — ሁሉም በአንድ ቦታ።",

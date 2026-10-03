@@ -21,6 +21,7 @@
     "submit": "Submit",
     "send": "Send",
     "pleaseWait": "Please wait...",
+    "all": "All",
     "pagination": {
       "previous": "Previous page",
       "next": "Next page",
@@ -273,7 +274,12 @@
       "storyline": "Storyline",
       "viewerReviews": "Viewer Reviews & Discussions",
       "youMightAlsoLike": "You Might Also Like",
-      "retry": "Retry"
+      "retry": "Retry",
+      "screenshots": "Screenshots",
+      "clickToEnlarge": "Click image to enlarge",
+      "screenshotAlt": "Screenshot {{index}}",
+      "trailerVideo": "Trailer & Video",
+      "trailerThumbnailAlt": "Trailer thumbnail"
     },
     "request": {
       "pageTitle": "Request a Movie",
@@ -343,11 +349,13 @@
         "pending": "Pending",
         "approved": "Approved",
         "rejected": "Rejected"
-      }
+      },
+      "genreAdventure": "Adventure"
     }
   },
   "books": {
     "title": "Book Center",
+    "by": "By",
     "borrow": "Borrow",
     "return": "Return",
     "renew": "Renew",
@@ -405,9 +413,21 @@
     "readerReviews": "Reader Reviews & Discussion",
     "confirm": {
       "title": "Confirm Borrowing",
+      "reservationTitle": "Confirm Reservation",
       "reservationExpires": "Reservation Expires",
       "confirmButton": "Confirm",
-      "terms": "By confirming, you agree to return the book by the due date."
+      "terms": "By confirming, you agree to return the book by the due date.",
+      "errors": {
+        "missingId": "Book not found. Please try again."
+      },
+      "borrowSuccess": "Book Borrowed Successfully!",
+      "reserveSuccess": "Book Reserved Successfully!",
+      "confirmationId": "Confirmation ID",
+      "pickupLocation": "Pickup Location",
+      "borrowConfirmedMessage": "Your borrowing has been confirmed. Visit the library to pick up your book.",
+      "reserveConfirmedMessage": "Your reservation has been confirmed. Visit the library before the reservation expires.",
+      "viewHistory": "View Borrowing History",
+      "backToBooks": "Back to Books"
     },
     "history": {
       "title": "Borrowing History",
@@ -434,7 +454,13 @@
       "emptyStateHint": "When you borrow books, they'll appear here.",
       "viewDetails": "View Details",
       "borrowAgain": "Borrow Again"
-    }
+    },
+    "borrowNow": "Borrow Now",
+    "buyButton": "Buy for",
+    "defaultDescription": "No description available for this book.",
+    "formatHardcover": "Hardcover",
+    "languageEnglish": "English",
+    "featured": "Featured"
   },
   "electronics": {
     "title": "Electronics Hub",
@@ -668,6 +694,17 @@
     "addProduct": "Add Product",
     "actions": "Actions",
     "status": "Status",
+    "dashboard": {
+      "subtitle": "Manage the Ahadu Center physical store catalog.",
+      "recentAdditions": "Recent Additions",
+      "recentLabel": "Recent",
+      "manageMoviesDesc": "Add, edit, or remove movies from the catalog.",
+      "manageElectronicsDesc": "Add, edit, or remove tech products.",
+      "manageBooksDesc": "Add, edit, or remove books from the library.",
+      "noRecentMovies": "No recent movie additions",
+      "noRecentElectronics": "No recent electronics additions",
+      "noRecentBooks": "No recent book additions"
+    },
     "table": {
       "title": "Title",
       "name": "Name",
@@ -686,7 +723,64 @@
       "rejected": "Rejected",
       "approve": "Approve",
       "reject": "Reject"
-    }
+    },
+    "manageMovies": {
+      "pageTitle": "Manage Movies",
+      "pageSubtitle": "Add, edit, delete, and organize movie content.",
+      "searchPlaceholder": "Search movies…",
+      "filterAllGenres": "All Genres",
+      "filterAllCountries": "All Countries",
+      "filterAllStatus": "All Status",
+      "filterAvailable": "Available",
+      "filterComingSoon": "Coming Soon",
+      "colPoster": "Poster",
+      "colTitleDirector": "Title / Director",
+      "colGenre": "Genre",
+      "colCountry": "Country",
+      "colYear": "Year",
+      "colStatus": "Status",
+      "colActions": "Actions",
+      "statusAvailable": "Available",
+      "statusComingSoon": "Coming Soon",
+      "editTitle": "Edit Movie",
+      "addTitle": "Add New Movie",
+      "photoLabel": "Poster & Screenshots",
+      "photoHint": "(optional, up to 5)",
+      "photoMaxHint": "First image becomes the poster. Max 5 photos.",
+      "addPhotoButton": "Add Photo",
+      "fieldTitle": "Title",
+      "fieldDirector": "Director",
+      "fieldCast": "Cast",
+      "fieldSynopsis": "Synopsis",
+      "fieldGenre": "Genre",
+      "fieldCountry": "Country",
+      "fieldYear": "Year",
+      "fieldDuration": "Duration (min)",
+      "fieldType": "Type",
+      "fieldRating": "Rating (0–10)",
+      "fieldStatus": "Status",
+      "fieldTrailerUrl": "Trailer URL (YouTube embed)",
+      "fieldTitlePlaceholder": "Movie title",
+      "fieldDirectorPlaceholder": "Director name",
+      "fieldCastPlaceholder": "e.g. Actor A, Actor B, Actor C",
+      "fieldSynopsisPlaceholder": "Brief synopsis of the movie…",
+      "fieldYearPlaceholder": "2024",
+      "fieldDurationPlaceholder": "2h 15m",
+      "fieldRatingPlaceholder": "8.5",
+      "fieldStatusPlaceholder": "YYYY-MM-DD",
+      "fieldTrailerUrlPlaceholder": "https://www.youtube.com/embed/…",
+      "editButton": "Edit",
+      "deleteButton": "Delete",
+      "cancelButton": "Cancel",
+      "saveChangesButton": "Save Changes",
+      "addMovieButton": "Add Movie",
+      "deleteConfirm": "Delete this movie?",
+      "failedDelete": "Failed to delete movie",
+      "failedSave": "Failed to save movie"
+    },
+    "deleteProductConfirm": "Are you sure you want to delete this product?",
+    "electronicsSubtitle": "Manage tech products and inventory.",
+    "searchProducts": "Search products…"
   },
   "footer": {
     "tagline": "Your gateway to movies, tech, and books — all in one place.",
