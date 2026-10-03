@@ -23,7 +23,7 @@ const SearchResultsPage = () => {
   // State
   const [activeTab, setActiveTab] = useState('all');
   const [showFilters, setShowFilters] = useState(false);
-  const [sortBy, setSortBy] = useState('Relevance');
+  const [sortBy, setSortBy] = useState('relevance');
   const [selectedGenres, setSelectedGenres] = useState(['Sci-Fi', 'Action', 'Drama']);
   const [priceMin, setPriceMin] = useState('');
   const [priceMax, setPriceMax] = useState('');
@@ -49,7 +49,7 @@ const SearchResultsPage = () => {
         const res = await searchService.search({
           q: searchQuery,
           type: typeParam,
-          sort: sortBy === 'Newest' ? 'newest' : undefined,
+          sort: sortBy === 'newest' ? 'newest' : sortBy === 'priceAsc' ? 'price-asc' : undefined,
           minPrice: priceMin ? parseFloat(priceMin) : undefined,
           maxPrice: priceMax ? parseFloat(priceMax) : undefined,
         });
@@ -115,6 +115,12 @@ const SearchResultsPage = () => {
     { key: 'books', label: t('search.tabs.books'), count: counts.books },
   ];
 
+  const sortOptions = [
+    { value: 'relevance', label: t('search.sort.relevance') },
+    { value: 'newest', label: t('search.sort.newest') },
+    { value: 'priceAsc', label: t('search.sort.priceLowToHigh') },
+  ];
+
   const genres = ['Sci-Fi', 'Action', 'Drama'];
 
   return (
@@ -128,13 +134,13 @@ const SearchResultsPage = () => {
             <div>
               <h1 className="text-2xl md:text-3xl font-bold text-white">
                 {searchQuery ? (
-                  <>{t('search.resultsFor', { query: searchQuery })}</>
+                  <>{t('search.resultsFor', { count: filteredResults.length, query: searchQuery })}</>
                 ) : (
                   <>{t('search.title')}</>
                 )}
               </h1>
               <p className="text-sm text-on-surface-variant mt-1">
-                {t('search.resultsFor', { query: `${filteredResults.length}` })}
+                {searchQuery ? t('search.resultsCounter', { count: filteredResults.length }) : t('search.placeholder')}
               </p>
             </div>
             <div className="flex w-full flex-wrap items-center gap-3 md:w-auto">
@@ -144,9 +150,9 @@ const SearchResultsPage = () => {
                 onChange={(e) => setSortBy(e.target.value)}
                 className="min-w-0 flex-1 bg-surface-container border border-white/10 rounded-lg py-2 pl-4 pr-10 text-white text-sm focus:outline-none focus:border-primary cursor-pointer md:flex-none"
               >
-                <option>Relevance</option>
-                <option>Newest</option>
-                <option>Price (Low to High)</option>
+                {sortOptions.map((option) => (
+                  <option key={option.value} value={option.value}>{option.label}</option>
+                ))}
               </select>
             </div>
           </header>
@@ -186,7 +192,7 @@ const SearchResultsPage = () => {
             {/* Filter Sidebar (desktop) */}
             <aside className="hidden md:block w-64 flex-shrink-0 glass-panel rounded-xl p-5 flex flex-col gap-6 sticky top-24">
               <div className="flex items-center justify-between border-b border-white/10 pb-3">
-                <h2 className="text-xl font-semibold text-white">{t('common.search')}</h2>
+                <h2 className="text-xl font-semibold text-white">{t('search.filters.title')}</h2>
                 <button
                   onClick={handleClearFilters}
                   className="text-xs uppercase text-primary hover:underline cursor-pointer"
@@ -199,7 +205,7 @@ const SearchResultsPage = () => {
               <div className="flex flex-col gap-3">
                 <h3 className="text-lg font-semibold text-white flex items-center gap-2">
                   <span className="material-symbols-outlined text-primary text-sm">movie</span>
-                  Movie Genres
+                  {t('search.filters.movieGenres')}
                 </h3>
                 <div className="flex flex-col gap-2 pl-2">
                   {genres.map((genre) => (

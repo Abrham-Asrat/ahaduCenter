@@ -28,10 +28,10 @@ const NotFoundPage = () => {
             404
           </h1>
 
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">{t('search.noResults')}</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">{t('errors.notFound.title')}</h2>
 
           <p className="text-lg text-on-surface-variant max-w-2xl mx-auto mb-8">
-            {t('search.noResultsHint')}
+            {t('errors.notFound.message')}
           </p>
 
           {/* Functional search bar */}
@@ -55,11 +55,11 @@ const NotFoundPage = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto mb-8">
             <Link to="/" className="bg-primary text-black px-4 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 hover:shadow-[0_0_20px_rgba(16,185,129,0.5)] transition-all">
               <span className="material-symbols-outlined">home</span>
-              {t('nav.home')}
+              {t('errors.notFound.goHome')}
             </Link>
             <Link to="/movies" className="border border-white/20 text-white px-4 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 hover:border-secondary hover:text-secondary transition-all">
               <span className="material-symbols-outlined">movie</span>
-              {t('nav.movies')}
+              {t('errors.notFound.browseMovies')}
             </Link>
             <Link to="/electronics" className="border border-white/20 text-white px-4 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 hover:border-secondary hover:text-secondary transition-all">
               <span className="material-symbols-outlined">devices</span>
@@ -67,7 +67,7 @@ const NotFoundPage = () => {
             </Link>
             <Link to="/books" className="border border-white/20 text-white px-4 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 hover:border-secondary hover:text-secondary transition-all">
               <span className="material-symbols-outlined">menu_book</span>
-              {t('nav.books')}
+              {t('errors.notFound.browseBooks')}
             </Link>
           </div>
 
@@ -75,15 +75,15 @@ const NotFoundPage = () => {
           <div className="flex flex-wrap justify-center gap-6 pt-6 border-t border-white/5">
             <Link to="/contact" className="text-secondary text-sm flex items-center gap-1 hover:opacity-80 transition-opacity">
               <span className="material-symbols-outlined text-sm">support_agent</span>
-              Contact Support
+              {t('errors.notFound.contactSupport')}
             </Link>
             <Link to="/contact" className="text-secondary text-sm flex items-center gap-1 hover:opacity-80 transition-opacity">
               <span className="material-symbols-outlined text-sm">help</span>
-              FAQ
+              {t('errors.notFound.faq')}
             </Link>
             <Link to="/" className="text-secondary text-sm flex items-center gap-1 hover:opacity-80 transition-opacity">
               <span className="material-symbols-outlined text-sm">map</span>
-              Site Map
+              {t('errors.notFound.siteMap')}
             </Link>
           </div>
         </div>
@@ -93,13 +93,13 @@ const NotFoundPage = () => {
         <div className="flex flex-col md:flex-row justify-between items-center px-4 md:px-8 max-w-7xl mx-auto gap-4">
           <div>
             <p className="text-primary font-semibold">Ahadu Center</p>
-            <p className="text-sm text-on-surface-variant">© 2024 Ahadu Center. All rights reserved.</p>
+            <p className="text-sm text-on-surface-variant">{t('footer.copyright', { year: new Date().getFullYear() })}</p>
           </div>
           <div className="flex flex-wrap gap-4 text-sm text-on-surface-variant">
-            <Link to="/contact" className="hover:text-secondary transition-colors">Privacy Policy</Link>
-            <Link to="/contact" className="hover:text-secondary transition-colors">Terms of Service</Link>
-            <Link to="/contact" className="hover:text-secondary transition-colors">Customer Support</Link>
-            <Link to="/" className="hover:text-secondary transition-colors">About Us</Link>
+            <Link to="/contact" className="hover:text-secondary transition-colors">{t('footer.privacy')}</Link>
+            <Link to="/contact" className="hover:text-secondary transition-colors">{t('footer.terms')}</Link>
+            <Link to="/contact" className="hover:text-secondary transition-colors">{t('errors.notFound.customerSupport')}</Link>
+            <Link to="/" className="hover:text-secondary transition-colors">{t('footer.links.about')}</Link>
           </div>
         </div>
       </footer>
