@@ -166,6 +166,25 @@ const MovieRequestPage = () => {
     }
   };
 
+  const getStatusLabel = (status: string) => {
+    switch (status) {
+      case 'Available': return t('movies.request.statusAvailable');
+      case 'Pending': return t('movies.request.statusPending');
+      case 'Fulfilled': return t('movies.request.statusFulfilled');
+      default: return status;
+    }
+  };
+
+  const getTypeLabel = (type: string) => {
+    switch (type) {
+      case 'Movie': return t('movies.request.typeMovie');
+      case 'TV Series': return t('movies.request.typeTvSeries');
+      case 'Mini Series': return t('movies.request.typeMiniSeries');
+      case 'Season Collection': return t('movies.request.typeSeasonCollection');
+      default: return type;
+    }
+  };
+
   return (
     <>
       <Navbar />
@@ -213,7 +232,7 @@ const MovieRequestPage = () => {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-on-surface-variant">{t('movies.request.modalTypeYear')}</span>
-                  <span className="text-white">{selectedRequestModal.type} ({selectedRequestModal.year})</span>
+                  <span className="text-white">{getTypeLabel(selectedRequestModal.type)} ({selectedRequestModal.year})</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-on-surface-variant">{t('movies.request.modalGenre')}</span>
@@ -407,12 +426,12 @@ const MovieRequestPage = () => {
                   <table className="w-full text-left border-collapse">
                     <thead>
                       <tr className="bg-surface-container-high border-b border-white/10">
-                        <th className="px-4 py-3.5 text-xs uppercase text-on-surface-variant font-semibold">Request ID</th>
-                        <th className="px-4 py-3.5 text-xs uppercase text-on-surface-variant font-semibold">Title</th>
-                        <th className="px-4 py-3.5 text-xs uppercase text-on-surface-variant font-semibold">Type</th>
-                        <th className="px-4 py-3.5 text-xs uppercase text-on-surface-variant font-semibold">Date</th>
-                        <th className="px-4 py-3.5 text-xs uppercase text-on-surface-variant font-semibold">Status</th>
-                        <th className="px-4 py-3.5 text-xs uppercase text-on-surface-variant font-semibold text-right">Actions</th>
+                        <th className="px-4 py-3.5 text-xs uppercase text-on-surface-variant font-semibold">{t('movies.request.tableIdHeader')}</th>
+                        <th className="px-4 py-3.5 text-xs uppercase text-on-surface-variant font-semibold">{t('movies.request.tableTitleHeader')}</th>
+                        <th className="px-4 py-3.5 text-xs uppercase text-on-surface-variant font-semibold">{t('movies.request.tableTypeHeader')}</th>
+                        <th className="px-4 py-3.5 text-xs uppercase text-on-surface-variant font-semibold">{t('movies.request.tableDateHeader')}</th>
+                        <th className="px-4 py-3.5 text-xs uppercase text-on-surface-variant font-semibold">{t('movies.request.tableStatusHeader')}</th>
+                        <th className="px-4 py-3.5 text-xs uppercase text-on-surface-variant font-semibold text-right">{t('movies.request.tableActionsHeader')}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -424,7 +443,7 @@ const MovieRequestPage = () => {
                             <td className="px-4 py-3 text-sm text-on-surface-variant font-mono">#{request.id}</td>
                             <td className="px-4 py-3 font-semibold text-white">{request.title}</td>
                             <td className="px-4 py-3">
-                              <span className="bg-surface-variant px-2.5 py-1 rounded text-xs font-medium text-white">{request.type}</span>
+                              <span className="bg-surface-variant px-2.5 py-1 rounded text-xs font-medium text-white">{getTypeLabel(request.type)}</span>
                             </td>
                             <td className="px-4 py-3 text-sm text-on-surface-variant">{request.date}</td>
                             <td className="px-4 py-3">
@@ -432,13 +451,13 @@ const MovieRequestPage = () => {
                                 <span className={`w-1.5 h-1.5 rounded-full ${request.status === 'Available' ? 'bg-primary' :
                                   request.status === 'Pending' ? 'bg-secondary' : 'bg-on-surface-variant'
                                   }`} />
-                                {request.status}
+                                {getStatusLabel(request.status)}
                               </span>
                             </td>
                             <td className="px-4 py-3 text-right">
                               <button
                                 onClick={() => setSelectedRequestModal(request)}
-                                title="View Request Details"
+                                title={t('movies.request.actionView')}
                                 className="text-on-surface-variant hover:text-primary transition-colors p-1 rounded hover:bg-white/10 mr-1"
                               >
                                 <span className="material-symbols-outlined text-xl">visibility</span>
@@ -447,7 +466,7 @@ const MovieRequestPage = () => {
                                 <button
                                   onClick={() => handleCancelRequest(request.id, request.title)}
                                   disabled={isCancelling}
-                                  title="Cancel Request"
+                                  title={t('movies.request.actionCancel')}
                                   className="text-on-surface-variant hover:text-error transition-colors p-1 rounded hover:bg-white/10 disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                   {isCancelling ? (
@@ -477,10 +496,10 @@ const MovieRequestPage = () => {
                         <div className="flex justify-between items-start mb-2">
                           <div>
                             <h4 className="text-white font-semibold">{request.title}</h4>
-                            <p className="text-sm text-on-surface-variant">{request.type} • {request.date}</p>
+                            <p className="text-sm text-on-surface-variant">{getTypeLabel(request.type)} • {request.date}</p>
                           </div>
                           <span className={`px-2 py-0.5 rounded text-xs font-semibold border ${getStatusBadge(request.status)}`}>
-                            {request.status}
+                            {getStatusLabel(request.status)}
                           </span>
                         </div>
                         <div className="flex justify-between items-center mt-3 pt-2 border-t border-white/5">
@@ -490,7 +509,7 @@ const MovieRequestPage = () => {
                               onClick={() => setSelectedRequestModal(request)}
                               className="text-xs text-primary font-semibold hover:underline"
                             >
-                              Details
+                              {t('movies.request.mobileDetails')}
                             </button>
                             {request.status === 'Pending' && (
                               <button
@@ -498,7 +517,7 @@ const MovieRequestPage = () => {
                                 disabled={isCancelling}
                                 className="text-xs text-error font-semibold hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
                               >
-                                {isCancelling ? 'Cancelling…' : 'Cancel'}
+                                {isCancelling ? t('movies.request.actionCancelling') : t('movies.request.mobileCancel')}
                               </button>
                             )}
                           </div>

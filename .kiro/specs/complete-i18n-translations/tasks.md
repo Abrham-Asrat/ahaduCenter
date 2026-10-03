@@ -109,15 +109,15 @@ This plan systematically translates all 70 remaining React components in the Aha
   - Run validation script: `npm run validate:i18n`
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 6. Translate Movie feature components (Priority 4)
-  - [-] 6.1 Translate MovieCard.tsx
+- [x] 6. Translate Movie feature components (Priority 4)
+  - [x] 6.1 Translate MovieCard.tsx
     - Import useTranslation hook
     - Replace metadata labels with "movies.card.*" keys (Duration, Genre, Rating)
     - Translate action buttons (Request Movie, View Details)
     - Translate status badges (Available, Requested)
     - _Requirements: 4.1, 4.7, 4.8_
   
-  - [-] 6.2 Translate MovieFilters.tsx
+  - [x] 6.2 Translate MovieFilters.tsx
     - Import useTranslation hook
     - Replace filter section headers with "movies.filters.*" keys
     - Translate filter options (if hardcoded)
@@ -125,7 +125,7 @@ This plan systematically translates all 70 remaining React components in the Aha
     - Translate sort options (Latest, Most Popular, Title A-Z)
     - _Requirements: 4.3, 4.7_
   
-  - [-] 6.3 Translate MovieCenterPage.tsx
+  - [x] 6.3 Translate MovieCenterPage.tsx
     - Import useTranslation hook
     - Replace page title with "movies.center.*" keys
     - Translate section headers (Featured Movies, New Releases)
@@ -134,7 +134,7 @@ This plan systematically translates all 70 remaining React components in the Aha
     - Translate breadcrumb navigation
     - _Requirements: 4.4_
   
-  - [-] 6.4 Translate MovieDetailPage.tsx
+  - [x] 6.4 Translate MovieDetailPage.tsx
     - Import useTranslation hook
     - Replace tab labels with "movies.detail.*" keys
     - Translate metadata labels (Director, Release Year, Duration, Language)
@@ -142,25 +142,25 @@ This plan systematically translates all 70 remaining React components in the Aha
     - Translate review section headers
     - _Requirements: 4.5_
   
-  - [-] 6.5 Translate MovieDetailHero.tsx
+  - [x] 6.5 Translate MovieDetailHero.tsx
     - Import useTranslation hook
     - Replace hero section content with "movies.detail.*" keys
     - Translate any overlay text or labels
     - _Requirements: 4.2_
   
-  - [-] 6.6 Translate MovieInfoSidebar.tsx and CastSection.tsx
+  - [x] 6.6 Translate MovieInfoSidebar.tsx and CastSection.tsx
     - Import useTranslation hook in both components
     - Replace sidebar metadata labels with "movies.detail.*" keys
     - Translate cast section header
     - _Requirements: 4.2, 4.5_
   
-  - [-] 6.7 Translate RelatedMoviesCarousel.tsx
+  - [x] 6.7 Translate RelatedMoviesCarousel.tsx
     - Import useTranslation hook
     - Replace carousel header with "movies.detail.*" keys
     - Translate navigation aria-labels
     - _Requirements: 4.2_
   
-  - [-] 6.8 Translate MovieRequestPage.tsx
+  - [x] 6.8 Translate MovieRequestPage.tsx
     - Import useTranslation hook
     - Replace form fields with "movies.request.*" keys
     - Translate instructions and submit button

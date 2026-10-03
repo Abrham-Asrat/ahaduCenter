@@ -31,7 +31,15 @@ const MovieFilters = ({ onFilterChange }: MovieFiltersProps) => {
 
   const genreDropdownRef = useRef<HTMLDivElement>(null);
 
-  const genres = ['Action', 'Comedy', 'Drama', 'Sci-Fi', 'Thriller', 'Horror', 'Adventure'];
+  const genres = [
+    ['Action', t('movies.request.genreAction')],
+    ['Comedy', t('movies.request.genreComedy')],
+    ['Drama', t('movies.request.genreDrama')],
+    ['Sci-Fi', t('movies.request.genreSciFi')],
+    ['Thriller', t('movies.request.genreThriller')],
+    ['Horror', t('movies.request.genreHorror')],
+    ['Adventure', t('movies.request.genreAdventure')],
+  ];
   const contents = ['All', 'Movie', 'TV Series'];
   const countries = ['All', 'Ethiopia', 'USA', 'UK', 'Korea', 'Japan'];
 
@@ -111,14 +119,14 @@ const MovieFilters = ({ onFilterChange }: MovieFiltersProps) => {
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-2">
           <span className="material-symbols-outlined text-primary">tune</span>
-          <h2 className="text-xl font-bold text-white">{t('common.search')}</h2>
+          <h2 className="text-xl font-bold text-white">{t('filters.filters')}</h2>
         </div>
         {hasActiveFilters && (
           <button
             onClick={handleClearAll}
             className="text-xs text-secondary hover:underline cursor-pointer font-semibold transition-colors"
           >
-            {t('common.delete')}
+            {t('filters.clearFilters')}
           </button>
         )}
       </div>
@@ -145,7 +153,7 @@ const MovieFilters = ({ onFilterChange }: MovieFiltersProps) => {
       {/* Country Filter */}
       <div className="mb-6">
         <label className="block text-xs uppercase tracking-wider text-on-surface-variant mb-2 font-semibold">
-          {t('admin.table.category')}
+          {t('filters.category')}
         </label>
         <select
           value={selectedCountry}
@@ -188,7 +196,7 @@ const MovieFilters = ({ onFilterChange }: MovieFiltersProps) => {
         {/* Dropdown Options List with Checkboxes */}
         {isGenreDropdownOpen && (
           <div className="absolute z-20 left-0 right-0 mt-2 bg-surface-container border border-white/10 rounded-lg p-2 space-y-1 max-h-48 overflow-y-auto shadow-2xl backdrop-blur-md">
-            {genres.map((genre) => (
+            {genres.map(([genre, label]) => (
               <label
                 key={genre}
                 className="flex items-center gap-2.5 cursor-pointer group select-none hover:bg-white/5 p-2 rounded transition-colors"
@@ -199,9 +207,7 @@ const MovieFilters = ({ onFilterChange }: MovieFiltersProps) => {
                   onChange={() => handleGenreChange(genre)}
                   className="w-4 h-4 rounded bg-surface-dim border-white/20 text-primary focus:ring-primary focus:ring-offset-background group-hover:border-primary transition-colors cursor-pointer"
                 />
-                <span className="text-sm text-on-surface group-hover:text-primary transition-colors">
-                  {genre}
-                </span>
+                <span className="text-sm text-on-surface group-hover:text-primary transition-colors">{label}</span>
               </label>
             ))}
           </div>
@@ -220,7 +226,7 @@ const MovieFilters = ({ onFilterChange }: MovieFiltersProps) => {
         >
           {contents.map((c) => (
             <option key={c} value={c} className="bg-surface-container-high text-white">
-              {c === 'All' ? t('common.all') : c}
+              {c === 'All' ? t('common.all') : c === 'Movie' ? t('movies.request.typeMovie') : t('movies.request.typeTvSeries')}
             </option>
           ))}
         </select>

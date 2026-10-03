@@ -18,6 +18,8 @@ import RelatedMoviesCarousel from '../components/movie/RelatedMoviesCarousel';
 import ReviewsCommentsSection from '../components/common/ReviewsCommentsSection';
 import Footer from '../components/common/Footer';
 import type { Movie } from '../types';
+import { useTranslation } from 'react-i18next';
+import { formatShortDate } from '../utils/i18nFormat';
 
 /**
  * MovieDetailPage Component
@@ -30,6 +32,7 @@ import type { Movie } from '../types';
 const MovieDetailPage = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
+  const { t, i18n } = useTranslation();
 
   // ── Redux state ──────────────────────────────────────────────────────────────
   const { selectedMovie, movies, reviews, loading, error } = useAppSelector((s) => s.movie);
@@ -74,64 +77,64 @@ const MovieDetailPage = () => {
 
   const movie: Movie | null = selectedMovie
     ? {
-        id: movieId,
-        title: selectedMovie.title,
-        bannerUrl:
-          selectedMovie.bannerImage ||
-          selectedMovie.bannerUrl ||
-          selectedMovie.posterImage ||
-          selectedMovie.posterUrl ||
-          '',
-        posterUrl:
-          selectedMovie.posterImage ||
-          selectedMovie.posterUrl ||
-          selectedMovie.bannerImage ||
-          selectedMovie.bannerUrl ||
-          '',
-        year: typeof selectedMovie.year === 'string' || typeof selectedMovie.year === 'number'
-          ? selectedMovie.year
-          : typeof selectedMovie.releaseYear === 'string' || typeof selectedMovie.releaseYear === 'number'
-            ? selectedMovie.releaseYear
-            : undefined,
-        country: selectedMovie.country,
-        runtime: selectedMovie.runtime,
-        quality: selectedMovie.quality || '4K',
-        language: selectedMovie.language,
-        subtitles: selectedMovie.subtitles,
-        genres: selectedMovie.genres || [],
-        rating: selectedMovie.rating || 0,
-        director: selectedMovie.director,
-        writers: Array.isArray(selectedMovie.writers)
-          ? selectedMovie.writers.join(', ')
-          : selectedMovie.writers,
-        studio: selectedMovie.studio,
-        releaseDate: selectedMovie.releaseDate,
-        trailerUrl: selectedMovie.trailerUrl,
-        description: typeof selectedMovie.description === 'string'
-          ? selectedMovie.description
-          : typeof selectedMovie.synopsis === 'string' ? selectedMovie.synopsis : '',
-        cast: (selectedMovie.cast || []).map((c, i) => ({
-          id: c._id || c.id || String(i),
-          name: c.name,
-          role: c.role || c.character,
-          photoUrl:
-            c.photoUrl ||
-            c.photo ||
-            c.image ||
-            `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(c.name || 'Actor')}`,
-        })),
-        screenshots: Array.isArray(selectedMovie.screenshots)
-          ? selectedMovie.screenshots.filter((item): item is string => typeof item === 'string')
-          : Array.isArray(selectedMovie.images)
-            ? selectedMovie.images.filter((item): item is string => typeof item === 'string')
-            : [],
-        trailerThumbnail:
-          selectedMovie.trailerThumbnail ||
-          selectedMovie.thumbnailUrl ||
-          selectedMovie.posterImage ||
-          selectedMovie.posterUrl ||
-          '',
-      }
+      id: movieId,
+      title: selectedMovie.title,
+      bannerUrl:
+        selectedMovie.bannerImage ||
+        selectedMovie.bannerUrl ||
+        selectedMovie.posterImage ||
+        selectedMovie.posterUrl ||
+        '',
+      posterUrl:
+        selectedMovie.posterImage ||
+        selectedMovie.posterUrl ||
+        selectedMovie.bannerImage ||
+        selectedMovie.bannerUrl ||
+        '',
+      year: typeof selectedMovie.year === 'string' || typeof selectedMovie.year === 'number'
+        ? selectedMovie.year
+        : typeof selectedMovie.releaseYear === 'string' || typeof selectedMovie.releaseYear === 'number'
+          ? selectedMovie.releaseYear
+          : undefined,
+      country: selectedMovie.country,
+      runtime: selectedMovie.runtime,
+      quality: selectedMovie.quality || '4K',
+      language: selectedMovie.language,
+      subtitles: selectedMovie.subtitles,
+      genres: selectedMovie.genres || [],
+      rating: selectedMovie.rating || 0,
+      director: selectedMovie.director,
+      writers: Array.isArray(selectedMovie.writers)
+        ? selectedMovie.writers.join(', ')
+        : selectedMovie.writers,
+      studio: selectedMovie.studio,
+      releaseDate: selectedMovie.releaseDate,
+      trailerUrl: selectedMovie.trailerUrl,
+      description: typeof selectedMovie.description === 'string'
+        ? selectedMovie.description
+        : typeof selectedMovie.synopsis === 'string' ? selectedMovie.synopsis : '',
+      cast: (selectedMovie.cast || []).map((c, i) => ({
+        id: c._id || c.id || String(i),
+        name: c.name,
+        role: c.role || c.character,
+        photoUrl:
+          c.photoUrl ||
+          c.photo ||
+          c.image ||
+          `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(c.name || 'Actor')}`,
+      })),
+      screenshots: Array.isArray(selectedMovie.screenshots)
+        ? selectedMovie.screenshots.filter((item): item is string => typeof item === 'string')
+        : Array.isArray(selectedMovie.images)
+          ? selectedMovie.images.filter((item): item is string => typeof item === 'string')
+          : [],
+      trailerThumbnail:
+        selectedMovie.trailerThumbnail ||
+        selectedMovie.thumbnailUrl ||
+        selectedMovie.posterImage ||
+        selectedMovie.posterUrl ||
+        '',
+    }
     : null;
 
   // ── Related movies: exclude current movie, map to carousel shape ─────────────
@@ -162,11 +165,7 @@ const MovieDetailPage = () => {
       )}`,
     rating: r.rating,
     date: r.createdAt
-      ? new Date(r.createdAt).toLocaleDateString('en-US', {
-          month: 'short',
-          day: 'numeric',
-          year: 'numeric',
-        })
+      ? formatShortDate(r.createdAt, i18n.language)
       : r.date || '',
     comment: r.comment,
     helpfulCount: r.helpfulCount || 0,
@@ -195,151 +194,153 @@ const MovieDetailPage = () => {
   return (
     <>
       <Navbar />
-    <div className="min-h-screen bg-background text-on-background flex flex-col relative animate-fade-in">
+      <div className="min-h-screen bg-background text-on-background flex flex-col relative animate-fade-in">
 
-      {/* Toast Notification */}
-      {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 bg-primary-container text-white px-5 py-3 rounded-lg shadow-2xl flex items-center gap-3 border border-primary/40 animate-bounce">
-          <span className="material-symbols-outlined text-xl">check_circle</span>
-          <span className="text-sm font-semibold">{toastMessage}</span>
-        </div>
-      )}
+        {/* Toast Notification */}
+        {toastMessage && (
+          <div className="fixed bottom-6 right-6 z-50 bg-primary-container text-white px-5 py-3 rounded-lg shadow-2xl flex items-center gap-3 border border-primary/40 animate-bounce">
+            <span className="material-symbols-outlined text-xl">check_circle</span>
+            <span className="text-sm font-semibold">{toastMessage}</span>
+          </div>
+        )}
 
-      {/* Trailer Modal */}
-      {isTrailerOpen && movie && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="relative w-full max-w-4xl bg-surface-container rounded-2xl overflow-hidden border border-white/20 shadow-2xl">
-            <div className="flex justify-between items-center px-6 py-4 border-b border-white/10">
-              <div className="flex items-center gap-3">
-                <span className="material-symbols-outlined text-primary">movie</span>
-                <h3 className="text-xl font-bold text-white">{movie.title} - Official Trailer</h3>
+        {/* Trailer Modal */}
+        {isTrailerOpen && movie && (
+          <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+            <div className="relative w-full max-w-4xl bg-surface-container rounded-2xl overflow-hidden border border-white/20 shadow-2xl">
+              <div className="flex justify-between items-center px-6 py-4 border-b border-white/10">
+                <div className="flex items-center gap-3">
+                  <span className="material-symbols-outlined text-primary">movie</span>
+                  <h3 className="text-xl font-bold text-white">{movie.title} - {t('movies.detail.officialTrailer')}</h3>
+                </div>
+                <button
+                  onClick={() => setIsTrailerOpen(false)}
+                  aria-label={t('common.close')}
+                  className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors"
+                >
+                  <span className="material-symbols-outlined">close</span>
+                </button>
               </div>
+              <div className="relative w-full pt-[56.25%] bg-black">
+                <iframe
+                  className="absolute inset-0 w-full h-full"
+                  src={movie.trailerUrl}
+                  title={movie.title}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Screenshot Lightbox Modal */}
+        {selectedScreenshot && (
+          <div
+            onClick={() => setSelectedScreenshot(null)}
+            className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 cursor-zoom-out"
+          >
+            <div className="relative max-w-5xl max-h-[90vh] rounded-xl overflow-hidden border border-white/20 shadow-2xl">
+              <img src={selectedScreenshot} alt={t('movies.screenshots')} className="w-full h-full object-contain" />
               <button
-                onClick={() => setIsTrailerOpen(false)}
-                className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors"
+                onClick={() => setSelectedScreenshot(null)}
+                aria-label={t('common.close')}
+                className="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center border border-white/20 transition-colors"
               >
                 <span className="material-symbols-outlined">close</span>
               </button>
             </div>
-            <div className="relative w-full pt-[56.25%] bg-black">
-              <iframe
-                className="absolute inset-0 w-full h-full"
-                src={movie.trailerUrl}
-                title={movie.title}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Screenshot Lightbox Modal */}
-      {selectedScreenshot && (
-        <div
-          onClick={() => setSelectedScreenshot(null)}
-          className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 cursor-zoom-out"
-        >
-          <div className="relative max-w-5xl max-h-[90vh] rounded-xl overflow-hidden border border-white/20 shadow-2xl">
-            <img src={selectedScreenshot} alt="Full screenshot" className="w-full h-full object-contain" />
-            <button
-              onClick={() => setSelectedScreenshot(null)}
-              className="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center border border-white/20 transition-colors"
-            >
-              <span className="material-symbols-outlined">close</span>
-            </button>
-          </div>
-        </div>
-      )}
-
-      <main className="flex-grow pt-[80px]">
-        {/* Error state */}
-        {error && !loading && !movie && (
-          <div className="max-w-7xl mx-auto px-4 md:px-8 py-16 flex flex-col items-center gap-4">
-            <span className="material-symbols-outlined text-red-400 text-5xl">error</span>
-            <p className="text-red-300 text-lg font-medium">{error}</p>
-            <button
-              onClick={() => { if (id) dispatch(fetchMovie(id)); }}
-              className="px-6 py-2 bg-primary text-black font-bold rounded-xl hover:opacity-90 transition-opacity"
-            >
-              Retry
-            </button>
           </div>
         )}
 
-        {/* Loading skeleton */}
-        {loading && !movie && <DetailSkeleton />}
+        <main className="flex-grow pt-[80px]">
+          {/* Error state */}
+          {error && !loading && !movie && (
+            <div className="max-w-7xl mx-auto px-4 md:px-8 py-16 flex flex-col items-center gap-4">
+              <span className="material-symbols-outlined text-red-400 text-5xl">error</span>
+              <p className="text-red-300 text-lg font-medium">{error}</p>
+              <button
+                onClick={() => { if (id) dispatch(fetchMovie(id)); }}
+                className="px-6 py-2 bg-primary text-black font-bold rounded-xl hover:opacity-90 transition-opacity"
+              >
+                {t('movies.detail.retry')}
+              </button>
+            </div>
+          )}
 
-        {/* Main content */}
-        {movie && (
-          <>
-            {/* Hero Banner */}
-            <MovieDetailHero movie={movie} onShowToast={showToast} />
+          {/* Loading skeleton */}
+          {loading && !movie && <DetailSkeleton />}
 
-            {/* Two-column layout */}
-            <section className="max-w-7xl mx-auto px-4 md:px-8 py-12 grid grid-cols-1 lg:grid-cols-12 gap-8 relative">
-              {/* Left column: main content */}
-              <div className="lg:col-span-8 flex flex-col gap-8">
-                {/* Storyline */}
-                <div className="glass-panel p-6 rounded-xl">
-                  <h2 className="text-2xl font-semibold text-white mb-3 flex items-center gap-2">
-                    <span className="material-symbols-outlined text-primary">auto_stories</span>
-                    <span>Storyline</span>
-                  </h2>
-                  <p className="text-lg text-on-surface-variant leading-relaxed">
-                    {typeof movie.description === 'string' ? movie.description : ''}
-                  </p>
+          {/* Main content */}
+          {movie && (
+            <>
+              {/* Hero Banner */}
+              <MovieDetailHero movie={movie} onShowToast={showToast} />
+
+              {/* Two-column layout */}
+              <section className="max-w-7xl mx-auto px-4 md:px-8 py-12 grid grid-cols-1 lg:grid-cols-12 gap-8 relative">
+                {/* Left column: main content */}
+                <div className="lg:col-span-8 flex flex-col gap-8">
+                  {/* Storyline */}
+                  <div className="glass-panel p-6 rounded-xl">
+                    <h2 className="text-2xl font-semibold text-white mb-3 flex items-center gap-2">
+                      <span className="material-symbols-outlined text-primary">auto_stories</span>
+                      <span>{t('movies.detail.storyline')}</span>
+                    </h2>
+                    <p className="text-lg text-on-surface-variant leading-relaxed">
+                      {typeof movie.description === 'string' ? movie.description : ''}
+                    </p>
+                  </div>
+
+                  {/* Cast */}
+                  {movie.cast && movie.cast.length > 0 && (
+                    <CastSection cast={movie.cast} />
+                  )}
+
+                  {/* Screenshots */}
+                  {movie.screenshots && movie.screenshots.length > 0 && (
+                    <ScreenshotsSection
+                      screenshots={movie.screenshots}
+                      onSelectScreenshot={(url) => setSelectedScreenshot(url)}
+                    />
+                  )}
+
+                  {/* Trailer */}
+                  {movie.trailerThumbnail && (
+                    <TrailerSection
+                      thumbnailUrl={movie.trailerThumbnail}
+                      onPlayTrailer={() => setIsTrailerOpen(true)}
+                    />
+                  )}
                 </div>
 
-                {/* Cast */}
-                {movie.cast && movie.cast.length > 0 && (
-                  <CastSection cast={movie.cast} />
-                )}
+                {/* Right column: sticky sidebar */}
+                <div className="lg:col-span-4">
+                  <MovieInfoSidebar movie={movie} />
+                </div>
+              </section>
 
-                {/* Screenshots */}
-                {movie.screenshots && movie.screenshots.length > 0 && (
-                  <ScreenshotsSection
-                    screenshots={movie.screenshots}
-                    onSelectScreenshot={(url) => setSelectedScreenshot(url)}
-                  />
-                )}
-
-                {/* Trailer */}
-                {movie.trailerThumbnail && (
-                  <TrailerSection
-                    thumbnailUrl={movie.trailerThumbnail}
-                    onPlayTrailer={() => setIsTrailerOpen(true)}
-                  />
-                )}
+              {/* Movie Reviews & Comments */}
+              <div className="max-w-7xl mx-auto px-4 md:px-8 pb-8">
+                <ReviewsCommentsSection
+                  title={t('movies.detail.viewerReviews')}
+                  initialReviews={mappedReviews}
+                  onSubmitReview={token ? handleSubmitReview : undefined}
+                  isAuthenticated={!!token}
+                />
               </div>
 
-              {/* Right column: sticky sidebar */}
-              <div className="lg:col-span-4">
-                <MovieInfoSidebar movie={movie} />
-              </div>
-            </section>
+              {/* You Might Also Like */}
+              {relatedMovies.length > 0 && (
+                <RelatedMoviesCarousel movies={relatedMovies} />
+              )}
+            </>
+          )}
+        </main>
 
-            {/* Movie Reviews & Comments */}
-            <div className="max-w-7xl mx-auto px-4 md:px-8 pb-8">
-              <ReviewsCommentsSection
-                title="Viewer Reviews & Discussions"
-                initialReviews={mappedReviews}
-                onSubmitReview={token ? handleSubmitReview : undefined}
-                isAuthenticated={!!token}
-              />
-            </div>
-
-            {/* You Might Also Like */}
-            {relatedMovies.length > 0 && (
-              <RelatedMoviesCarousel movies={relatedMovies} />
-            )}
-          </>
-        )}
-      </main>
-
-      {/* Footer */}
-      <Footer />
-    </div>
+        {/* Footer */}
+        <Footer />
+      </div>
     </>
   );
 };

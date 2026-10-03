@@ -40,9 +40,31 @@ const MovieCenterPage = () => {
   const [bookmarkedIds, setBookmarkedIds] = useState<string[]>([]);
 
   const filterGroups: FilterGroup[] = [
-    { key: 'genres', label: t('movies.genre'), options: ['Action', 'Comedy', 'Drama', 'Sci-Fi', 'Thriller', 'Horror', 'Adventure'], multiSelect: true },
-    { key: 'country', label: t('admin.table.category'), options: ['All', 'Ethiopia', 'USA', 'UK', 'Korea', 'Japan'] },
-    { key: 'contentType', label: t('electronics.product'), options: ['All', 'Movie', 'TV Series'] },
+    {
+      key: 'genres',
+      label: t('movies.genre'),
+      options: ['Action', 'Comedy', 'Drama', 'Sci-Fi', 'Thriller', 'Horror', 'Adventure'],
+      optionLabels: {
+        Action: t('movies.request.genreAction'),
+        Comedy: t('movies.request.genreComedy'),
+        Drama: t('movies.request.genreDrama'),
+        'Sci-Fi': t('movies.request.genreSciFi'),
+        Thriller: t('movies.request.genreThriller'),
+        Horror: t('movies.request.genreHorror'),
+        Adventure: t('movies.request.genreAdventure'),
+      },
+      multiSelect: true,
+    },
+    { key: 'country', label: t('filters.category'), options: ['All', 'Ethiopia', 'USA', 'UK', 'Korea', 'Japan'] },
+    {
+      key: 'contentType',
+      label: t('movies.request.typeLabel'),
+      options: ['All', 'Movie', 'TV Series'],
+      optionLabels: {
+        Movie: t('movies.request.typeMovie'),
+        'TV Series': t('movies.request.typeTvSeries'),
+      },
+    },
   ];
 
   const showToast = (msg: string) => {
@@ -284,23 +306,27 @@ const MovieCenterPage = () => {
               onClick={(event) => event.stopPropagation()}
             >
               <div className="flex justify-between items-center mb-4">
-                <h3 className="text-xl font-bold text-white">Filter Movies</h3>
-                <button onClick={() => setShowMobileFilters(false)} className="text-on-surface-variant hover:text-white">
+                <h3 className="text-xl font-bold text-white">{t('filters.filters')}</h3>
+                <button
+                  onClick={() => setShowMobileFilters(false)}
+                  aria-label={t('common.close')}
+                  className="text-on-surface-variant hover:text-white"
+                >
                   <span className="material-symbols-outlined">close</span>
                 </button>
               </div>
               <Filters
                 key={`mobile-${filterResetKey}`}
                 groups={filterGroups}
-                searchLabel="Search Title"
-                searchPlaceholder="Search movies..."
+                searchLabel={t('books.searchLabel')}
+                searchPlaceholder={t('nav.searchPlaceholder')}
                 onFilterChange={handleFilterChange}
               />
               <button
                 className="w-full mt-6 bg-primary text-black font-bold py-3 rounded-xl uppercase text-xs tracking-wider"
                 onClick={() => setShowMobileFilters(false)}
               >
-                Apply Filters
+                {t('filters.applyFilters')}
               </button>
             </div>
           </div>

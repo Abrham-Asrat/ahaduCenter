@@ -192,7 +192,7 @@ const ElectionicsFilters = ({ onFilterChange }: ElectronicsFiltersProps) => {
             step={PRICE_STEP}
             value={priceRange.min}
             onChange={(event) => handlePriceChange('min', event.currentTarget.valueAsNumber)}
-            aria-label={t('filters.priceRange')}
+            aria-label={t('filters.minimumPrice')}
             className="price-range-slider"
             style={{ zIndex: priceRange.min > MAX_PRICE / 2 ? 5 : 3 }}
           />
@@ -203,7 +203,7 @@ const ElectionicsFilters = ({ onFilterChange }: ElectronicsFiltersProps) => {
             step={PRICE_STEP}
             value={priceRange.max}
             onChange={(event) => handlePriceChange('max', event.currentTarget.valueAsNumber)}
-            aria-label={t('filters.priceRange')}
+            aria-label={t('filters.maximumPrice')}
             className="price-range-slider"
             style={{ zIndex: priceRange.max < MAX_PRICE / 2 ? 5 : 4 }}
           />
