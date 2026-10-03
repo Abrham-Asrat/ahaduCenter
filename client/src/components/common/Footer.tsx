@@ -1,10 +1,16 @@
-import { type CSSProperties } from 'react';
+import { useState, type CSSProperties, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 const Footer = () => {
   const { t } = useTranslation();
   const currentYear = new Date().getFullYear();
+  const [isSubscribed, setIsSubscribed] = useState(false);
+
+  const handleSubscribe = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setIsSubscribed(true);
+  };
 
   return (
     <footer className="relative mt-20 w-full overflow-hidden border-t border-white/5 bg-dark-bg pb-8 pt-14 text-white sm:pt-16">
@@ -13,7 +19,7 @@ const Footer = () => {
       <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-px bg-gradient-to-r from-primary via-secondary to-primary shadow-[0_0_16px_rgba(16,185,129,0.4)]" />
 
       <div className="relative mx-auto px-4 sm:px-8 ">
-        <div className="grid grid-cols-2 gap-x-5 gap-y-10 pb-12 md:grid-cols-3 md:gap-x-8 xl:grid-cols-5 xl:gap-8 xl:pb-14">
+        <div className="grid grid-cols-2 gap-x-5 gap-y-10 px-4 pb-12 md:grid-cols-3 md:gap-x-8 lg:px-20 xl:grid-cols-5 xl:gap-8 xl:pb-14">
           <div className="footer-reveal col-span-2 flex min-w-0 flex-col justify-between b gap-8 sm:col-span-1 xl:pr-4" style={{ '--footer-delay': '100ms' } as CSSProperties}>
             <div>
               <Link to="/" aria-label="Ahadu Center home" className="mb-4 inline-flex items-center gap-2 ">
@@ -73,8 +79,23 @@ const Footer = () => {
               <span className="material-symbols-outlined text-base text-primary" aria-hidden="true">location_on</span>
               Mizan, Ethiopia
             </Link>
-
-
+            {isSubscribed ? (
+              <p role="status" className="text-sm text-primary">{t('footer.subscribeSuccess')}</p>
+            ) : (
+              <form onSubmit={handleSubscribe} className="flex flex-col gap-2">
+                <label htmlFor="footer-newsletter-email" className="sr-only">{t('footer.newsletter')}</label>
+                <input
+                  id="footer-newsletter-email"
+                  type="email"
+                  required
+                  placeholder={t('footer.newsletterPlaceholder')}
+                  className="min-w-0 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-light-gray focus:border-primary focus:outline-none"
+                />
+                <button type="submit" className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-black transition hover:bg-primary/90">
+                  {t('footer.subscribe')}
+                </button>
+              </form>
+            )}
           </div>
         </div>
 

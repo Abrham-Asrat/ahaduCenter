@@ -5,6 +5,7 @@ export type FilterGroup = {
   key: string;
   label: string;
   options: string[];
+  optionLabels?: Record<string, string>;
   defaultValue?: string;
   multiSelect?: boolean;
 };
@@ -141,7 +142,10 @@ const Filters = ({
         const values = selectedValues[group.key] ?? [];
         const selectedLabel = values.length === 0
           ? t('filters.select', { label: group.label })
-          : t('filters.selected', { count: values.length, items: values.join(', ') });
+          : t('filters.selected', {
+            count: values.length,
+            items: values.map((value) => group.optionLabels?.[value] ?? value).join(', '),
+          });
 
         return (
           <div className="mb-6 relative" key={group.key}>
@@ -173,7 +177,7 @@ const Filters = ({
                           onChange={() => handleMultiSelectChange(group, option)}
                           className="w-4 h-4 rounded bg-surface-dim border-white/20 text-primary focus:ring-primary focus:ring-offset-background cursor-pointer"
                         />
-                        <span className="text-sm text-on-surface">{option}</span>
+                        <span className="text-sm text-on-surface">{group.optionLabels?.[option] ?? option}</span>
                       </label>
                     ))}
                   </div>
@@ -187,7 +191,9 @@ const Filters = ({
               >
                 {group.options.map((option) => (
                   <option key={option} value={option} className="bg-surface-container-high text-white">
-                    {option === (group.defaultValue ?? group.options[0]) ? t('filters.all', { label: group.label }) : option}
+                    {option === (group.defaultValue ?? group.options[0])
+                      ? t('filters.all', { label: group.label })
+                      : group.optionLabels?.[option] ?? option}
                   </option>
                 ))}
               </select>

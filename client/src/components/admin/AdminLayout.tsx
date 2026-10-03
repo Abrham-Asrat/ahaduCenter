@@ -60,7 +60,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
                     </div>
                     <div>
                         <h1 className="font-heading text-lg font-bold text-white leading-tight">Ahadu Center</h1>
-                        <p className="text-xs text-primary font-semibold">Admin Terminal</p>
+                        <p className="text-xs text-primary font-semibold">{t('admin.title')}</p>
                     </div>
                 </div>
 
