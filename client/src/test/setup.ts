@@ -1,5 +1,16 @@
 import '@testing-library/jest-dom';
 import { vi } from 'vitest';
+import '../i18n/config';
+import i18n from '../i18n/config';
+
+beforeAll(async () => {
+  if (!i18n.isInitialized) {
+    await new Promise<void>((resolve) => {
+      i18n.on('initialized', () => resolve());
+    });
+  }
+  await i18n.changeLanguage('en');
+});
 
 // ─── Global service mocks ─────────────────────────────────────────────────────
 // All services make real HTTP calls via axios. Mock them globally so tests run

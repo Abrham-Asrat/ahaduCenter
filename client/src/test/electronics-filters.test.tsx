@@ -28,7 +28,7 @@ describe('ElectronicsFilters', () => {
       maxPrice: 80000,
     }));
 
-    fireEvent.click(screen.getByRole('button', { name: 'Clear All' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Clear Filters' }));
 
     expect(screen.getByRole('slider', { name: 'Minimum price' })).toHaveValue('0');
     expect(screen.getByRole('slider', { name: 'Maximum price' })).toHaveValue('150000');

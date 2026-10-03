@@ -24,6 +24,9 @@ vi.mock('react-router-dom', async () => {
 
 import App from '../App';
 import ElectronicsPage from '../pages/ElectronicsPage';
+import SearchResultsPage from '../pages/SearchResultsPage';
+import NotFoundPage from '../pages/NotFoundPage';
+import i18n from '../i18n/config';
 
 /**
  * Helper: renders App inside MemoryRouter at a given initial route,
@@ -39,6 +42,7 @@ const mockAuthStore = configureStore({
     notification: () => ({ notifications: [], unreadCount: 0, loading: false }),
     wishlist: () => ({ items: [] }),
     product: () => ({ products: [], loading: false }),
+    language: () => ({ language: 'en' }),
   },
 });
 
@@ -92,6 +96,7 @@ const mockStore = configureStore({
     }),
     auth: () => ({ user: null }),
     wishlist: () => ({ items: [] }),
+    language: () => ({ language: 'en' }),
   },
 });
 
@@ -127,5 +132,37 @@ describe('ElectronicsPage compare navigation (Requirement 1.3)', () => {
 
     // Ensure the old incorrect path is never used
     expect(mockNavigate).not.toHaveBeenCalledWith('/electronics/compare');
+  });
+});
+
+describe('Utility page translations', () => {
+  beforeEach(async () => {
+    await i18n.changeLanguage('am');
+  });
+
+  it('renders translated search sort labels and result headings in Amharic', () => {
+    render(
+      <Provider store={mockAuthStore}>
+        <MemoryRouter initialEntries={['/search?q=ተከታታይ']}>
+          <SearchResultsPage />
+        </MemoryRouter>
+      </Provider>
+    );
+
+    expect(screen.getByRole('heading', { name: /ለ\s*"ተከታታይ"\s*.*ውጤቶች/i })).toBeInTheDocument();
+    expect(screen.getByRole('option', { name: /ተዛማጅነት/i })).toBeInTheDocument();
+  });
+
+  it('renders translated not-found copy instead of generic search results text', () => {
+    render(
+      <Provider store={mockAuthStore}>
+        <MemoryRouter>
+          <NotFoundPage />
+        </MemoryRouter>
+      </Provider>
+    );
+
+    expect(screen.getByRole('heading', { name: /ገጹ አልተገኘም/i })).toBeInTheDocument();
+    expect(screen.getByText(/የሚፈልጉት ገጽ አልተገኘም/i)).toBeInTheDocument();
   });
 });

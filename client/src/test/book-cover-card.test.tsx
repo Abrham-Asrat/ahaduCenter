@@ -29,6 +29,9 @@ import { MemoryRouter } from 'react-router-dom';
 
 import BookCoverCard from '../components/book/BookCoverCard';
 import { store } from '../redux/store';
+import { userService } from '../services/userService';
+
+let wishlistBackend: Array<{ id: string; itemId: string; itemType: string; title?: string }> = [];
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Shared test fixture
@@ -50,6 +53,17 @@ const renderCard = () => render(
 );
 
 beforeEach(() => {
+    wishlistBackend = [];
+    vi.mocked(userService.getWishlist).mockImplementation(async () => wishlistBackend);
+    vi.mocked(userService.addToWishlist).mockImplementation(async (payload) => {
+        const item = payload as { itemId: string; itemType: string; title?: string };
+        wishlistBackend = [...wishlistBackend, { ...item, id: item.itemId }];
+        return {};
+    });
+    vi.mocked(userService.removeFromWishlist).mockImplementation(async (itemId) => {
+        wishlistBackend = wishlistBackend.filter((item) => item.itemId !== itemId);
+        return {};
+    });
     store.dispatch({
         type: 'auth/googleLogin/fulfilled',
         payload: { token: 'test-token', user: { name: 'Test User', email: 'test@example.com' } },
@@ -63,13 +77,13 @@ beforeEach(() => {
 // ─────────────────────────────────────────────────────────────────────────────
 
 describe('BookCoverCard Save toggle — Property 3 (Validates: Requirements 4.2)', () => {
-    it('clicking Save twice returns the bookmark icon to the unsaved state (involution)', () => {
+    it('clicking Save twice returns the bookmark icon to the unsaved state (involution)', async () => {
         fc.assert(
-            fc.property(
+            fc.asyncProperty(
                 // We only ever start from the default state (isSaved = false).
                 // fast-check runs this property numRuns times, each in a fresh render.
                 fc.constant(null),
-                (_) => {
+                async (_) => {
                     store.dispatch({ type: 'wishlist/fetchWishlist/fulfilled', payload: [] });
                     const { getByRole, unmount } = renderCard();
 
@@ -82,12 +96,14 @@ describe('BookCoverCard Save toggle — Property 3 (Validates: Requirements 4.2)
 
                     // First click — toggle ON (saved)
                     fireEvent.click(saveButton);
+                    await waitFor(() => expect(saveButton).toHaveAttribute('aria-label', 'Remove from Wishlist'));
                     const iconAfterFirstClick = saveButton.querySelector('.material-symbols-outlined');
                     if (!iconAfterFirstClick) throw new Error('Saved icon was not rendered');
                     expect(iconAfterFirstClick.textContent.trim()).toBe('bookmark_added');
 
                     // Second click — toggle OFF (back to original state)
                     fireEvent.click(saveButton);
+                    await waitFor(() => expect(saveButton).toHaveAttribute('aria-label', 'Save'));
                     const iconAfterSecondClick = saveButton.querySelector('.material-symbols-outlined');
                     if (!iconAfterSecondClick) throw new Error('Restored save icon was not rendered');
                     expect(iconAfterSecondClick.textContent.trim()).toBe('bookmark');
@@ -99,16 +115,18 @@ describe('BookCoverCard Save toggle — Property 3 (Validates: Requirements 4.2)
         );
     });
 
-    it('Save button aria-label reflects the current saved state', () => {
+    it('Save button aria-label reflects the current saved state', async () => {
         const { getByRole } = renderCard();
 
         const saveButton = getByRole('button', { name: /save/i });
         expect(saveButton).toHaveAttribute('aria-label', 'Save');
 
         fireEvent.click(saveButton);
-        expect(saveButton).toHaveAttribute('aria-label', 'Unsave');
+        await waitFor(() => expect(saveButton).toHaveAttribute('aria-label', 'Remove from Wishlist'));
+        expect(saveButton).toHaveAttribute('aria-label', 'Remove from Wishlist');
 
         fireEvent.click(saveButton);
+        await waitFor(() => expect(saveButton).toHaveAttribute('aria-label', 'Save'));
         expect(saveButton).toHaveAttribute('aria-label', 'Save');
     });
 });

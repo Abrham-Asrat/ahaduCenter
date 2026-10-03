@@ -32,7 +32,7 @@ describe('Footer branding (Requirement 7.1)', () => {
 
   it('displays "Ahadu Center" in the copyright notice', () => {
     renderFooter();
-    expect(screen.getByText(/© 2024 Ahadu Center/i)).toBeInTheDocument();
+    expect(screen.getByText(new RegExp(`© ${new Date().getFullYear()} Ahadu Center`, 'i'))).toBeInTheDocument();
   });
 
   it('does NOT display "NexusGlobal" anywhere in the footer', () => {
@@ -84,6 +84,7 @@ describe('Footer newsletter subscription (Requirement 6.1)', () => {
 
   it('shows success message after clicking Send', () => {
     renderFooter();
+    fireEvent.change(screen.getByPlaceholderText(/email address/i), { target: { value: 'reader@example.com' } });
     const sendButton = screen.getByRole('button');
     fireEvent.click(sendButton);
     expect(screen.getByText(/thanks for subscribing/i)).toBeInTheDocument();
@@ -91,6 +92,7 @@ describe('Footer newsletter subscription (Requirement 6.1)', () => {
 
   it('hides the email input after clicking Send', () => {
     renderFooter();
+    fireEvent.change(screen.getByPlaceholderText(/email address/i), { target: { value: 'reader@example.com' } });
     const sendButton = screen.getByRole('button');
     fireEvent.click(sendButton);
     expect(screen.queryByPlaceholderText(/email address/i)).not.toBeInTheDocument();
@@ -98,6 +100,7 @@ describe('Footer newsletter subscription (Requirement 6.1)', () => {
 
   it('hides the Send button after clicking it', () => {
     renderFooter();
+    fireEvent.change(screen.getByPlaceholderText(/email address/i), { target: { value: 'reader@example.com' } });
     const sendButton = screen.getByRole('button');
     fireEvent.click(sendButton);
     expect(screen.queryByRole('button')).not.toBeInTheDocument();

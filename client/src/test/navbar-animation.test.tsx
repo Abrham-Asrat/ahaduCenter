@@ -76,8 +76,8 @@ describe('Navbar profile dropdown animation class (Requirement 10.1)', () => {
   it('dropdown container has class animate-fade-in after opening', () => {
     renderNavbar();
 
-    // Find the avatar button (title="User Profile Menu") and click it to open the dropdown
-    const avatarButton = screen.getByTitle('User Profile Menu');
+    // Find the accessible profile button and click it to open the dropdown
+    const avatarButton = screen.getByRole('button', { name: 'Profile' });
     fireEvent.click(avatarButton);
 
     // The dropdown renders "Alex Mercer" in the header — use that to find the dropdown root
@@ -93,7 +93,7 @@ describe('Navbar profile dropdown animation class (Requirement 10.1)', () => {
   it('dropdown container does NOT have class animate-fadeIn (camelCase)', () => {
     renderNavbar();
 
-    const avatarButton = screen.getByTitle('User Profile Menu');
+    const avatarButton = screen.getByRole('button', { name: 'Profile' });
     fireEvent.click(avatarButton);
 
     // The camelCase class should not appear anywhere in the dropdown

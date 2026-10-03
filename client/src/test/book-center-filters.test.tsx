@@ -1,16 +1,15 @@
-import { configureStore } from '@reduxjs/toolkit';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { bookService } from '../services/bookService';
-import bookReducer from '../redux/slices/bookSlice';
 import BookCenterPage from '../pages/BookCenterPage';
+import { store } from '../redux/store';
+import '../i18n/config';
 
 vi.mock('../components/common/Navbar', () => ({ default: () => null }));
 
 const renderBookCenter = () => {
-  const store = configureStore({ reducer: { book: bookReducer } });
   return render(
     <Provider store={store}>
       <MemoryRouter>
@@ -51,10 +50,10 @@ describe('BookCenterPage filters', () => {
     fireEvent.change(getFormatSelect(), { target: { value: 'Hardcover' } });
     await waitFor(() => expect(bookService.getBooks).toHaveBeenLastCalledWith(expect.objectContaining({ format: 'Hardcover' })));
 
-    fireEvent.click(screen.getByRole('button', { name: 'Reset Filters' }));
+    fireEvent.click(screen.getAllByRole('button', { name: 'Clear Filters' })[0]);
 
     await waitFor(() => {
-      expect(getFormatSelect()).toHaveValue('All Formats');
+      expect(getFormatSelect()).toHaveValue('All');
       expect(bookService.getBooks).toHaveBeenLastCalledWith({ page: 1, limit: 12 });
     });
   });
