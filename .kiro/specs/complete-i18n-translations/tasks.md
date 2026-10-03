@@ -14,36 +14,36 @@ This plan systematically translates all 70 remaining React components in the Aha
   - Document any missing translation keys that need to be added
   - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6_
 
-- [ ] 2. Translate Home Page components (Priority 2)
-  - [-] 2.1 Translate HomeHero.tsx
+- [x] 2. Translate Home Page components (Priority 2)
+  - [x] 2.1 Translate HomeHero.tsx
     - Import and setup useTranslation hook
     - Replace hero section text with translation keys from "home.hero.*" namespace
     - Translate CTA button labels (Explore Catalog, Sign Up Free)
     - Verify badge and subtitle text uses translation keys
     - _Requirements: 2.1, 2.7_
   
-  - [-] 2.2 Translate HomeStats.tsx
+  - [x] 2.2 Translate HomeStats.tsx
     - Import useTranslation hook
     - Replace all stat labels with "home.stats.*" keys
     - Translate section header
     - Handle number formatting if needed
     - _Requirements: 2.2_
   
-  - [-] 2.3 Translate HomeCategories.tsx
+  - [x] 2.3 Translate HomeCategories.tsx
     - Import useTranslation hook
     - Replace category names and descriptions with "home.categories.*" keys
     - Translate "View All" links and section headers
     - Verify department labels use translation keys
     - _Requirements: 2.3_
   
-  - [-] 2.4 Translate HomeFeatured.tsx
+  - [x] 2.4 Translate HomeFeatured.tsx
     - Import useTranslation hook
     - Replace featured section headers with "home.featured.*" keys
     - Translate navigation labels and "See More" buttons
     - Handle empty states if present
     - _Requirements: 2.4_
   
-  - [-] 2.5 Translate HomeTestimonials.tsx
+  - [x] 2.5 Translate HomeTestimonials.tsx
     - Import useTranslation hook
     - Replace section header with "home.testimonials.*" keys
     - Translate navigation button aria-labels for accessibility
