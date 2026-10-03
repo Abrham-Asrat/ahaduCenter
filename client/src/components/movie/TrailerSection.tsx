@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+
 interface TrailerSectionProps {
     thumbnailUrl: string;
     onPlayTrailer?: () => void;
@@ -15,11 +17,13 @@ interface TrailerSectionProps {
  * - onPlayTrailer: Function triggered when play button is clicked
  */
 const TrailerSection = ({ thumbnailUrl, onPlayTrailer }: TrailerSectionProps) => {
+    const { t } = useTranslation();
+
     return (
         <div className="glass-panel p-6 rounded-xl">
             <h2 className="text-2xl font-semibold text-white mb-6 flex items-center gap-2">
                 <span className="material-symbols-outlined text-primary">play_circle</span>
-                <span>Trailer & Video</span>
+                <span>{t('movies.detail.trailerVideo')}</span>
             </h2>
             <div
                 onClick={onPlayTrailer}
@@ -29,7 +33,7 @@ const TrailerSection = ({ thumbnailUrl, onPlayTrailer }: TrailerSectionProps) =>
                 <img
                     className="absolute inset-0 w-full h-full object-cover opacity-75 group-hover:opacity-50 group-hover:scale-105 transition-all duration-500"
                     src={thumbnailUrl}
-                    alt="Trailer thumbnail"
+                    alt={t('movies.detail.trailerThumbnailAlt')}
                 />
                 {/* Play button overlay */}
                 <div className="absolute inset-0 flex items-center justify-center">
