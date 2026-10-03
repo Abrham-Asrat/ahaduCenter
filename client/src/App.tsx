@@ -1,3 +1,4 @@
+import './i18n/config';
 import { useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import HomePage from './pages/HomePage';
