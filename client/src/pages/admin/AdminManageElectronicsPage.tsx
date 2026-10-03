@@ -66,12 +66,12 @@ const AdminManageElectronicsPage = () => {
     const handleAdd = () => { setActionError(null); setEditingProduct(null); setShowModal(true); };
     const handleEdit = (p: Product) => { setActionError(null); setEditingProduct(p); setShowModal(true); };
     const handleDelete = async (id: string) => {
-        if (confirm('Delete this product?')) {
+        if (confirm(t('admin.deleteProductConfirm'))) {
             setActionError(null);
             try {
                 await dispatch(deleteProduct(id)).unwrap();
             } catch (err) {
-                setActionError(typeof err === 'string' ? err : 'Failed to delete product');
+                setActionError(typeof err === 'string' ? err : t('errors.generic'));
             }
         }
     };
@@ -87,7 +87,7 @@ const AdminManageElectronicsPage = () => {
             }
             setShowModal(false);
         } catch (err) {
-            setActionError(typeof err === 'string' ? err : 'Failed to save product');
+            setActionError(typeof err === 'string' ? err : t('errors.generic'));
         }
     };
 
@@ -108,7 +108,7 @@ const AdminManageElectronicsPage = () => {
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
                 <div>
                     <h2 className="text-3xl md:text-5xl font-bold text-white mb-2">{t('admin.electronics')}</h2>
-                    <p className="text-on-surface-variant">Add, edit, delete, and organize electronics products.</p>
+                    <p className="text-on-surface-variant">{t('admin.electronicsSubtitle')}</p>
                 </div>
                 <button onClick={handleAdd} className="bg-primary text-black px-6 py-3 rounded-lg flex items-center justify-center gap-2 hover:shadow-[0_0_20px_rgba(16,185,129,0.5)] transition-all font-bold text-xs uppercase tracking-wider cursor-pointer self-start sm:self-auto">
                     <span className="material-symbols-outlined text-lg">add</span>
@@ -127,7 +127,7 @@ const AdminManageElectronicsPage = () => {
             <div className="glass-panel rounded-xl p-4 flex flex-col md:flex-row gap-4 justify-between items-center mb-6">
                 <div className="flex items-center bg-background rounded-lg px-3 py-2 border border-white/10 flex-1 max-w-md w-full">
                     <span className="material-symbols-outlined text-on-surface-variant text-lg mr-2">search</span>
-                    <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder={t('common.search')} className="bg-transparent border-none outline-none text-white w-full placeholder-gray-500 transition-all duration-200" />
+                    <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder={t('admin.searchProducts')} className="bg-transparent border-none outline-none text-white w-full placeholder-gray-500 transition-all duration-200" />
                 </div>
                 <div className="flex flex-wrap gap-3 w-full md:w-auto">
                     <select value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)} className="bg-background border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-primary outline-none cursor-pointer transition-all duration-200">

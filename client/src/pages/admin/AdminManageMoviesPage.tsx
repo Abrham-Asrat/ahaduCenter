@@ -62,12 +62,12 @@ const AdminManageMoviesPage = () => {
     const handleAdd = () => { setActionError(null); setEditingMovie(null); setShowModal(true); };
     const handleEdit = (movie: Movie) => { setActionError(null); setEditingMovie(movie); setShowModal(true); };
     const handleDelete = async (id: string) => {
-        if (confirm('Delete this movie?')) {
+        if (confirm(t('admin.manageMovies.deleteConfirm'))) {
             setActionError(null);
             try {
                 await dispatch(deleteMovie(id)).unwrap();
             } catch (err) {
-                setActionError(typeof err === 'string' ? err : 'Failed to delete movie');
+                setActionError(typeof err === 'string' ? err : t('admin.manageMovies.failedDelete'));
             }
         }
     };
@@ -83,7 +83,7 @@ const AdminManageMoviesPage = () => {
             }
             setShowModal(false);
         } catch (err) {
-            setActionError(typeof err === 'string' ? err : 'Failed to save movie');
+            setActionError(typeof err === 'string' ? err : t('admin.manageMovies.failedSave'));
         }
     };
 
@@ -93,7 +93,7 @@ const AdminManageMoviesPage = () => {
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
                 <div>
                     <h2 className="text-3xl md:text-5xl font-bold text-white mb-2">{t('admin.movies')}</h2>
-                    <p className="text-on-surface-variant">Add, edit, delete, and organize movie content.</p>
+                    <p className="text-on-surface-variant">{t('admin.manageMovies.pageSubtitle')}</p>
                 </div>
                 <button onClick={handleAdd} className="bg-primary text-black px-6 py-3 rounded-lg flex items-center justify-center gap-2 hover:shadow-[0_0_20px_rgba(16,185,129,0.5)] font-bold transition-all self-start sm:self-auto">
                     <span className="material-symbols-outlined text-lg">add</span>

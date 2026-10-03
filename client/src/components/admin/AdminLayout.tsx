@@ -98,7 +98,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
                 {/* Topbar */}
                 <header className="sticky top-0 z-30 bg-surface/80 backdrop-blur-xl border-b border-white/5 h-16 flex items-center justify-between gap-3 px-3 sm:px-4 md:px-8">
                     {/* Hamburger (mobile) */}
-                    <button aria-label="Open admin navigation" className="shrink-0 md:hidden text-on-surface-variant hover:text-primary p-2" onClick={() => setIsDrawerOpen(true)}>
+                    <button aria-label={t('nav.admin')} className="shrink-0 md:hidden text-on-surface-variant hover:text-primary p-2" onClick={() => setIsDrawerOpen(true)}>
                         <span className="material-symbols-outlined">menu</span>
                     </button>
 
@@ -118,7 +118,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
                     <div className="ml-auto flex min-w-0 items-center gap-2 sm:gap-4">
                         <div className="hidden items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-bold uppercase text-primary sm:flex">
                             <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-                            {t('common.yes')}
+                            {t('user.adminBadge')}
                         </div>
                         <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-surface-container-high bg-gradient-to-br from-primary/20 to-secondary/20 text-sm font-bold text-white">
                             AD

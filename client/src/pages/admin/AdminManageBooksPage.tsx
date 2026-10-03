@@ -98,7 +98,7 @@ const AdminManageBooksPage = () => {
                 await dispatch(deleteBook(deleteConfirm.id)).unwrap();
                 setDeleteConfirm(null);
             } catch (err) {
-                setActionError(typeof err === 'string' ? err : 'Failed to delete book');
+                setActionError(typeof err === 'string' ? err : t('errors.generic'));
                 setDeleteConfirm(null);
             }
         }
@@ -116,7 +116,7 @@ const AdminManageBooksPage = () => {
             }
             setShowModal(false);
         } catch (err) {
-            setActionError(typeof err === 'string' ? err : 'Failed to save book');
+            setActionError(typeof err === 'string' ? err : t('errors.generic'));
         }
     };
 
@@ -179,13 +179,13 @@ const AdminManageBooksPage = () => {
                                     type="text"
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
-                                    placeholder="Search title, author, ISBN..."
+                                    placeholder={`${t('common.search')} ${t('admin.table.title')}, ${t('admin.table.author')}, ${t('admin.table.isbn')}…`}
                                     className="w-full bg-background border border-white/10 rounded-lg pl-10 pr-4 py-2 text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all duration-200"
                                 />
                             </div>
                             <div className="flex flex-wrap gap-3">
                                 <select value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)} className="bg-background border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-primary outline-none transition-all duration-200">
-                                    <option>All Categories</option>
+                                    <option value="All Categories">{t('filters.allCategories')}</option>
                                     <option>Sci-Fi</option>
                                     <option>Design</option>
                                     <option>Classic</option>
@@ -193,19 +193,19 @@ const AdminManageBooksPage = () => {
                                     <option>Non-Fiction</option>
                                 </select>
                                 <select value={availabilityFilter} onChange={(e) => setAvailabilityFilter(e.target.value)} className="bg-background border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-primary outline-none transition-all duration-200">
-                                    <option>All Availability</option>
-                                    <option>Available</option>
-                                    <option>Limited</option>
-                                    <option>Out of Stock</option>
+                                    <option value="All Availability">{t('filters.availability')}</option>
+                                    <option value="Available">{t('books.available')}</option>
+                                    <option value="Limited">{t('filters.selected', { count: 1, items: '' }).replace('1 Selected ()', 'Limited')}</option>
+                                    <option value="Out of Stock">{t('electronics.outOfStock')}</option>
                                 </select>
                                 <select value={languageFilter} onChange={(e) => setLanguageFilter(e.target.value)} className="bg-background border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-primary outline-none transition-all duration-200">
-                                    <option>All Languages</option>
-                                    <option>English</option>
-                                    <option>Amharic</option>
+                                    <option value="All Languages">{t('books.languages.all')}</option>
+                                    <option value="English">{t('books.languages.english')}</option>
+                                    <option value="Amharic">{t('books.languages.amharic')}</option>
                                 </select>
                                 <button onClick={handleResetFilters} className="text-secondary hover:text-secondary-fixed text-sm flex items-center cursor-pointer font-semibold">
                                     <span className="material-symbols-outlined text-sm mr-1">filter_alt_off</span>
-                                    Reset
+                                    {t('filters.clearFilters')}
                                 </button>
                             </div>
                         </div>
