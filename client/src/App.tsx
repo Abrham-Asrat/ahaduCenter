@@ -13,6 +13,7 @@ import AdminLoginPage from './pages/AdminLoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import UserDashboardPage from './pages/UserDashboardPage';
+import PurchaseHistoryPage from './pages/PurchaseHistoryPage';
 import AdminDashboardPage from './pages/admin/AdminDashboardPage';
 import SearchResultsPage from './pages/SearchResultsPage';
 import WishlistPage from './pages/WishlistPage';
@@ -113,7 +114,8 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="/account" element={<UserDashboardPage />} />
           <Route path="/wishlist" element={<WishlistPage />} />
-          
+          <Route path="/purchase-history" element={<PurchaseHistoryPage />} />
+
           <Route path="/borrowing-history" element={<BorrowingHistoryPage />} />
           <Route path="/movie-request" element={<MovieRequestPage />} />
           <Route path="/notifications" element={<NotificationsPage />} />
